@@ -89,6 +89,48 @@ $(document).ready(function(){
 ** - Renvoyer vers une page update_user.php a créer
 ************************************************/
 
+//Détecte la présence d'une div avec l'id user-edited
+	//Si la div existe le script de update_user.php s'éxécute
+	//avec les données data envoyées en POST.
+	//La requête envoie une réponse (retour) sous forme d'un tableau JSon.
+	//Selon le contenu de la réponse, des div différentes s'affichent.
+	
+	if($('#user-edited').length == 1){
+		$.ajax({
+			url: 'update_user.php',
+			method: 'POST',
+			data : {
+				username : targetUserData.name,
+				usersurname : targetUserData.surname,
+				usermail : targetUserData.email,
+				userlogin : targetUserData.login,
+				adminname : 'Justine',
+				adminsurname : 'Simmet',
+				adminmail : 'justine.simmet@gmail.com'
+			},
+			success: function(retour){
+				var obj = JSON.parse(retour);
+				if (obj.response == 'success') {
+					var divSuccess ='<div class="alert alert-success alert-dismissable">'
+					+'<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'
+					+'<strong>Un email de confirmation a été envoyé.</strong>'
+					+'</div>';
+
+					$('#alert-area').append(divSuccess);	
+				}
+				else{
+					var divError ='<div class="alert alert-danger alert-dismissable">'
+					+'<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'
+					+'<strong>Un email de confirmation n\'a pas pu être envoyé.</strong> Merci de vérifier l\'état de votre connexion'
+					+'</div>';
+
+					$('#alert-area').append(divError);
+				}
+			},
+		});
+	};
+
+
 
 
 

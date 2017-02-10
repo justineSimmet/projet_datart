@@ -22,7 +22,7 @@ if(isset($_POST['public_name'])){
 		$targetUser->setEmailAdress($_POST['email']);
 		$targetUser->setStatus($_POST['status']);
 		$updateUser = $targetUser->synchroDb('', '');
-		var_dump($updateUser);
+
 		
 			if ($updateUser) {
 				$actionResultat = '<div class="alert alert-success alert-dismissable" id="user-edited">
@@ -46,7 +46,7 @@ if(isset($_POST['public_name'])){
 	$newUser->setLogin($_POST['login']);
 	$newUser->setEmailAdress($_POST['email']);
 	$newUser->setStatus($_POST['status']);
-	$addUser = $user->synchroDb('','');
+	$addUser = $newUser->synchroDb('','');
 		if ($addUser) {
 			$actionResultat = '<div class="alert alert-success alert-dismissable" id="user-added">
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -129,8 +129,8 @@ include('header.php');
 			$targetUser->form($_SERVER['PHP_SELF'], 'Modifier', 'edit');
 		}
 		else{
-			$newUser = new User();
-			$newUser->form($_SERVER['PHP_SELF'],'Créer', 'add');
+			$User = new User();
+			$User->form($_SERVER['PHP_SELF'],'Créer', 'add');
 		}
 	?>
 
@@ -140,6 +140,8 @@ include('header.php');
 
 <!-- Mettre en place var adminData quand la connexion sera ok -->
 <script type="text/javascript"> var userData = <?php  if(isset($newUser)){echo $newUser->toJson() ;}else{echo "''";} ; ?></script>
+
+<script type="text/javascript"> var targetUserData = <?php  if(isset($targetUser)){echo $targetUser->toJson() ;}else{echo "''";} ; ?></script>
 
 <?php
 include('footer.php');
