@@ -1,0 +1,20 @@
+/******************************
+CSS DU LOGIN
+******************************/
+#login-container{
+	margin-top: 50px;
+}
+
+#login-img-container{
+	margin-bottom: 70px;
+}
+
+#login-img-container img{
+	height: 80px;
+}
+
+#login-form{
+	background-color: #fff;
+	box-shadow: 0 0 15px rgba(0,0,0,0.2);
+	padding: 80px;
+}

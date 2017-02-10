@@ -46,7 +46,7 @@ if(isset($_POST['public_name'])){
 	$newUser->setLogin($_POST['login']);
 	$newUser->setEmailAdress($_POST['email']);
 	$newUser->setStatus($_POST['status']);
-	$addUser = $user->synchroDb('','');
+	$addUser = $newUser->synchroDb('','');
 		if ($addUser) {
 			$actionResultat = '<div class="alert alert-success alert-dismissable" id="user-added">
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -129,13 +129,15 @@ include('header.php');
 			$targetUser->form($_SERVER['PHP_SELF'], 'Modifier', 'edit');
 		}
 		else{
-			$newUser = new User();
-			$newUser->form($_SERVER['PHP_SELF'],'Créer', 'add');
+			$user = new User();
+			$user->form($_SERVER['PHP_SELF'],'Créer', 'add');
 		}
 	?>
 
 	</section>
-
+<?php
+ var_dump($newUser);
+?>
 </div>
 
 <!-- Mettre en place var adminData quand la connexion sera ok -->
