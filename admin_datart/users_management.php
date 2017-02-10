@@ -1,11 +1,36 @@
 <?php
 
-require_once('includes/include.php');
 require_once('classes/user.php');
+require_once('includes/include.php');
 
 if (isset($_POST['targetUser'])) {
 	$targetUser = new User($_POST['targetUser']);
 };
+
+?>
+
+
+
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+ <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"> &times;</button>
+        <h4 class="modal-title">ATTENTION!!!!</h4>
+      </div>
+      <div class="modal-body">
+        <p>Tu peux pas supprimer un admin BOULET!</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<?php
 
 $actionResultat = '';
 
@@ -101,14 +126,14 @@ include('header.php');
 						<?= $l->getEmailAdress(); ?>
 					</td>
 					<td>
-						<?= !empty($l->getLastConnection())?getLastConnection():'Aucune connexion'; ?>
+						<?= !empty($l->getLastConnection())?$l->getLastConnection():'Aucune connexion'; ?>
 					</td>
 					<td>
-						<div class="form-group">
+						<div class="form-group" >
 							<select class="form-control actionUser">
 								<option></option>
 								<option value="update" data-id="<?= $l->getId(); ?>">Modifier</option>
-								<option value="delete" data-id="<?= $l->getId(); ?>">Supprimer</option>
+								<option value="delete" data-id="<?= $l->getId(); ?>" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Supprimer</option>
 							</select>
 						</div>
 					</td>
@@ -134,6 +159,8 @@ include('header.php');
 
 		}
 	?>
+
+
 
 	</section>
 <?php
