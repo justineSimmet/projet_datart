@@ -9,7 +9,7 @@ if (isset($_POST['targetUser'])) {
 };
 
 $actionResultat = '';
-
+//TEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEST
 //INSERTIONS EN BASE DE DONNEE DU FORMULAIRE
 if(isset($_POST['public_name'])){
 	//Pour être plus précis qu'avec un simple isset $targetUser, je teste si l'id renvoyé par le formulaire n'est pas vide. Si c'est le cas, je fais un update.
