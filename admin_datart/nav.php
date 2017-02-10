@@ -1,70 +1,47 @@
-<section class="nav">
+<!-- TOP NAV Menu, présent uniquement sur grand écran -->
+<nav class="navbar-fixed-top hidden-sm hidden-xs">
+    <div class="container-fluid" id="top-nav">
 
-    <div class="top_nav">
+        <h1 class="col-lg-5 col-lg-offset-3 col-md-5 col-md-offset-3 "><?= isset($location)?$location:'Bienvenue '.$currentUser->getName().' '.$currentUser->getSurname(); ?></h1>
 
-        <div class="page_location"></div>
-        <div class="my_account">
-            <a href="">Mon compte</a>
-        </div>
-        <div class="disconnect">
-            <a href="">Déconnexion</a>
-        </div>
-
-    </div>
-<!-- top_nav disparait une fois en mode tablette -->
-
-
-
-    <div class="main_nav">
-        <div  class="btn-nav"> 
-            <p>
-                <a href="">
-                    <span>Menu</span>
-                </a>
-            </p>
-        </div>
-
-        <h1>$Titre</h1>
-
-<!-- btn-nav et h1 apparaissent en tablette
- -->
-
-        <div class="logo_nav">
-            <img src="" alt="">
-        </div>
-
-<!-- btn-nav, h1 et logo_nav se mettent en direction row en tablette
- -->
-
-
-        <ul id="main_menu">
-            <li>
-                <img src="assets/images/DATART-rvb.png" width="250px"></img>
-            </li>
-            <li>dashboard</li>
-            <li>user</li>
-            <li>agenda</li>
-            <li>Les expositions
-                <ul>
-                    <li>Zoom exposition</li>
-                </ul>
-            </li>
-            <li>Les artistes
-                <ul>
-                    <li>Zoom artiste</li>
-                </ul>
-            </li>
-            <li>Les oeuvres
-                <ul>
-                    <li>Zoom oeuvre</li>
-                </ul>
-            </li>
-            <li>Statistiques</li>
-            <li>Déconnexion</li>
+        <ul class="col-lg-4 col-md-4">
+            <li><a href="user_account.php"><span class="fa fa-user"></span>Mon compte</a></li><!--
+            --><li><a href="logout.php"><span class="fa fa-sign-out"></span>Déconnexion</a></li>
         </ul>
-<!-- #main_menu disparait en tablette pour se positionner en absolute ds le main_nav
- -->
-    
-    </div>
 
-</section>
+    </div>
+</nav>
+
+<!-- MAIN NAV -->
+<nav class="col-lg-3 col-md-3" id="main-nav">
+    <div class="row">
+        <div class="nav-logo col-lg-12 col-md-12">
+            <img src="assets/images/datartGA_vecto-blanc.png"> <!-- Logo écran large -->
+        </div>
+
+        <ul id="main-menu">
+            <li><a href="dashboard.php"><span class="fa fa-dashboard"></span>Tableau de bord</a></li>
+            <?=
+                $currentUser->getStatus() == 0?'<li><a href="users_management.php"><span class="fa fa-users"></span>Gestion des utilisateurs</a></li>':'';
+            ?>
+            <li><a href="planning.php"><span class="fa fa-calendar"></span>Agenda</a></li>
+            <li><a href="exhibit_management.php"><span class="fa fa-archive"></span>Les expositions
+                <ul>
+                    <a href="exhibit_zoom.php"><span> >> </span>Ajouter une expo.</a></li>
+                </ul>
+            </a></li>
+            <li><a href="artist_management.php"><span class="fa fa-paint-brush"></span>Les artistes
+                <ul>
+                    <a href="artist_zoom.php"><span> >> </span>Ajouter un artiste</a></li>
+                </ul>
+            </a></li>
+            <li><a href="artwork_management.php"><span class="fa fa-eye"></span>Les oeuvres
+                <ul>
+                    <a href="artwork_zoom.php"><span> >> </span>Ajouter une oeuvre</a></li>
+                </ul>
+            </a></li>
+            <li><a href="statistics.php"><span class="fa fa-bar-chart"></span>Statistiques</a></li>
+        </ul>
+
+    </div>
+</nav>

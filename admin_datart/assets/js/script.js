@@ -30,8 +30,6 @@ $(function(){
 });
 
 
-
-
 $(document).ready(function(){
 
 /**********************************************
@@ -53,9 +51,9 @@ $(document).ready(function(){
 				usersurname : userData.surname,
 				usermail : userData.email,
 				userlogin : userData.login,
-				adminname : 'Justine',
-				adminsurname : 'Simmet',
-				adminmail : 'justine.simmet@gmail.com'
+				adminname : adminData.name,
+				adminsurname : adminData.surname,
+				adminmail : adminData.email
 			},
 			success: function(retour){
 				var obj = JSON.parse(retour);
@@ -104,9 +102,9 @@ $(document).ready(function(){
 				usersurname : targetUserData.surname,
 				usermail : targetUserData.email,
 				userlogin : targetUserData.login,
-				adminname : 'Justine',
-				adminsurname : 'Simmet',
-				adminmail : 'justine.simmet@gmail.com'
+				adminname : adminData.name,
+				adminsurname : adminData.surname,
+				adminmail : adminData.email
 			},
 			success: function(retour){
 				var obj = JSON.parse(retour);

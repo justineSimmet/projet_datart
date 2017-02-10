@@ -11,9 +11,10 @@
  	<link rel="stylesheet" type="text/css" href="assets/css/style.css" />
  </head>
  <body>
+<div class="container-fluid main-container">
 
 <?php
 	include('nav.php');
 ?>
-<div class="container-fluid">
+
 	

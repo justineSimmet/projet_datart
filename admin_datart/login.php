@@ -3,21 +3,22 @@
 require_once('includes/include.php');
 require_once('classes/user.php');
 
-if (isset($_POST['login']) && isset($_POST['password'])) {
-		$log = User::connect($_POST['login'], $_POST['password']);
-		var_dump($log);
-		if ($log == TRUE) {
-			$_SESSION['id'] = $log;
-		}
-		else{
-			$error = '<div class="alert alert-danger alert-dismissable">
-						<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-						<strong>La connexion a échouée. Votre login et/ou votre mot de passe est incorrect.</strong><br>
-						Merci de vous rapprocher de votre administrateur :<br>
-						Machin Fioret - machin-fioret@grand-angle.fr
-						</div>';
-		}
+if(isset($_POST['login']) && isset($_POST['password'])) {
+	$log = User::connect($_POST['login'], $_POST['password']);
+	var_dump($log);
+	if (!$log) {
+		$error = '<div class="alert alert-danger alert-dismissable">
+					<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+					<strong>La connexion a échouée. Votre login et/ou votre mot de passe est incorrect.</strong><br>
+					Merci de vous rapprocher de votre administrateur :<br>
+					Machin Fioret - machin-fioret@grand-angle.fr
+					</div>';
 	}
+	else{
+		$_SESSION['id'] = $log;
+		header('Location:index.php');
+	}
+}
 
 //CONTRÔLE DE CONNEXION
 

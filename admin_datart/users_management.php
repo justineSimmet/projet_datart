@@ -1,14 +1,16 @@
 <?php
 
-require_once('includes/include.php');
 require_once('classes/user.php');
+require_once('includes/include.php');
+
+$location = 'Gestion des utilisateurs';
+
 
 if (isset($_POST['targetUser'])) {
 	$targetUser = new User($_POST['targetUser']);
 };
 
 $actionResultat = '';
-//TEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEST
 //INSERTIONS EN BASE DE DONNEE DU FORMULAIRE
 if(isset($_POST['public_name'])){
 	//Pour être plus précis qu'avec un simple isset $targetUser, je teste si l'id renvoyé par le formulaire n'est pas vide. Si c'est le cas, je fais un update.
@@ -101,7 +103,7 @@ include('header.php');
 						<?= $l->getEmailAdress(); ?>
 					</td>
 					<td>
-						<?= !empty($l->getLastConnection())?getLastConnection():'Aucune connexion'; ?>
+						<?= !empty($l->getLastConnection())?$l->getLastConnection():'Aucune connexion'; ?>
 					</td>
 					<td>
 						<div class="form-group">
@@ -136,12 +138,9 @@ include('header.php');
 	?>
 
 	</section>
-<?php
- var_dump($newUser);
-?>
 </div>
+<script type="text/javascript"> var adminData = <?php  if(isset($currentUser)){echo $currentUser->toJson() ;}else{echo "''";} ; ?></script>
 
-<!-- Mettre en place var adminData quand la connexion sera ok -->
 <script type="text/javascript"> var userData = <?php  if(isset($newUser)){echo $newUser->toJson() ;}else{echo "''";} ; ?></script>
 
 <script type="text/javascript"> var targetUserData = <?php  if(isset($targetUser)){echo $targetUser->toJson() ;}else{echo "''";} ; ?></script>

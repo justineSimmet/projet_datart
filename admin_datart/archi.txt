@@ -70,25 +70,25 @@ GRAND_ANGLE_EXPO
 	|
 	|-->logout.php
 	|
-	|-->users-management.php
+	|-->users_management.php
 	|
-	|-->user-account.php
+	|-->user_account.php
 	|
-	|-->exhibit-management.php
+	|-->exhibit_management.php
 	|
-	|-->exhibit-zoom.php
+	|-->exhibit_zoom.php
 	|
-	|-->exhibit-zoning.php
+	|-->exhibit_zoning.php
 	|
-	|-->exhibit-technical-sheet.php
+	|-->exhibit-_technical-sheet.php
 	|
-	|-->artist-management.php
+	|-->artist_management.php
 	|
-	|-->artist-zoom.php
+	|-->artist_zoom.php
 	|
-	|-->artwork-management.php
+	|-->artwork_management.php
 	|
-	|-->artwork-zoom.php
+	|-->artwork_zoom.php
 	|
 	|-->planning.php
 	|
