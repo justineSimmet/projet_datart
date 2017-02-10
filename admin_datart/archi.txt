@@ -1,0 +1,95 @@
+GRAND_ANGLE_EXPO
+|
+|-->header.php
+|
+|-->nav.php
+|
+|-->language.php // Menu de gestion des langues
+|
+|-->footer.php
+|
+|-->index.php 
+|
+|-->exhibit-visit.php
+|
+|-->artist-visit.php
+|
+|-->artwork-visit.php
+|
+|-->about.php
+|
+|-->/admin_datart
+	|
+	|
+	|-->/assets
+	|	|
+	|	|-->css
+	|	|
+	|	|-->fonts
+	|	|
+	|	|-->images
+	|	|
+	|	|-->js
+	|
+	|
+	|-->/classes
+	|	|
+	|	|-->user.php
+	|	|
+	|	|-->exhibit.php
+	|	|
+	|	|-->artist.php
+	|	|
+	|	|-->artwork.php
+	|	|
+	|	|-->event.php
+	|	|
+	|	|-->PHPMailer.php //Librairie PHP qui facilite la gestion de l'envoi de mails
+	|
+	|
+	|-->/includes.php
+	|	|
+	|	|-->config.php //Regroupe les infos de connexion à la BD et les constantes du projet
+	|	|
+	|	|-->functions.php //Regroupe les fonctions génériques du projets
+	|	|
+	|	|-->include.php //Regroupe les appels de fichiers
+	|
+	|
+	|//FICHIERS DE STRUCTURE DU PROJET
+	|
+	|-->header.php
+	|
+	|-->nav.php
+	|
+	|-->footer.php
+	|
+	|-->index.php  //Dashboard DatArt
+	|
+	|-->login.php
+	|
+	|-->logout.php
+	|
+	|-->users-management.php
+	|
+	|-->user-account.php
+	|
+	|-->exhibit-management.php
+	|
+	|-->exhibit-zoom.php
+	|
+	|-->exhibit-zoning.php
+	|
+	|-->exhibit-technical-sheet.php
+	|
+	|-->artist-management.php
+	|
+	|-->artist-zoom.php
+	|
+	|-->artwork-management.php
+	|
+	|-->artwork-zoom.php
+	|
+	|-->planning.php
+	|
+	|-->statistics.php
