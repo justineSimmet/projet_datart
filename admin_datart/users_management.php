@@ -21,7 +21,7 @@ if(isset($_POST['public_name'])){
 		$targetUser->setEmailAdress($_POST['email']);
 		$targetUser->setStatus($_POST['status']);
 		$updateUser = $targetUser->synchroDb('', '');
-		var_dump($updateUser);
+
 		
 			if ($updateUser) {
 				$actionResultat = '<div class="alert alert-success alert-dismissable" id="user-edited">
@@ -128,8 +128,10 @@ include('header.php');
 			$targetUser->form($_SERVER['PHP_SELF'], 'Modifier', 'edit');
 		}
 		else{
+
 			$user = new User();
 			$user->form($_SERVER['PHP_SELF'],'Créer', 'add');
+
 		}
 	?>
 
@@ -141,6 +143,8 @@ include('header.php');
 
 <!-- Mettre en place var adminData quand la connexion sera ok -->
 <script type="text/javascript"> var userData = <?php  if(isset($newUser)){echo $newUser->toJson() ;}else{echo "''";} ; ?></script>
+
+<script type="text/javascript"> var targetUserData = <?php  if(isset($targetUser)){echo $targetUser->toJson() ;}else{echo "''";} ; ?></script>
 
 <?php
 include('footer.php');
