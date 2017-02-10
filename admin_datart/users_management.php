@@ -1,7 +1,6 @@
 <?php
 
-require_once('includes/config.php');
-require_once('includes/functions.php');
+require_once('includes/include.php');
 require_once('classes/user.php');
 
 if (isset($_POST['targetUser'])) {
@@ -129,13 +128,17 @@ include('header.php');
 			$targetUser->form($_SERVER['PHP_SELF'], 'Modifier', 'edit');
 		}
 		else{
-			$User = new User();
-			$User->form($_SERVER['PHP_SELF'],'Créer', 'add');
+
+			$user = new User();
+			$user->form($_SERVER['PHP_SELF'],'Créer', 'add');
+
 		}
 	?>
 
 	</section>
-
+<?php
+ var_dump($newUser);
+?>
 </div>
 
 <!-- Mettre en place var adminData quand la connexion sera ok -->
