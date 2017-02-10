@@ -1,7 +1,6 @@
 <?php
 
-require_once('includes/config.php');
-require_once('includes/functions.php');
+require_once('includes/include.php');
 require_once('classes/user.php');
 
 if (isset($_POST['targetUser'])) {
