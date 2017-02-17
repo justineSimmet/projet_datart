@@ -63,6 +63,23 @@ if(isset($_POST['public_name'])){
 	};
 };
 
+if(isset($_POST['action']) && $_POST['action'] == 'resetPassword'){
+	$targetUser = new User($_POST['id']);
+	$resetPassword = $targetUser->resetPassword();
+	if ($resetPassword) {
+		$actionResultat = '<div class="alert alert-success alert-dismissable" id="user-password">
+		<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+		<strong>Vous venez de réinitialiser le mot de passe de '.$targetUser->getPublicName().' '.$targetUser->getPublicSurname().'.</strong> Merci de patienter, un e-mail de confirmation est en cours d\'envoi.
+		</div>';
+	}
+	else{
+		$actionResultat = '<div class="alert alert-danger alert-dismissable">
+		<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+		<strong>Erreur !</strong> le mot de passe de l\'utilisateur n\'a pas pu être réinitialiser.
+		</div>';
+	}
+}
+
 
 include('header.php');
 
@@ -128,7 +145,13 @@ include('header.php');
 	 <?php
 		if(isset($targetUser)){
 			$targetUser->form($_SERVER['PHP_SELF'], 'Modifier', 'edit');
-			echo '<button type="button" class="btn btn-warning" id="reset-password">Réinitialiser le mot de passe</button>';
+			?>
+			<form action="<?= $_SERVER['PHP_SELF']; ?>" method="POST">
+				<input type="hidden" name="action" value="resetPassword">
+				<input type="hidden" name="id" value="<?= $targetUser->getId(); ?>" />
+				<input type="submit" value="Réinitialiser le mot de passe" class="btn btn-warning btn-md" />
+			</form>
+		<?php
 		}
 		else{
 

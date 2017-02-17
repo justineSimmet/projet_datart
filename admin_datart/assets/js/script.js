@@ -107,14 +107,9 @@ $(document).ready(function(){
 		});
 	};
 
-
 /**********************************************
-** A FAIRE !!
 ** EXECUTION REQUETE AJAX SI UN UTILISATEUR A
 ** ETE UPDATE EN BD CORRECTEMENT 
-** Fonction idem que précédemment sauf qu'il faut :
-** - Intervenir sur #user-edited
-** - Renvoyer vers une page update_user.php a créer
 ************************************************/
 
 //Détecte la présence d'une div avec l'id user-edited
@@ -158,7 +153,46 @@ $(document).ready(function(){
 		});
 	};
 
+/**********************************************
+** EXECUTION REQUETE AJAX SI UN MOT DE PASSE
+** UTILISATEUR A ETE RESET CORRECTEMENT 
+************************************************/
 
+	if($('#user-password').length == 1){
+		$.ajax({
+			url: 'reset_password.php',
+			method: 'POST',
+			data : {
+				username : targetUserData.name,
+				usersurname : targetUserData.surname,
+				usermail : targetUserData.email,
+				userlogin : targetUserData.login,
+				adminname : adminData.name,
+				adminsurname : adminData.surname,
+				adminmail : adminData.email
+			},
+			success: function(retour){
+				var obj = JSON.parse(retour);
+				if (obj.response == 'success') {
+					var divSuccess ='<div class="alert alert-success alert-dismissable">'
+					+'<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'
+					+'<strong>Un email de confirmation a été envoyé.</strong>'
+					+'</div>';
+
+					$('#alert-area').append(divSuccess);	
+				}
+				else{
+					var divError ='<div class="alert alert-danger alert-dismissable">'
+					+'<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'
+					+'<strong>Un email de confirmation n\'a pas pu être envoyé.</strong> Merci de vérifier l\'état de votre connexion'
+					+'</div>';
+
+					$('#alert-area').append(divError);
+				}
+			},
+		});
+	};
+	
 /**********************************************
 ** ACTIONS SUR LA LISTE DEROULANTE DES ACTIONS
 ************************************************/
