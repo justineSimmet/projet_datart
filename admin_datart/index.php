@@ -3,9 +3,11 @@ require_once('classes/user.php');
 require_once('includes/include.php');
 
 
-
 include('header.php');
+?>
+
+<h2>TEST</h2>
 
 
-var_dump($_SESSION);
-var_dump($currentUser);
+<?php
+include('footer.php');

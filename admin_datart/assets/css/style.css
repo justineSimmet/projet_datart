@@ -23,8 +23,8 @@ body{
 	font-size: 16px;
 }
 
-.main-container{
-	padding :100px 0 0 400px;
+#main-container{
+	padding-top: 50px;
 }
 
 /*************************************************************
@@ -68,6 +68,10 @@ body{
 	margin-right: 10px;
 }
 
+#top-nav-ul{
+	padding-right: 0px;
+}
+
 #main-nav{
 	position: fixed;
 	z-index: 1000;
@@ -75,14 +79,167 @@ body{
 	left: 0;
 	bottom: 0;
 	background-color: #fff;
-	box-shadow: 5px 0 5px rgba(0,0,0,0.5);
+	box-shadow: 5px 0 5px rgba(0,0,0,0.2);
 }
 
 #main-nav .nav-logo{
-	padding: 15px 30px;
+	padding: 15px;
 	background-color: #d5313a;
 }
 
+#main-nav-menu{
+	display: inline-block;
+	width: 100%;
+}
+
+#main-nav-menu li{
+	width: 100%;
+	border-bottom: 1px solid #778085;
+	border-top: 1px solid rgba(0,0,0,0);
+}
+
+#main-nav-menu li:hover{
+	width: 100%;
+	border-bottom: 1px solid #fff;
+	border-top: 1px solid #fff;;
+}
+
+#main-nav-menu a{
+	position: relative;
+	display: block;
+	width: 100%;
+	padding: 10px;
+	color: #778085;
+	font-size: 1.125em;
+	text-decoration: none;
+}
+
+#main-nav-menu a:hover{
+	color: #fff;
+	background-color:#dadada;
+	background-color: rgb(213,49,58); /* Old browsers */
+	background-color: -moz-linear-gradient(top, rgba(213,49,58,1) 0%, rgba(181,40,47,1) 100%); /* FF3.6-15 */
+	background-color: -webkit-linear-gradient(top, rgba(213,49,58,1) 0%,rgba(181,40,47,1) 100%); /* Chrome10-25,Safari5.1-6 */
+	background-color: linear-gradient(to bottom, rgba(213,49,58,1) 0%,rgba(181,40,47,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d5313a', endColorstr='#b5282f',GradientType=0 ); /* IE6-9 */
+}
+
+#main-nav-menu .active-nav-link{
+	color: #fff;
+	background-color:#dadada;
+	background-color: rgb(213,49,58); /* Old browsers */
+	background-color: -moz-linear-gradient(top, rgba(213,49,58,1) 0%, rgba(181,40,47,1) 100%); /* FF3.6-15 */
+	background-color: -webkit-linear-gradient(top, rgba(213,49,58,1) 0%,rgba(181,40,47,1) 100%); /* Chrome10-25,Safari5.1-6 */
+	background-color: linear-gradient(to bottom, rgba(213,49,58,1) 0%,rgba(181,40,47,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d5313a', endColorstr='#b5282f',GradientType=0 ); /* IE6-9 */
+}
+
+#main-nav-menu a span{
+	margin-right: 10px;
+}
+
+.link-plus{
+	color: #d5313a;
+	position: absolute;
+	margin:auto;
+	right: 0;
+	top: 50%;
+	transform: translate(-50%,-50%);
+}
+
+#main-nav-menu a:hover .link-plus{
+	color: #fff;
+}
+
+#main-nav-menu li>ul{
+	display: none;
+}
+
+#background-nav{
+	display: none;
+}
+
+/*************************MEDIA QUERIES DU NAV************************/
+@media screen and (max-width: 992px){
+
+	#main-container{
+		padding-top: 120px;
+	}
+
+	#main-nav{
+		max-height: 100px;
+		min-height: 100px;
+		top:0px;
+		bottom: initial;
+	}
+
+	#main-nav .nav-logo {
+		position: relative;
+		display: block;
+		height: 100px;
+		background-color: #d5313a;
+	}
+
+	#main-nav .nav-logo img{
+		position: absolute;
+		max-width: 95%;
+		min-width: 95%;
+    	margin: 0;
+    	position: absolute;
+    	top: 50%;
+    	left: 50%;
+    	transform: translate(-50%, -50%);
+	}
+
+	.nav-header{
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.btn-nav{
+		padding: 25px 0;
+		text-align: center;
+		font-size: 1.3em;
+		line-height: 1em;
+		cursor: pointer;
+		z-index: 1000;
+	}
+
+	#close-nav{
+		display: none;
+	}
+
+	#main-nav h1{
+		overflow: hidden;
+		font-size: 1.8em;
+		line-height: 100px;
+		margin: 0;
+		color: #778085;
+	}
+
+	#main-nav-menu{
+		display: none;
+		position: fixed;
+		top: 0; bottom: 0; left: 0;
+		padding-top: 100px;
+		margin-bottom: 0;
+		width: 35%;
+		background-color: #fff;
+		z-index: 500;
+	}
+
+	#background-nav{
+		display: none;
+		position: fixed;
+		top: 0; bottom: 0; left: 0; right: 0;
+		background-color: #778085 ;
+		opacity: 0.5;
+	}
+
+}
 
 /*************************************************************
 **	CSS DU LOGIN

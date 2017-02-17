@@ -1,4 +1,34 @@
 /*-----------------------------------------------------------------------------
+ACTIONS SUR LE MENU HAMBURGER DE LA NAVIGATION
+------------------------------------------------------------------------------*/
+
+$('#open-nav').click(function(){
+	$('#main-nav-menu').show();
+	$('#background-nav').show();
+	$(this).hide();
+	$('#close-nav').show();
+});
+
+$('#close-nav').click(function(){
+	$('#main-nav-menu').hide();
+	$('#background-nav').hide();
+	$(this).hide();
+	$('#open-nav').show();
+});
+
+/*-----------------------------------------------------------------------------
+GESTION LIEN ACTIFS
+------------------------------------------------------------------------------*/
+$(function() {
+	var location = window.location.href.substr(window.location.href.lastIndexOf("/")+1);
+	$("#main-nav-menu li a").each(function(){
+		if($(this).attr("href") == location){
+			$(this).addClass("active-nav-link");
+      	}
+     })
+});
+
+/*-----------------------------------------------------------------------------
 FORMULAIRE DE CREATION D'UTILISATEURS - CONTROLES & ACTIONS
 A AJUSTER EN FONCTION DU FORMULAIRE CREE
 ------------------------------------------------------------------------------*/
@@ -129,10 +159,6 @@ $(document).ready(function(){
 	};
 
 
-
-
-
-
 /**********************************************
 ** ACTIONS SUR LA LISTE DEROULANTE DES ACTIONS
 ************************************************/
@@ -162,4 +188,5 @@ $(document).ready(function(){
 	});
 
 
-})
+});
+

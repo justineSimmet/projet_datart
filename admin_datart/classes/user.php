@@ -137,6 +137,22 @@ class User{
 	}
 
 /*----------------------------------------------------------------
+	Reset Password
+	Réinitialise le mot de passe utilisateur
+	en le remplaçant par celui générique
+----------------------------------------------------------------*/
+	function resetPassword(){
+		$resetPassword = requete_sql("UPDATE user SET password = '".addslashes($this->passwordCrypt(GENERIC_PASSWORD))."' WHERE id='".$this->id."' ");
+		if ($resetPassword) {
+			return TRUE;
+		}
+		else{
+			return FALSE;
+		}
+	}
+
+
+/*----------------------------------------------------------------
 	Mise en place de la fonction de controle des mots de passe
 	Pour l'utiliser User::passwordCheck()
 ----------------------------------------------------------------*/

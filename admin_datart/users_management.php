@@ -3,7 +3,7 @@
 require_once('classes/user.php');
 require_once('includes/include.php');
 
-$location = 'Gestion des utilisateurs';
+$locationTitle = 'Gestion des utilisateurs';
 
 
 if (isset($_POST['targetUser'])) {
@@ -73,7 +73,7 @@ include('header.php');
 </div>
 
 <div class="row">
-	<section class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 col-sm-9 ">
+	<section class="col-lg-12 col-md-12 col-sm-9 col-xs-9">
 	<h2>Liste des utilisateurs</h2>
 		<table>
 			<thead>
@@ -124,10 +124,11 @@ include('header.php');
 
 	</section>
 
-	<section class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 col-sm-3 ">
+	<section class="col-lg-12 col-md-12 col-sm-3 col-xs-3 ">
 	 <?php
 		if(isset($targetUser)){
 			$targetUser->form($_SERVER['PHP_SELF'], 'Modifier', 'edit');
+			echo '<button type="button" class="btn btn-warning" id="reset-password">Réinitialiser le mot de passe</button>';
 		}
 		else{
 

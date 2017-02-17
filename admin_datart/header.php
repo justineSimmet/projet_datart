@@ -1,8 +1,9 @@
  <!DOCTYPE html>
  <html lang="fr">
  <head>
- 	<meta charset="utf-8">
-  	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
  	<title><?= isset($location)?$location:'Application DATART / Grand Angle'; ?></title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
  	<link rel="stylesheet" type="text/css" href="assets/css/reset.css" />
@@ -11,10 +12,10 @@
  	<link rel="stylesheet" type="text/css" href="assets/css/style.css" />
  </head>
  <body>
-<div class="container-fluid main-container">
+<div class="container-fluid">
 
+	<div class="row">
 <?php
 	include('nav.php');
 ?>
-
-	
+		<div class="col-lg-10 col-lg-offset-2 col-md-10 col-md-offset-2 col-sm-12 col-xs-12" id="main-container">
