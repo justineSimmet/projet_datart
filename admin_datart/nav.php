@@ -24,7 +24,7 @@
             </p>
         </div>
 
-        <h1>$Titre</h1>
+        <h1>DD ME TAPE!!</h1>
 
 <!-- btn-nav et h1 apparaissent en tablette
  -->

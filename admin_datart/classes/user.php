@@ -141,12 +141,12 @@ class User{
 	Pour l'utiliser User::passwordCheck()
 ----------------------------------------------------------------*/
 	static function passwordCheck($password, $hashCrypt){
-		if ( password_verify($password,base64_decode($hashCrypt)) ){
+		if ( password_verify($password, base64_decode($hashCrypt)) ){
 			return TRUE;
 		}
 		else{
 			return FALSE;
-		}
+		} 
 	}
 	
 /*----------------------------------------------------------------
@@ -274,10 +274,29 @@ class User{
 
 
 /*----------------------------------------------------------------
-	Suppresion du compte utilisateur ciblé après vérification
+	Suppression du compte utilisateur ciblé après vérification
 	du mot de passe.
 ----------------------------------------------------------------*/
 
+
+	function deleteUser($password, $targetUser){
+        $adminPass= requete_sql("SELECT password FROM user WHERE id='".$this->id."' ");
+        $adminPass = $adminPass->fetch(PDO::FETCH_ASSOC);
+        $adminCheck = User::passwordCheck($password, $adminPass['password']);
+
+        if ($adminCheck) {
+            $deleteTarget = requete_sql("DELETE FROM user WHERE id = '".$targetUser."' ");
+            if ($deleteTarget) {
+                 return TRUE;
+            }
+            else{
+                 return FALSE;
+            }
+        }
+        else{
+            return FALSE;
+        }
+    }
 
 
 
@@ -368,7 +387,8 @@ class User{
 			"name" => $this->public_name,
 			"surname" => $this->public_surname,
 			"email" => $this->email_adress,
-			"login" => $this->login 
+			"login" => $this->login, 
+			"status" => $this->status
 		);
 		return json_encode($userArray, JSON_PRETTY_PRINT);
 	}

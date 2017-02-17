@@ -11,24 +11,6 @@ if (isset($_POST['targetUser'])) {
 
 
 
-<div id="myModal" class="modal fade" role="dialog">
-  <div class="modal-dialog">
- <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"> &times;</button>
-        <h4 class="modal-title">ATTENTION!!!!</h4>
-      </div>
-      <div class="modal-body">
-        <p>Tu peux pas supprimer un admin BOULET!</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
-      </div>
-    </div>
-
-  </div>
-</div>
-
 
 <?php
 
@@ -86,13 +68,56 @@ if(isset($_POST['public_name'])){
 	};
 };
 
+	if(isset($_POST['password'])){
+		$delete = $currentUser->deleteUser($_POST['password'], $_POST['targetId']);
+
+	}
+
 
 include('header.php');
 
 ?>
 
+
 <div class="row" id="alert-area">
 	<?= !empty($actionResultat)?$actionResultat:''; ?>
+</div>
+
+<div id="mymodal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Attention!</h4>
+            </div>
+            <?php if((isset($targetUser)) && ($targetUser->getStatus() == 0)) {
+          
+            echo '<div class="modal-body_admin">
+                <p> Vous ne pouvez pas supprimer un administrateur</p>
+            </div>';
+             } 
+			else{
+            ?><div class="modal-body_user">
+                <p> Etes vous sûr(e) de vouloir supprimer cet utilisateur?</p>
+                <p> Pour continuer la suppression, veuillez saisir votre mot de passe s\'il vous plaît</p>
+
+                <form action="users_management.php" method="post">
+
+                <label for="inputPassword">Password</label>
+                <input type="password" name="password" placeholder="Votre mot de passe"  required />
+                <input type="hidden" value="<?= isset($targetUser)?$targetUser->getId():';' ?>" name="targetId">
+                <input type="submit" value="Supprimer" />
+
+                </form>
+
+            </div><?php
+            }
+            ?>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="row">
@@ -133,7 +158,7 @@ include('header.php');
 							<select class="form-control actionUser">
 								<option></option>
 								<option value="update" data-id="<?= $l->getId(); ?>">Modifier</option>
-								<option value="delete" data-id="<?= $l->getId(); ?>" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Supprimer</option>
+								<option value="delete" data-id="<?= $l->getId(); ?>" >Supprimer</option>
 							</select>
 						</div>
 					</td>
@@ -162,9 +187,10 @@ include('header.php');
 
 
 
+
 	</section>
 <?php
- var_dump($newUser);
+
 ?>
 </div>
 
