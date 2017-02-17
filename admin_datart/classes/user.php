@@ -347,7 +347,7 @@ class User{
 						<input type="password" name="old-password" id="old-password" />
 					</div>
 					<div class="form-group">
-						<label for="new-password">Mot de passe actuel :</label>
+						<label for="new-password">Nouveau mot de passe :</label>
 						<input type="password" name="new-password" id="new-password" />
 					</div>
 				</fieldset>

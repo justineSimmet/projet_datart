@@ -3,7 +3,7 @@
     <div class="container-fluid" id="top-nav">
         <div class="row">
             <div class="col-lg-6 col-lg-offset-2 col-md-6 col-md-offset-2 ">
-                <h1><?= isset($locationTile)?$locationTitle:'Bienvenue '.$currentUser->getPublicName().' '.$currentUser->getPublicSurname(); ?></h1>
+                <h1><?= isset($locationTitle)? $locationTitle : 'Bienvenue '.$currentUser->getPublicName().' '.$currentUser->getPublicSurname(); ?></h1>
             </div>
             <div class="col-lg-4 col-md-4" id="top-nav-ul">
                 <ul>
@@ -30,7 +30,7 @@
             <div class="row">
                 <p class="btn-nav col-sm-2 col-xs-2" id="open-nav"><span class="fa fa-bars"></span><br/>Menu</p>
                 <p class="btn-nav col-sm-2 col-xs-2" id="close-nav"><span class="fa fa-close"></span><br/>Fermer</p>
-                <h1 class="col-sm-10 col-xs-10"><?= isset($locationTitle)?$locationTitle:'Bienvenue '.$currentUser->getPublicName().' '.$currentUser->getPublicSurname(); ?></h1>
+                <h1 class="col-sm-10 col-xs-10"><?= isset($locationTitle)? $locationTitle :'Bienvenue '.$currentUser->getPublicName().' '.$currentUser->getPublicSurname(); ?></h1>
             </div>
         </div>
         <ul id="main-nav-menu">
@@ -39,6 +39,7 @@
             <?=
                 $currentUser->getStatus() == 0?'<li><a href="users_management.php"><span class="fa fa-users"></span>Gestion des utilisateurs</a></li>':'';
             ?>
+            <li class="hidden-lg hidden-md"><a href="user_account.php"><span class="fa fa-user"></span>Mon compte</a></li>
             <li><a href="planning.php"><span class="fa fa-calendar"></span>Agenda</a></li>
             <li><a href="exhibit_management.php"><span class="fa fa-archive"></span>Les expositions <span class="fa fa-plus-circle link-plus"></span>
                 <ul>
