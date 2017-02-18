@@ -22,6 +22,7 @@
         <div class="col-lg-12 col-md-12 col-sm-4 hidden-sm col-xs-4 hidden-xs nav-logo">
             <a href="index.php"><img src="assets/images/datartGA_vecto-blanc.png"></a>
         </div>
+
         <!-- LOGO VERSION PETIT ECRAN-->
         <div class="col-lg-12 col-lg-push-0 hidden-lg col-md-12 col-md-push-0 hidden-md col-sm-4 col-sm-push-8 col-xs-4 col-xs-push-8 nav-logo">
             <a href="index.php"><img src="assets/images/DAgrand-angle_vecto-blanc.png"></a>

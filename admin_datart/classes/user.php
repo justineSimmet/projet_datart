@@ -163,7 +163,7 @@ class User{
 		}
 		else{
 			return FALSE;
-		}
+		} 
 	}
 	
 /*----------------------------------------------------------------
@@ -211,6 +211,33 @@ class User{
  			return FALSE;
  		}
 	}
+
+
+
+/*----------------------------------------------------------------
+	Suppression du compte utilisateur ciblé après vérification
+	du mot de passe.
+----------------------------------------------------------------*/
+
+
+	function deleteUser($password, $targetUser){
+        $adminCheck = $this->passwordCheck($password);
+
+        if ($adminCheck) {
+            $deleteTarget = requete_sql("DELETE FROM user WHERE id = '".$targetUser."' ");
+            if ($deleteTarget) {
+                 return TRUE;
+            }
+            else{
+                 return FALSE;
+            }
+        }
+        else{
+            return FALSE;
+        }
+    }
+
+
 
 /*----------------------------------------------------------------
 	Synchronisation des données de l'utilisateur à la BD
@@ -289,16 +316,6 @@ class User{
 			}
 		}
 	}
-
-
-
-/*----------------------------------------------------------------
-	Suppresion du compte utilisateur ciblé après vérification
-	du mot de passe.
-----------------------------------------------------------------*/
-
-
-
 
 /*----------------------------------------------------------------
 	Formulaire de création ou édition d'un utilisateur
@@ -387,7 +404,8 @@ class User{
 			"name" => $this->public_name,
 			"surname" => $this->public_surname,
 			"email" => $this->email_adress,
-			"login" => $this->login 
+			"login" => $this->login, 
+			"status" => $this->status
 		);
 		return json_encode($userArray, JSON_PRETTY_PRINT);
 	}

@@ -3,6 +3,7 @@
 require_once('classes/user.php');
 require_once('includes/include.php');
 
+
 $locationTitle = 'Gestion des utilisateurs';
 
 
@@ -10,7 +11,6 @@ if (isset($_POST['targetUser'])) {
 	$targetUser = new User($_POST['targetUser']);
 };
 
-$actionResultat = '';
 //INSERTIONS EN BASE DE DONNEE DU FORMULAIRE
 if(isset($_POST['public_name'])){
 	//Pour être plus précis qu'avec un simple isset $targetUser, je teste si l'id renvoyé par le formulaire n'est pas vide. Si c'est le cas, je fais un update.
@@ -63,6 +63,7 @@ if(isset($_POST['public_name'])){
 	};
 };
 
+
 if(isset($_POST['action']) && $_POST['action'] == 'resetPassword'){
 	$targetUser = new User($_POST['id']);
 	$resetPassword = $targetUser->resetPassword();
@@ -80,13 +81,68 @@ if(isset($_POST['action']) && $_POST['action'] == 'resetPassword'){
 	}
 }
 
+if(isset($_POST['password'])){
+	$delete = $currentUser->deleteUser($_POST['password'], $_POST['targetId']);
+
+	if ($delete) {
+		$actionResultat = '<div class="alert alert-success alert-dismissable" >
+		<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+		<strong>Félicitation</strong> L\'utilisateur a bien été supprimé.</div>';			
+	}
+	else{
+		$actionResultat = '<div class="alert alert-danger alert-dismissable">
+		<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+		<strong>Erreur</strong> Votre mot de passe ne correspond pas. L\'utilisateur n\'a pas pu été supprimé.
+		</div>';			
+	}
+}
+
+
 
 include('header.php');
 
 ?>
 
+
 <div class="row" id="alert-area">
 	<?= !empty($actionResultat)?$actionResultat:''; ?>
+</div>
+
+<div id="mymodal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Attention!</h4>
+            </div>
+            <?php if((isset($targetUser)) && ($targetUser->getStatus() == 0)) {
+          
+            echo '<div class="modal-body_admin">
+                <p> Vous ne pouvez pas supprimer un administrateur</p>
+            </div>';
+             } 
+			else{
+            ?><div class="modal-body_user">
+                <p> Etes vous sûr(e) de vouloir supprimer cet utilisateur?</p>
+                <p> Pour continuer la suppression, veuillez saisir votre mot de passe s\'il vous plaît</p>
+
+                <form action="users_management.php" method="post">
+
+                <label for="inputPassword">Password</label>
+                <input type="password" name="password" placeholder="Votre mot de passe"  required />
+                <input type="hidden" value="<?= isset($targetUser)?$targetUser->getId():';' ?>" name="targetId">
+                <input type="submit" value="Supprimer" />
+
+                </form>
+
+            </div><?php
+            }
+            ?>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="row">
@@ -123,11 +179,11 @@ include('header.php');
 						<?= !empty($l->getLastConnection())?$l->getLastConnection():'Aucune connexion'; ?>
 					</td>
 					<td>
-						<div class="form-group">
+						<div class="form-group" >
 							<select class="form-control actionUser">
 								<option></option>
 								<option value="update" data-id="<?= $l->getId(); ?>">Modifier</option>
-								<option value="delete" data-id="<?= $l->getId(); ?>">Supprimer</option>
+								<option value="delete" data-id="<?= $l->getId(); ?>" >Supprimer</option>
 							</select>
 						</div>
 					</td>
@@ -162,6 +218,7 @@ include('header.php');
 	?>
 
 	</section>
+
 </div>
 <script type="text/javascript"> var adminData = <?php  if(isset($currentUser)){echo $currentUser->toJson() ;}else{echo "''";} ; ?></script>
 

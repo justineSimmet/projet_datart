@@ -218,7 +218,24 @@ $(document).ready(function(){
 					newDoc.close()
 				}	
 			});
-		 };				
+		 }
+
+		else if($(this).val() == 'delete'){
+			var userId = $(this).children('option:selected').attr("data-id");
+			$.ajax({
+				method: 'POST',
+				data : {
+					targetUser : userId
+				},
+				success: function(data){
+					var newDoc = document.open("text/html", "replace");
+					newDoc.write(data);
+					newDoc.close();
+					$("#mymodal").modal('show')
+				}	
+			});
+
+		 };			
 	});
 
 
