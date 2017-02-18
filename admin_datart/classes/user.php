@@ -154,10 +154,11 @@ class User{
 
 /*----------------------------------------------------------------
 	Mise en place de la fonction de controle des mots de passe
-	Pour l'utiliser User::passwordCheck()
 ----------------------------------------------------------------*/
-	static function passwordCheck($password, $hashCrypt){
-		if ( password_verify($password,base64_decode($hashCrypt)) ){
+	function passwordCheck($password){
+		$registerPassword = requete_sql("SELECT password FROM user WHERE id='".$this->id."' ");
+		$registerPassword = $registerPassword->fetch(PDO::FETCH_ASSOC);
+		if ( password_verify($password ,base64_decode($registerPassword['password'])) ){
 			return TRUE;
 		}
 		else{
@@ -173,7 +174,8 @@ class User{
  	static function connect($login, $password){
  		$userConnect = requete_sql("SELECT id,password FROM user WHERE login='".$login."' ");
  		$userConnect = $userConnect->fetch(PDO::FETCH_ASSOC);
- 		$passwordTest = User::passwordCheck($password, $userConnect['password']);
+ 		$user = new User($userConnect['id']);
+ 		$passwordTest = $user->passwordCheck($password);
  		if ($passwordTest) {
  			$lastConnection = requete_sql("UPDATE user SET last_connection = now() WHERE id='".$userConnect['id']."' ");
  			return $userConnect['id'];
@@ -195,7 +197,7 @@ class User{
 	function updatePassword($oldPassword, $newPassword){
 		$userPassword = requete_sql("SELECT password FROM user WHERE id='".$this->id."' ");
 		$userPassword = $userPassword->fetch(PDO::FETCH_ASSOC);
-		$passwordTest = User::passwordCheck($oldPassword, $userPassword['password']);
+		$passwordTest = $this->passwordCheck($oldPassword);
  		if ($passwordTest) {
  			$updatePassword = requete_sql("UPDATE user SET password = '".$this->passwordCrypt($newPassword)."' WHERE id='".$this->id."' ");
  			if ($updatePassword) {
@@ -260,7 +262,7 @@ class User{
 				}
 			}
 			else{
-				if(isset($newPassword) && isset($oldPassword)){
+				if(!empty($oldPassword) && !empty($newPassword) ){
 					$updatePassword = $this->updatePassword($oldPassword, $newPassword);
 					if ($updatePassword) {
 						$updateMail = requete_sql("UPDATE user SET email_adress = '".addslashes($this->email_adress)."' WHERE id = '".$this->id."' ");
@@ -302,10 +304,10 @@ class User{
 	Formulaire de création ou édition d'un utilisateur
 ----------------------------------------------------------------*/
 
-	function form($target, $action='', $description){
+	function form($target, $action='', $titre, $description){
 	?>
 		<form action=<?= $target ?> method="POST" id="<?= $description; ?>-user-form" class="user-form">
-			<h2><?= $action ?> un utilisateur :</h2>
+			<h2><?= $titre ?></h2>
 			<div class="form-group">
 				<label for="public_name">Prénom :</label>
 				<input type="text" name="public_name" id="public_name" onblur="getNameForm()" value="<?= $this->public_name ?>" required <?= strpos($_SERVER['PHP_SELF'],'admin_datart/user_account.php')?'disabled':''; ?> />
@@ -320,7 +322,7 @@ class User{
 			</div>
 			<div class="form-group">
 				<label for="login">Login :</label>
-				<input type="text" name="login" id="login" value="<?= $this->login ?>" readonly />
+				<input type="text" name="login" id="login" value="<?= $this->login ?>" readonly <?= strpos($_SERVER['PHP_SELF'],'admin_datart/user_account.php')?'disabled':''; ?>/>
 			</div>
 			<div class="form-group">
 				<label for="email">Adresse e-mail :</label>

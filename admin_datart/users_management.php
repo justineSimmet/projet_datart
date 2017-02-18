@@ -144,7 +144,7 @@ include('header.php');
 	<section class="col-lg-12 col-md-12 col-sm-3 col-xs-3 ">
 	 <?php
 		if(isset($targetUser)){
-			$targetUser->form($_SERVER['PHP_SELF'], 'Modifier', 'edit');
+			$targetUser->form($_SERVER['PHP_SELF'], 'Modifier', 'Modifier un utilisateur :', 'edit');
 			?>
 			<form action="<?= $_SERVER['PHP_SELF']; ?>" method="POST">
 				<input type="hidden" name="action" value="resetPassword">
@@ -156,7 +156,7 @@ include('header.php');
 		else{
 
 			$user = new User();
-			$user->form($_SERVER['PHP_SELF'],'Créer', 'add');
+			$user->form($_SERVER['PHP_SELF'],'Créer', 'Créer un utilisateur :', 'add');
 
 		}
 	?>
