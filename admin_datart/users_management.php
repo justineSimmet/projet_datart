@@ -71,6 +71,17 @@ if(isset($_POST['public_name'])){
 	if(isset($_POST['password'])){
 		$delete = $currentUser->deleteUser($_POST['password'], $_POST['targetId']);
 
+		if ($delete) {
+			$actionResultat = '<div class="alert alert-success alert-dismissable" >
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<strong>Félicitation</strong> L\'utilisateur a bien été supprimé.</div>';			
+		}
+		else{
+			$actionResultat = '<div class="alert alert-danger alert-dismissable">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<strong>Erreur</strong> Votre mot de passe ne correspond pas. L\'utilisateur n\'a pas pu été supprimé.
+			</div>';			
+		}
 	}
 
 
