@@ -190,6 +190,11 @@ class User{
 	Deconnexion de l'application
 ----------------------------------------------------------------*/
 
+	function disconnect(){
+		session_destroy();
+		session_start();
+	}
+
 /*----------------------------------------------------------------
 	Fonction d'update de mot de passe depuis le compte utilisateur
 ----------------------------------------------------------------*/
@@ -221,6 +226,7 @@ class User{
 
 
 	function deleteUser($password, $targetUser){
+
         $adminCheck = $this->passwordCheck($password);
 
         if ($adminCheck) {

@@ -24,6 +24,12 @@ $(function() {
 	$("#main-nav-menu li a").each(function(){
 		if($(this).attr("href") == location){
 			$(this).addClass("active-nav-link");
+			if( $(this).next('ul').hasClass('nav-submenu') ){
+				var plus = $(this).children('.link-plus');
+				var submenu = $(this).next('ul');
+				plus.hide();
+				submenu.show();
+			}
       	}
      })
 });
@@ -219,7 +225,6 @@ $(document).ready(function(){
 				}	
 			});
 		 }
-
 		else if($(this).val() == 'delete'){
 			var userId = $(this).children('option:selected').attr("data-id");
 			$.ajax({

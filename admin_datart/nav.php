@@ -42,21 +42,21 @@
             ?>
             <li class="hidden-lg hidden-md"><a href="user_account.php"><span class="fa fa-user"></span>Mon compte</a></li>
             <li><a href="planning.php"><span class="fa fa-calendar"></span>Agenda</a></li>
-            <li><a href="exhibit_management.php"><span class="fa fa-archive"></span>Les expositions <span class="fa fa-plus-circle link-plus"></span>
-                <ul>
-                    <a href="exhibit_zoom.php"><span> >> </span>Ajouter une expo.</a></li>
+            <li><a href="exhibit_management.php"><span class="fa fa-archive"></span>Les expositions <span class="fa fa-plus-circle link-plus"></span></a>
+                <ul class="nav-submenu">
+                    <li><a href="exhibit_zoom.php"><span class="fa fa-plus-circle"></span>Ajouter une exposition</a></li>
                 </ul>
-            </a></li>
-            <li><a href="artist_management.php"><span class="fa fa-paint-brush"></span>Les artistes <span class="fa fa-plus-circle link-plus"></span>
-                <ul>
-                    <a href="artist_zoom.php"><span> >> </span>Ajouter un artiste</a></li>
+            </li>
+            <li><a href="artist_management.php"><span class="fa fa-paint-brush"></span>Les artistes <span class="fa fa-plus-circle link-plus"></span></a>
+                <ul class="nav-submenu">
+                    <li><a href="artist_zoom.php"><span class="fa fa-plus-circle"></span>Ajouter un artiste</a></li>
                 </ul>
-            </a></li>
-            <li><a href="artwork_management.php"><span class="fa fa-eye"></span>Les oeuvres <span class="fa fa-plus-circle link-plus"></span>
-                <ul>
-                    <a href="artwork_zoom.php"><span> >> </span>Ajouter une oeuvre</a></li>
+            </li>
+            <li><a href="artwork_management.php"><span class="fa fa-eye"></span>Les oeuvres <span class="fa fa-plus-circle link-plus"></span></a>
+                <ul class="nav-submenu">
+                    <li><a href="artwork_zoom.php"><span class="fa fa-plus-circle"></span>Ajouter une oeuvre</a></li>
                 </ul>
-            </a></li>
+            </li>
             <li><a href="statistics.php"><span class="fa fa-bar-chart"></span>Statistiques</a></li>
         </ul>
         <div id="background-nav"></div>
