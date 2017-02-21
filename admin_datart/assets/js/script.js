@@ -19,10 +19,17 @@ $('#close-nav').click(function(){
 /*-----------------------------------------------------------------------------
 GESTION LIEN ACTIFS
 ------------------------------------------------------------------------------*/
+
+// Regarde le href de chaque lien pour trouver si il est similaire
+// à l'adresse de la page en cours.
+// Si c'est le cas, il rajoute au lien la classe .active-nav-link
+// Ensuite, il regarde si le lien ciblé possède un menu imbriqué
+// de classe .nav-submenu. Si c'est le cas, il va faire apparaître le 
+// lien imbriqué caché et cacher le picto + du lien parent.
 $(function() {
-	var location = window.location.href.substr(window.location.href.lastIndexOf("/")+1);
-	$("#main-nav-menu li a").each(function(){
-		if($(this).attr("href") == location){
+	var locationPath = window.location.pathname.split( '/' ).pop();
+	$("#main-nav-menu a").each(function(){
+		if($(this).attr("href") == locationPath){
 			$(this).addClass("active-nav-link");
 			if( $(this).next('ul').hasClass('nav-submenu') ){
 				var plus = $(this).children('.link-plus');
@@ -31,8 +38,24 @@ $(function() {
 				submenu.show();
 			}
       	}
-     })
+    });
 });
+
+// Vérifie si la classe .active-nav-link est positionnée sur un lien imbriqué.
+// Si c'est le cas, le picto + du lien parent est caché tandis que le lien 
+// imbriqué est montré.
+$(function() {
+	$(".nav-submenu li a").each(function(){
+		if ($(this).hasClass("active-nav-link")) {
+			var plus = $(this).parent().parent().parent().find('.link-plus') ;
+			var submenu = $(this).parent().parent();
+			plus.hide();
+			submenu.show();
+		}
+	});	
+});
+
+
 
 /*-----------------------------------------------------------------------------
 FORMULAIRE DE CREATION D'UTILISATEURS - CONTROLES & ACTIONS
@@ -200,7 +223,7 @@ $(document).ready(function(){
 	};
 	
 /**********************************************
-** ACTIONS SUR LA LISTE DEROULANTE DES ACTIONS
+** ACTIONS SUR LA LISTE DEROULANTE DES ACTIONS USERS
 ************************************************/
 	//Si une option est sélectionnée dans une liste déroulante actionUser
 	//et que ça valeur est update, on récupère la valeur de data-id dans userId.
@@ -244,5 +267,15 @@ $(document).ready(function(){
 	});
 
 
-});
+/**********************************************
+** ACTIONS SUR LA LISTE DEROULANTE DES ACTIONS EXHIBIT
+************************************************/
+	$('.actionExhibit').on('change', function(){
+			if ($(this).val() == 'update'){
+				var exhibitId = $(this).children('option:selected').attr("data-id");
+				window.location.replace('exhibit_zoom?exhibit='+exhibitId);
+			 }		
+		});
 
+
+});

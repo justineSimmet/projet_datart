@@ -95,7 +95,7 @@ body{
 #main-nav-menu li{
 	width: 100%;
 	border-bottom: 1px solid #778085;
-	border-top: 1px solid rgba(0,0,0,0);
+	border-top: 1px solid #fff;
 }
 
 #main-nav-menu li:hover{
@@ -168,10 +168,18 @@ body{
 	border-bottom: none;
 }
 
-#main-nav-menu .nav-submenu li a{
+#main-nav-menu .nav-submenu a{
 	font-size: 1em;
 	color: #000;
-	padding-left: 20%;
+	padding-left: 10%;
+	background-color: transparent;
+}
+
+#main-nav-menu .nav-submenu .active-nav-link {
+	font-size: 1em;
+	color: #d5313a;
+	padding-left: 10%;
+	background-color: transparent;
 }
 
 #main-nav-menu .nav-submenu li a:hover{

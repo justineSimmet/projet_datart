@@ -176,7 +176,7 @@ include('header.php');
 						<?= $l->getEmailAdress(); ?>
 					</td>
 					<td>
-						<?= !empty($l->getLastConnection())?$l->getLastConnection():'Aucune connexion'; ?>
+						<?= !empty($l->getLastConnection())?dateFormat($l->getLastConnection()):'Aucune connexion'; ?>
 					</td>
 					<td>
 						<div class="form-group" >
