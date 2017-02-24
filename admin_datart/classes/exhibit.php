@@ -143,31 +143,94 @@ class Exhibit{
 		}
 	}
 
+/******************************************************
+**
+** CACHER L'EXPOSITION AUX UTILISATEURS BASIQUES
+**
+******************************************************/
+
+	function hideExhibit(){
+		$this->setVisible('0');
+		$res = requete_sql("UPDATE exhibit SET visible = '".$this->visible."' WHERE id = '".$this->id."' ");
+		if ($res) {
+			return TRUE;
+		}
+		else{
+			return FALSE;
+		}
+	}
+
+/******************************************************
+**
+** RENDRE VISIBLE L'EXPOSITION AUX UTILISATEURS BASIQUES
+**
+******************************************************/
+
+	function publishExhibit(){
+		$this->setVisible('1');
+		$res = requete_sql("UPDATE exhibit SET visible = '".$this->visible."' WHERE id = '".$this->id."' ");
+		if ($res) {
+			return TRUE;
+		}
+		else{
+			return FALSE;
+		}
+	}
+	
+/******************************************************
+**
+** SUPPRIMER DEFINITIVEMENT L'EXPOSITION
+**
+******************************************************/
+
+	function deleteExhibit(){
+		$delete = requete_sql("DELETE FROM exhibit WHERE id ='".$this->id."' ");
+		if ($delete) {
+			return TRUE;
+		}
+		else{
+			return FALSE;
+		}
+	}
+
+/******************************************************
+**
+** FORMULAIRE
+** Infos générales de l'expo
+**
+******************************************************/
 	function formInfos($target, $action){
 		?>
 		<form method="POST" action="<?= $target ?>">
 			<h2>Informations Générales</h2>
 				<div class="form-group">
 					<label for="title">Titre de l'exposition :</label>
-					<input type="text" name="title" value="<?= $this->title ?>" required />
+					<input type="text" name="title" value="<?= $this->title ?>" required <?= !empty($this->getId()) && ($this->getEndDate() < date('Y-m-d') || $this->getVisible() == FALSE)?'disabled':''; ?> />
 				</div>
 				<div class="form-group">
 					<label for="begin_date">Début de l'exposition :</label>
-					<input type="date" name="begin_date" value="<?= dateFormat($this->begin_date) ?>" placeholder="jj/mm/aaaa" required />
+					<input type="date" name="begin_date" value="<?= dateFormat($this->begin_date) ?>" placeholder="jj/mm/aaaa" required <?= !empty($this->getId()) && ($this->getEndDate() < date('Y-m-d') || $this->getVisible() == FALSE)?'disabled':''; ?> />
 				</div>
 				<div class="form-group">
 					<label for="end_date">Fin de l'exposition :</label>
-					<input type="date" name="end_date" value="<?= dateFormat($this->end_date) ?>" placeholder="jj/mm/aaaa"  required />
+					<input type="date" name="end_date" value="<?= dateFormat($this->end_date) ?>" placeholder="jj/mm/aaaa" required <?= !empty($this->getId()) && ($this->getEndDate() < date('Y-m-d') || $this->getVisible() == FALSE)?'disabled':''; ?> />
 				</div>
 				<div class="form-group">
 					<label for="public_opening">Horaires d'ouverture :</label>
-					<input type="text" name="public_opening" value="<?= $this->public_opening ?>" placeholder="Ex. : Ouvert du lundi au vendredi de 9h à 12h30 et de..." required />
+					<input type="text" name="public_opening" value="<?= $this->public_opening ?>" placeholder="Ex. : Ouvert du lundi au vendredi de 9h à 12h30 et de..." required <?= !empty($this->getId()) && ($this->getEndDate() < date('Y-m-d') || $this->getVisible() == FALSE)?'disabled':''; ?> />
 				</div>
 				<input type="hidden" name="id" value="<?= $this->id ?>">
-				<input type="submit" value="<?= $action; ?>" />
+				<input type="submit" value="<?= $action; ?>" class="btn btn-default" <?= !empty($this->getId()) && ($this->getEndDate() < date('Y-m-d') || $this->getVisible() == FALSE)?'disabled':''; ?> />
 		</form>
 		<?php
 	}
+
+
+/******************************************************
+**
+** RETOURNE L'EXPOSITION ACTUELLE SOUS FORME DE TABLEAU
+**
+******************************************************/
 
 	static function currentExhibit(){
 		$res = requete_sql("SELECT id FROM exhibit WHERE begin_date <= now() AND end_date >= now() ");
@@ -176,8 +239,14 @@ class Exhibit{
 		return $currentExhibit;
 	}
 
+/******************************************************
+**
+** RETOURNE LA LISTE DES EXPOS A VENIR
+**
+******************************************************/
+
 	static function listNextExhibit(){
-		$res = requete_sql("SELECT id FROM exhibit WHERE begin_date > now() ORDER BY begin_date DESC");
+		$res = requete_sql("SELECT id FROM exhibit WHERE begin_date > now() AND visible = TRUE ORDER BY begin_date DESC");
 		$res = $res->fetchAll(PDO::FETCH_ASSOC);
 		$list = array();
 		foreach ($res as $exhibit) {
@@ -186,6 +255,14 @@ class Exhibit{
 		}
 		return $list;
 	}
+
+
+
+/******************************************************
+**
+** RETOURNE LA LISTE DES EXPOS PASSEES SOUS FORME DE TABLEAU
+**
+******************************************************/
 
 	static function listPassedExhibit(){
 		$res = requete_sql("SELECT id FROM exhibit WHERE end_date < now() ORDER BY end_date DESC");
@@ -197,5 +274,27 @@ class Exhibit{
 		}
 		return $list;
 	}
+
+/******************************************************
+**
+** RETOURNE LA LISTE DES EXPOS CACHEES
+**
+******************************************************/
+
+	static function listHidenExhibit(){
+		$res = requete_sql("SELECT id FROM exhibit WHERE visible = FALSE ORDER BY begin_date DESC");
+		$res = $res->fetchAll(PDO::FETCH_ASSOC);
+		$list = array();
+		foreach ($res as $exhibit) {
+			$exhibit = new Exhibit($exhibit['id']);
+			array_push($list, $exhibit);
+		}
+		return $list;
+	}
+
+
+
+
+
 
 }

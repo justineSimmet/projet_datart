@@ -89,6 +89,25 @@ $(function(){
 });
 
 
+
+/************************************************
+** FONCTION DE SUPPRESSION D'UNE EXPO DEPUIS ZOOM
+*************************************************/
+/*function deleteExhibit(targetId){
+	$.ajax({
+		method: 'POST',
+		data : {
+			targetId : targetId
+		},
+		success: function(data){
+			var newDoc = document.open("text/html", "replace");
+			newDoc.write(data);
+			newDoc.close();
+			$("#deleteExhibit").modal('show');
+		}
+	});
+}*/
+
 $(document).ready(function(){
 
 /**********************************************
@@ -222,9 +241,9 @@ $(document).ready(function(){
 		});
 	};
 	
-/**********************************************
+/**************************************************
 ** ACTIONS SUR LA LISTE DEROULANTE DES ACTIONS USERS
-************************************************/
+***************************************************/
 	//Si une option est sélectionnée dans une liste déroulante actionUser
 	//et que ça valeur est update, on récupère la valeur de data-id dans userId.
 	//La valeur de userId est envoyée en POST via une requête ajax vers la page actuelle.
@@ -244,7 +263,7 @@ $(document).ready(function(){
 				success: function(data){
 					var newDoc = document.open("text/html", "replace");
 					newDoc.write(data);
-					newDoc.close()
+					newDoc.close();
 				}	
 			});
 		 }
@@ -259,7 +278,7 @@ $(document).ready(function(){
 					var newDoc = document.open("text/html", "replace");
 					newDoc.write(data);
 					newDoc.close();
-					$("#mymodal").modal('show')
+					$("#mymodal").modal('show');
 				}	
 			});
 
@@ -267,15 +286,67 @@ $(document).ready(function(){
 	});
 
 
-/**********************************************
+/***************************************************
 ** ACTIONS SUR LA LISTE DEROULANTE DES ACTIONS EXHIBIT
-************************************************/
+****************************************************/
 	$('.actionExhibit').on('change', function(){
-			if ($(this).val() == 'update'){
-				var exhibitId = $(this).children('option:selected').attr("data-id");
-				window.location.replace('exhibit_zoom?exhibit='+exhibitId);
-			 }		
+		if ($(this).val() == 'update' || $(this).val() == 'show'){
+			var exhibitId = $(this).children('option:selected').attr("data-id");
+			window.location.replace('exhibit_zoom.php?exhibit='+exhibitId);
+		}
+		else if($(this).val() == 'hide'){
+			var targetId = $(this).children('option:selected').attr("data-id");
+			$.ajax({
+				method: 'POST',
+				data : {
+					targetId
+				},
+				success: function(data){
+					var newDoc = document.open("text/html", "replace");
+					newDoc.write(data);
+					newDoc.close();
+					$("#hideExhibit").modal('show');
+				}	
+			});
+		}
+		else if($(this).val() == 'publish'){
+			var targetId = $(this).children('option:selected').attr("data-id");
+			$.ajax({
+				method: 'POST',
+				data : {
+					targetId : targetId,
+					action : 'publish'
+				},
+				success: function(data){
+					var newDoc = document.open("text/html", "replace");
+					newDoc.write(data);
+					newDoc.close();
+				}	
+			});
+		}		
+	});
+
+
+/**********************************************************************
+** OUVERTURE D'UNE MODAL SI CLIC SUR LE BOUTON SUPPRIMER DEFINITIVEMENT
+** Envoi le targetId de l'expo en Ajax et recharge la page avant
+** d'ouvrir la modal.
+***********************************************************************/
+	$('.btn-delete').on('click', function(){
+		var targetId = $(this).attr("data-id");
+		$.ajax({
+			method: 'POST',
+			data : {
+				targetId : targetId
+			},
+			success: function(data){
+				var newDoc = document.open("text/html", "replace");
+				newDoc.write(data);
+				newDoc.close();
+				$("#deleteExhibit").modal('show');
+			}
 		});
+	});
 
 
 });
