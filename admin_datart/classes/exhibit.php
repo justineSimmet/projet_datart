@@ -28,9 +28,48 @@ class Exhibit{
 			$this->visible = $exhibit['visible'];	
 			$this->creation_date = $exhibit['creation_date'];
 			$this->textual_content =  array();
-			$res = requete_sql("SELECT content, language, subject FROM textual_content_exhibit WHERE exhibit_id = '".$id."' ");
-			while ( $t = $res->fetch(PDO::FETCH_ASSOC)) {
-				array_push($this->textual_content, new ExhibitText($t['id']));
+			$text = requete_sql("SELECT id, language, subject FROM textual_content_exhibit WHERE exhibit_id = '".$id."' ");
+			while ( $t = $text->fetch(PDO::FETCH_ASSOC)) {
+				if ($t['language'] == 'french') {
+					if ($t['subject'] == 'category') {
+						array_push($this->textual_content, new ExhibitFrenchCategory($t['id']));
+					}
+					else{
+						array_push($this->textual_content, new ExhibitFrenchSummary($t['id']));
+					}
+				}
+				elseif ($t['language'] == 'english') {
+					if ($t['subject'] == 'category') {
+						array_push($this->textual_content, new ExhibitEnglishCategory($t['id']));
+					}
+					else{
+						array_push($this->textual_content, new ExhibitEnglishSummary($t['id']));
+					}
+				}
+				elseif ($t['language'] == 'german') {
+					if ($t['subject'] == 'category') {
+						array_push($this->textual_content, new ExhibitGermanCategory($t['id']));
+					}
+					else{
+						array_push($this->textual_content, new ExhibitGermanSummary($t['id']));
+					}
+				}
+				elseif ($t['language'] == 'russian') {
+					if ($t['subject'] == 'category') {
+						array_push($this->textual_content, new ExhibitRussianCategory($t['id']));
+					}
+					else{
+						array_push($this->textual_content, new ExhibitRussianSummary($t['id']));
+					}
+				}
+				elseif ($t['language'] == 'chinese') {
+					if ($t['subject'] == 'category') {
+						array_push($this->textual_content, new ExhibitChineseCategory($t['id']));
+					}
+					else{
+						array_push($this->textual_content, new ExhibitChineseSummary($t['id']));
+					}
+				}
 			}
 		}
 		else {
@@ -96,6 +135,49 @@ class Exhibit{
 		return $this->creation_date;
 	}
 
+	function getTextualContent(){
+		return $this->textual_content;
+	}
+
+	function getFrenchCategory(){
+		return $this->textual_content[0];
+	}
+
+	function getFrenchSummary(){
+		return $this->textual_content[1];
+	}
+
+	function getEnglishCategory(){
+		return $this->textual_content[2];
+	}
+
+	function getEnglishSummary(){
+		return $this->textual_content[3];
+	}
+
+	function getGermanCategory(){
+		return $this->textual_content[4];
+	}
+
+	function getGermanSummary(){
+		return $this->textual_content[5];
+	}
+
+	function getRussianCategory(){
+		return $this->textual_content[6];
+	}
+
+	function getRussianSummary(){
+		return $this->textual_content[7];
+	}
+
+	function getChineseCategory(){
+		return $this->textual_content[8];
+	}
+
+	function getChineseSummary(){
+		return $this->textual_content[9];
+	}
 
 /*********************************
 **
@@ -111,8 +193,8 @@ class Exhibit{
 				VALUES(
 					NULL,
 					'".addslashes($this->title)."',
-					'".addslashes(dateFormat($this->begin_date))."',
-					'".addslashes(dateFormat($this->end_date))."',
+					'".addslashes($this->begin_date)."',
+					'".addslashes($this->end_date)."',
 					'".addslashes($this->public_opening)."',
 					TRUE,
 					now()
@@ -129,8 +211,8 @@ class Exhibit{
 			$update = requete_sql("
 				UPDATE exhibit SET
 				exhibit_title = '".addslashes($this->title)."',
-				begin_date =  '".addslashes(dateFormat($this->begin_date))."',
-				end_date = '".addslashes(dateFormat($this->end_date))."',
+				begin_date =  '".addslashes($this->begin_date)."',
+				end_date = '".addslashes($this->end_date)."',
 				public_opening = '".addslashes($this->public_opening)."'
 				WHERE id = '".$this->id."'
 				");
@@ -184,9 +266,15 @@ class Exhibit{
 ******************************************************/
 
 	function deleteExhibit(){
-		$delete = requete_sql("DELETE FROM exhibit WHERE id ='".$this->id."' ");
-		if ($delete) {
-			return TRUE;
+		$clean = requete_sql("DELETE FROM textual_content_exhibit WHERE exhibit_id ='".$this->id."' ");
+		if ($clean) {
+			$delete = requete_sql("DELETE FROM exhibit WHERE id ='".$this->id."' ");
+			if ($delete) {
+				return TRUE;
+			}
+			else{
+				return FALSE;
+			}
 		}
 		else{
 			return FALSE;
@@ -209,11 +297,11 @@ class Exhibit{
 				</div>
 				<div class="form-group">
 					<label for="begin_date">Début de l'exposition :</label>
-					<input type="date" name="begin_date" value="<?= dateFormat($this->begin_date) ?>" placeholder="jj/mm/aaaa" required <?= !empty($this->getId()) && ($this->getEndDate() < date('Y-m-d') || $this->getVisible() == FALSE)?'disabled':''; ?> />
+					<input class="datepicker" type="date" name="begin_date" value="<?= dateFormat($this->begin_date) ?>" placeholder="jj/mm/aaaa" required <?= !empty($this->getId()) && ($this->getEndDate() < date('Y-m-d') || $this->getVisible() == FALSE)?'disabled':''; ?> />
 				</div>
 				<div class="form-group">
 					<label for="end_date">Fin de l'exposition :</label>
-					<input type="date" name="end_date" value="<?= dateFormat($this->end_date) ?>" placeholder="jj/mm/aaaa" required <?= !empty($this->getId()) && ($this->getEndDate() < date('Y-m-d') || $this->getVisible() == FALSE)?'disabled':''; ?> />
+					<input class="datepicker" type="date" name="end_date" value="<?= dateFormat($this->end_date) ?>" placeholder="jj/mm/aaaa" required <?= !empty($this->getId()) && ($this->getEndDate() < date('Y-m-d') || $this->getVisible() == FALSE)?'disabled':''; ?> />
 				</div>
 				<div class="form-group">
 					<label for="public_opening">Horaires d'ouverture :</label>
@@ -225,6 +313,92 @@ class Exhibit{
 		<?php
 	}
 
+
+/**********************************************************
+**
+** FORMULAIRE DES TEXTES COMPLEMENTAIRES
+**
+**********************************************************/
+	function formText($target, $action){
+		?>
+			<form method="POST" action="<?= $target ?>">
+				<h2>Textes d'accompagnement</h2>
+				
+				<ul class="nav nav-tabs">
+					<li class="active"><a data-toggle="tab" href="#french">Français</a></li>
+					<li><a data-toggle="tab" href="#english">Anglais</a></li>
+				    <li><a data-toggle="tab" href="#german">Allemand</a></li>
+					<li><a data-toggle="tab" href="#russian">Russe</a></li>
+					<li><a data-toggle="tab" href="#chinese">Chinois</a></li>
+				</ul>
+				<div class="tab-content">
+					<div id="french" class="tab-pane fade in active">
+					<fieldset <?= empty($this->getId()) || ($this->getEndDate() < date('Y-m-d') || $this->getVisible() == FALSE)?'disabled':''; ?>>
+						<div class="form-group">
+							<label for="categoryfrench">Catégorie :</label>
+							<input type="text" name="categoryFrench" value="<?= !empty($this->getTextualContent())?$this->getFrenchCategory()->getContent():'' ?>">
+						</div>
+						<div class="form-group">
+							<label for="summaryfrench">Résumé :</label>
+							<textarea name="summaryFrench"><?= !empty($this->getTextualContent())?$this->getFrenchSummary()->getContent():'' ?></textarea>
+						</div>
+					</fieldset>
+					</div>
+					<div id="english" class="tab-pane fade">
+					<fieldset <?= empty($this->getId()) || ($this->getEndDate() < date('Y-m-d') || $this->getVisible() == FALSE)?'disabled':''; ?>>
+						<div class="form-group">
+							<label for="categoryEnglish">Catégorie :</label>
+							<input type="text" name="categoryEnglish" value="<?= !empty($this->getTextualContent())?$this->getEnglishCategory()->getContent():'' ?>">
+						</div>
+						<div class="form-group">
+							<label for="summaryEnglish">Résumé :</label>
+							<textarea name="summaryEnglish"><?= !empty($this->getTextualContent())?$this->getEnglishSummary()->getContent():'' ?></textarea>
+						</div>
+					</fieldset>
+					</div>
+					<div id="german" class="tab-pane fade">
+					<fieldset <?= empty($this->getId()) || ($this->getEndDate() < date('Y-m-d') || $this->getVisible() == FALSE)?'disabled':''; ?>>
+						<div class="form-group">
+							<label for="categoryGerman">Catégorie :</label>
+							<input type="text" name="categoryGerman" value="<?= !empty($this->getTextualContent())?$this->getGermanCategory()->getContent():'' ?>">
+						</div>
+						<div class="form-group">
+							<label for="summaryGerman">Résumé :</label>
+							<textarea name="summaryGerman"><?= !empty($this->getTextualContent())?$this->getGermanSummary()->getContent():'' ?></textarea>
+						</div>
+					</fieldset>
+					</div>
+					<div id="russian" class="tab-pane fade">
+					<fieldset <?= empty($this->getId()) || ($this->getEndDate() < date('Y-m-d') || $this->getVisible() == FALSE)?'disabled':''; ?>>
+						<div class="form-group">
+							<label for="categoryRussian">Catégorie :</label>
+							<input type="text" name="categoryRussian" value="<?= !empty($this->getTextualContent())?$this->getRussianCategory()->getContent():'' ?>">
+						</div>
+						<div class="form-group">
+							<label for="summaryRussian">Résumé :</label>
+							<textarea name="summaryRussian"><?= !empty($this->getTextualContent())?$this->getRussianSummary()->getContent():'' ?></textarea>
+						</div>
+					</fieldset>
+					</div>
+					<div id="chinese" class="tab-pane fade">
+					<fieldset <?= empty($this->getId()) || ($this->getEndDate() < date('Y-m-d') || $this->getVisible() == FALSE)?'disabled':''; ?>>
+						<div class="form-group">
+							<label for="categoryChinese">Catégorie :</label>
+							<input type="text" name="categoryChinese" value="<?= !empty($this->getTextualContent())?$this->getChineseCategory()->getContent():'' ?>">
+						</div>
+						<div class="form-group">
+							<label for="summaryChinese">Résumé :</label>
+							<textarea name="summaryChinese"><?= !empty($this->getTextualContent())?$this->getChineseSummary()->getContent():'' ?></textarea>
+						</div>
+					</fieldset>				
+					</div>
+				</div>
+				<input type="hidden" name="id" value="<?= isset($this)?$this->getId():'' ?>">
+				<button type="button" class="btn btn-default" id="btn-add-text" <?= empty($this->getId()) || ($this->getEndDate() < date('Y-m-d') || $this->getVisible() == FALSE)?'disabled':''; ?>><?= $action ?></button>
+			
+			</form>
+	<?php
+	}
 
 /******************************************************
 **
@@ -293,8 +467,61 @@ class Exhibit{
 	}
 
 
+/******************************************************
+**
+** CONTROLE SUR LES TEXTES EN ANGLAIS
+**
+******************************************************/
 
+	function checkTrad($language){
 
+		if (!empty($this->getTextualContent())) {
+			switch ($language) {
+				case 'english':
+					if (!empty($this->getEnglishCategory()->getContent()) && !empty($this->getEnglishSummary()->getContent())) {
+					return TRUE;
+					}
+					else{
+						return FALSE;
+					}
+					break;
+				
+				case 'german':
+					if (!empty($this->getGermanCategory()->getContent()) && !empty($this->getGermanSummary()->getContent())) {
+					return TRUE;
+					}
+					else{
+						return FALSE;
+					}
+					break;
+				
+				case 'russian':
+					if (!empty($this->getRussianCategory()->getContent()) && !empty($this->getRussianSummary()->getContent())) {
+					return TRUE;
+					}
+					else{
+						return FALSE;
+					}
+					break;
+				
+				case 'chinese':
+					if (!empty($this->getChineseCategory()->getContent()) && !empty($this->getChineseSummary()->getContent())) {
+					return TRUE;
+					}
+					else{
+						return FALSE;
+					}
+					break;
+				
+				default:
+					return FALSE;
+					break;
+			}
+		}
+		else{
+			return FALSE;
+		}		
+	}
 
 
 }

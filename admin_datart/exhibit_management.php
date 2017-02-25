@@ -17,7 +17,7 @@ if (isset($_POST['targetId']) && isset($_POST['action']) ) {
 		$targetExhibit = new Exhibit($_POST['targetId']);
 		$hide = $targetExhibit->hideExhibit();
 		if ($hide) {
-			$actionResultat = '<div class="alert alert-success alert-dismissable" id="user-edited">
+			$actionResultat = '<div class="alert alert-success alert-dismissable"s>
 				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 				<strong>Vous venez de supprimer l\'exposition '.$targetExhibit->getTitle().' . </strong>
 				</div>';
@@ -39,7 +39,7 @@ if (isset($_POST['targetId']) && isset($_POST['action']) ) {
 		if ($check) {
 			$delete = $targetExhibit->deleteExhibit();
 			if ($delete) {
-				$actionResultat = '<div class="alert alert-success alert-dismissable" id="user-edited">
+				$actionResultat = '<div class="alert alert-success alert-dismissable">
 				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 				<strong>Vous venez de supprimer définitivement l\'exposition '.$targetExhibit->getTitle().'. </strong>
 				</div>';
@@ -85,6 +85,7 @@ include('header.php');
 	                <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
 	                <input type="hidden" name="targetId" value="<?= isset($targetExhibit)?$targetExhibit->getId():'' ; ?>" />
 	                <input type="hidden" name="action" value="hide" />
+	              	<!-- <button type="button" class="btn btn-default" id="btn-hide">Supprimer</button> -->
 	              	<input type="submit" class="btn btn-default" value="Supprimer" />
                 </form>
         	</div>
@@ -125,10 +126,10 @@ include('header.php');
 	<div class="col-lg-9">
 
 <!-- SECTION TABLEAU DE L'EXPOSITION EN COURS -->
-	<section>
 		<h2>Exposition en cours</h2>
+	<section>
 
-		<table>
+		<table class="table">
 		<?php
 			$currentExhibit = Exhibit::currentExhibit();
 		?>
@@ -150,7 +151,7 @@ include('header.php');
 				</tr>
 			</tbody>
 			<tbody>
-				<table>
+				<table class="table table-bordered text-center">
 					<thead>
 						<th>
 							Artistes
@@ -186,16 +187,16 @@ include('header.php');
 								<!-- Fonction qui retourne le nombre d'oeuvres liés à l'expo et disponible à la galerie -->
 							</td>
 							<td>
-								<!-- Fonction qui retourne si la traduction de l'expo en anglais est ok -->
+								<?= $currentExhibit->checkTrad('english') == TRUE?'<span class="fa fa-check red"></span>':'<span class="fa fa-circle-o red"></span>' ?>
 							</td>
 							<td>
-								<!-- Fonction qui retourne si la traduction de l'expo en allemand est ok -->
+								<?= $currentExhibit->checkTrad('german') == TRUE?'<span class="fa fa-check red"></span>':'<span class="fa fa-circle-o red"></span>' ?>
 							</td>
 							<td>
-								<!-- Fonction qui retourne si la traduction de l'expo en chinois est ok -->
+								<?= $currentExhibit->checkTrad('russian') == TRUE?'<span class="fa fa-check red"></span>':'<span class="fa fa-circle-o red"></span>' ?>
 							</td>
 							<td>
-								<!-- Fonction qui retourne si la traduction de l'expo en russe est ok -->
+								<?= $currentExhibit->checkTrad('chinese') == TRUE?'<span class="fa fa-check red"></span>':'<span class="fa fa-circle-o red"></span>' ?>
 							</td>
 						</tr>
 					</tbody>
@@ -205,14 +206,14 @@ include('header.php');
 	</section>
 
 <!-- SECTION TABLEAU DES EXPOSITIONS A VENIR -->
-	<section>
 		<h2>Expositions à venir</h2>
-		<table>
+	<section>
+		<table class="table table-striped">
 			<?php
 				$listNext = Exhibit::listNextExhibit();
 				foreach ($listNext as $ln) {
 					?>
-					<table>
+					<table class="table">
 						<tbody>
 							<tr>
 								<td>
@@ -231,7 +232,7 @@ include('header.php');
 							</tr>
 						</tbody>
 						<tbody>
-							<table>
+							<table class="table table-bordered text-center">
 								<thead>
 									<th>
 										Artistes
@@ -267,16 +268,16 @@ include('header.php');
 											<!-- Fonction qui retourne le nombre d'oeuvres liés à l'expo et disponible à la galerie -->
 										</td>
 										<td>
-											<!-- Fonction qui retourne si la traduction de l'expo en anglais est ok -->
+											<?= $ln->checkTrad('english') == TRUE?'<span class="fa fa-check red"></span>':'<span class="fa fa-circle-o red"></span>' ?>
 										</td>
 										<td>
-											<!-- Fonction qui retourne si la traduction de l'expo en allemand est ok -->
+											<?= $ln->checkTrad('german') == TRUE?'<span class="fa fa-check red"></span>':'<span class="fa fa-circle-o red"></span>' ?>
 										</td>
 										<td>
-											<!-- Fonction qui retourne si la traduction de l'expo en chinois est ok -->
+											<?= $ln->checkTrad('russian') == TRUE?'<span class="fa fa-check red"></span>':'<span class="fa fa-circle-o red"></span>' ?>
 										</td>
 										<td>
-											<!-- Fonction qui retourne si la traduction de l'expo en russe est ok -->
+											<?= $ln->checkTrad('chinese') == TRUE?'<span class="fa fa-check red"></span>':'<span class="fa fa-circle-o red"></span>' ?>
 										</td>
 									</tr>
 								</tbody>
@@ -293,9 +294,9 @@ include('header.php');
 	<?php
 		if($currentUser->getStatus() == FALSE ){
 			?>
-			<section>
 				<h2>Expositions en cours de suppression</h2>
-				<table>
+			<section>
+				<table class="table table-striped">
 					<?php
 					$listHide = Exhibit::listHidenExhibit();
 					foreach ($listHide as $lh) {
@@ -332,7 +333,7 @@ include('header.php');
 	<div class="col-lg-3">
 
 		<h2>Expositions passées</h2>
-		<table>
+		<table class="table table-bordered">
 			<?php
 				$listOld = Exhibit::listPassedExhibit();
 				foreach ($listOld as $lo) {
@@ -340,6 +341,7 @@ include('header.php');
 						<tr>
 							<h4><?= $lo->getTitle(); ?></h4>
 							<p class="date"><?= dateFormat($lo->getBeginDate()); ?> > <?= dateFormat($lo->getEndDate()); ?></p>
+							<a href="exhibit_zoom.php?exhibit=<?= $lo->getId(); ?>"><span class="fa fa-eye"></span></a>
 						</tr>
 					<?php
 				}

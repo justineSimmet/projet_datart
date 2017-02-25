@@ -56,6 +56,20 @@ $(function() {
 });
 
 
+/*-----------------------------------------------------------------------------
+MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
+------------------------------------------------------------------------------*/
+
+$(function(){
+	$.datepicker.setDefaults($.datepicker.regional['fr']);
+	$('.datepicker').datepicker({
+		showAnim: 'clip',
+		showOtherMonths: true,
+		selectOtherMonths: true,
+		minDate: -7
+	});
+});
+
 
 /*-----------------------------------------------------------------------------
 FORMULAIRE DE CREATION D'UTILISATEURS - CONTROLES & ACTIONS
@@ -89,24 +103,6 @@ $(function(){
 });
 
 
-
-/************************************************
-** FONCTION DE SUPPRESSION D'UNE EXPO DEPUIS ZOOM
-*************************************************/
-/*function deleteExhibit(targetId){
-	$.ajax({
-		method: 'POST',
-		data : {
-			targetId : targetId
-		},
-		success: function(data){
-			var newDoc = document.open("text/html", "replace");
-			newDoc.write(data);
-			newDoc.close();
-			$("#deleteExhibit").modal('show');
-		}
-	});
-}*/
 
 $(document).ready(function(){
 
@@ -326,7 +322,6 @@ $(document).ready(function(){
 		}		
 	});
 
-
 /**********************************************************************
 ** OUVERTURE D'UNE MODAL SI CLIC SUR LE BOUTON SUPPRIMER DEFINITIVEMENT
 ** Envoi le targetId de l'expo en Ajax et recharge la page avant
@@ -348,5 +343,44 @@ $(document).ready(function(){
 		});
 	});
 
+	$('.btn-publish').on('click', function(){
+		var targetId = $(this).attr("data-id");
+		$.ajax({
+			method: 'POST',
+			data : {
+				targetId : targetId,
+				action : 'publish'
+			},
+			success: function(data){
+				var newDoc = document.open("text/html", "replace");
+				newDoc.write(data);
+				newDoc.close()
+			}
+		});
+	});
+
+/**********************************************
+** EXECUTION REQUETE AJAX POUR INSERT OU UPDATE
+** DES TEXTES D'ACCOMPAGNEMENT D'EXPO 
+************************************************/
+	$('#btn-add-text').on('click', function(){
+		var formText = $(this).parent().serialize();
+		$.ajax({
+			method: 'POST',
+			data: formText,
+    		dataType: "json",
+			success: function(data){
+				var newDoc = document.open("text/html", "replace");
+				newDoc.write(data);
+				newDoc.close();	
+			},
+		});
+		var divSuccess ='<div class="alert alert-success alert-dismissable">'
+		+'<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'
+		+'<strong>Les textes d\'accompagnement ont bien été enregistré.</strong>'
+		+'</div>';
+		$('#alert-area').append(divSuccess);
+	});
+	
 
 });
