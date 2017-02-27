@@ -3,14 +3,22 @@
 require_once('classes/user.php');
 require_once('classes/exhibit.php');
 require_once('classes/exhibit_textual_content.php');
+require_once('classes/event.php');
 require_once('includes/include.php');
 
+
+// INITIALISE UN OBJET EXHIBIT SI ID EN GET
 if (isset($_GET['exhibit'])) {
 	$targetExhibit = new Exhibit($_GET['exhibit']);
 }
 
 
-//MANIPULATION EN BASE DE DONNEE SUR LES DONNEES GENERALES
+/************************************************************************************************
+**
+** Insertion ou update en base de donnée après un submit du formulaire 1 (Infos générale)
+**
+************************************************************************************************/
+
 if (isset($_POST['title'])) {
 	if (empty($_POST['id'])) {
 		$newExhibit = new Exhibit();
@@ -20,6 +28,24 @@ if (isset($_POST['title'])) {
 		$newExhibit->setPublicOpening($_POST['public_opening']);
 		$create = $newExhibit->synchroDb();
 		if ($create) {
+			// CREATION DES EVENEMENTS DE L'EXPO
+			// Si l'insert est réussi, les dates de début et de fin de l'expo sont transformées
+			// en objet Event avec des horaires génériques et inscrits en base de donnée
+			// Ouverture
+			$openEvent = new Event();
+			$openEvent->setExhibitId($create);
+			$openEvent->setName('Début');
+			$openEvent->setEventDate($newExhibit->getBeginDate());
+			// Fermeture
+			$closeEvent = new Event();
+			$closeEvent->setExhibitId($create);
+			$closeEvent->setName('Fin');
+			$closeEvent->setEventDate($newExhibit->getEndDate());
+			// Insertion des événements en base de donnée
+			$openEvent->synchroDb();
+			$closeEvent->synchroDb();
+
+			// Redirection vers la fiche Expo créé
 			header('Location:exhibit_zoom.php?exhibit='.$create);
 		}
 		else{
@@ -37,6 +63,19 @@ if (isset($_POST['title'])) {
 		$targetExhibit->setPublicOpening($_POST['public_opening']);
 		$update = $targetExhibit->synchroDb();
 		if ($update) {
+			// UPDATE DES EVENEMENTS DE L'EXPO
+			// Si l'update est réussi, je récupère les événements de début et de fin et update
+			// leurs donnée avec des horaires génériques et inscrits en base de donnée
+			// Ouverture
+			$openEvent = new Event($targetExhibit->getOpenEvent()->getId());
+			$openEvent->setEventDate($targetExhibit->getBeginDate());
+			// Fermeture
+			$closeEvent = new Event($targetExhibit->getCloseEvent()->getId());
+			$closeEvent->setEventDate($targetExhibit->getEndDate());
+			// Update des événements en base de donnée
+			$openEvent->synchroDb();
+			$closeEvent->synchroDb();
+
 			$actionResultat = '<div class="alert alert-success alert-dismissable">
 				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 				<strong>Félicitation</strong> L\'exposition '.$targetExhibit->getTitle().' a bien été modifiée.
@@ -50,7 +89,13 @@ if (isset($_POST['title'])) {
 	}
 }
 
-//ACTIONS SUR UNE EXPOSITION MASQUEE
+/************************************************************************************************
+**
+** Actions sur les expositions masquées /visible == FALSE/
+** Permet leur publication ou leur suppression définitive 
+**
+************************************************************************************************/
+
 if (isset($_POST['targetId']) && isset($_POST['action']) ) {
 	if($_POST['action'] == 'publish'){
 		$targetExhibit = new Exhibit($_POST['targetId']);
@@ -91,7 +136,14 @@ if (isset($_POST['targetId']) && isset($_POST['action']) ) {
 	
 	}
 }
-//MANIPULATION EN BASE DE DONNEE SUR LES TEXTES D'ACCOMPAGNEMENT D'UNE EXPO
+
+/************************************************************************************************
+**
+** Manipulation sur les textes d'accompagnement d'une exposition
+** Lorsque le formulaire 2 est validé, enregistre automatiquement l'ensemble des entrées de
+** de langues en base de donnée.
+**
+************************************************************************************************/
 if(isset($_POST['categoryFrench']) && isset($_POST['summaryFrench']) ) {
 	//UPDATE DES TEXTES
 	$targetExhibit = new Exhibit($_POST['id']);
@@ -181,7 +233,6 @@ if(isset($_POST['categoryFrench']) && isset($_POST['summaryFrench']) ) {
 				$valideInsert ++;
 			};
 		}
-		var_dump($valideInsert);
 		if($valideInsert == 10){
 			$actionResultat = '<div class="alert alert-success alert-dismissable">
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -197,13 +248,51 @@ if(isset($_POST['categoryFrench']) && isset($_POST['summaryFrench']) ) {
 	}
 }
 
+
+
+/************************************************************************************************
+**
+** MANIPULATION DES EVENEMENTS DE L'EXPOSITION
+** Ajoute ou modifie des expositions en base de donnée
+**
+************************************************************************************************/
+
+if (isset($_POST['name']) && isset($_POST['date'])) {
+	if (empty($_POST['id'])) {
+		$newEvent = new Event();
+		$newEvent->setExhibitId($_POST['id-exhibit']);
+		$newEvent->setName($_POST['name']);
+		$newEvent->setDescription($_POST['description']);
+		$newEvent->setEventDate(dateFormat($_POST['date']));
+		$newEvent->setEventStartTime($_POST['start-time']);
+		$insert = $newEvent->synchroDb();
+		if ($insert) {
+			$actionResultat = '<div class="alert alert-success alert-dismissable">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<strong>L\'événement "'.$newEvent->getName().'" a bien été enregistré.</strong>
+			</div>';
+		}
+		else{
+			$actionResultat = '<div class="alert alert-danger alert-dismissable">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<strong>Erreur !</strong> L\'événement "'.$newEvent->getName().'" n\'a pas été enregistré.
+			</div>';
+		}
+	}
+}
+
 $locationTitle = isset($targetExhibit)?$targetExhibit->getTitle():'Ajouter une exposition';
 
 include('header.php');
+
 ?>
 <div class="row">
 
-	<!-- MODAL POUR CONFIRMER LA SUPPRESSION DEFINITIVE D'UNE EXPOSITION -->
+<!--
+************************************************************************************************
+	MODAL POUR CONFIRMER LA SUPPRESSION DEFINITIVE D'UNE EXPOSITION
+************************************************************************************************
+-->
 	<div id="deleteExhibit" class="modal fade" role="dialog" >
 		<div class="modal-dialog">
 		</div>
@@ -229,6 +318,13 @@ include('header.php');
 	        </div>
 	</div>
 
+
+<!--
+************************************************************************************************
+	MESSAGE D'ERREUR si une exposition est masquée et que l'utilisateur n'est pas admin
+************************************************************************************************
+-->
+
 <?php
 	if (isset($targetExhibit) && ($targetExhibit->getVisible() == FALSE && $currentUser->getStatus() == TRUE )) {
 ?>	
@@ -247,7 +343,13 @@ include('header.php');
 	else{
 ?>
 
-	<div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+	<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+<!--
+************************************************************************************************
+	MENU ADAPTATIF SELON L'ECRAN ET LE TYPE DE CONTENU CIBLE
+************************************************************************************************
+-->
 
 <?php
 	if (isset($targetExhibit)){
@@ -292,8 +394,17 @@ include('header.php');
 
 		<div class="row">
 
-			<div class="col-lg-12 col-md-9 col-sm-9 col-xs-12"> <!-- ZONE PRINCIPALE -->
-				<section> <!--FORMULAIRES INFOS GENERALES & TEXTES -->
+			<div class="col-lg-12 col-md-9 col-sm-9 col-xs-12">
+<!--
+************************************************************************************************
+	ZONE PRINCIPALE
+************************************************************************************************
+-->
+
+<!--FORMULAIRES PRINCIPAUX DU ZOOM EXPO : Infos générales / Textes complémentaires / Artistes / Oeuvres -->
+				<section> 
+				<div> <!--FORMULAIRE Infos générales -->
+
 					<?php
 
 						if (isset($targetExhibit)) {
@@ -305,7 +416,8 @@ include('header.php');
 						}
 
 					?>
-				<div> <!--FORMULAIRE TEXTES -->
+				</div>
+				<div> <!--FORMULAIRE Textes complémentaires -->
 				<?php
 					if (isset($targetExhibit)) {
 						if (!empty($targetExhibit->getTextualContent())) {
@@ -324,16 +436,22 @@ include('header.php');
 
 				</section>
 
-				<section> <!-- FORMULAIRE ARTISTES -->
+				<section> <!-- FORMULAIRE Artistes -->
 					
 				</section>
 
-				<section> <!-- FORMULAIRE OEUVRES -->
+				<section> <!-- FORMULAIRE Oeuvres -->
 					
 				</section>
 			</div>
 
-			<div class="col-lg-12 col-md-3 col-sm-3 col-xs-12"> <!-- ZONE ANNEXE A DROITE -->
+			<div class="col-lg-12 col-md-3 col-sm-3 col-xs-12"> 
+
+<!--
+************************************************************************************************
+	ZONE ANNEXE
+************************************************************************************************
+-->
 			<?php
 			if (isset($targetExhibit)){
 				if ($targetExhibit->getVisible() == TRUE) {
@@ -355,9 +473,49 @@ include('header.php');
 				}
 			}
 			?>
-				<h2>Vie de l'expo</h2>
+
+<!--
+************************************************************************************************
+	GESTION DE LA VIE DE L'EXPOSITION
+************************************************************************************************
+-->
+				<h2>Vie de l'exposition</h2>
 				<section>
-					
+				<?php
+					if(isset($targetExhibit)){
+						if(isset($targetEvent)){
+							$targetEvent->formEvent($_SERVER['PHP_SELF'].'?exhibit='.$targetExhibit->getId(), 'Modifier', $targetExhibit->getId());
+						}
+						else{
+							$newEvent = new Event();
+							$newEvent->formEvent($_SERVER['PHP_SELF'].'?exhibit='.$targetExhibit->getId(), 'Ajouter', $targetExhibit->getId());
+						}
+					}
+					else{
+						$newEvent = new Event();
+						$newEvent->formEvent($_SERVER['PHP_SELF'].'?exhibit='.$targetExhibit->getId(), 'Ajouter','');	
+					}
+				?>
+				<h3>Evénements enregistrés :</h3>
+				<table class="table table-striped">
+				<tbody>
+				<?php
+					if (isset($targetExhibit)) {
+						foreach ($targetExhibit->event as $event) {
+							?>
+								<tr>
+								<td>
+									<p>Le <?= dateFormat($event->getEventDate()); ?> <?= empty($event->getEventStartTime()) || $event->getEventStartTime() == '00:00:00' ?'':' à '. timeFormat($event->getEventStartTime()); ?> </p>
+									<h4><?= $event->getName(); ?></h4>
+									<p><?= $event->getDescription(); ?> <a href="#" class="update-event" data-id="<?= $event->getId(); ?>"> <span class="fa fa-pencil"></span></a></p>
+								</td>
+								</tr>
+							<?php
+						}
+					}
+				?>
+				</tbody>
+				</table>
 				</section>
 			</div>
 

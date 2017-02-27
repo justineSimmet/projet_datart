@@ -3,6 +3,7 @@
 require_once('classes/user.php');
 require_once('classes/exhibit.php');
 require_once('classes/exhibit_textual_content.php');
+require_once('classes/event.php');
 require_once('includes/include.php');
 
 
@@ -128,23 +129,23 @@ include('header.php');
 <!-- SECTION TABLEAU DE L'EXPOSITION EN COURS -->
 		<h2>Exposition en cours</h2>
 	<section>
-
 		<table class="table">
 		<?php
 			$currentExhibit = Exhibit::currentExhibit();
+			foreach ($currentExhibit as $ce){
 		?>
 			<tbody>
 				<tr>
 					<td>
-					<h3><?= $currentExhibit->getTitle(); ?></h3>
-					<p class="date"><?= dateFormat($currentExhibit->getBeginDate()); ?> > <?= dateFormat($currentExhibit->getEndDate()); ?></p>
+					<h3><?= $ce->getTitle(); ?></h3>
+					<p class="date"><?= dateFormat($ce->getBeginDate()); ?> > <?= dateFormat($ce->getEndDate()); ?></p>
 					</td>
 					<td>
 						<div class="form-group" >
 							<select class="form-control actionExhibit">
 								<option> --- </option>
-								<option value="update" data-id="<?= $currentExhibit->getId(); ?>">Modifier</option>
-								<option value="delete" data-id="<?= $currentExhibit->getId(); ?>" >Supprimer</option>
+								<option value="update" data-id="<?= $ce->getId(); ?>">Modifier</option>
+								<option value="delete" data-id="<?= $ce->getId(); ?>" >Supprimer</option>
 							</select>
 						</div>
 					</td>
@@ -187,21 +188,24 @@ include('header.php');
 								<!-- Fonction qui retourne le nombre d'oeuvres liés à l'expo et disponible à la galerie -->
 							</td>
 							<td>
-								<?= $currentExhibit->checkTrad('english') == TRUE?'<span class="fa fa-check red"></span>':'<span class="fa fa-circle-o red"></span>' ?>
+								<?= $ce->checkTrad('english') == TRUE?'<span class="fa fa-check red"></span>':'<span class="fa fa-circle-o red"></span>' ?>
 							</td>
 							<td>
-								<?= $currentExhibit->checkTrad('german') == TRUE?'<span class="fa fa-check red"></span>':'<span class="fa fa-circle-o red"></span>' ?>
+								<?= $ce->checkTrad('german') == TRUE?'<span class="fa fa-check red"></span>':'<span class="fa fa-circle-o red"></span>' ?>
 							</td>
 							<td>
-								<?= $currentExhibit->checkTrad('russian') == TRUE?'<span class="fa fa-check red"></span>':'<span class="fa fa-circle-o red"></span>' ?>
+								<?= $ce->checkTrad('russian') == TRUE?'<span class="fa fa-check red"></span>':'<span class="fa fa-circle-o red"></span>' ?>
 							</td>
 							<td>
-								<?= $currentExhibit->checkTrad('chinese') == TRUE?'<span class="fa fa-check red"></span>':'<span class="fa fa-circle-o red"></span>' ?>
+								<?= $ce->checkTrad('chinese') == TRUE?'<span class="fa fa-check red"></span>':'<span class="fa fa-circle-o red"></span>' ?>
 							</td>
 						</tr>
 					</tbody>
 				</table>
 			</tbody>
+			<?php
+				}
+			?>
 		</table>
 	</section>
 
@@ -288,7 +292,7 @@ include('header.php');
 				}
 			?>		
 		</table>
-		
+		<a href="exhibit_zoom.php" class="btn btn-default">Créer une exposition</a>
 	</section>
 
 	<?php

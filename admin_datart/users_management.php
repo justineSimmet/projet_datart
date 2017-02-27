@@ -148,7 +148,7 @@ include('header.php');
 <div class="row">
 	<section class="col-lg-12 col-md-12 col-sm-9 col-xs-9">
 	<h2>Liste des utilisateurs</h2>
-		<table>
+		<table class="table table-striped">
 			<thead>
 				<tr>
 					<th>Utilisateur</th>
@@ -181,7 +181,7 @@ include('header.php');
 					<td>
 						<div class="form-group" >
 							<select class="form-control actionUser">
-								<option></option>
+								<option> --- </option>
 								<option value="update" data-id="<?= $l->getId(); ?>">Modifier</option>
 								<option value="delete" data-id="<?= $l->getId(); ?>" >Supprimer</option>
 							</select>

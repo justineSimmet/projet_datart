@@ -25,12 +25,12 @@ function requete_sql($requete){
 		if (preg_match("/INSERT/", $requete)) {
 			$resultat = $sql->lastInsertId();
 		}
-		$sql=null;
+		$sql=NULL;
 		return $resultat;
 	}
 	else{
-		$sql=null;
-		return false;
+		$sql=NULL;
+		return FALSE;
 	}
 };
 
@@ -60,7 +60,25 @@ function dateFormat($str){
 		return $formatedDate;
 	}
 	else{
-		return false;
+		return FALSE;
 	}
-
 };
+
+function timeFormat($str){
+	$dbToNormalize = '#[0-2][0-9]:[0-5][0-9]:[0-5][0-9]#';
+	$normalizeToDb = '#[0-2][0-9]h[0-5][0-9]#';
+	if (preg_match($dbToNormalize, $str)) {
+		list($hour, $minute, $seconds) = split('[:]', $str);
+		$formatedTime = $hour.'h'.$minute;
+		return $formatedTime;
+	}
+	elseif (preg_match($normalizeToDb, $str)) {
+		list($hour, $minute) = split('h', $str);
+		$formatedTime = $hour.':'.$minute.':00';
+		return $formatedTime;
+	}
+	else{
+		return FALSE;
+	}
+};
+
