@@ -238,6 +238,31 @@ $(document).ready(function(){
 		 };			
 	});
 
-
 });
+
+
+/************************************************************
+** ACTIONS SUR LA LISTE DEROULANTE DES ACTIONS SUR L'ARTISTE
+*************************************************************/
+
+
+	$('.actionArtist').on('change', function(){
+		if ($(this).val() == 'update'){
+			var artistId = $(this).children('option:selected').attr("data-id");
+			window.location.replace('zoom_artist?artist='+artistId);
+		}
+	});
+
+
+	$('.actionArtist').on('change', function(){
+		if ($(this).val() == 'delete'){
+			var artistId = $(this).children('option:selected').attr("data-id");
+			$("#mymodal").modal('show')
+		}
+	});	
+
+
+
+
+
 
