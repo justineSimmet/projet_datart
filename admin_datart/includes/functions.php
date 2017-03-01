@@ -67,6 +67,7 @@ function dateFormat($str){
 function timeFormat($str){
 	$dbToNormalize = '#[0-2][0-9]:[0-5][0-9]:[0-5][0-9]#';
 	$normalizeToDb = '#[0-2][0-9]h[0-5][0-9]#';
+	$errorToDb = '#[0-2][0-9]h#';
 	if (preg_match($dbToNormalize, $str)) {
 		list($hour, $minute, $seconds) = split('[:]', $str);
 		$formatedTime = $hour.'h'.$minute;
@@ -75,6 +76,11 @@ function timeFormat($str){
 	elseif (preg_match($normalizeToDb, $str)) {
 		list($hour, $minute) = split('h', $str);
 		$formatedTime = $hour.':'.$minute.':00';
+		return $formatedTime;
+	}
+	elseif (preg_match($errorToDb, $str)) {
+		list($hour) = split('h', $str);
+		$formatedTime = $hour.':00:00';
 		return $formatedTime;
 	}
 	else{

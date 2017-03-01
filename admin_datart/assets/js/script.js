@@ -56,20 +56,6 @@ $(function() {
 });
 
 
-/*-----------------------------------------------------------------------------
-MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
-------------------------------------------------------------------------------*/
-
-$(function(){
-	$.datepicker.setDefaults($.datepicker.regional['fr']);
-	$('.datepicker').datepicker({
-		showAnim: 'clip',
-		showOtherMonths: true,
-		selectOtherMonths: true,
-		minDate: -7
-	});
-});
-
 
 /*-----------------------------------------------------------------------------
 FORMULAIRE DE CREATION D'UTILISATEURS - CONTROLES & ACTIONS
@@ -102,9 +88,26 @@ $(function(){
 	})
 });
 
-
-
 $(document).ready(function(){
+
+/*-----------------------------------------------------------------------------
+MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
+------------------------------------------------------------------------------*/
+$.datepicker.setDefaults($.datepicker.regional['fr']);
+
+$('.datepicker').focusin(function(){
+	if ( $(this).attr('name') == 'end_date' && $(this).val() == ''){
+		$beginDate = $(this).parent().parent().prev().children().children().val();
+		$(this).val($beginDate);
+	}
+});
+
+$('.datepicker').datepicker({
+		showAnim: 'clip',
+		showOtherMonths: true,
+		selectOtherMonths: true,
+		minDate: -7
+});
 
 /**********************************************
 ** EXECUTION REQUETE AJAX SI UN UTILISATEUR A
@@ -338,8 +341,8 @@ $(document).ready(function(){
 				var newDoc = document.open("text/html", "replace");
 				newDoc.write(data);
 				newDoc.close();
-				$("#deleteExhibit").modal('show');
-			}
+				$("#deleteExhibit").modal('show')
+			},
 		});
 	});
 
@@ -360,27 +363,147 @@ $(document).ready(function(){
 	});
 
 /**********************************************
-** EXECUTION REQUETE AJAX POUR INSERT OU UPDATE
+** REFRESH AJAX APRES INSERT OU UPDATE
 ** DES TEXTES D'ACCOMPAGNEMENT D'EXPO 
 ************************************************/
-	$('#btn-add-text').on('click', function(){
-		var formText = $(this).parent().serialize();
+	if($('#insert-exhibit-text').length == 1 || $('#update-exhibit-text').length == 1){
+
+		var insertSuccess ='<div class="alert alert-success alert-dismissable">'
+		+'<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'
+		+'<strong>Les textes d\'accompagnement ont bien été enregistré.'
+		+'</div>';
+
+		var updateSuccess ='<div class="alert alert-success alert-dismissable">'
+		+'<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'
+		+'<strong>Les textes d\'accompagnement ont bien été mis à jour.</strong>'
+		+'</div>';
+
+		if($('#insert-exhibit-text').length == 1){
+			$.ajax({
+				method: 'POST',
+				success: function(data){
+					var newDoc = document.open("text/html", "replace");
+					newDoc.write(data);
+					newDoc.close();
+
+					$('#alert-area').append(insertSuccess);
+				},
+			});	
+		}
+		else{
+			$.ajax({
+				method: 'POST',
+				success: function(data){
+					var newDoc = document.open("text/html", "replace");
+					newDoc.write(data);
+					newDoc.close();
+
+					$('#alert-area').append(updateSuccess);
+				},
+			});
+		}
+
+	};
+
+/**********************************************
+** REFRESH AJAX APRES INSERT OU UPDATE
+** D'UN EVENEMENT D'EXPO 
+************************************************/
+	if($('#insert-exhibit-event').length == 1 || $('#update-exhibit-event').length == 1){
+
+		var insertSuccess ='<div class="alert alert-success alert-dismissable">'
+		+'<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'
+		+'<strong>L\'événement a bien été enregistré.'
+		+'</div>';
+
+		var updateSuccess ='<div class="alert alert-success alert-dismissable">'
+		+'<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'
+		+'<strong>L\'événement a bien été mis à jour.</strong>'
+		+'</div>';
+
+		if($('#insert-exhibit-event').length == 1){
+			$.ajax({
+				method: 'POST',
+				success: function(data){
+					var newDoc = document.open("text/html", "replace");
+					newDoc.write(data);
+					newDoc.close();
+
+					$('#alert-area').append(insertSuccess);
+				},
+			});	
+		}
+		else{
+			$.ajax({
+				method: 'POST',
+				success: function(data){
+					var newDoc = document.open("text/html", "replace");
+					newDoc.write(data);
+					newDoc.close();
+
+					$('#alert-area').append(updateSuccess);
+				},
+			});
+		}
+
+	};
+	
+/*********************************************************
+** RECHARGEMENT DE LA PAGE SI UNE EXPO A BIEN ETE UPDATE
+*********************************************************/
+	if($('#update-exhibit').length == 1){
 		$.ajax({
 			method: 'POST',
-			data: formText,
-    		dataType: "json",
+			success: function(data){
+				var newDoc = document.open("text/html", "replace");
+				newDoc.write(data);
+				newDoc.close();
+
+				var divSuccess ='<div class="alert alert-success alert-dismissable">'
+				+'<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'
+				+'<strong>Félicitation</strong> L\'exposition a bien été modifiée.'
+				+'</div>';
+				$('#alert-area').append(divSuccess);
+			},
+		});
+
+	};
+
+
+/**********************************************
+** EXECUTION REQUETE AJAX POUR UPDATE OU DELETE
+** UN EVENEMENT SUR LE ZOOM EXHIBIT
+************************************************/
+	$('.update-event').on('click', function(){
+		var targetEvent = $(this).attr("data-id");
+		$.ajax({
+			method: 'POST',
+			data : {
+				targetEvent : targetEvent,
+				action : 'update'
+			},
 			success: function(data){
 				var newDoc = document.open("text/html", "replace");
 				newDoc.write(data);
 				newDoc.close();	
 			},
 		});
-		var divSuccess ='<div class="alert alert-success alert-dismissable">'
-		+'<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'
-		+'<strong>Les textes d\'accompagnement ont bien été enregistré.</strong>'
-		+'</div>';
-		$('#alert-area').append(divSuccess);
 	});
-	
+
+	$('.delete-event').on('click', function(){
+		var targetEvent = $(this).attr("data-id");
+		$.ajax({
+			method: 'POST',
+			data : {
+				targetEvent : targetEvent
+			},
+			success: function(data){
+				var newDoc = document.open("text/html", "replace");
+				newDoc.write(data);
+				newDoc.close();
+				$("#deleteEvent").modal('show')	
+			},
+		});
+	});
 
 });

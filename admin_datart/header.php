@@ -5,7 +5,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
  	<title><?= isset($location)?$location:'Application DATART / Grand Angle'; ?></title>
- 	<link rel="stylesheet" type="text/css" href="assets/css/normalize.css" />
  	<link rel="stylesheet" type="text/css" href="assets/css/jquery-ui.min.css" />
  	<link rel="stylesheet" type="text/css" href="assets/css/jquery-ui.structure.min.css" />
  	<link rel="stylesheet" type="text/css" href="assets/css/jquery-ui.theme.min.css" />

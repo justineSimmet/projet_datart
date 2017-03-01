@@ -12,6 +12,11 @@ if (isset($_GET['exhibit'])) {
 	$targetExhibit = new Exhibit($_GET['exhibit']);
 }
 
+// INITIALISE UN OBJET EVENT
+if (isset($_POST['targetEvent'])) {
+	$targetEvent = new Event($_POST['targetEvent']);
+}
+
 
 /************************************************************************************************
 **
@@ -67,23 +72,23 @@ if (isset($_POST['title'])) {
 			// Si l'update est réussi, je récupère les événements de début et de fin et update
 			// leurs donnée avec des horaires génériques et inscrits en base de donnée
 			// Ouverture
-			$openEvent = new Event($targetExhibit->getOpenEvent()->getId());
+			$openEvent = new Event($targetExhibit->getOpenEvent());
 			$openEvent->setEventDate($targetExhibit->getBeginDate());
 			// Fermeture
-			$closeEvent = new Event($targetExhibit->getCloseEvent()->getId());
+			$closeEvent = new Event($targetExhibit->getCloseEvent());
 			$closeEvent->setEventDate($targetExhibit->getEndDate());
 			// Update des événements en base de donnée
 			$openEvent->synchroDb();
 			$closeEvent->synchroDb();
 
-			$actionResultat = '<div class="alert alert-success alert-dismissable">
+			$actionResultat = '<div class="alert alert-success alert-dismissable" id="update-exhibit">
 				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-				<strong>Félicitation</strong> L\'exposition '.$targetExhibit->getTitle().' a bien été modifiée.
+				<strong>Félicitation</strong> L\'exposition a bien été modifiée.
 				</div>';
 		}else{
 			$actionResultat = '<div class="alert alert-danger alert-dismissable">
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-			<strong>Erreur !</strong> L\'exposition '.$targetExhibit->getTitle().' n\'a pas pu être modifiée.
+			<strong>Erreur !</strong> L\'exposition n\'a pas pu être modifiée.
 			</div>';	
 		}
 	}
@@ -112,7 +117,7 @@ if (isset($_POST['targetId']) && isset($_POST['action']) ) {
 			</div>';	
 		}
 	}
-	elseif($_POST['action'] == 'delete'){
+	elseif($_POST['action'] == 'delete-exhibit'){
 		$targetExhibit = new Exhibit($_POST['targetId']);
 		$check = $currentUser->passwordCheck($_POST['password']);
 		if ($check) {
@@ -133,7 +138,28 @@ if (isset($_POST['targetId']) && isset($_POST['action']) ) {
 			<strong>Votre mot de passe est incorrect.</strong> Vous ne pouvez pas supprimer l\'exposition '.$targetExhibit->getTitle().'.
 			</div>';
 		}
-	
+	}
+	elseif ($_POST['action'] == 'delete-event') {
+		$targetEvent = new Event($_POST['targetId']);
+		$check = $currentUser->passwordCheck($_POST['password']);
+		if ($check) {
+			$delete = $targetEvent->deleteEvent();
+			if ($delete) {
+				header('Location:exhibit_zoom.php?exhibit='.$targetExhibit->getId());
+			}
+			else{
+				$actionResultat = '<div class="alert alert-danger alert-dismissable">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<strong>Erreur !</strong> L\'événement '.$targetEvent->getName().' n\'a pas été supprimée.
+				</div>';
+			}
+		}
+		else{
+			$actionResultat = '<div class="alert alert-danger alert-dismissable">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<strong>Votre mot de passe est incorrect.</strong> Vous ne pouvez pas supprimer l\'événement '.$targetEvent->getName().'.
+			</div>';	
+		}
 	}
 }
 
@@ -184,7 +210,7 @@ if(isset($_POST['categoryFrench']) && isset($_POST['summaryFrench']) ) {
 			}
 		}
 		if($valideUpdate == 10){
-			$actionResultat = '<div class="alert alert-success alert-dismissable">
+			$actionResultat = '<div class="alert alert-success alert-dismissable" id="update-exhibit-text">
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 			<strong>Les textes d\'accompagnement ont bien été mis à jour.</strong>
 			</div>';
@@ -234,7 +260,7 @@ if(isset($_POST['categoryFrench']) && isset($_POST['summaryFrench']) ) {
 			};
 		}
 		if($valideInsert == 10){
-			$actionResultat = '<div class="alert alert-success alert-dismissable">
+			$actionResultat = '<div class="alert alert-success alert-dismissable" id="insert-exhibit-text">>
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 			<strong>Les textes d\'accompagnement ont bien été enregistré.</strong>
 			</div>';
@@ -247,8 +273,6 @@ if(isset($_POST['categoryFrench']) && isset($_POST['summaryFrench']) ) {
 		}
 	}
 }
-
-
 
 /************************************************************************************************
 **
@@ -264,18 +288,38 @@ if (isset($_POST['name']) && isset($_POST['date'])) {
 		$newEvent->setName($_POST['name']);
 		$newEvent->setDescription($_POST['description']);
 		$newEvent->setEventDate(dateFormat($_POST['date']));
-		$newEvent->setEventStartTime($_POST['start-time']);
+		$newEvent->setEventStartTime(timeFormat($_POST['start-time']));
 		$insert = $newEvent->synchroDb();
 		if ($insert) {
-			$actionResultat = '<div class="alert alert-success alert-dismissable">
+			$actionResultat = '<div class="alert alert-success alert-dismissable" id="insert-exhibit-event">
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-			<strong>L\'événement "'.$newEvent->getName().'" a bien été enregistré.</strong>
+			<strong>L\'événement a bien été enregistré.</strong>
 			</div>';
 		}
 		else{
 			$actionResultat = '<div class="alert alert-danger alert-dismissable">
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 			<strong>Erreur !</strong> L\'événement "'.$newEvent->getName().'" n\'a pas été enregistré.
+			</div>';
+		}
+	}
+	else{
+		$targetEvent = new Event($_POST['id']);
+		$targetEvent->setName($_POST['name']);
+		$targetEvent->setDescription($_POST['description']);
+		$targetEvent->setEventDate(dateFormat($_POST['date']));
+		$targetEvent->setEventStartTime(timeFormat($_POST['start-time']));
+		$update = $targetEvent->synchroDb();
+		if ($update) {
+			$actionResultat = '<div class="alert alert-success alert-dismissable" id="update-exhibit-event">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<strong>L\'événement a bien été modifié.</strong>
+			</div>';
+		}
+		else{
+			$actionResultat = '<div class="alert alert-danger alert-dismissable">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<strong>Erreur !</strong> L\'événement "'.$targetEvent->getName().'" n\'a pas été modifié.
 			</div>';
 		}
 	}
@@ -307,8 +351,38 @@ include('header.php');
 	                <form action="<?= isset($targetExhibit)?$_SERVER['PHP_SELF'].'?exhibit='.$targetExhibit->getId():''; ?>" method="POST">
 		                <label for="password">Mot de passe :</label>
 		                <input type="password" name="password" placeholder="Votre mot de passe"  required />
-		                <input type="hidden" name="action" value="delete" />
+		                <input type="hidden" name="action" value="delete-exhibit" />
 		                <input type="hidden" value="<?= isset($targetExhibit)?$targetExhibit->getId():';' ?>" name="targetId">
+		                <input type="submit" value="Supprimer" />
+	                </form>
+	        	</div>
+	        	<div class="modal-footer">
+	                <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+	            </div>
+	        </div>
+	</div>
+
+<!--
+************************************************************************************************
+	MODAL POUR CONFIRMER LA SUPPRESSION DEFINITIVE D'UN EVENEMENT
+************************************************************************************************
+-->
+	<div id="deleteEvent" class="modal fade" role="dialog" >
+		<div class="modal-dialog">
+		</div>
+			<div class="modal-content">
+	        	<div class="modal-header">
+	        		<button type="button" class="close" data-dismiss="modal">&times;</button>
+	        		<h4 class="modal-title">Attention !</h4>
+	        	</div>
+	        	<div class="modal-body_test">
+	        		<p> Vous êtes sur le point de supprimer <strong>définitivement</strong> l'événement <?= isset($targetEvent)?$targetEvent->getName():''; ?>. </p>
+	                <p> Pour confirmer cette action, merci de saisir votre mot de passe</p>
+	                <form action="<?= isset($targetExhibit)?$_SERVER['PHP_SELF'].'?exhibit='.$targetExhibit->getId():''; ?>" method="POST">
+		                <label for="password">Mot de passe :</label>
+		                <input type="password" name="password" placeholder="Votre mot de passe" required />
+		                <input type="hidden" name="action" value="delete-event" />
+		                <input type="hidden" value="<?= isset($targetEvent)?$targetEvent->getId():';' ?>" name="targetId">
 		                <input type="submit" value="Supprimer" />
 	                </form>
 	        	</div>
@@ -354,7 +428,6 @@ include('header.php');
 <?php
 	if (isset($targetExhibit)){
 ?>
-	<!-- BOUTONS D'ACTIONS -->
 		<div class="row">
 
 
@@ -401,122 +474,162 @@ include('header.php');
 ************************************************************************************************
 -->
 
-<!--FORMULAIRES PRINCIPAUX DU ZOOM EXPO : Infos générales / Textes complémentaires / Artistes / Oeuvres -->
-				<section> 
-				<div> <!--FORMULAIRE Infos générales -->
+			<div class="row"> 
+				<section class="col-xs-12">
 
-					<?php
+<!-- *************************** FORMULAIRE Infos générales *************************** -->
+					<div>
+						<h2>Informations Générales</h2>
+						<?php
 
-						if (isset($targetExhibit)) {
-							$targetExhibit->formInfos($_SERVER['PHP_SELF'].'?exhibit='.$targetExhibit->getId(),'Modifier');
-						}
-						else{
-							$newExhibit = new Exhibit();
-							$newExhibit->formInfos($_SERVER['PHP_SELF'],'Créer');
-						}
+							if (isset($targetExhibit)) {
+								$targetExhibit->formInfos($_SERVER['PHP_SELF'].'?exhibit='.$targetExhibit->getId(),'Modifier');
+							}
+							else{
+								$newExhibit = new Exhibit();
+								$newExhibit->formInfos($_SERVER['PHP_SELF'],'Créer');
+							}
 
-					?>
+						?>
+					</div>
+
+<!-- *************************** FORMULAIRE Textes d'accompagnement *************************** -->
+					<div>
+						<h2>Textes d'accompagnement</h2>
+						<?php
+							if (isset($targetExhibit)) {
+								if (!empty($targetExhibit->getTextualContent())) {
+									$targetExhibit->formText($_SERVER['PHP_SELF'].'?exhibit='.$targetExhibit->getId() ,'Modifier');
+								}
+								else{
+									$targetExhibit->formText($_SERVER['PHP_SELF'].'?exhibit='.$targetExhibit->getId(), 'Ajouter');
+								}
+							}
+							else{
+								$newExhibit = new Exhibit();
+								$newExhibit->formText('','Ajouter');
+							}
+						?>
+					</div>
+				</section>
+
+				<div class="col-xs-12">
+					<div class="row">
+
+<!-- *************************** FORMULAIRE Artistes *************************** -->
+						<div class="col-sm-6 col-xs-12">
+						<section class="gutter-left">
+							<h2>Les artistes</h2>
+						</section>	
+						</div>
+
+						<div class="gutter hidden-xs"></div>
+
+<!-- *************************** FORMULAIRE Oeuvres *************************** -->
+						<div class="col-sm-6 col-xs-12">
+						<section class="gutter-right">
+							<h2>Les oeuvres</h2>
+						</section>
+						</div>
+
+					</div>
 				</div>
-				<div> <!--FORMULAIRE Textes complémentaires -->
-				<?php
-					if (isset($targetExhibit)) {
-						if (!empty($targetExhibit->getTextualContent())) {
-							$targetExhibit->formText($_SERVER['PHP_SELF'].'?exhibit='.$targetExhibit->getId() ,'Modifier');
-						}
-						else{
-							$targetExhibit->formText($_SERVER['PHP_SELF'].'?exhibit='.$targetExhibit->getId(), 'Ajouter');
-						}
-					}
-					else{
-						$newExhibit = new Exhibit();
-						$newExhibit->formText('','Ajouter');
-					}
-				?>
-				</div>
-
-				</section>
-
-				<section> <!-- FORMULAIRE Artistes -->
-					
-				</section>
-
-				<section> <!-- FORMULAIRE Oeuvres -->
-					
-				</section>
+			</div>
 			</div>
 
-			<div class="col-lg-12 col-md-3 col-sm-3 col-xs-12"> 
 
 <!--
 ************************************************************************************************
 	ZONE ANNEXE
 ************************************************************************************************
 -->
-			<?php
-			if (isset($targetExhibit)){
-				if ($targetExhibit->getVisible() == TRUE) {
-			?>
-				<div class="col-lg-12 hidden-lg col-md-12 col-sm-12 col-xs-12 hidden-xs">
-					<a href="#" class="btn btn-default" role="button"><span class="fa fa-cubes"></span> Placer les oeuvres</a>
-					<a href="#" class="btn btn-default" role="button"><span class="fa fa-file-text"></span> Dossier technique</a>
-					<a href="#" class="btn btn-default" role="button"><span class="fa fa-desktop"></span> Voir la page visiteur</a>
-				</div>
-			<?php
+			<div class="col-lg-12 col-md-3 col-sm-3 col-xs-12">
+			<div class="row">
+<!-- *************************** GESTION DES BOUTONS VARIANTE *************************** -->
+				<?php
+				if (isset($targetExhibit)){
+					if ($targetExhibit->getVisible() == TRUE) {
+				?>
+					<div class="col-lg-12 hidden-lg col-md-12 col-sm-12 col-xs-12 hidden-xs">
+						<?= $targetExhibit->getEndDate() < date('Y-m-d')?'':'<a href="#" class="btn btn-default" role="button"><span class="fa fa-cubes"></span> Placer les oeuvres</a>'; ?>
+						<a href="#" class="btn btn-default" role="button"><span class="fa fa-file-text"></span> Dossier technique</a>
+						<a href="#" class="btn btn-default" role="button"><span class="fa fa-desktop"></span> Voir la page visiteur</a>
+					</div>
+				<?php
+					}
+					else{
+				?>
+					<div class="col-lg-12 hidden-lg col-md-12 col-sm-12 col-xs-12 hidden-xs">
+						<button class="btn btn-default btn-publish" role="button" data-id="<?= $targetExhibit->getId(); ?>" ><span class="fa fa-eye"></span> Publier l'exposition</button>
+						<button class="btn btn-default btn-delete" role="button" data-id="<?= $targetExhibit->getId(); ?>" ><span class="fa fa-trash"></span> Supprimer définitivement l'exposition</button>
+					</div>	
+				<?php
+					}
 				}
-				else{
-			?>
-				<div class="col-lg-12 hidden-lg col-md-12 col-sm-12 col-xs-12 hidden-xs">
-					<button class="btn btn-default btn-publish" role="button" data-id="<?= $targetExhibit->getId(); ?>" ><span class="fa fa-eye"></span> Publier l'exposition</button>
-					<button class="btn btn-default btn-delete" role="button" data-id="<?= $targetExhibit->getId(); ?>" ><span class="fa fa-trash"></span> Supprimer définitivement l'exposition</button>
-				</div>	
-			<?php
-				}
-			}
-			?>
+				?>
 
 <!--
 ************************************************************************************************
 	GESTION DE LA VIE DE L'EXPOSITION
 ************************************************************************************************
 -->
+			<section class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 				<h2>Vie de l'exposition</h2>
-				<section>
-				<?php
-					if(isset($targetExhibit)){
-						if(isset($targetEvent)){
-							$targetEvent->formEvent($_SERVER['PHP_SELF'].'?exhibit='.$targetExhibit->getId(), 'Modifier', $targetExhibit->getId());
-						}
-						else{
-							$newEvent = new Event();
-							$newEvent->formEvent($_SERVER['PHP_SELF'].'?exhibit='.$targetExhibit->getId(), 'Ajouter', $targetExhibit->getId());
-						}
-					}
-					else{
-						$newEvent = new Event();
-						$newEvent->formEvent($_SERVER['PHP_SELF'].'?exhibit='.$targetExhibit->getId(), 'Ajouter','');	
-					}
-				?>
-				<h3>Evénements enregistrés :</h3>
-				<table class="table table-striped">
-				<tbody>
-				<?php
-					if (isset($targetExhibit)) {
-						foreach ($targetExhibit->event as $event) {
-							?>
-								<tr>
-								<td>
-									<p>Le <?= dateFormat($event->getEventDate()); ?> <?= empty($event->getEventStartTime()) || $event->getEventStartTime() == '00:00:00' ?'':' à '. timeFormat($event->getEventStartTime()); ?> </p>
-									<h4><?= $event->getName(); ?></h4>
-									<p><?= $event->getDescription(); ?> <a href="#" class="update-event" data-id="<?= $event->getId(); ?>"> <span class="fa fa-pencil"></span></a></p>
-								</td>
-								</tr>
-							<?php
-						}
-					}
-				?>
-				</tbody>
-				</table>
+				<div class="row">
+					<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+						<?php
+							if(isset($targetExhibit)){
+								if(isset($targetEvent)){
+									$targetEvent->formEvent($_SERVER['PHP_SELF'].'?exhibit='.$targetExhibit->getId(), 'Modifier', $targetExhibit->getId());
+								}
+								else{
+									$newEvent = new Event();
+									$newEvent->formEvent($_SERVER['PHP_SELF'].'?exhibit='.$targetExhibit->getId(), 'Ajouter', $targetExhibit->getId());
+								}
+							}
+							else{
+								$newEvent = new Event();
+								$newEvent->formEvent('', 'Ajouter','');	
+							}
+						?>
+						</div>
+					<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+						<h3>Evénements enregistrés :</h3>
+						<table class="table table-striped">
+						<tbody>
+						<?php
+							if (isset($targetExhibit)) {
+								foreach ($targetExhibit->event as $event) {
+									?>
+										<tr>
+										<td>
+											<p>Le <?= dateFormat($event->getEventDate()); ?> <?= empty($event->getEventStartTime()) || $event->getEventStartTime() == '00:00:00' ?'':' à '. timeFormat($event->getEventStartTime()); ?> </p>
+											<h4><?= $event->getName(); ?></h4>
+											<p><?php echo $event->getDescription(); 
+												if ($targetExhibit->getEndDate() > date('Y-m-d')) {
+													echo '<button class="update-event" data-id="'.$event->getId().'"><span class="fa fa-pencil"></span></button>';
+
+													if ($event->getName() == 'Début' || $event->getName() == 'Fin') {
+														echo '';
+													}
+													else{
+														echo '<button class="delete-event" data-id="'.$event->getId().'"><span class="fa fa-trash"></span></button>';	
+													}
+												}
+												?> 
+											</p>
+										</td>
+										</tr>
+									<?php
+								}
+							}
+						?>
+						</tbody>
+						</table>
+					</div>
+				</div>
 				</section>
+			</div>
 			</div>
 
 		</div>

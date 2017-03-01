@@ -104,8 +104,7 @@ class Event{
 		}
 		else{
 			$update = requete_sql("
-				UPDATE exhibit SET
-				exhibit_id = '".addslashes($this->exhibit_id)."',
+				UPDATE event SET
 				name =  '".addslashes($this->name)."',
 				description = '".addslashes($this->description)."',
 				event_date = '".addslashes($this->event_date)."',
@@ -150,24 +149,32 @@ class Event{
 			$targetExhibit = new Exhibit();
 		}
 		?>
-			<form method="POST" action="<?= $target; ?>">
+			<form method="POST" action="<?= $target; ?>" class="form-horizontal">
 				<h3><?= $action; ?> un événement</h3>
 				<fieldset <?= isset($targetExhibit) && ( empty($targetExhibit->getId()) || $targetExhibit->getEndDate() < date('Y-m-d') || $targetExhibit->getVisible() == FALSE)?'disabled':''; ?> >
 					<div class="form-group form-group-lg">
-						<label for="name">Titre :</label>
+						<label for="name" class="control-label col-lg-5 col-md-5 col-sm-5">Titre :</label>
+						<div class="col-lg-7 col-md-7 col-sm-7">
 						<input type="text" name="name" class="form-control" value="<?= !empty($this->getId())?$this->getName():''; ?>" <?= $this->getName() == 'Début' || $this->getName() == 'Fin' ?'disabled':''; ?> required />
+						</div>
 					</div>
 					<div class="form-group form-group-lg">
-						<label for="description">Description :</label>
+						<label for="description" class="control-label col-lg-5 col-md-5 col-sm-5">Description :</label>
+						<div class="col-lg-7 col-md-7 col-sm-7">
 						<input type="text" name="description" class="form-control" value="<?= !empty($this->getId())?$this->getDescription():''; ?>" />
+						</div>
 					</div>
 					<div class="form-group form-group-lg">
-						<label for="date">Date de l'évènement :</label>
-						<input type="date" name="date" class="datepicker form-control" value="<?= !empty($this->getId())?$this->getEventDate():''; ?>" required  />
+						<label for="date" class="control-label col-lg-5 col-md-5 col-sm-5">Date de l'évènement :</label>
+						<div class="col-lg-7 col-md-7 col-sm-7">
+						<input type="date" name="date" class="datepicker form-control" value="<?= !empty($this->getId())?dateFormat($this->getEventDate()):''; ?>" required placeholder="ex. : 24/02/2017" />
+						</div>
 					</div>
 					<div class="form-group form-group-lg">
-						<label for="start-time">Horaire de l'évènement :</label>
-						<input type="time" name="start-time" class="form-control" value="<?= !empty($this->getId())?$this->getEventStartTime():''; ?>" />
+						<label for="start-time" class="control-label col-lg-5 col-md-5 col-sm-5">Horaire de l'évènement :</label>
+						<div class="col-lg-7 col-md-7 col-sm-7">
+						<input type="time" name="start-time" class="form-control" value="<?= !empty($this->getId())?timeFormat($this->getEventStartTime()):''; ?>" placeholder="ex. : 14h30" />
+						</div>
 					</div>
 
 					<input type="hidden" name="id" value="<?= !empty($this->getId())?$this->getId():''; ?>">

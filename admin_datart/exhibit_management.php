@@ -126,55 +126,64 @@ include('header.php');
 
 	<div class="col-lg-9">
 
-<!-- SECTION TABLEAU DE L'EXPOSITION EN COURS -->
-		<h2>Exposition en cours</h2>
+<!--
+************************************************************************************************
+	ZONE LISTE EXPO EN COURS
+************************************************************************************************
+-->
+	<h2>Exposition en cours</h2>
 	<section>
-		<table class="table">
 		<?php
-			$currentExhibit = Exhibit::currentExhibit();
-			foreach ($currentExhibit as $ce){
+		$currentExhibit = Exhibit::currentExhibit();
+		foreach ($currentExhibit as $ce){
 		?>
-			<tbody>
-				<tr>
-					<td>
-					<h3><?= $ce->getTitle(); ?></h3>
-					<p class="date"><?= dateFormat($ce->getBeginDate()); ?> > <?= dateFormat($ce->getEndDate()); ?></p>
-					</td>
-					<td>
-						<div class="form-group" >
-							<select class="form-control actionExhibit">
+		<div class="row col-equal-height">
+			<div class="col-sm-8">
+				<h3><?= $ce->getTitle(); ?></h3>
+				<p class="major-list-date"><?= dateFormat($ce->getBeginDate()); ?> > <?= dateFormat($ce->getEndDate()); ?></p>
+			</div>
+			<div class="col-sm-4">
+				<form class="form-horizontal">
+					<div class="form-group">
+						<label for="actions-expo" class="control-label col-sm-4">Actions :</label>
+						<div class="col-sm-8">
+							<select name="actions-expo" class="form-control actionExhibit">
 								<option> --- </option>
 								<option value="update" data-id="<?= $ce->getId(); ?>">Modifier</option>
-								<option value="delete" data-id="<?= $ce->getId(); ?>" >Supprimer</option>
+								<option value="hide" data-id="<?= $ce->getId(); ?>" >Supprimer</option>
 							</select>
 						</div>
-					</td>
-				</tr>
-			</tbody>
-			<tbody>
-				<table class="table table-bordered text-center">
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-12">
+				<table class="table text-center">
 					<thead>
-						<th>
-							Artistes
-						</th>
-						<th>
-							Oeuvres
-						</th>
-						<th>
-							Oeuvres dispo.
-						</th>
-						<th>
-							Anglais
-						</th>
-						<th>
-							Allemand
-						</th>
-						<th>
-							Chinois
-						</th>
-						<th>
-							Russe
-						</th>
+						<tr>
+							<th>
+								Artistes
+							</th>
+							<th>
+								Oeuvres
+							</th>
+							<th>
+								Oeuvres dispo.
+							</th>
+							<th>
+								Anglais
+							</th>
+							<th>
+								Allemand
+							</th>
+							<th>
+								Russe
+							</th>
+							<th>
+								Chinois
+							</th>
+						</tr>
 					</thead>
 					<tbody>
 						<tr>
@@ -201,132 +210,147 @@ include('header.php');
 							</td>
 						</tr>
 					</tbody>
-				</table>
-			</tbody>
-			<?php
-				}
-			?>
-		</table>
-	</section>
+				</table>				
+			</div>
+		</div>
+		<?php
+		};
+		?>
+		</section>
 
-<!-- SECTION TABLEAU DES EXPOSITIONS A VENIR -->
-		<h2>Expositions à venir</h2>
+
+<!--
+************************************************************************************************
+	ZONE LISTE EXPO A VENIR
+************************************************************************************************
+-->
+	<h2>Expositions à venir</h2>
 	<section>
-		<table class="table table-striped">
-			<?php
-				$listNext = Exhibit::listNextExhibit();
-				foreach ($listNext as $ln) {
-					?>
-					<table class="table">
-						<tbody>
-							<tr>
-								<td>
-									<h3><?= $ln->getTitle(); ?></h3>
-									<p class="date"><?= dateFormat($ln->getBeginDate()); ?> > <?= dateFormat($ln->getEndDate()); ?></p>
-								</td>
-								<td>
-									<div class="form-group" >
-										<select class="form-control actionExhibit">
-											<option> --- </option>
-											<option value="update" data-id="<?= $ln->getId(); ?>">Modifier</option>
-											<option value="hide" data-id="<?= $ln->getId(); ?>" >Supprimer</option>
-										</select>
-									</div>
-								</td>
-							</tr>
-						</tbody>
-						<tbody>
-							<table class="table table-bordered text-center">
-								<thead>
-									<th>
-										Artistes
-									</th>
-									<th>
-										Oeuvres
-									</th>
-									<th>
-										Oeuvres dispo.
-									</th>
-									<th>
-										Anglais
-									</th>
-									<th>
-										Allemand
-									</th>
-									<th>
-										Chinois
-									</th>
-									<th>
-										Russe
-									</th>
-								</thead>
-								<tbody>
-									<tr>
-										<td>
-											<!-- Fonction qui retourne le nombre d'artistes liés à l'expo -->
-										</td>
-										<td>
-											<!-- Fonction qui retourne le nombre d'oeuvres liés à l'expo -->
-										</td>
-										<td>
-											<!-- Fonction qui retourne le nombre d'oeuvres liés à l'expo et disponible à la galerie -->
-										</td>
-										<td>
-											<?= $ln->checkTrad('english') == TRUE?'<span class="fa fa-check red"></span>':'<span class="fa fa-circle-o red"></span>' ?>
-										</td>
-										<td>
-											<?= $ln->checkTrad('german') == TRUE?'<span class="fa fa-check red"></span>':'<span class="fa fa-circle-o red"></span>' ?>
-										</td>
-										<td>
-											<?= $ln->checkTrad('russian') == TRUE?'<span class="fa fa-check red"></span>':'<span class="fa fa-circle-o red"></span>' ?>
-										</td>
-										<td>
-											<?= $ln->checkTrad('chinese') == TRUE?'<span class="fa fa-check red"></span>':'<span class="fa fa-circle-o red"></span>' ?>
-										</td>
-									</tr>
-								</tbody>
-							</table>
-						</tbody>
-					</table>
-					<?php
-				}
-			?>		
-		</table>
-		<a href="exhibit_zoom.php" class="btn btn-default">Créer une exposition</a>
-	</section>
-
-	<?php
-		if($currentUser->getStatus() == FALSE ){
-			?>
-				<h2>Expositions en cours de suppression</h2>
-			<section>
-				<table class="table table-striped">
-					<?php
-					$listHide = Exhibit::listHidenExhibit();
-					foreach ($listHide as $lh) {
-					?>
+		<?php
+		$listNext = Exhibit::listNextExhibit();
+		foreach ($listNext as $ln) {
+		?>
+		<div class="row col-equal-height">
+			<div class="col-sm-8">
+				<h3><?= $ln->getTitle(); ?></h3>
+				<p class="major-list-date"><?= dateFormat($ln->getBeginDate()); ?> > <?= dateFormat($ln->getEndDate()); ?></p>
+			</div>
+			<div class="col-sm-4">
+				<form class="form-horizontal">
+					<div class="form-group">
+						<label for="actions-expo" class="control-label col-sm-4">Actions :</label>
+						<div class="col-sm-8">
+							<select name="actions-expo" class="form-control actionExhibit">
+								<option> --- </option>
+								<option value="update" data-id="<?= $ln->getId(); ?>">Voir / Modifier</option>
+								<option value="hide" data-id="<?= $ln->getId(); ?>" >Supprimer</option>
+							</select>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-12">
+				<table class="table text-center">
+					<thead>
+						<tr>
+							<th>
+								Artistes
+							</th>
+							<th>
+								Oeuvres
+							</th>
+							<th>
+								Oeuvres dispo.
+							</th>
+							<th>
+								Anglais
+							</th>
+							<th>
+								Allemand
+							</th>
+							<th>
+								Russe
+							</th>
+							<th>
+								Chinois
+							</th>
+						</tr>
+					</thead>
+					<tbody>
 						<tr>
 							<td>
-								<h4><?= $lh->getTitle(); ?></h4>
-								<p class="date">Crée le : <?= dateFormat($lh->getCreationDate()); ?></p>
+								<!-- Fonction qui retourne le nombre d'artistes liés à l'expo -->
 							</td>
 							<td>
-								<div class="form-group" >
-									<select class="form-control actionExhibit">
+								<!-- Fonction qui retourne le nombre d'oeuvres liés à l'expo -->
+							</td>
+							<td>
+								<!-- Fonction qui retourne le nombre d'oeuvres liés à l'expo et disponible à la galerie -->
+							</td>
+							<td>
+								<?= $ln->checkTrad('english') == TRUE?'<span class="fa fa-check red"></span>':'<span class="fa fa-circle-o red"></span>' ?>
+							</td>
+							<td>
+								<?= $ln->checkTrad('german') == TRUE?'<span class="fa fa-check red"></span>':'<span class="fa fa-circle-o red"></span>' ?>
+							</td>
+							<td>
+								<?= $ln->checkTrad('russian') == TRUE?'<span class="fa fa-check red"></span>':'<span class="fa fa-circle-o red"></span>' ?>
+							</td>
+							<td>
+								<?= $ln->checkTrad('chinese') == TRUE?'<span class="fa fa-check red"></span>':'<span class="fa fa-circle-o red"></span>' ?>
+							</td>
+						</tr>
+					</tbody>
+				</table>				
+			</div>
+		</div>
+		<?php
+		};
+		?>
+		</section>
+
+<!--
+************************************************************************************************
+	ZONE LISTE EXPO EN COURS DE SUPPRESSION
+************************************************************************************************
+-->	
+		<?php
+		if($currentUser->getStatus() == FALSE ){
+			?>
+		<h2>Expositions en cours de suppression</h2>
+			<section>
+				<?php
+				$listHide = Exhibit::listHiddenExhibit();
+				foreach ($listHide as $lh) {
+				?>
+				<div class="row col-equal-height">
+					<div class="col-sm-5">
+						<h3><?= $lh->getTitle(); ?></h3>
+						<p class="date">Crée le : <?= dateFormat($lh->getCreationDate()); ?></p>
+					</div>
+					<div class="col-sm-4">
+						<form class="form-horizontal">
+							<div class="form-group">
+								<label for="actions-expo" class="control-label col-sm-4">Actions :</label>
+								<div class="col-sm-8">
+									<select name="actions-expo" class="form-control actionExhibit">
 										<option> --- </option>
 										<option value="show" data-id="<?= $lh->getId(); ?>">Visionner</option>
 										<option value="publish" data-id="<?= $lh->getId(); ?>" >Publier</option>
 									</select>
 								</div>
-							</td>
-							<td>
-								<button type="button" class="btn btn-default btn-delete" data-id="<?= $lh->getId(); ?>" >Supprimer définitivement</button>
-							</td>
-						</tr>
-					<?php
-					}
-					?>
-				</table>
+							</div>
+						</form>
+					</div>
+					<div class="col-sm-3">
+						<button type="button" class="btn btn-danger btn-delete" data-id="<?= $lh->getId(); ?>" >Supprimer définitivement</button>
+					</div>
+				</div>
+				<?php
+				}
+				?>
 			</section>
 			<?php
 		}
@@ -334,23 +358,30 @@ include('header.php');
 		
 	</div>
 
+<!--
+************************************************************************************************
+	ZONE LISTE EXPO PASSEES
+************************************************************************************************
+-->	
 	<div class="col-lg-3">
 
-		<h2>Expositions passées</h2>
-		<table class="table table-bordered">
+		<h4>Expositions passées</h4>
+		<section class="minor-list">
+			<ul>
 			<?php
 				$listOld = Exhibit::listPassedExhibit();
 				foreach ($listOld as $lo) {
-					?>
-						<tr>
-							<h4><?= $lo->getTitle(); ?></h4>
-							<p class="date"><?= dateFormat($lo->getBeginDate()); ?> > <?= dateFormat($lo->getEndDate()); ?></p>
-							<a href="exhibit_zoom.php?exhibit=<?= $lo->getId(); ?>"><span class="fa fa-eye"></span></a>
-						</tr>
-					<?php
+			?>
+				<li>
+					<h5><?= $lo->getTitle(); ?></h5>
+					<p class="minor-date"><?= dateFormat($lo->getBeginDate()); ?> > <?= dateFormat($lo->getEndDate()); ?></p>
+					<a href="exhibit_zoom.php?exhibit=<?= $lo->getId(); ?>"><span class="fa fa-eye"></span></a>
+				</li>
+			<?php
 				}
 			?>
-		</table>
+			</ul>
+		</section>
 	</div>
 
 </div>

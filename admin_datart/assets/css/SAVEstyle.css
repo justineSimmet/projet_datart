@@ -1,7 +1,75 @@
 /*************************************************************
 **************************************************************
-*** 
-*** FONTS
+**** 
+**** RESET
+***
+**************************************************************
+*************************************************************/
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video{
+	margin: 0 0;
+	padding: 0 0;
+	border: 0;
+	font-size: 100%;
+	vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+
+a{
+	text-decoration: none;
+}
+
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+div img{
+	vertical-align: bottom;
+}
+
+img {
+	max-width: 100%;
+	height: auto;
+	zoom :1;
+}
+
+
+/*************************************************************
+**************************************************************
+**** 
+**** FONTS
 ***
 **************************************************************
 *************************************************************/
@@ -13,18 +81,6 @@
          url('../fonts/kelson_rg-webfont.woff') format('woff'),
          url('../fonts/kelson_rg-webfont.ttf') format('truetype'),
          url('../fonts/kelson_rg-webfont.svg#kelson') format('svg');
-    font-weight: normal;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'kelson-bold';
-    src: url('../fonts/kelson_bd-webfont.eot');
-    src: url('../fonts/kelson_bd-webfont.eot?#iefix') format('embedded-opentype'),
-         url('../fonts/kelson_bd-webfont.woff2') format('woff2'),
-         url('../fonts/kelson_bd-webfont.woff') format('woff'),
-         url('../fonts/kelson_bd-webfont.ttf') format('truetype'),
-         url('../fonts/kelson_bd-webfont.svg#kelson') format('svg');
     font-weight: normal;
     font-style: normal;
 }
@@ -42,59 +98,9 @@
 }
 
 /*************************************************************
-***
-*** RESET & TRICK
-***
-*************************************************************/
-* {    
-	box-sizing: border-box;   
-	margin: 0;    
-	padding: 0;  
-}
-
-html, body {
-	height: 100%;
-	margin: 0;
-}
-
-body {
-	line-height: 1.5; 
-}
-
-html {    
-	box-sizing: border-box;  
-}
-
-*, *:before, *:after {    
-	box-sizing: inherit;  
-}
-
-
-.flex-container {
-	display: flex;
-	justify-content: space-between;
-}
-
-.flex-container .item {
-	flex-basis: 23%;
-}
-
-
-div img{
-	vertical-align: bottom;
-}
-
-img {
-	max-width: 100%;
-	height: auto;
-	zoom :1;
-}
-
-
-/*************************************************************
 **************************************************************
-*** 
-*** CSS GENERAL
+**** 
+**** CSS GENERAL
 ***
 **************************************************************
 *************************************************************/
@@ -104,14 +110,14 @@ body{
 }
 
 #main-container{
-	padding: 100px 50px 50px 50px;
+	padding-top: 50px;
 }
 
 .modal{
 	display: none;
 }
 
-h2,h3,h4{
+h2,h3{
 	font-family: 'metropolis', 'arial', 'helvetica', sans-serif;
 	color: #d5313a;
 }
@@ -119,18 +125,6 @@ h2,h3,h4{
 h2{
 	font-size: 1.5em;
 	margin-bottom: 20px;
-	margin-top: 0px;
-}
-
-
-h3{
-	font-size: 1.125em;
-	margin-bottom: 0;
-}
-
-h4{
-	color: #778085;
-	font-size: 1.250em;
 }
 
 .red{
@@ -139,10 +133,9 @@ h4{
 
 section{
 	background-color: #fff;
-	box-shadow: 0 0 10px rgba(100,100,100,0.25);
+	box-shadow: 0 0 15px rgba(100,100,100,0.1);
 	margin-bottom: 45px;
 	padding: 15px;
-	border: 1px solid #F0F0F0;
 }
 
 /*************************************************************
@@ -275,7 +268,7 @@ section{
 
 #main-nav-menu .nav-submenu{
 	display: none;
-	box-shadow: 0 5px 5px rgba(150,150,150,0.4) inset;
+	box-shadow: 0 5px 5px rgba(0,0,0,0.3) inset;
 }
 
 #main-nav-menu .nav-submenu li{
@@ -396,15 +389,9 @@ section{
 
 }
 
-
 /*************************************************************
-**************************************************************
-*** 
-*** CSS LOGIN
-***
-**************************************************************
+**	CSS DU LOGIN
 *************************************************************/
-
 #login-container{
 	margin-top: 50px;
 }
@@ -416,7 +403,6 @@ section{
 #login-img-container img{
 	height: 80px;
 }
-
 
 #login-form{
 	background-color: #fff;
@@ -430,149 +416,10 @@ section{
 
 
 /*************************************************************
-**************************************************************
-*** 
-*** CSS FORMULAIRES
-***
-**************************************************************
+**	CSS DES FORMULAIRES
 *************************************************************/
-.gutter-left{
-	margin-left: -15px;
-}
-
-.gutter-right{
-	margin-right: -15px;
-}
-
-@media screen and (max-width: 768px){
-	.gutter-left{
-		margin-right: -15px;
-		margin-left: -15px;
-	}
-
-	.gutter-right{
-		margin-right: -15px;
-		margin-left: -15px;
-	}
-}
 
 fieldset textarea{
 	min-height: 200px;
 	height: 400px;
-}
-
-form select{
-	border-bottom: 1px solid;
-}
-
-form option{
-	padding: 5px;
-}
-
-/*************************************************************
-**************************************************************
-*** 
-*** CSS DES LISTES ET TABLEAUX
-***
-**************************************************************
-*************************************************************/
-
-.col-equal-height{
-	overflow: hidden; 
-}
-
-.col-equal-height [class*="col-"]{
-    margin-bottom: -99999px;
-    padding-bottom: 99999px;
-}
-
-.col-equal-height form{
-	margin-top: 20px;
-}
-
-.col-equal-height button{
-	margin-top: 20px;
-}
-
-.major-list-date{
-	font-family: 'kelson-bold','arial', 'helvetica', sans-serif; ;
-	color: #969ca0 ;
-}
-
-table{
-	border-left: 1px solid #dadada;
-	border-right: 1px solid #dadada;
-}
-
-thead{
-	background-color: #c1c6c9;
-	border: none;
-}
-
-thead th{
-	text-align: center;
-	font-weight: normal;
-	border-bottom: none;
-}
-
-th, td{
-	border-top: none;
-	border-right: 1px solid #dadada;	
-	border-left: 1px solid #dadada;
-}
-
-tbody{
-	border-top: none;
-	border-bottom: 1px solid #dadada;
-}
-
-.minor-list{
-	padding: 0;
-	box-shadow: none;
-}
-
-.minor-list ul{
-	list-style-type: none;
-	margin: 0;
-}
-
-.minor-list ul li{
-	position: relative;
-	display: block;
-	padding: 5px;
-}
-
-.minor-list ul li:nth-child(odd){
-	background-color: #ede8e8;
-}
-
-.minor-list h5{
-	font-size: 1em;
-	margin: 0;
-	margin-bottom: 5px;
-}
-
-.minor-date{
-	font-size: 0.875em;
-	font-style: italic;
-	color: #778085 ;
-	margin-bottom: 0;
-}
-
-.minor-list a{
-	display: inline-block;
-	position: absolute;
-	top:0; right: 0; bottom: 0; left: 0;
-	color: #c1c6c9;
-	transition: color 0.5s;
-}
-
-.minor-list a:hover{
-	color: #9d9d9d;
-}
-
-.minor-list span{
-	position: absolute;
-	right: 5px; bottom: 5px; 
-	font-size: 1.5em;
 }

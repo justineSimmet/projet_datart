@@ -189,13 +189,15 @@ class Exhibit{
 	function getOpenEvent(){
 		$res = requete_sql("SELECT id FROM event WHERE exhibit_id = '".$this->id."' AND name = 'Début' ");
 		$open = $res->fetch(PDO::FETCH_ASSOC);
-		return $open;
+		$open = implode("','",$open);
+		return (int) $open;
 	}
 
 	function getCloseEvent(){
 		$res = requete_sql("SELECT id FROM event WHERE exhibit_id = '".$this->id."' AND name = 'Fin' ");
-		$open = $res->fetch(PDO::FETCH_ASSOC);
-		return $close;	
+		$close = $res->fetch(PDO::FETCH_ASSOC);
+		$close = implode("','",$close);
+		return (int) $close;	
 	}
 
 
@@ -312,33 +314,32 @@ class Exhibit{
 	function formInfos($target, $action){
 		?>
 		<form method="POST" action="<?= $target ?>" class="form-horizontal">
-			<h2>Informations Générales</h2>
 				<div class="form-group form-group-lg">
 					<label for="title" class="control-label col-lg-3 col-md-3 col-sm-3">Titre de l'exposition :</label>
 					<div class="col-lg-8 col-md-8 col-sm-8">
-					<input type="text" name="title" value="<?= $this->title ?>" class="form-control" required <?= !empty($this->getId()) && ($this->getEndDate() < date('Y-m-d') || $this->getVisible() == FALSE)?'disabled':''; ?> />
+					<input type="text" name="title" value="<?= $this->title ?>" class="form-control" required <?= !empty($this->getId()) && $this->getVisible() == FALSE?'disabled':''; ?> <?= !empty($this->id) && $this->getEndDate() < date('Y-m-d')?'readonly':''; ?> />
 					</div>
 				</div>
 				<div class="form-group form-group-lg">
 					<label for="begin_date" class="control-label col-lg-3 col-md-3 col-sm-3">Début de l'exposition :</label>
 					<div class="col-lg-8 col-md-8 col-sm-8">
-					<input type="date" name="begin_date" class="datepicker form-control" value="<?= dateFormat($this->begin_date) ?>" placeholder="jj/mm/aaaa" required <?= !empty($this->getId()) && ($this->getEndDate() < date('Y-m-d') || $this->getVisible() == FALSE)?'disabled':''; ?> />
+					<input type="date" name="begin_date" class="datepicker form-control" value="<?= dateFormat($this->begin_date) ?>" placeholder="ex. : 02/02/2017" required <?= !empty($this->getId()) && $this->getVisible() == FALSE?'disabled':''; ?> <?= !empty($this->id) && $this->getEndDate() < date('Y-m-d')?'readonly':''; ?> />
 					</div>
 				</div>
 				<div class="form-group form-group-lg">
 					<label for="end_date" class="control-label col-lg-3 col-md-3 col-sm-3">Fin de l'exposition :</label>
 					<div class="col-lg-8 col-md-8 col-sm-8">
-					<input type="date" name="end_date" class="datepicker form-control" value="<?= dateFormat($this->end_date) ?>" placeholder="jj/mm/aaaa" required <?= !empty($this->getId()) && ($this->getEndDate() < date('Y-m-d') || $this->getVisible() == FALSE)?'disabled':''; ?> />
+					<input type="date" name="end_date" class="datepicker form-control" value="<?= dateFormat($this->end_date) ?>" placeholder="ex. : 02/02/2017" required <?= !empty($this->getId()) && $this->getVisible() == FALSE?'disabled':''; ?> <?= !empty($this->id) && $this->getEndDate() < date('Y-m-d')?'readonly':''; ?> />
 					</div>
 				</div>
 				<div class="form-group form-group-lg">
 					<label for="public_opening" class="control-label col-lg-3 col-md-3 col-sm-3">Horaires d'ouverture :</label>
 					<div class="col-lg-8 col-md-8 col-sm-8">
-					<input type="text" name="public_opening" class="form-control" value="<?= $this->public_opening ?>" placeholder="Ex. : Ouvert du lundi au vendredi de 9h à 12h30 et de..." required <?= !empty($this->getId()) && ($this->getEndDate() < date('Y-m-d') || $this->getVisible() == FALSE)?'disabled':''; ?> />
+					<input type="text" name="public_opening" class="form-control" value="<?= $this->public_opening ?>" placeholder="Ex. : Ouvert du lundi au vendredi de 9h à 12h30 et de..." required <?= !empty($this->getId()) &&$this->getVisible() == FALSE?'disabled':''; ?> <?= !empty($this->id) && $this->getEndDate() < date('Y-m-d')?'readonly':''; ?> />
 					</div>
 				</div>
 				<input type="hidden" name="id" value="<?= $this->id ?>">
-				<input type="submit" value="<?= $action; ?>" class="btn btn-default" <?= !empty($this->getId()) && ($this->getEndDate() < date('Y-m-d') || $this->getVisible() == FALSE)?'disabled':''; ?> />
+				<input type="submit" value="<?= $action; ?>" class="btn btn-default" <?= !empty($this->getId()) && $this->getVisible() == FALSE?'disabled':''; ?> <?= !empty($this->id) && $this->getEndDate() < date('Y-m-d')?'disabled':''; ?> />
 		</form>
 		<?php
 	}
@@ -351,8 +352,7 @@ class Exhibit{
 **********************************************************/
 	function formText($target, $action){
 		?>
-			<form method="POST" action="<?= $target ?>">
-				<h2>Textes d'accompagnement</h2>
+			<form method="POST" action="<?= $target ?>" class="form-horizontal">
 				
 				<ul class="nav nav-tabs">
 					<li class="active"><a data-toggle="tab" href="#french">Français</a></li>
@@ -363,68 +363,88 @@ class Exhibit{
 				</ul>
 				<div class="tab-content">
 					<div id="french" class="tab-pane fade in active">
-					<fieldset <?= empty($this->getId()) || ($this->getEndDate() < date('Y-m-d') || $this->getVisible() == FALSE)?'disabled':''; ?> >
+					<fieldset <?= empty($this->getId()) || $this->getVisible() == FALSE?'disabled':''; ?>  >
 						<div class="form-group form-group-lg">
-							<label for="categoryfrench" class="control-label">Catégorie :</label>
-							<input type="text" name="categoryFrench" class="form-control" value="<?= !empty($this->getTextualContent())?$this->getFrenchCategory()->getContent():'' ?>">
+							<label for="categoryfrench" class="control-label col-lg-3 col-md-3 col-sm-3">Catégorie :</label>
+							<div class="col-lg-8 col-md-8 col-sm-8">
+							<input type="text" name="categoryFrench" class="form-control" value="<?= !empty($this->getTextualContent())?$this->getFrenchCategory()->getContent():'' ?>" <?= !empty($this->id) && $this->getEndDate() < date('Y-m-d')?'readonly':''; ?> >
+							</div>
 						</div>
 						<div class="form-group form-group-lg">
-							<label for="summaryfrench" class="control-label">Résumé :</label>
-							<textarea name="summaryFrench" class="form-control"><?= !empty($this->getTextualContent())?$this->getFrenchSummary()->getContent():'' ?></textarea>
+							<label for="summaryfrench" class="control-label col-lg-3 col-md-3 col-sm-3">Résumé :</label>
+							<div class="col-lg-8 col-md-8 col-sm-8">
+							<textarea name="summaryFrench" class="form-control" <?= !empty($this->id) && $this->getEndDate() < date('Y-m-d')?'readonly':''; ?> ><?= !empty($this->getTextualContent())?$this->getFrenchSummary()->getContent():'' ?></textarea>
+							</div>
 						</div>
 					</fieldset>
 					</div>
 					<div id="english" class="tab-pane fade">
-					<fieldset <?= empty($this->getId()) || ($this->getEndDate() < date('Y-m-d') || $this->getVisible() == FALSE)?'disabled':''; ?>>
+					<fieldset <?= empty($this->getId()) || $this->getVisible() == FALSE?'disabled':''; ?>>
 						<div class="form-group form-group-lg">
-							<label for="categoryEnglish" class="control-label">Catégorie :</label>
-							<input type="text" name="categoryEnglish" class="form-control" value="<?= !empty($this->getTextualContent())?$this->getEnglishCategory()->getContent():'' ?>">
+							<label for="categoryEnglish" class="control-label col-lg-3 col-md-3 col-sm-3">Catégorie :</label>
+							<div class="col-lg-8 col-md-8 col-sm-8">
+							<input type="text" name="categoryEnglish" class="form-control" value="<?= !empty($this->getTextualContent())?$this->getEnglishCategory()->getContent():'' ?>" <?= !empty($this->id) && $this->getEndDate() < date('Y-m-d')?'readonly':''; ?> >
+							</div>
 						</div>
 						<div class="form-group form-group-lg">
-							<label for="summaryEnglish" class="control-label">Résumé :</label>
-							<textarea name="summaryEnglish" class="form-control"><?= !empty($this->getTextualContent())?$this->getEnglishSummary()->getContent():'' ?></textarea>
+							<label for="summaryEnglish" class="control-label col-lg-3 col-md-3 col-sm-3">Résumé :</label>
+							<div class="col-lg-8 col-md-8 col-sm-8">
+							<textarea name="summaryEnglish" class="form-control" <?= !empty($this->id) && $this->getEndDate() < date('Y-m-d')?'readonly':''; ?> ><?= !empty($this->getTextualContent())?$this->getEnglishSummary()->getContent():'' ?></textarea>
+							</div>
 						</div>
 					</fieldset>
 					</div>
 					<div id="german" class="tab-pane fade">
-					<fieldset <?= empty($this->getId()) || ($this->getEndDate() < date('Y-m-d') || $this->getVisible() == FALSE)?'disabled':''; ?>>
+					<fieldset <?= empty($this->getId()) || $this->getVisible() == FALSE?'disabled':''; ?>>
 						<div class="form-group form-group-lg">
-							<label for="categoryGerman" class="control-label">Catégorie :</label>
-							<input type="text" name="categoryGerman" class="form-control" value="<?= !empty($this->getTextualContent())?$this->getGermanCategory()->getContent():'' ?>">
+							<label for="categoryGerman" class="control-label col-lg-3 col-md-3 col-sm-3">Catégorie :</label>
+							<div class="col-lg-8 col-md-8 col-sm-8">
+							<input type="text" name="categoryGerman" class="form-control" value="<?= !empty($this->getTextualContent())?$this->getGermanCategory()->getContent():'' ?>" <?= !empty($this->id) && $this->getEndDate() < date('Y-m-d')?'readonly':''; ?> >
+							</div>
 						</div>
 						<div class="form-group form-group-lg">
-							<label for="summaryGerman" class="control-label">Résumé :</label>
-							<textarea name="summaryGerman" class="form-control"><?= !empty($this->getTextualContent())?$this->getGermanSummary()->getContent():'' ?></textarea>
+							<label for="summaryGerman" class="control-label col-lg-3 col-md-3 col-sm-3">Résumé :</label>
+							<div class="col-lg-8 col-md-8 col-sm-8">
+							<textarea name="summaryGerman" class="form-control" <?= !empty($this->id) && $this->getEndDate() < date('Y-m-d')?'readonly':''; ?> ><?= !empty($this->getTextualContent())?$this->getGermanSummary()->getContent():'' ?></textarea>
+							</div>
 						</div>
 					</fieldset>
 					</div>
 					<div id="russian" class="tab-pane fade">
-					<fieldset <?= empty($this->getId()) || ($this->getEndDate() < date('Y-m-d') || $this->getVisible() == FALSE)?'disabled':''; ?>>
+					<fieldset <?= empty($this->getId()) || $this->getVisible() == FALSE?'disabled':''; ?>>
 						<div class="form-group form-group-lg">
-							<label for="categoryRussian" class="control-label">Catégorie :</label>
-							<input type="text" name="categoryRussian" class="form-control" value="<?= !empty($this->getTextualContent())?$this->getRussianCategory()->getContent():'' ?>">
+							<label for="categoryRussian" class="control-label col-lg-3 col-md-3 col-sm-3">Catégorie :</label>
+							<div class="col-lg-8 col-md-8 col-sm-8">
+							<input type="text" name="categoryRussian" class="form-control" value="<?= !empty($this->getTextualContent())?$this->getRussianCategory()->getContent():'' ?>" <?= !empty($this->id) && $this->getEndDate() < date('Y-m-d')?'readonly':''; ?> >
+							</div>
 						</div>
 						<div class="form-group form-group-lg">
-							<label for="summaryRussian" class="control-label">Résumé :</label>
-							<textarea name="summaryRussian" class="form-control" ><?= !empty($this->getTextualContent())?$this->getRussianSummary()->getContent():'' ?></textarea>
+							<label for="summaryRussian" class="control-label col-lg-3 col-md-3 col-sm-3">Résumé :</label>
+							<div class="col-lg-8 col-md-8 col-sm-8">
+							<textarea name="summaryRussian" class="form-control" <?= !empty($this->id) && $this->getEndDate() < date('Y-m-d')?'readonly':''; ?> ><?= !empty($this->getTextualContent())?$this->getRussianSummary()->getContent():'' ?></textarea>
+							</div>
 						</div>
 					</fieldset>
 					</div>
 					<div id="chinese" class="tab-pane fade">
-					<fieldset <?= empty($this->getId()) || ($this->getEndDate() < date('Y-m-d') || $this->getVisible() == FALSE)?'disabled':''; ?>>
+					<fieldset <?= empty($this->getId()) || $this->getVisible() == FALSE?'disabled':''; ?>>
 						<div class="form-group form-group-lg">
-							<label for="categoryChinese" class="control-label">Catégorie :</label>
-							<input type="text" name="categoryChinese" class="form-control" value="<?= !empty($this->getTextualContent())?$this->getChineseCategory()->getContent():'' ?>">
+							<label for="categoryChinese" class="control-label col-lg-3 col-md-3 col-sm-3">Catégorie :</label>
+							<div class="col-lg-8 col-md-8 col-sm-8">
+							<input type="text" name="categoryChinese" class="form-control" value="<?= !empty($this->getTextualContent())?$this->getChineseCategory()->getContent():'' ?>" <?= !empty($this->id) && $this->getEndDate() < date('Y-m-d')?'readonly':''; ?> >
+							</div>
 						</div>
 						<div class="form-group form-group-lg">
-							<label for="summaryChinese" class="control-label">Résumé :</label>
-							<textarea name="summaryChinese"><?= !empty($this->getTextualContent())?$this->getChineseSummary()->getContent():'' ?></textarea>
+							<label for="summaryChinese" class="control-label col-lg-3 col-md-3 col-sm-3">Résumé :</label>
+							<div class="col-lg-8 col-md-8 col-sm-8">
+							<textarea name="summaryChinese" class="form-control" <?= !empty($this->id) && $this->getEndDate() < date('Y-m-d')?'readonly':''; ?> ><?= !empty($this->getTextualContent())?$this->getChineseSummary()->getContent():'' ?></textarea>
+							</div>
 						</div>
 					</fieldset>				
 					</div>
 				</div>
 				<input type="hidden" name="id" value="<?= isset($this)?$this->getId():'' ?>">
-				<button type="button" class="btn btn-default" id="btn-add-text" <?= empty($this->getId()) || ($this->getEndDate() < date('Y-m-d') || $this->getVisible() == FALSE)?'disabled':''; ?>><?= $action ?></button>
+				<input type="submit" value="<?= $action; ?>" class="btn btn-default" <?= !empty($this->getId()) &&  $this->getVisible() == FALSE?'disabled':''; ?> <?= !empty($this->id) && $this->getEndDate() < date('Y-m-d')?'disabled':''; ?> />
 			
 			</form>
 	<?php
@@ -454,7 +474,7 @@ class Exhibit{
 ******************************************************/
 
 	static function listNextExhibit(){
-		$res = requete_sql("SELECT id FROM exhibit WHERE begin_date > now() AND visible = TRUE ORDER BY begin_date DESC");
+		$res = requete_sql("SELECT id FROM exhibit WHERE begin_date > now() AND visible = TRUE ORDER BY begin_date ASC");
 		$res = $res->fetchAll(PDO::FETCH_ASSOC);
 		$list = array();
 		foreach ($res as $exhibit) {
@@ -473,7 +493,7 @@ class Exhibit{
 ******************************************************/
 
 	static function listPassedExhibit(){
-		$res = requete_sql("SELECT id FROM exhibit WHERE end_date < now() ORDER BY end_date DESC");
+		$res = requete_sql("SELECT id FROM exhibit WHERE end_date < now() ORDER BY end_date ASC");
 		$res = $res->fetchAll(PDO::FETCH_ASSOC);
 		$list = array();
 		foreach ($res as $exhibit) {
@@ -489,8 +509,8 @@ class Exhibit{
 **
 ******************************************************/
 
-	static function listHidenExhibit(){
-		$res = requete_sql("SELECT id FROM exhibit WHERE visible = FALSE ORDER BY begin_date DESC");
+	static function listHiddenExhibit(){
+		$res = requete_sql("SELECT id FROM exhibit WHERE visible = FALSE ORDER BY creation_date ASC");
 		$res = $res->fetchAll(PDO::FETCH_ASSOC);
 		$list = array();
 		foreach ($res as $exhibit) {
