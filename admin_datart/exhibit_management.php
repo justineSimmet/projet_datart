@@ -138,11 +138,11 @@ include('header.php');
 		foreach ($currentExhibit as $ce){
 		?>
 		<div class="row col-equal-height">
-			<div class="col-sm-8">
+			<div class="col-sm-7">
 				<h3><?= $ce->getTitle(); ?></h3>
 				<p class="major-list-date"><?= dateFormat($ce->getBeginDate()); ?> > <?= dateFormat($ce->getEndDate()); ?></p>
 			</div>
-			<div class="col-sm-4">
+			<div class="col-sm-5">
 				<form class="form-horizontal">
 					<div class="form-group">
 						<label for="actions-expo" class="control-label col-sm-4">Actions :</label>
@@ -159,6 +159,7 @@ include('header.php');
 		</div>
 		<div class="row">
 			<div class="col-sm-12">
+				<div class="table-responsive">
 				<table class="table text-center">
 					<thead>
 						<tr>
@@ -210,7 +211,8 @@ include('header.php');
 							</td>
 						</tr>
 					</tbody>
-				</table>				
+				</table>
+				</div>				
 			</div>
 		</div>
 		<?php
@@ -252,6 +254,7 @@ include('header.php');
 		</div>
 		<div class="row">
 			<div class="col-sm-12">
+				<div class="table-responsive">
 				<table class="table text-center">
 					<thead>
 						<tr>
@@ -303,12 +306,13 @@ include('header.php');
 							</td>
 						</tr>
 					</tbody>
-				</table>				
+				</table>
+				</div>				
 			</div>
 		</div>
 		<?php
 		};
-		?>
+		?>	
 		</section>
 
 <!--
@@ -345,7 +349,7 @@ include('header.php');
 						</form>
 					</div>
 					<div class="col-sm-3">
-						<button type="button" class="btn btn-danger btn-delete" data-id="<?= $lh->getId(); ?>" >Supprimer définitivement</button>
+						<button type="button" class="btn btn-danger delete-exhibit" data-id="<?= $lh->getId(); ?>" >Supprimer définitivement</button>
 					</div>
 				</div>
 				<?php
@@ -364,6 +368,7 @@ include('header.php');
 ************************************************************************************************
 -->	
 	<div class="col-lg-3">
+		<a href="zoom_exhibit.php" class="btn btn-default btn-block btn-lg btn-custom"><span class="fa fa-plus-circle"></span> Nouvelle exposition</a>	
 
 		<h4>Expositions passées</h4>
 		<section class="minor-list">

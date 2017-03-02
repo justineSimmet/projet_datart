@@ -330,7 +330,7 @@ $('.datepicker').datepicker({
 ** Envoi le targetId de l'expo en Ajax et recharge la page avant
 ** d'ouvrir la modal.
 ***********************************************************************/
-	$('.btn-delete').on('click', function(){
+	$('.delete-exhibit').on('click', function(){
 		var targetId = $(this).attr("data-id");
 		$.ajax({
 			method: 'POST',
@@ -346,7 +346,7 @@ $('.datepicker').datepicker({
 		});
 	});
 
-	$('.btn-publish').on('click', function(){
+	$('.publish-exhibit').on('click', function(){
 		var targetId = $(this).attr("data-id");
 		$.ajax({
 			method: 'POST',

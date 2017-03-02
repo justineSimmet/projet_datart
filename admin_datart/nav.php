@@ -24,14 +24,14 @@
         </div>
 
         <!-- LOGO VERSION PETIT ECRAN-->
-        <div class="col-lg-12 col-lg-push-0 hidden-lg col-md-12 col-md-push-0 hidden-md col-sm-4 col-sm-push-8 col-xs-4 col-xs-push-8 nav-logo">
+        <div class="col-lg-12 col-lg-push-0 hidden-lg col-md-12 col-md-push-0 hidden-md col-sm-4 col-sm-push-8 col-xs-6 col-xs-push-6 nav-logo">
             <a href="index.php"><img src="assets/images/DAgrand-angle_vecto-blanc.png"></a>
         </div>
-        <div class="col-lg-12 hidden-lg col-md-12 hidden-md col-sm-8 col-sm-pull-4 col-xs-8 col-xs-pull-4">
+        <div class="col-lg-12 hidden-lg col-md-12 hidden-md col-sm-8 col-sm-pull-4 col-xs-6 col-xs-pull-6">
             <div class="row">
-                <p class="btn-nav col-sm-2 col-xs-2" id="open-nav"><span class="fa fa-bars"></span><br/>Menu</p>
-                <p class="btn-nav col-sm-2 col-xs-2" id="close-nav"><span class="fa fa-close"></span><br/>Fermer</p>
-                <h1 class="col-sm-10 col-xs-10"><?= isset($locationTitle)? $locationTitle :'Bienvenue '.$currentUser->getPublicName().' '.$currentUser->getPublicSurname(); ?></h1>
+                <p class="btn-nav col-sm-2 col-xs-5" id="open-nav"><span class="fa fa-bars"></span><br/>Menu</p>
+                <p class="btn-nav col-sm-2 col-xs-5" id="close-nav"><span class="fa fa-close"></span><br/>Fermer</p>
+                <h1 class="col-sm-10 col-xs-hidden"><?= isset($locationTitle)? $locationTitle :'Bienvenue '.$currentUser->getPublicName().' '.$currentUser->getPublicSurname(); ?></h1>
             </div>
         </div>
         <ul id="main-nav-menu">

@@ -104,7 +104,7 @@ body{
 }
 
 #main-container{
-	padding: 100px 50px 50px 50px;
+	padding: 60px;
 }
 
 .modal{
@@ -145,6 +145,44 @@ section{
 	border: 1px solid #F0F0F0;
 }
 
+section > div:not(:first-child){
+	margin-top: 20px;
+}
+
+.btn-custom{
+	border: 1px solid #dadada;
+	color: #778085;
+	background: rgb(255,255,255); /* Old browsers */
+	background: -moz-linear-gradient(top, rgba(255,255,255,1) 30%, rgba(222,222,222,1) 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(top, rgba(255,255,255,1) 30%,rgba(222,222,222,1) 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to bottom, rgba(255,255,255,1) 30%,rgba(222,222,222,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#dedede',GradientType=0 ); /* IE6-9 */
+}
+
+.btn-custom:hover{
+	border: 1px solid #d5313a;
+	color: #d5313a;
+}
+
+.btn-custom span{
+	padding-right: 10px;
+}
+
+.btn-area-row{
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	flex-wrap: nowrap;
+	margin-bottom: 30px;
+}
+
+.btn-area-col{
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+	flex-wrap: nowrap;
+	margin-bottom: 30px;
+}
 /*************************************************************
 **	CSS DU NAV
 *************************************************************/
@@ -367,13 +405,19 @@ section{
 		display: none;
 	}
 
+	#main-nav .nav-title{
+		max-height: 100px;
+		min-height: 100px;
+		overflow: scroll;
+	}
+
 	#main-nav h1{
-		overflow: hidden;
 		font-size: 1.8em;
 		line-height: 100px;
 		margin: 0;
 		color: #778085;
 	}
+
 
 	#main-nav-menu{
 		display: none;
@@ -394,6 +438,12 @@ section{
 		opacity: 0.5;
 	}
 
+}
+
+@media screen and (max-width: 770px){
+	#main-nav h1{
+		display: none;
+	}
 }
 
 
@@ -436,6 +486,11 @@ section{
 ***
 **************************************************************
 *************************************************************/
+
+div > form{
+	padding: 0 5%;
+}
+
 .gutter-left{
 	margin-left: -15px;
 }
@@ -456,6 +511,11 @@ section{
 	}
 }
 
+textarea{
+	min-width: 100%;
+	max-width: 100%;
+}
+
 fieldset textarea{
 	min-height: 200px;
 	height: 400px;
@@ -467,6 +527,47 @@ form select{
 
 form option{
 	padding: 5px;
+}
+
+.nav-tabs{
+	border-color: #778085;
+}
+
+.nav-tabs li{
+	margin-right: 5px;
+}
+
+.nav-tabs li.active > a{
+	border: 1px solid #778085;
+	border-bottom-color: transparent;
+}
+
+.nav-tabs li.active > a:hover{
+	border: 1px solid #778085;
+	border-bottom-color: transparent;
+	cursor: pointer;
+}
+
+.nav-tabs li > a{
+	background-color: #ede8e8;
+	border: 1px solid transparent;
+	border-bottom-color: #778085;
+	color: #778085;
+}
+
+.nav-tabs li > a:hover{
+	background-color: #778085;
+	border: 1px solid #778085;
+	color: #ede8e8;
+	cursor: pointer;
+}
+
+.tab-content{
+	padding: 20px 5%;
+	border: 1px solid #778085;
+	border-top: none;
+	margin-bottom: 20px;
+	padding-bottom: 50px;
 }
 
 /*************************************************************
@@ -576,3 +677,32 @@ tbody{
 	right: 5px; bottom: 5px; 
 	font-size: 1.5em;
 }
+
+
+.event-list{
+	padding: 15px 0 0 0;
+}
+
+.event-list ul{
+	list-style-type: none;
+	margin: 0;
+}
+
+.event-list ul li{
+	position: relative;
+	display: block;
+	padding: 5px;
+}
+
+.event-list ul li:nth-child(odd){
+	background-color: #ede8e8;
+}
+
+.event-date{
+	font-size: 1em;
+	color: #778085 ;
+	margin-bottom: 0;
+}
+
+.event-list  button
+
