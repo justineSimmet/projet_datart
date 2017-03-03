@@ -19,14 +19,43 @@ $('#close-nav').click(function(){
 /*-----------------------------------------------------------------------------
 GESTION LIEN ACTIFS
 ------------------------------------------------------------------------------*/
+
+// Regarde le href de chaque lien pour trouver si il est similaire
+// à l'adresse de la page en cours.
+// Si c'est le cas, il rajoute au lien la classe .active-nav-link
+// Ensuite, il regarde si le lien ciblé possède un menu imbriqué
+// de classe .nav-submenu. Si c'est le cas, il va faire apparaître le 
+// lien imbriqué caché et cacher le picto + du lien parent.
 $(function() {
-	var location = window.location.href.substr(window.location.href.lastIndexOf("/")+1);
-	$("#main-nav-menu li a").each(function(){
-		if($(this).attr("href") == location){
+	var locationPath = window.location.pathname.split( '/' ).pop();
+	$("#main-nav-menu a").each(function(){
+		if($(this).attr("href") == locationPath){
 			$(this).addClass("active-nav-link");
+			if( $(this).next('ul').hasClass('nav-submenu') ){
+				var plus = $(this).children('.link-plus');
+				var submenu = $(this).next('ul');
+				plus.hide();
+				submenu.show();
+			}
       	}
-     })
+    });
 });
+
+// Vérifie si la classe .active-nav-link est positionnée sur un lien imbriqué.
+// Si c'est le cas, le picto + du lien parent est caché tandis que le lien 
+// imbriqué est montré.
+$(function() {
+	$(".nav-submenu li a").each(function(){
+		if ($(this).hasClass("active-nav-link")) {
+			var plus = $(this).parent().parent().parent().find('.link-plus') ;
+			var submenu = $(this).parent().parent();
+			plus.hide();
+			submenu.show();
+		}
+	});	
+});
+
+
 
 /*-----------------------------------------------------------------------------
 FORMULAIRE DE CREATION D'UTILISATEURS - CONTROLES & ACTIONS
@@ -59,8 +88,27 @@ $(function(){
 	})
 });
 
-
 $(document).ready(function(){
+
+/*-----------------------------------------------------------------------------
+MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
+------------------------------------------------------------------------------*/
+$.datepicker.setDefaults($.datepicker.regional['fr']);
+
+$('.datepicker').focusin(function(){
+	if ( $(this).attr('name') == 'end_date' && $(this).val() == ''){
+		$beginDate = $(this).parent().parent().prev().children().children().val();
+		$(this).val($beginDate);
+	}
+});
+
+$('.datepicker').datepicker({
+		showAnim: 'clip',
+		showOtherMonths: true,
+		selectOtherMonths: true,
+		minDate: -7
+});
+
 
 /**********************************************
 ** EXECUTION REQUETE AJAX SI UN UTILISATEUR A
@@ -257,12 +305,65 @@ $(document).ready(function(){
 	$('.actionArtist').on('change', function(){
 		if ($(this).val() == 'delete'){
 			var artistId = $(this).children('option:selected').attr("data-id");
-			$("#mymodal").modal('show')
-		}
+			$.ajax({
+				method: 'POST',
+				data : {
+					targetId : artistId
+				},
+				success: function(data){
+					var newDoc = document.open("text/html", "replace");
+					newDoc.write(data);
+					newDoc.close();
+					$("#hideartist").modal('show')
+
+				}
+			});
+		};
 	});	
 
 
+/*************************************************************************
+** ACTIONS SUR LA LISTE DEROULANTE DES ACTIONS SUR LES ARTISTES CACHES
+**************************************************************************/
 
+	$('.btn-delete').on('click', function(){
+			var artistId = $(this).attr("data-id");
+			$.ajax({
+				method: 'POST',
+				data : {
+						targetId : artistId
+				},
+				success: function(data){
+					var newDoc = document.open("text/html", "replace");
+					newDoc.write(data);
+					newDoc.close();
+					$("#deleteArtist").modal('show')
 
+				},
+			});
+		});	
 
+	$('.actionArtistAdmin').on('change', function(){
+		if ($(this).val() == 'show'){
+			var artistId = $(this).children('option:selected').attr("data-id");
+			window.location.replace('zoom_artist?artist='+artistId);
+		}
+	});
 
+		$('.actionArtistAdmin').on('change', function(){
+		if ($(this).val() == 'publish'){
+			var artistId = $(this).children('option:selected').attr("data-id");
+			$.ajax({
+				method: 'POST',
+				data : {
+					targetId : artistId,
+					action : 'publish'
+				},
+				success: function(data){
+					var newDoc = document.open("text/html", "replace");
+					newDoc.write(data);
+					newDoc.close();
+				}
+			});
+		};
+	});	

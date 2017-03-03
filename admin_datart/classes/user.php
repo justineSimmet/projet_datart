@@ -5,7 +5,6 @@
 	classes/user.php
 	author : ApplePie Cie
 ---------------------------- */
-
 class User{
 	private $id;
 	private $public_name;
@@ -39,7 +38,6 @@ class User{
 		$this->public_name = $public_name;
 		return TRUE;
 	}
-
 	function getPublicName(){
 	    return $this->public_name;
 	}
@@ -48,7 +46,6 @@ class User{
 		$this->public_surname = $public_surname;
 		return TRUE;
 	}
-
 	function getPublicSurname(){
 	    return $this->public_surname;
 	}
@@ -57,7 +54,6 @@ class User{
 		$this->function = $function;
 		return TRUE;
 	}
-
 	function getFunction(){
 	    return $this->function;
 	}
@@ -66,7 +62,6 @@ class User{
 		$this->login = $login;
 		return TRUE;
 	}
-
 	function getLogin(){
 	    return $this->login;
 	}
@@ -75,11 +70,9 @@ class User{
 		$this->email_adress = $email_adress;
 		return TRUE;
 	}
-
 	function getEmailAdress(){
 	    return $this->email_adress;
 	}
-
 	function getLastConnection(){
 	    return $this->last_connection;
 	}
@@ -88,27 +81,20 @@ class User{
 		$this->status = $status;
 		return TRUE;
 	}
-
 	function getStatus(){
 	    return $this->status;
 	}
-
-
 /*----------------------------------------------------------------
 	Mise en place de la fonction de cryptage des mots de passe
 	Pour l'utiliser $this->passwordCrypt()
 ----------------------------------------------------------------*/
-
 	function passwordCrypt($password){
-
 		/*----------------------------------
 		Je commence par définir un "cost" optimal. Le cost est une suite d'itération qui permet d'augmenter la "solidité" du hash généré. Plus il est important, plus le hash est puissant (et donc difficile à décrypter). Mais la puissance demandée en calcul pour la machine augmente en conséquence.
 		----------------------------------*/
 		function optimalCost(){
 			$timeTarget = 0.03;	// Durée de calcul de 30 millisecondes
-
 			$cost = 8;	//Cost de base - Il est recommandé de partir sur une base entre 8 et 10.
-
 			//Une forme de boucle que l'on a pas encore utilisée. A la différence d'un while classique la vérification de la condition s'effectue à la fin de l'exécution. Une itération est donc toujours effectuée au minimum. Ici la boucle prend en paramètre le temps d'execution définit par timeTarget. Tant que l'on est en dessous des 30 millisecondes, le cost augmente.
 			do {
 			    $cost++;
@@ -116,26 +102,20 @@ class User{
 			    password_hash("test", PASSWORD_BCRYPT, ["cost" => $cost]);
 			    $end = microtime(TRUE);
 			} while (($end - $start) < $timeTarget);
-
 			return $cost;
 		}
-
 		$option = [
 			'cost' => optimalCost(),
 		];
-
 		//Je rajoute un encodage en base64 sur le mot de passe hashé pour ajouter une "sécurité"
 		$passwordCrypted = base64_encode(password_hash($password, PASSWORD_BCRYPT, $option));
-
 		if ($passwordCrypted){
 			return $passwordCrypted;
 		}
 		else{
 			return FALSE;
 		}
-
 	}
-
 /*----------------------------------------------------------------
 	Reset Password
 	Réinitialise le mot de passe utilisateur
@@ -150,8 +130,6 @@ class User{
 			return FALSE;
 		}
 	}
-
-
 /*----------------------------------------------------------------
 	Mise en place de la fonction de controle des mots de passe
 ----------------------------------------------------------------*/
@@ -185,15 +163,16 @@ class User{
  		}
  	}
  	
-
 /*----------------------------------------------------------------
 	Deconnexion de l'application
 ----------------------------------------------------------------*/
-
+	function disconnect(){
+		session_destroy();
+		session_start();
+	}
 /*----------------------------------------------------------------
 	Fonction d'update de mot de passe depuis le compte utilisateur
 ----------------------------------------------------------------*/
-
 	function updatePassword($oldPassword, $newPassword){
 		$userPassword = requete_sql("SELECT password FROM user WHERE id='".$this->id."' ");
 		$userPassword = $userPassword->fetch(PDO::FETCH_ASSOC);
@@ -211,18 +190,12 @@ class User{
  			return FALSE;
  		}
 	}
-
-
-
 /*----------------------------------------------------------------
 	Suppression du compte utilisateur ciblé après vérification
 	du mot de passe.
 ----------------------------------------------------------------*/
-
-
 	function deleteUser($password, $targetUser){
         $adminCheck = $this->passwordCheck($password);
-
         if ($adminCheck) {
             $deleteTarget = requete_sql("DELETE FROM user WHERE id = '".$targetUser."' ");
             if ($deleteTarget) {
@@ -236,9 +209,6 @@ class User{
             return FALSE;
         }
     }
-
-
-
 /*----------------------------------------------------------------
 	Synchronisation des données de l'utilisateur à la BD
 	- Si c'est une création -> INSERT & création du mot de passe
@@ -248,7 +218,6 @@ class User{
 	- L'update prend en compte la page active et fait la différence entre
 	le compte utilisateur et la gestion de utilisateurs
 ----------------------------------------------------------------*/
-
 	function synchroDb($oldPassword, $newPassword){
 		if (empty($this->id)) {
 			$create = requete_sql("INSERT INTO user VALUES(
@@ -316,11 +285,9 @@ class User{
 			}
 		}
 	}
-
 /*----------------------------------------------------------------
 	Formulaire de création ou édition d'un utilisateur
 ----------------------------------------------------------------*/
-
 	function form($target, $action='', $titre, $description){
 	?>
 		<form action=<?= $target ?> method="POST" id="<?= $description; ?>-user-form" class="user-form">
@@ -379,8 +346,6 @@ class User{
 		</form>
 	<?php
 	}
-
-
 /*----------------------------------------------------------------
 	Génération d'une liste de tout les utilisateurs
 ----------------------------------------------------------------*/
@@ -394,8 +359,6 @@ class User{
 		}
 		return $list;
 	}
-
-
 /*----------------------------------------------------------------
 	Envoi l'objet User dans un array puis le converti en Json
 ----------------------------------------------------------------*/
@@ -410,3 +373,5 @@ class User{
 		return json_encode($userArray, JSON_PRETTY_PRINT);
 	}
 }
+
+

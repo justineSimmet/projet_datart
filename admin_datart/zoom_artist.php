@@ -3,6 +3,7 @@
 
 require_once('classes/artist.php');
 require_once('classes/user.php');
+require_once('classes/artist_textual_content.php');
 require_once('includes/include.php');
 
 
@@ -53,20 +54,49 @@ if (isset($_POST['id'])) {
 					</div>';
 			}
 
-
-
-			// 	$actionResultat = '<div class="alert alert-success alert-dismissable" id="user-added">
-			// 		<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-			// 		<strong>Félicitation</strong> L\'artiste a bien été ajouté.
-			// 		</div>';
-			// }
-			// else{
-			// 	$actionResultat = '<div class="alert alert-danger alert-dismissable">
-			// 		<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-			// 		<strong>Erreur</strong> L\'artiste n\'a pas été ajouté.
-			// 		</div>';
-			
 	};
+}
+
+
+if (isset($_POST['targetArtist']) && isset($_POST['action']) ) {
+	if($_POST['action'] == 'publish'){
+		$targetArtist = new Artiste($_POST['targetArtist']);
+		$publish = $targetArtist->publishArtist();
+		if ($publish) {
+			$actionResultat = '<div class="alert alert-success alert-dismissable">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<strong>Félicitation,</strong> L\'artiste '.$targetArtist->getIdentity().' est de nouveau visible.
+				</div>';
+		}
+		else{
+			$actionResultat = '<div class="alert alert-danger alert-dismissable">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<strong>Erreur !</strong> L\'artiste '.$targetArtist->getIdentity().' est toujours masqué.
+			</div>';	
+		}
+	}
+	elseif($_POST['action'] == 'deleteArtiste'){
+		$targetArtist = new Artiste($_POST['targetArtist']);
+		$check = $currentUser->passwordCheck($_POST['password']);
+		if ($check) {
+			$delete = $targetArtist->deleteArtist();
+			if ($delete) {
+				header('Location:exhibit_management.php');
+			}
+			else{
+				$actionResultat = '<div class="alert alert-danger alert-dismissable">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<strong>Erreur !</strong> L\'artiste '.$targetArtist->getIdentity().' n\'a pas été supprimée.
+				</div>';
+			}
+		}
+		else{
+			$actionResultat = '<div class="alert alert-danger alert-dismissable">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<strong>Votre mot de passe est incorrect.</strong> Vous ne pouvez pas supprimer l\'artiste '.$targetExhibit->getIdentity().'.
+			</div>';
+		}
+	}
 }
 
 
@@ -112,7 +142,7 @@ include('header.php');
 						<h3>2 - Textes et photos</h3>
 				<?php
 
-					if (isset($targetArtist) && $targetArtist->getVisible()==TRUE){	
+					if (isset($targetArtist)){	
 					$targetArtist->formText($_SERVER['PHP_SELF'], 'Créer');
 					$targetArtist->formPhoto($_SERVER['PHP_SELF'], 'Créer');
 					}
