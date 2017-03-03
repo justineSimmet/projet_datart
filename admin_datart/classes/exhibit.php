@@ -18,7 +18,9 @@ class Exhibit{
 	public $event;
 
 	function __construct($id=''){
+
 		if($id != 0){
+
 			$res= requete_sql("SELECT * FROM exhibit WHERE id = '".$id."' ");
 			$exhibit = $res->fetch(PDO::FETCH_ASSOC);
 			$this->id = $exhibit['id'];	
@@ -30,52 +32,65 @@ class Exhibit{
 			$this->creation_date = $exhibit['creation_date'];
 			$this->textual_content =  array();
 			$text = requete_sql("SELECT id, language, subject FROM textual_content_exhibit WHERE exhibit_id = '".$id."' ");
-			while ( $t = $text->fetch(PDO::FETCH_ASSOC)) {
-				if ($t['language'] == 'french') {
-					if ($t['subject'] == 'category') {
-						array_push($this->textual_content, new ExhibitFrenchCategory($t['id']));
+
+			if (count($text) !== 0) {
+
+				while ( $t = $text->fetch(PDO::FETCH_ASSOC)) {
+					if ($t['language'] == 'french') {
+						if ($t['subject'] == 'category') {
+							array_push($this->textual_content, new ExhibitFrenchCategory($t['id']));
+						}
+						else{
+							array_push($this->textual_content, new ExhibitFrenchSummary($t['id']));
+						}
 					}
-					else{
-						array_push($this->textual_content, new ExhibitFrenchSummary($t['id']));
+					elseif ($t['language'] == 'english') {
+						if ($t['subject'] == 'category') {
+							array_push($this->textual_content, new ExhibitEnglishCategory($t['id']));
+						}
+						else{
+							array_push($this->textual_content, new ExhibitEnglishSummary($t['id']));
+						}
+					}
+					elseif ($t['language'] == 'german') {
+						if ($t['subject'] == 'category') {
+							array_push($this->textual_content, new ExhibitGermanCategory($t['id']));
+						}
+						else{
+							array_push($this->textual_content, new ExhibitGermanSummary($t['id']));
+						}
+					}
+					elseif ($t['language'] == 'russian') {
+						if ($t['subject'] == 'category') {
+							array_push($this->textual_content, new ExhibitRussianCategory($t['id']));
+						}
+						else{
+							array_push($this->textual_content, new ExhibitRussianSummary($t['id']));
+						}
+					}
+					elseif ($t['language'] == 'chinese') {
+						if ($t['subject'] == 'category') {
+							array_push($this->textual_content, new ExhibitChineseCategory($t['id']));
+						}
+						else{
+							array_push($this->textual_content, new ExhibitChineseSummary($t['id']));
+						}
 					}
 				}
-				elseif ($t['language'] == 'english') {
-					if ($t['subject'] == 'category') {
-						array_push($this->textual_content, new ExhibitEnglishCategory($t['id']));
-					}
-					else{
-						array_push($this->textual_content, new ExhibitEnglishSummary($t['id']));
-					}
-				}
-				elseif ($t['language'] == 'german') {
-					if ($t['subject'] == 'category') {
-						array_push($this->textual_content, new ExhibitGermanCategory($t['id']));
-					}
-					else{
-						array_push($this->textual_content, new ExhibitGermanSummary($t['id']));
-					}
-				}
-				elseif ($t['language'] == 'russian') {
-					if ($t['subject'] == 'category') {
-						array_push($this->textual_content, new ExhibitRussianCategory($t['id']));
-					}
-					else{
-						array_push($this->textual_content, new ExhibitRussianSummary($t['id']));
-					}
-				}
-				elseif ($t['language'] == 'chinese') {
-					if ($t['subject'] == 'category') {
-						array_push($this->textual_content, new ExhibitChineseCategory($t['id']));
-					}
-					else{
-						array_push($this->textual_content, new ExhibitChineseSummary($t['id']));
-					}
-				}
+
+			}
+			else{
+				$this->textual_content = array();
 			}
 			$this->event = array();
 			$event = requete_sql("SELECT id FROM event WHERE exhibit_id = '".$this->id."' ORDER BY event_date ASC, event_start_time ASC");
-			while ($e = $event->fetch(PDO::FETCH_ASSOC)) {
-				array_push($this->event, new Event($e['id']));
+			if (count($event) !== 0) {
+				while ($e = $event->fetch(PDO::FETCH_ASSOC)) {
+					array_push($this->event, new Event($e['id']));
+				}
+			}
+			else{
+        		$this->event = array();
 			}
 		}
 		else {
@@ -458,7 +473,7 @@ class Exhibit{
 
 	static function currentExhibit(){
 		$res = requete_sql("SELECT id FROM exhibit WHERE begin_date <= now() AND end_date >= now() ");
-		$exhibit = $res->fetch(PDO::FETCH_ASSOC);
+		$res = $res->fetchAll(PDO::FETCH_ASSOC);
 		$currentExhibit = array();
 		foreach ($res as $exhibit) {
 			$exhibit = new Exhibit($exhibit['id']);

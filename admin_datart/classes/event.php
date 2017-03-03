@@ -149,7 +149,7 @@ class Event{
 			$targetExhibit = new Exhibit();
 		}
 		?>
-			<form method="POST" action="<?= $target; ?>" class="form-horizontal">
+			<form method="POST" action="<?= $target; ?>">
 				
 				<fieldset <?= isset($targetExhibit) && ( empty($targetExhibit->getId()) || $targetExhibit->getEndDate() < date('Y-m-d') || $targetExhibit->getVisible() == FALSE)?'disabled':''; ?> >
 					<div class="form-group form-group-lg">
@@ -171,7 +171,7 @@ class Event{
 
 					<input type="hidden" name="id" value="<?= !empty($this->getId())?$this->getId():''; ?>">
 					<input type="hidden" name="id-exhibit" value="<?= !empty($this->getId())?$this->getExhibitId():$targetExhibit->getId(); ?>">
-					<input type="submit" role="button" class="btn btn-default" value="<?= $action; ?>">
+					<input type="submit" role="button" class="btn btn-default pull-right" value="<?= $action; ?>">
 				</fieldset>
 
 			</form>

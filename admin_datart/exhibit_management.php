@@ -138,11 +138,11 @@ include('header.php');
 		foreach ($currentExhibit as $ce){
 		?>
 		<div class="row col-equal-height">
-			<div class="col-sm-7">
+			<div class="col-sm-6">
 				<h3><?= $ce->getTitle(); ?></h3>
 				<p class="major-list-date"><?= dateFormat($ce->getBeginDate()); ?> > <?= dateFormat($ce->getEndDate()); ?></p>
 			</div>
-			<div class="col-sm-5">
+			<div class="col-sm-6">
 				<form class="form-horizontal">
 					<div class="form-group">
 						<label for="actions-expo" class="control-label col-sm-4">Actions :</label>
@@ -233,11 +233,11 @@ include('header.php');
 		foreach ($listNext as $ln) {
 		?>
 		<div class="row col-equal-height">
-			<div class="col-sm-8">
+			<div class="col-sm-6">
 				<h3><?= $ln->getTitle(); ?></h3>
 				<p class="major-list-date"><?= dateFormat($ln->getBeginDate()); ?> > <?= dateFormat($ln->getEndDate()); ?></p>
 			</div>
-			<div class="col-sm-4">
+			<div class="col-sm-6">
 				<form class="form-horizontal">
 					<div class="form-group">
 						<label for="actions-expo" class="control-label col-sm-4">Actions :</label>
@@ -330,15 +330,15 @@ include('header.php');
 				foreach ($listHide as $lh) {
 				?>
 				<div class="row col-equal-height">
-					<div class="col-sm-5">
+					<div class="col-sm-4">
 						<h3><?= $lh->getTitle(); ?></h3>
 						<p class="date">Crée le : <?= dateFormat($lh->getCreationDate()); ?></p>
 					</div>
 					<div class="col-sm-4">
 						<form class="form-horizontal">
 							<div class="form-group">
-								<label for="actions-expo" class="control-label col-sm-4">Actions :</label>
-								<div class="col-sm-8">
+								<label for="actions-expo" class="control-label col-sm-5">Actions :</label>
+								<div class="col-sm-7">
 									<select name="actions-expo" class="form-control actionExhibit">
 										<option> --- </option>
 										<option value="show" data-id="<?= $lh->getId(); ?>">Visionner</option>
@@ -348,8 +348,8 @@ include('header.php');
 							</div>
 						</form>
 					</div>
-					<div class="col-sm-3">
-						<button type="button" class="btn btn-danger delete-exhibit" data-id="<?= $lh->getId(); ?>" >Supprimer définitivement</button>
+					<div class="col-sm-4">
+						<button type="button" class="btn btn-danger btn-block delete-exhibit" data-id="<?= $lh->getId(); ?>" >Supprimer définitivement</button>
 					</div>
 				</div>
 				<?php

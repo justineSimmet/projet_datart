@@ -172,7 +172,7 @@ section > div:not(:first-child){
 	display: flex;
 	flex-direction: row;
 	justify-content: space-around;
-	flex-wrap: nowrap;
+	flex-wrap: wrap;
 	margin-bottom: 30px;
 }
 
@@ -183,6 +183,15 @@ section > div:not(:first-child){
 	flex-wrap: nowrap;
 	margin-bottom: 30px;
 }
+
+.btn-area-col a:not(:first-child){
+	margin-top: 15px;
+}
+
+.padding-left{
+	padding-left: 45px;
+}
+
 /*************************************************************
 **	CSS DU NAV
 *************************************************************/
@@ -487,10 +496,6 @@ section > div:not(:first-child){
 **************************************************************
 *************************************************************/
 
-div > form{
-	padding: 0 5%;
-}
-
 .gutter-left{
 	margin-left: -15px;
 }
@@ -531,10 +536,6 @@ form option{
 
 .nav-tabs{
 	border-color: #778085;
-}
-
-.nav-tabs li{
-	margin-right: 5px;
 }
 
 .nav-tabs li.active > a{
@@ -579,7 +580,8 @@ form option{
 *************************************************************/
 
 .col-equal-height{
-	overflow: hidden; 
+	overflow: hidden;
+	width: 100%;
 }
 
 .col-equal-height [class*="col-"]{
@@ -678,7 +680,6 @@ tbody{
 	font-size: 1.5em;
 }
 
-
 .event-list{
 	padding: 15px 0 0 0;
 }
@@ -689,20 +690,50 @@ tbody{
 }
 
 .event-list ul li{
-	position: relative;
-	display: block;
-	padding: 5px;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: space-between;
+	padding: 10px;
+}
+
+.event-action{
+	width: 20%;
+	text-align: right;
 }
 
 .event-list ul li:nth-child(odd){
 	background-color: #ede8e8;
 }
 
+.event-list h4{
+	color: #d5313a;
+}
+
+.event-list p, .event-list h4{
+	margin: 0;
+}
+
 .event-date{
 	font-size: 1em;
 	color: #778085 ;
-	margin-bottom: 0;
 }
 
-.event-list  button
+.event-list ul li:nth-child(odd) .btn-group a{
+	background-color: #fff;
+}
+
+.event-list .btn-group a{
+	color: #d5313a ;
+	background-color: #ede8e8;
+}
+
+.event-list .btn-group a:hover{
+	color: #778085;
+}
+
+
+.event-description{
+	font-size: 0.95em;
+}
 
