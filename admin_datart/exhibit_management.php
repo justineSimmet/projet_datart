@@ -1,6 +1,7 @@
 <?php
 
 require_once('classes/user.php');
+require_once('classes/artist.php');
 require_once('classes/exhibit.php');
 require_once('classes/exhibit_textual_content.php');
 require_once('classes/event.php');
@@ -33,6 +34,18 @@ if (isset($_POST['targetId']) && isset($_POST['action']) ) {
 	elseif($_POST['action'] == 'publish'){
 		$targetExhibit = new Exhibit($_POST['targetId']);
 		$publish = $targetExhibit->publishExhibit();
+		if ($publish) {
+			$actionResultat = '<div class="alert alert-success alert-dismissable"s>
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<strong>Vous venez de re-publier l\'exposition '.$targetExhibit->getTitle().' . </strong>
+				</div>';
+		}
+		else{
+			$actionResultat = '<div class="alert alert-danger alert-dismissable">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<strong>Erreur !</strong> L\'exposition '.$targetExhibit->getTitle().' n\'a pas pu être re-publiée.
+			</div>';
+	    }
 	}
 	elseif($_POST['action'] == 'delete'){
 		$targetExhibit = new Exhibit($_POST['targetId']);
@@ -71,15 +84,14 @@ include('header.php');
 </div>
 
 <!-- MODAL POUR CONFIRMER LE CHANGEMENT DE STATUT D'UNE EXPOSITION A VISIBLE FALSE -->
-<div id="hideExhibit" class="modal fade" role="dialog" >
+<div id="hideExhibit" class="modal fade">
 	<div class="modal-dialog">
-	</div>
 		<div class="modal-content">
         	<div class="modal-header">
         		<button type="button" class="close" data-dismiss="modal">&times;</button>
         		<h4 class="modal-title">Attention !</h4>
         	</div>
-        	<div class="modal-body_test">
+        	<div class="modal-body">
         		<p> Vous êtes sur le point de supprimer l'exposition <?= isset($targetExhibit)?$targetExhibit->getTitle():''; ?>. </p>
                 <p> Voulez-vous confirmer cette action ?</p>
                 <form action="exhibit_management.php" method="POST">
@@ -94,18 +106,18 @@ include('header.php');
                 <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
             </div>
         </div>
+    </div>
 </div>
 
 <!-- MODAL POUR CONFIRMER LA SUPPRESSION DEFINITIVE D'UNE EXPOSITION -->
 <div id="deleteExhibit" class="modal fade" role="dialog" >
 	<div class="modal-dialog">
-	</div>
 		<div class="modal-content">
         	<div class="modal-header">
         		<button type="button" class="close" data-dismiss="modal">&times;</button>
         		<h4 class="modal-title">Attention !</h4>
         	</div>
-        	<div class="modal-body_test">
+        	<div class="modal-body">
         		<p> Vous êtes sur le point de supprimer <strong>définitivement</strong> l'exposition <?= isset($targetExhibit)?$targetExhibit->getTitle():''; ?>. </p>
                 <p> Pour confirmer cette action, merci de saisir votre mot de passe</p>
                 <form action="exhibit_management.php" method="POST">
@@ -120,11 +132,12 @@ include('header.php');
                 <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
             </div>
         </div>
+	</div>
 </div>
 
 <div class="row">
 
-	<div class="col-lg-9">
+	<div class="col-lg-9" id="managementExhibitList">
 
 <!--
 ************************************************************************************************
@@ -189,7 +202,7 @@ include('header.php');
 					<tbody>
 						<tr>
 							<td>
-								<!-- Fonction qui retourne le nombre d'artistes liés à l'expo -->
+								<?= $ce->totalArtistExposed(); ?>
 							</td>
 							<td>
 								<!-- Fonction qui retourne le nombre d'oeuvres liés à l'expo -->
@@ -284,7 +297,7 @@ include('header.php');
 					<tbody>
 						<tr>
 							<td>
-								<!-- Fonction qui retourne le nombre d'artistes liés à l'expo -->
+								<?= $ln->totalArtistExposed(); ?>
 							</td>
 							<td>
 								<!-- Fonction qui retourne le nombre d'oeuvres liés à l'expo -->
@@ -368,7 +381,7 @@ include('header.php');
 ************************************************************************************************
 -->	
 	<div class="col-lg-3">
-		<a href="zoom_exhibit.php" class="btn btn-default btn-block btn-lg btn-custom"><span class="fa fa-plus-circle"></span> Nouvelle exposition</a>	
+		<a href="exhibit_zoom.php" class="btn btn-default btn-block btn-lg btn-custom"><span class="fa fa-plus-circle"></span> Nouvelle exposition</a>	
 
 		<h4>Expositions passées</h4>
 		<section class="minor-list">

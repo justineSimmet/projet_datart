@@ -88,3 +88,32 @@ function timeFormat($str){
 	}
 };
 
+function lastCreateElement(){
+	$res = requete_sql("SELECT id,creation_date,visible, 'artist' AS source FROM artist
+		UNION
+		SELECT id,creation_date,visible, 'artwork' AS source FROM artwork
+		UNION
+		SELECT id,creation_date,visible, 'exhibit' AS source FROM exhibit
+		WHERE visible = TRUE
+		ORDER BY creation_date DESC
+		LIMIT 0,10");
+	$res = $res->fetchAll(PDO::FETCH_ASSOC);
+	$last = array();
+	foreach ($res as $l) {
+		switch ($l['source']) {
+			case 'artist':
+				array_push($last, new Artist($l['id']));
+				break;
+			
+			case 'artwork':
+				array_push($last, new Artwork($l['id']));
+				break;
+
+			case 'exhibit':
+				array_push($last, new Exhibit($l['id']));
+				break;	
+		}
+	}
+	return $last;
+}
+

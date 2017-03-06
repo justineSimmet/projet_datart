@@ -16,6 +16,7 @@ $('#close-nav').click(function(){
 	$('#open-nav').show();
 });
 
+
 /*-----------------------------------------------------------------------------
 GESTION LIEN ACTIFS
 ------------------------------------------------------------------------------*/
@@ -93,21 +94,135 @@ $(document).ready(function(){
 /*-----------------------------------------------------------------------------
 MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
 ------------------------------------------------------------------------------*/
-$.datepicker.setDefaults($.datepicker.regional['fr']);
+	$.datepicker.setDefaults($.datepicker.regional['fr']);
 
-$('.datepicker').focusin(function(){
-	if ( $(this).attr('name') == 'end_date' && $(this).val() == ''){
-		$beginDate = $(this).parent().parent().prev().children().children().val();
-		$(this).val($beginDate);
+	$('#begin_date').on('focusin', function(){
+		$(this).datepicker({
+			showAnim: 'clip',
+			showOtherMonths: true,
+			selectOtherMonths: true,
+			minDate: 0
+		});
+	});
+
+	$('#end_date').on('focusin', function(){
+		var beginDate = $('#begin_date').val();
+		$(this).val(beginDate);
+		var dateArray = beginDate.split('/');
+		$(this).datepicker({
+			showAnim: 'clip',
+			showOtherMonths: true,
+			selectOtherMonths: true,
+			minDate: new Date(dateArray[2],dateArray[1],dateArray[0])
+		});
+	});
+
+	$('#datepicker').on('focus', function(){
+		var beginDate = $('#begin_date').val();
+		var endDate = $('#end_date').val();
+		var beginArray = beginDate.split('/');
+		var endArray = endDate.split('/');
+		$(this).datepicker({
+			showAnim: 'clip',
+			showOtherMonths: true,
+			selectOtherMonths: true,
+			minDate: new Date(beginArray[2],beginArray[1],beginArray[0]-3),
+			maxDate: new Date(endArray[2],endArray[1],endArray[0]-3),
+		});
+	})
+
+/**************************************************
+** SELECTION D'ARTISTES DANS UNE LISTE
+****************************************************/
+// INPUT DE RECHERCHE DANS LA LISTE DES ARTISTES ENREGISTREE
+	var artistList = [];
+	$('#recordedArtists li').each(function(){
+		artistList.push($(this).text());
+	});
+	$('#selectedArtists li').each(function(){
+		artistList.push($(this).text());
+	});
+
+	//Widget JQuery UI qui reprend la liste des artistes dispos
+	$( "#searchArtist" ).autocomplete({
+    	source: artistList,
+    	select: function( event, ui ) {
+    		$("#searchArtist").val(ui.item.label);
+    		var result = ui.item.label.toLowerCase();
+    		$('#recordedArtists li').each(function() {
+			var text = $(this).text().toLowerCase();
+	    		if (text.indexOf(result) == 0) {
+	    			$(this).show();
+	    		}
+	    		else{
+	        		$(this).hide();
+	        	}
+	    	})
+	    	$('#selectedArtists li').each(function() {
+			var text = $(this).text().toLowerCase();
+	    		if (text.indexOf(result) == 0) {
+	    			$(this).show();
+	    		}
+	    		else{
+	        		$(this).hide();
+	        	}
+	    	})
+      	}
+    });
+
+    $( "#searchArtist" ).focusout(function(){
+    	$('#recordedArtists li').each(function(){
+			$(this).show();
+		});
+		$('#selectedArtists li').each(function(){
+			$(this).show();
+		});
+    })
+
+//MISE EN FORME - CLASSEMENT PAR ORDRE ALPHABETIQUE
+	function orderList(selector) {
+	    $(selector).children("li").sort(function(a, b) {
+	        var upA = $(a).text().toUpperCase();
+	        var upB = $(b).text().toUpperCase();
+	        return (upA < upB) ? -1 : (upA > upB) ? 1 : 0;
+	    }).appendTo(selector);
 	}
-});
+	orderList("#recordedArtists");
+	orderList("#selectedArtists");
 
-$('.datepicker').datepicker({
-		showAnim: 'clip',
-		showOtherMonths: true,
-		selectOtherMonths: true,
-		minDate: -7
-});
+    $( "#recordedArtists" ).sortable({
+      connectWith: "#selectedArtists",
+      cursor: "move",
+      update: function( event, ui ) {
+      	$('#searchArtist').val('');
+      	$('#recordedArtists li').each(function(){
+			$(this).show();
+		});
+		$('#selectedArtists li').each(function(){
+			$(this).show();
+		});
+      	orderList("#selectedArtists");
+      	orderList("#recordedArtists");
+      }
+    });
+
+    $( "#selectedArtists" ).sortable({
+      connectWith: "#recordedArtists",
+      cursor: "move",
+      update: function( event, ui ) {
+      	$('#recordedArtists li').each(function(){
+			$(this).show();
+		});
+		$('#selectedArtists li').each(function(){
+			$(this).show();
+		});
+      	orderList("#recordedArtists");
+      	orderList("#selectedArtists");
+      }
+    });
+
+
+
 
 /**********************************************
 ** EXECUTION REQUETE AJAX SI UN UTILISATEUR A
@@ -245,42 +360,22 @@ $('.datepicker').datepicker({
 ***************************************************/
 	//Si une option est sélectionnée dans une liste déroulante actionUser
 	//et que ça valeur est update, on récupère la valeur de data-id dans userId.
-	//La valeur de userId est envoyée en POST via une requête ajax vers la page actuelle.
-	//C'est là que ça devient vicieux ^^
-	//Les données renvoyée correspondent à la page actuelle avec la création d'un objet User
-	//$targetUser. Pour afficher ces données, j'interviens directement sur DOM en lui disant de
-	//créer une variable newDoc qui correspond à l'ensemble de la page HTML présente (Doctype / Head / Body).
-	//Je remplace le contenu de cette page par les données retournée en ajac et referme la manipulation de doc.
+	//La valeur de userId est envoyée en POST via une requête ajax vers la page actuelle
+	//Je modifie l'élément nécéssaire (la modal ou le formulaire) via la reponse effectuée
+	//par le serveur.
 	$('.actionUser').on('change', function(){
 		if ($(this).val() == 'update'){
 			var userId = $(this).children('option:selected').attr("data-id");
-			$.ajax({
-				method: 'POST',
-				data : {
-					targetUser : userId
-				},
-				success: function(data){
-					var newDoc = document.open("text/html", "replace");
-					newDoc.write(data);
-					newDoc.close();
-				}	
+			$.post('users_management.php',{ targetUser : userId}, function(response){
+				$('#formArea').html($(response).find('#formArea').html());
 			});
 		 }
 		else if($(this).val() == 'delete'){
 			var userId = $(this).children('option:selected').attr("data-id");
-			$.ajax({
-				method: 'POST',
-				data : {
-					targetUser : userId
-				},
-				success: function(data){
-					var newDoc = document.open("text/html", "replace");
-					newDoc.write(data);
-					newDoc.close();
-					$("#mymodal").modal('show');
-				}	
+			$.post('users_management.php',{ targetUser : userId} , function(response){
+				$("#modalDeleteUser").html($(response).find("#modalDeleteUser").html());
+				$("#modalDeleteUser").modal('show');
 			});
-
 		 };			
 	});
 
@@ -295,32 +390,16 @@ $('.datepicker').datepicker({
 		}
 		else if($(this).val() == 'hide'){
 			var targetId = $(this).children('option:selected').attr("data-id");
-			$.ajax({
-				method: 'POST',
-				data : {
-					targetId
-				},
-				success: function(data){
-					var newDoc = document.open("text/html", "replace");
-					newDoc.write(data);
-					newDoc.close();
-					$("#hideExhibit").modal('show');
-				}	
+			$.post('exhibit_management.php', {targetId}, function(response){
+				$("#hideExhibit").html($(response).find("#hideExhibit").html());
+				$("#hideExhibit").modal('show');
 			});
 		}
 		else if($(this).val() == 'publish'){
 			var targetId = $(this).children('option:selected').attr("data-id");
-			$.ajax({
-				method: 'POST',
-				data : {
-					targetId : targetId,
-					action : 'publish'
-				},
-				success: function(data){
-					var newDoc = document.open("text/html", "replace");
-					newDoc.write(data);
-					newDoc.close();
-				}	
+			$.post('exhibit_management.php', {targetId : targetId, action : 'publish'}, function(response){
+				$("#managementExhibitList").html($(response).find("#managementExhibitList").html());
+				$("#alert-area").html($(response).find("#alert-area").html());
 			});
 		}		
 	});
@@ -332,17 +411,9 @@ $('.datepicker').datepicker({
 ***********************************************************************/
 	$('.delete-exhibit').on('click', function(){
 		var targetId = $(this).attr("data-id");
-		$.ajax({
-			method: 'POST',
-			data : {
-				targetId : targetId
-			},
-			success: function(data){
-				var newDoc = document.open("text/html", "replace");
-				newDoc.write(data);
-				newDoc.close();
-				$("#deleteExhibit").modal('show')
-			},
+		$.post(window.location.href, {targetId}, function(response){
+			$("#deleteExhibit").html($(response).find("#deleteExhibit").html());
+			$("#deleteExhibit").modal('show');
 		});
 	});
 
@@ -362,47 +433,23 @@ $('.datepicker').datepicker({
 		});
 	});
 
+/*********************************************************
+** RECHARGEMENT DE LA PAGE SI UNE EXPO A BIEN ETE UPDATE
+*********************************************************/
+	if($('#update-exhibit').length == 1){
+		$.post(window.location.href, function(response){
+			$("#exhibitMainInfo").html($(response).find("#exhibitMainInfo").html());
+		});
+	};
+
 /**********************************************
 ** REFRESH AJAX APRES INSERT OU UPDATE
 ** DES TEXTES D'ACCOMPAGNEMENT D'EXPO 
 ************************************************/
 	if($('#insert-exhibit-text').length == 1 || $('#update-exhibit-text').length == 1){
-
-		var insertSuccess ='<div class="alert alert-success alert-dismissable">'
-		+'<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'
-		+'<strong>Les textes d\'accompagnement ont bien été enregistré.'
-		+'</div>';
-
-		var updateSuccess ='<div class="alert alert-success alert-dismissable">'
-		+'<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'
-		+'<strong>Les textes d\'accompagnement ont bien été mis à jour.</strong>'
-		+'</div>';
-
-		if($('#insert-exhibit-text').length == 1){
-			$.ajax({
-				method: 'POST',
-				success: function(data){
-					var newDoc = document.open("text/html", "replace");
-					newDoc.write(data);
-					newDoc.close();
-
-					$('#alert-area').append(insertSuccess);
-				},
-			});	
-		}
-		else{
-			$.ajax({
-				method: 'POST',
-				success: function(data){
-					var newDoc = document.open("text/html", "replace");
-					newDoc.write(data);
-					newDoc.close();
-
-					$('#alert-area').append(updateSuccess);
-				},
-			});
-		}
-
+		$.post(window.location.href, function(response){
+			$("#formTextArea").html($(response).find("#formTextArea").html());
+		});
 	};
 
 /**********************************************
@@ -410,100 +457,46 @@ $('.datepicker').datepicker({
 ** D'UN EVENEMENT D'EXPO 
 ************************************************/
 	if($('#insert-exhibit-event').length == 1 || $('#update-exhibit-event').length == 1){
-
-		var insertSuccess ='<div class="alert alert-success alert-dismissable">'
-		+'<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'
-		+'<strong>L\'événement a bien été enregistré.'
-		+'</div>';
-
-		var updateSuccess ='<div class="alert alert-success alert-dismissable">'
-		+'<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'
-		+'<strong>L\'événement a bien été mis à jour.</strong>'
-		+'</div>';
-
-		if($('#insert-exhibit-event').length == 1){
-			$.ajax({
-				method: 'POST',
-				success: function(data){
-					var newDoc = document.open("text/html", "replace");
-					newDoc.write(data);
-					newDoc.close();
-
-					$('#alert-area').append(insertSuccess);
-				},
-			});	
-		}
-		else{
-			$.ajax({
-				method: 'POST',
-				success: function(data){
-					var newDoc = document.open("text/html", "replace");
-					newDoc.write(data);
-					newDoc.close();
-
-					$('#alert-area').append(updateSuccess);
-				},
-			});
-		}
-
+		$.post(window.location.href, function(response){
+			$("#alert-area-event").html($(response).find("#update-exhibit-event").html())
+			$("#exhibitEvent").html($(response).find("#exhibitEvent").html());
+		});
 	};
 	
-/*********************************************************
-** RECHARGEMENT DE LA PAGE SI UNE EXPO A BIEN ETE UPDATE
-*********************************************************/
-	if($('#update-exhibit').length == 1){
-		$.ajax({
-			method: 'POST',
-			success: function(data){
-				var newDoc = document.open("text/html", "replace");
-				newDoc.write(data);
-				newDoc.close();
-
-				var divSuccess ='<div class="alert alert-success alert-dismissable">'
-				+'<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'
-				+'<strong>Félicitation</strong> L\'exposition a bien été modifiée.'
-				+'</div>';
-				$('#alert-area').append(divSuccess);
-			},
-		});
-
-	};
-
 
 /**********************************************
 ** EXECUTION REQUETE AJAX POUR UPDATE OU DELETE
 ** UN EVENEMENT SUR LE ZOOM EXHIBIT
 ************************************************/
-	$('.update-event').on('click', function(){
+	$('#exhibitEvent').on('click','.update-event', function(){
 		var targetEvent = $(this).attr("data-id");
-		$.ajax({
-			method: 'POST',
-			data : {
-				targetEvent : targetEvent,
-				action : 'update'
-			},
-			success: function(data){
-				var newDoc = document.open("text/html", "replace");
-				newDoc.write(data);
-				newDoc.close();	
-			},
+		$.post(window.location.href, {targetEvent : targetEvent}, function(response){
+			$("#exhibitEvent form").html($(response).find("#exhibitEvent form").html());
 		});
 	});
 
-	$('.delete-event').on('click', function(){
+	$('#exhibitEvent').on('click','.delete-event', function(){
 		var targetEvent = $(this).attr("data-id");
-		$.ajax({
-			method: 'POST',
-			data : {
-				targetEvent : targetEvent
-			},
-			success: function(data){
-				var newDoc = document.open("text/html", "replace");
-				newDoc.write(data);
-				newDoc.close();
-				$("#deleteEvent").modal('show')	
-			},
+		$.post(window.location.href, {targetEvent : targetEvent}, function(response){
+			$("#deleteEvent").html($(response).find("#deleteEvent").html());
+			$("#deleteEvent").modal('show');
 		});
 	});
+
+/**********************************************
+** EXECUTION REQUETE AJAX POUR LIER
+** DES ARTISTES SUR LE ZOOM EXHIBIT
+************************************************/
+
+	$('#btn-selectedArtist').on('click', function(){
+		var listId = [];
+		$('#selectedArtists li').each(function(){
+			listId.push($(this).attr('data-artistId'));
+		});
+		$.post(window.location.href, {actionLink : 'addArtist', artistId : listId}, function(response){
+			$("#exhibitLinkedArtist").html($(response).find("#exhibitLinkedArtist").html());
+			$("#alert-area-artist").html($(response).find("#update-exhibit-artist").html());
+		});
+	})
 
 });

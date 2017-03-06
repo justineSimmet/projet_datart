@@ -1,9 +1,10 @@
 <?php
 
 require_once('classes/user.php');
-require_once('classes/exhibit.php');
+require_once('classes/artist.php');
 require_once('classes/exhibit_textual_content.php');
 require_once('classes/event.php');
+require_once('classes/exhibit.php');
 require_once('includes/include.php');
 
 
@@ -148,14 +149,14 @@ if (isset($_POST['targetId']) && isset($_POST['action']) ) {
 				header('Location:exhibit_zoom.php?exhibit='.$targetExhibit->getId());
 			}
 			else{
-				$actionResultat = '<div class="alert alert-danger alert-dismissable">
+				$actionResultatEvent = '<div class="alert alert-danger alert-dismissable">
 				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 				<strong>Erreur !</strong> L\'événement '.$targetEvent->getName().' n\'a pas été supprimée.
 				</div>';
 			}
 		}
 		else{
-			$actionResultat = '<div class="alert alert-danger alert-dismissable">
+			$actionResultatEvent = '<div class="alert alert-danger alert-dismissable">
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 			<strong>Votre mot de passe est incorrect.</strong> Vous ne pouvez pas supprimer l\'événement '.$targetEvent->getName().'.
 			</div>';	
@@ -291,13 +292,13 @@ if (isset($_POST['name']) && isset($_POST['date'])) {
 		$newEvent->setEventStartTime(timeFormat($_POST['start-time']));
 		$insert = $newEvent->synchroDb();
 		if ($insert) {
-			$actionResultat = '<div class="alert alert-success alert-dismissable" id="insert-exhibit-event">
+			$actionResultatEvent = '<div class="alert alert-success alert-dismissable" id="insert-exhibit-event">
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 			<strong>L\'événement a bien été enregistré.</strong>
 			</div>';
 		}
 		else{
-			$actionResultat = '<div class="alert alert-danger alert-dismissable">
+			$actionResultatEvent = '<div class="alert alert-danger alert-dismissable">
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 			<strong>Erreur !</strong> L\'événement "'.$newEvent->getName().'" n\'a pas été enregistré.
 			</div>';
@@ -311,13 +312,13 @@ if (isset($_POST['name']) && isset($_POST['date'])) {
 		$targetEvent->setEventStartTime(timeFormat($_POST['start-time']));
 		$update = $targetEvent->synchroDb();
 		if ($update) {
-			$actionResultat = '<div class="alert alert-success alert-dismissable" id="update-exhibit-event">
+			$actionResultatEvent = '<div class="alert alert-success alert-dismissable" id="update-exhibit-event">
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 			<strong>L\'événement a bien été modifié.</strong>
 			</div>';
 		}
 		else{
-			$actionResultat = '<div class="alert alert-danger alert-dismissable">
+			$actionResultatEvent = '<div class="alert alert-danger alert-dismissable">
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 			<strong>Erreur !</strong> L\'événement "'.$targetEvent->getName().'" n\'a pas été modifié.
 			</div>';
@@ -325,16 +326,35 @@ if (isset($_POST['name']) && isset($_POST['date'])) {
 	}
 }
 
+
+/************************************************************************************************
+**
+** MANIPULATION DES ARTISTES LIES A L'EXPOSITION
+** Ajoute ou modifie des expositions en base de donnée
+**
+************************************************************************************************/
+if (isset($_POST['actionLink']) && $_POST['actionLink'] == 'addArtist') {
+	$artistExposed = $targetExhibit->linkExposedArtist($_POST['artistId']);
+	if ($artistExposed) {
+		$actionResultatArtist = '<div id="update-exhibit-artist"><div class="alert alert-success alert-dismissable">
+		<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+		<strong> Les artistes ont bien été lié à l\'exposition.</strong>
+		</div></div>';
+	}
+	else{
+		$actionResultatArtist = '<div id="update-exhibit-artist"><div class="alert alert-danger alert-dismissable">
+		<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+		<strong>Erreur !</strong> Les artistes n\'ont pas été lié à l\'exposition.
+		</div></div>';
+	}
+}
+
 $locationTitle = isset($targetExhibit)?$targetExhibit->getTitle():'Ajouter une exposition';
 
 include('header.php');
 
-?>
-<div class="row"> <!-- ROW PRINCIPALE -->
 
-	<div class="col-sm-12" id="alert-area"> <!-- ZONE DES MESSAGES DE SUCCES OU D'ERREUR -->
-		<?= !empty($actionResultat)?$actionResultat:''; ?>
-	</div>
+?>
 
 <!--
 ************************************************************************************************
@@ -343,13 +363,12 @@ include('header.php');
 -->
 	<div id="deleteExhibit" class="modal fade" role="dialog" >
 		<div class="modal-dialog">
-		</div>
 			<div class="modal-content">
 	        	<div class="modal-header">
 	        		<button type="button" class="close" data-dismiss="modal">&times;</button>
 	        		<h4 class="modal-title">Attention !</h4>
 	        	</div>
-	        	<div class="modal-body_test">
+	        	<div class="modal-body">
 	        		<p> Vous êtes sur le point de supprimer <strong>définitivement</strong> l'exposition <?= isset($targetExhibit)?$targetExhibit->getTitle():''; ?>. </p>
 	                <p> Pour confirmer cette action, merci de saisir votre mot de passe</p>
 	                <form action="<?= isset($targetExhibit)?$_SERVER['PHP_SELF'].'?exhibit='.$targetExhibit->getId():''; ?>" method="POST">
@@ -364,6 +383,7 @@ include('header.php');
 	                <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
 	            </div>
 	        </div>
+		</div>
 	</div>
 
 <!--
@@ -373,7 +393,6 @@ include('header.php');
 -->
 	<div id="deleteEvent" class="modal fade" role="dialog" >
 		<div class="modal-dialog">
-		</div>
 			<div class="modal-content">
 	        	<div class="modal-header">
 	        		<button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -394,6 +413,7 @@ include('header.php');
 	                <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
 	            </div>
 	        </div>
+		</div>
 	</div>
 
 <!--
@@ -426,179 +446,210 @@ include('header.php');
 	MENU ADAPTATIF SELON L'ECRAN ET LE TYPE DE CONTENU CIBLE (expo visible/modifiable ou non)
 ************************************************************************************************
 -->
-
-	<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-	<?php
-		if (isset($targetExhibit)){
-			if ($targetExhibit->getVisible() == TRUE) {
-	?>
-		<div class="hidden-md hidden-sm btn-area-row">
-			<a href="#" class="btn btn-default btn-custom btn-lg" role="button"><span class="fa fa-cubes"></span> Placer les oeuvres</a>
-			<a href="#" class="btn btn-default btn-custom btn-lg" role="button"><span class="fa fa-file-text"></span> Dossier technique</a>
-			<a href="#" class="btn btn-default btn-custom btn-lg" role="button"><span class="fa fa-desktop"></span> Voir la page visiteur</a>
-		</div>
-	<?php
-		}
-		else{
-	?>
-		<div class="hidden-md hidden-sm btn-area-row">
-			<button class="btn btn-default btn-custom btn-lg publish-exhibit" role="button" data-id="<?= $targetExhibit->getId(); ?>" ><span class="fa fa-eye"></span> Publier l'exposition</button>
-			<button class="btn btn-default btn-custom btn-lg delete-exhibit" role="button" data-id="<?= $targetExhibit->getId(); ?>" ><span class="fa fa-trash"></span> Supprimer définitivement l'exposition</button>
-		</div>	
-	<?php
-		}
-	}
-	?>
+<div class="col-xs-12">
+<?php
+	if (isset($targetExhibit)){
+		if ($targetExhibit->getVisible() == TRUE) {
+?>
+	<div class="hidden-lg hidden-sm btn-area-row">
+		<a href="#" class="btn btn-default btn-custom btn-lg" role="button"><span class="fa fa-cubes"></span> Placer les oeuvres</a>
+		<a href="#" class="btn btn-default btn-custom btn-lg" role="button"><span class="fa fa-file-text"></span> Dossier technique</a>
+		<a href="#" class="btn btn-default btn-custom btn-lg" role="button"><span class="fa fa-desktop"></span> Voir la page visiteur</a>
 	</div>
-<!--
-************************************************************************************************
-	ZONE DE CONTENU PRINCIPALE
-************************************************************************************************
--->
-	<div class="row">
+<?php
+	}
+	else{
+?>
+	<div class="hidden-lg hidden-sm btn-area-row">
+		<button class="btn btn-default btn-custom btn-lg publish-exhibit" role="button" data-id="<?= $targetExhibit->getId(); ?>" ><span class="fa fa-eye"></span> Publier l'exposition</button>
+		<button class="btn btn-default btn-custom btn-lg delete-exhibit" role="button" data-id="<?= $targetExhibit->getId(); ?>" ><span class="fa fa-trash"></span> Supprimer définitivement l'exposition</button>
+	</div>	
+<?php
+	}
+}
+?>
+</div>
 
-		<div class="col-lg-12 col-sm-8 col-xs-12"> <!-- BLOC CENTRAL CONSTANT -->
-			<div class="row">
-				<section class="col-sm-12">
+<div class="col-lg-9 col-md-12 col-sm-9 col-xs-12">
+	<div class="row" id="alert-area">
+		<?= !empty($actionResultat)?$actionResultat:''; ?>
+	</div>
+
+	<div class="row">
+		<div class="col-sm-12">
+			<section>
 
 <!-- *************************** FORMULAIRE Infos générales *************************** -->
-					<div>
-						<h2>Informations Générales</h2>
-						<?php
+				<div id="exhibitMainInfo">
+					<h2>Etape 1 : Informations Générales</h2>
+					<?php
 
-							if (isset($targetExhibit)) {
-								$targetExhibit->formInfos($_SERVER['PHP_SELF'].'?exhibit='.$targetExhibit->getId(),'Modifier');
-							}
-							else{
-								$newExhibit = new Exhibit();
-								$newExhibit->formInfos($_SERVER['PHP_SELF'],'Créer');
-							}
+						if (isset($targetExhibit)) {
+							$targetExhibit->formInfos($_SERVER['PHP_SELF'].'?exhibit='.$targetExhibit->getId(),'Modifier');
+						}
+						else{
+							$newExhibit = new Exhibit();
+							$newExhibit->formInfos($_SERVER['PHP_SELF'],'Créer');
+						}
 
-						?>
-					</div>
+					?>
+				</div>
 
 <!-- *************************** FORMULAIRE Textes d'accompagnement *************************** -->
-					<div>
-						<h2>Textes d'accompagnement</h2>
-						<?php
-							if (isset($targetExhibit)) {
-								if (!empty($targetExhibit->getTextualContent())) {
-									$targetExhibit->formText($_SERVER['PHP_SELF'].'?exhibit='.$targetExhibit->getId() ,'Modifier');
-								}
-								else{
-									$targetExhibit->formText($_SERVER['PHP_SELF'].'?exhibit='.$targetExhibit->getId(), 'Ajouter');
-								}
+				<div class="div-minus">
+					<h3>Textes d'accompagnement :</h3>
+					<div id="formTextArea">
+					<?php
+						if (isset($targetExhibit)) {
+							if (!empty($targetExhibit->getTextualContent())) {
+								$targetExhibit->formText($_SERVER['PHP_SELF'].'?exhibit='.$targetExhibit->getId() ,'Modifier');
 							}
 							else{
-								$newExhibit = new Exhibit();
-								$newExhibit->formText('','Ajouter');
+								$targetExhibit->formText($_SERVER['PHP_SELF'].'?exhibit='.$targetExhibit->getId(), 'Ajouter');
 							}
-						?>
-					</div>
-				</section>
-
-				<div class="col-sm-12">
-					<div class="row">
-
-<!-- *************************** FORMULAIRE Artistes *************************** -->
-						<div class="col-sm-6 col-xs-12">
-							<section class="gutter-left">
-								<h2>Les artistes</h2>
-							</section>	
-						</div>
-
-						<div class="gutter hidden-xs"></div>
-
-<!-- *************************** FORMULAIRE Oeuvres *************************** -->
-						<div class="col-sm-6 col-xs-12">
-							<section class="gutter-right">
-								<h2>Les oeuvres</h2>
-							</section>
-						</div>
-
+						}
+						else{
+							$newExhibit = new Exhibit();
+							$newExhibit->formText('','Ajouter');
+						}
+					?>
 					</div>
 				</div>
-			</div>		
+			</section>
 		</div>
-
-<!--
-************************************************************************************************
-	ZONE ANNEXE DROITE
-************************************************************************************************
--->
-		<div class="col-lg-12 col-sm-4 col-xs-12 padding-left">
+		<div class="col-sm-12">
 			<div class="row">
+				<div class="col-md-6 col-xs-12">
+					<?php //INITIALISATION DES LISTES
+						$recordedArtists = Artist::listArtist();
+						if(isset($targetExhibit) && !empty($targetExhibit->getId())){
+							$selectedArtists = $targetExhibit->getArtistExposed();
+						}
+						else{
+							$selectedArtists = array();
+						}
+					?>
+					<section>
+						<div class="col-sm-12" id="alert-area-artist"> <!-- ZONE DES MESSAGES DE SUCCES OU D'ERREUR -->
+							<?= !empty($actionResultatArtist)?$actionResultatArtist:''; ?>
+						</div>
+						<h2>Etape 2 : Artistes exposés</h2>
+						<div class="row" id="exhibitLinkedArtist">
+							<div class="col-sm-6">
+								<h3>Artistes disponibles</h3>
+								<ul id="recordedArtists">
+									<?php
+										$clone = Artist::compareList($recordedArtists, $selectedArtists);
+										if (!empty($clone)) {
+											foreach ($recordedArtists as $ra) {
+												if (!in_array($ra->getId(), $clone)) {
+													?>
+													<li data-artistId="<?= $ra->getId(); ?>"><?= $ra->getIdentity(); ?></li> 
+													<?php
+												}
+											}
+										}
+										else{
+											foreach ($recordedArtists as $ra) {
+											?>
+												<li data-artistId="<?= $ra->getId(); ?>"><?= $ra->getIdentity(); ?></li> 
+											<?php
+											}
+										}
+									?>
+								</ul>
+							</div>
+							<div class="col-sm-6">
+								<h3>Artistes associés</h3>
+								<ul id="selectedArtists">
+								<?php
+									if(isset($targetExhibit) && !empty($targetExhibit->getId())){
+										foreach ($selectedArtists as $ra) {
+										?>
+										<li data-artistId="<?= $ra->getId(); ?>"><?= $ra->getIdentity(); ?></li>
+									<?php
+										}
+									}
+									?>
+								</ul>
+							</div>
+							<div class="col-xs-12">
+								<div class="form-group" >
+									<label for="searchArtist">Rechercher un artiste dans les listes :</label>
+									<input type="text" name="searchArtist" id="searchArtist" placeholder="abc.." class="form-control" />
+								</div>
+								<div class="alert alert-danger alert-dismissable">
+									<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+									<strong>Attention !</strong> Retirer un artiste ayant des oeuvres prévues à l'exposition entraînera également le retrait de ses oeuvres.
+								</div>
+								<div class="form-group clearfix" >
+									<button class="btn btn-default pull-right" id="btn-selectedArtist">Enregistrer</button>
+								</div>
+							</div>
+						</div>
+					</section>	
+				</div>
+				<div class="col-md-6 col-xs-12">
+					<section>
+						<h2>Etape 3 : Les oeuvres</h2>
+					</section>
+				</div>
+			</div>
+		</div>
+	</div>
+</div> <!-- FIN DU CONTAINER CENTRAL -->
 
-<!-- *************************** GESTION DES BOUTONS VARIANTE *************************** -->
-				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-				<?php
+<div class="col-lg-3 col-md-12 col-sm-3 col-xs-12">
+	<div class="row">
+	<!-- *************************** GESTION DES BOUTONS VARIANTE *************************** -->
+		<div class="col-xs-12">
+			<?php
 				if (isset($targetExhibit)){
 					if ($targetExhibit->getVisible() == TRUE) {
-				?>
-					<div class="hidden-lg hidden-xs btn-area-col">
-						<?= $targetExhibit->getEndDate() < date('Y-m-d')?'':'<a href="#" class="btn btn-default btn-custom btn-md" role="button"><span class="fa fa-cubes"></span> Placer les oeuvres</a>'; ?>
-						<a href="#" class="btn btn-default btn-custom btn-md" role="button"><span class="fa fa-file-text"></span> Dossier technique</a>
-						<a href="#" class="btn btn-default btn-custom btn-md" role="button"><span class="fa fa-desktop"></span> Voir la page visiteur</a>
-					</div>
-				<?php
-					}
-					else{
-				?>
-					<div class="hidden-lg hidden-xs btn-area-col">
-						<button class="btn btn-default btn-custom btn-md btn-publish" role="button" data-id="<?= $targetExhibit->getId(); ?>" ><span class="fa fa-eye"></span> Publier l'exposition</button>
-						<button class="btn btn-default btn-custom btn-md delete-exhibit" role="button" data-id="<?= $targetExhibit->getId(); ?>" ><span class="fa fa-trash"></span> Supprimer définitivement l'exposition</button>
-					</div>	
-				<?php
-					}
-				}
-				?>
+			?>
+				<div class="hidden-md hidden-xs btn-area-col">
+					<a href="#" class="btn btn-default btn-custom btn-md" role="button"><span class="fa fa-cubes"></span> Placer les oeuvres</a>
+					<a href="#" class="btn btn-default btn-custom btn-md" role="button"><span class="fa fa-file-text"></span> Dossier technique</a>
+					<a href="#" class="btn btn-default btn-custom btn-md" role="button"><span class="fa fa-desktop"></span> Voir la page visiteur</a>
 				</div>
-
-<!--
-************************************************************************************************
-	GESTION DE LA VIE DE L'EXPOSITION
-************************************************************************************************
--->
-				<h2>Vie de l'exposition</h2>
-				<section class="col-sm-12">
-					<div class="row">
-						<div class="col-lg-6 col-sm-12 col-xs-6">
-							<h3>Gérer les événements</h3>
-							<?php
-								if(isset($targetExhibit)){
-									if(isset($targetEvent)){
-										$targetEvent->formEvent($_SERVER['PHP_SELF'].'?exhibit='.$targetExhibit->getId(), 'Modifier', $targetExhibit->getId());
-									}
-									else{
-										$newEvent = new Event();
-										$newEvent->formEvent($_SERVER['PHP_SELF'].'?exhibit='.$targetExhibit->getId(), 'Ajouter', $targetExhibit->getId());
-									}
-								}
-								else{
-									$newEvent = new Event();
-									$newEvent->formEvent('', 'Ajouter','');	
-								}
-							?>
-						</div>
-						<div class="col-lg-6 col-sm-12 col-xs-6">
-							<h3>Evénements enregistrés :</h3>
-							<div class="event-list">
-								<ul>
-									<?php
-										if (isset($targetExhibit)) {
-										foreach ($targetExhibit->event as $event) {
-									?>
-									<li>
-										<div class="event-text">
-											<p class="event-date">Le <?= dateFormat($event->getEventDate()); ?> <?= empty($event->getEventStartTime()) || $event->getEventStartTime() == '00:00:00' ?'':' à '. timeFormat($event->getEventStartTime()); ?>
-											</p>
-											<h4><?= $event->getName(); ?></h4>
-											<p class="event-description">
+			<?php
+				}
+				else{
+			?>
+				<div class="hidden-md hidden-xs btn-area-col">
+					<button class="btn btn-default btn-custom btn-md publish-exhibit" role="button" data-id="<?= $targetExhibit->getId(); ?>" ><span class="fa fa-eye"></span> Publier l'exposition</button>
+					<button class="btn btn-default btn-custom btn-md delete-exhibit" role="button" data-id="<?= $targetExhibit->getId(); ?>" ><span class="fa fa-trash"></span> Supprimer définitivement l'exposition</button>
+				</div>	
+			<?php
+				}
+			}
+			?>
+		</div>
+		<div class="col-xs-12" id="exhibitEvent">
+			<h2 class="col-xs-12">Vie de l'exposition</h2>
+			<div id="alert-area-event">
+				<?= !empty($actionResultatEvent)?$actionResultatEvent:''; ?>
+			</div>
+			<section>
+				<div class="row">
+					<div class="col-lg-12 col-md-6 col-sm-12 col-xs-6">
+						<h3>Evénements enregistrés : </h3>
+						<div class="event-list">
+							<ul>
+								<?php
+								if (isset($targetExhibit)) {
+								foreach ($targetExhibit->event as $event) {
+								?>
+								<li>
+									<div class="event-text">
+										<p class="event-date">Le <?= dateFormat($event->getEventDate()); ?> <?= empty($event->getEventStartTime()) || $event->getEventStartTime() == '00:00:00' ?'':' à '. timeFormat($event->getEventStartTime()); ?>
 										</p>
+										<h4><?= $event->getName(); ?></h4>
+										<p class="event-description">
 											<?= $event->getDescription(); ?>
 										</p>
-										</div>
-										<div class="event-action">
+									</div>
+									<div class="event-action">
 										<?php
 										if ($targetExhibit->getEndDate() > date('Y-m-d')) {
 											if($event->getName() == 'Début' || $event->getName() == 'Fin'){
@@ -618,30 +669,48 @@ include('header.php');
 											}
 										}
 										?>
-										</div>
-									</li>
-
-									<?php
-										}
+									</div>
+								</li>
+								<?php
 									}
-									?>
-								</ul>
-							</div>							
+								}
+								?>
+							</ul>
 						</div>
 					</div>
-				</section>
-			</div>		
+					<div class="col-lg-12 col-md-6 col-sm-12 col-xs-6">
+						<h3>Gérer les événements</h3>
+						<?php
+							if(isset($targetExhibit)){
+								if(isset($targetEvent)){
+									$targetEvent->formEvent($_SERVER['PHP_SELF'].'?exhibit='.$targetExhibit->getId(), 'Modifier', $targetExhibit->getId());
+									echo '<input type="hidden" id="begin_date" value="'.$targetExhibit->getBeginDate().'" />';
+									echo '<input type="hidden" id="end_date" value="'.$targetExhibit->getEndDate().'" />';
+								}
+								else{
+									$newEvent = new Event();
+									$newEvent->formEvent($_SERVER['PHP_SELF'].'?exhibit='.$targetExhibit->getId(), 'Ajouter', $targetExhibit->getId());
+									echo '<input type="hidden" id="begin_date" value="'.$targetExhibit->getBeginDate().'" />';
+									echo '<input type="hidden" id="end_date" value="'.$targetExhibit->getEndDate().'" />';
+								}
+							}
+							else{
+								$newEvent = new Event();
+								$newEvent->formEvent('', 'Ajouter','');
+								echo '<input type="hidden" id="begin_date" value="'.$targetExhibit->getBeginDate().'" />';
+								echo '<input type="hidden" id="end_date" value="'.$targetExhibit->getEndDate().'" />';	
+							}
+						?>
+					</div>
+				</div>
+			</section>
 		</div>
-
-
 	</div>
+</div>
 
 <!-- Fin de la condition de PHP selon le statut de l'utilisateur -->
 <?php
 	}
-?>
-</div>
-<?php
 
 include('footer.php');
 

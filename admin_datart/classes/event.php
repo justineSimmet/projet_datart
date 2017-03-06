@@ -149,7 +149,7 @@ class Event{
 			$targetExhibit = new Exhibit();
 		}
 		?>
-			<form method="POST" action="<?= $target; ?>">
+			<form method="POST" action="<?= $target; ?>" class="form-vertical">
 				
 				<fieldset <?= isset($targetExhibit) && ( empty($targetExhibit->getId()) || $targetExhibit->getEndDate() < date('Y-m-d') || $targetExhibit->getVisible() == FALSE)?'disabled':''; ?> >
 					<div class="form-group form-group-lg">
@@ -162,7 +162,7 @@ class Event{
 					</div>
 					<div class="form-group form-group-lg">
 						<label for="date" class="control-label">Date de l'évènement :</label>
-						<input type="date" name="date" class="datepicker form-control" value="<?= !empty($this->getId())?dateFormat($this->getEventDate()):''; ?>" required placeholder="ex. : 24/02/2017" />
+						<input type="date" name="date" id="datepicker" class="form-control" value="<?= !empty($this->getId())?dateFormat($this->getEventDate()):''; ?>" required placeholder="ex. : 24/02/2017" />
 					</div>
 					<div class="form-group form-group-lg">
 						<label for="start-time" class="control-label">Horaire de l'évènement :</label>
