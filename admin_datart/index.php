@@ -105,6 +105,8 @@ include('header.php');
 						<div class="content">
 							<?php
 								$nextExhibit = Exhibit::listNextExhibit();
+								if (!empty($nextExhibit)) {
+
 							?>
 							<p>A suivre... <?= dateFormat($nextExhibit[0]->getBeginDate()) ; ?> > <?= dateFormat($nextExhibit[0]->getEndDate()) ; ?></p>
 							<h3><?= $nextExhibit[0]->getTitle(); ?></h3>
@@ -124,6 +126,10 @@ include('header.php');
 								?>
 								<a href="exhibit_zoom.php?exhibit=<?= $nextExhibit[0]->getId(); ?>" class="btn btn-default">Voir / Modifier l'exposition</a>
 							</p>
+
+						<?php
+						 } 
+						 ?>	
 						</div>
 					</div>
 				</section>
