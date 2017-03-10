@@ -16,7 +16,7 @@ class Artist{
   private $photographic_portrait;
   private $creation_date;
   private $visible;
-
+  private $artwork;
 
 // Le constructeur est la pour initialiser les attributs lors de la création d'un objet(artist)
   function __construct($id = ''){  
@@ -88,10 +88,17 @@ class Artist{
         else{
           $this->textual_content = array();
         }
-
+        $this->artwork = array();
+        $artwork = requete_sql("SELECT id FROM artwork WHERE artist_id = '".$this->id."' ");
+        if (count($text) !== 0) {
+          while ($art = $artwork->fetch(PDO::FETCH_ASSOC)){
+            array_push($this->artwork, new Artwork($art['id']));
+          }
+        }
     }
     else{
       $this->textual_content = array();
+      $this->artwork = array();
     }
   }
 
@@ -214,6 +221,9 @@ class Artist{
     }
   }
 
+  function getArtwork(){
+    return $this->artwork;
+  }
 
 /***************************************************************************
 

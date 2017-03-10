@@ -44,7 +44,7 @@
             <li><a href="planning.php"><span class="fa fa-calendar"></span>Agenda</a></li>
             <li><a href="exhibit_management.php"><span class="fa fa-archive"></span>Les expositions <span class="fa fa-plus-circle link-plus"></span></a>
                 <ul class="nav-submenu">
-                    <li><a href="exhibit_zoom.php"><span class="fa fa-plus-circle"></span>Ajouter une exposition</a></li>
+                    <li><a href="exhibit_zoom.php"><span class="fa fa-plus-circle"></span>Ajouter une expo.</a></li>
                 </ul>
             </li>
             <li><a href="artist_management.php"><span class="fa fa-paint-brush"></span>Les artistes <span class="fa fa-plus-circle link-plus"></span></a>

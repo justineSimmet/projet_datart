@@ -1,4 +1,14 @@
 /*-----------------------------------------------------------------------------
+INITIALISATION TINYMCE
+------------------------------------------------------------------------------*/
+var configTinyMce = {selector: 'textarea',
+    				language: 'fr_FR',
+    				menubar: false,
+    				toolbar:'undo | redo | bold | italic | alignleft | aligncenter | alignright | cut | copy | paste',
+    				statusbar: false};
+
+
+/*-----------------------------------------------------------------------------
 ACTIONS SUR LE MENU HAMBURGER DE LA NAVIGATION
 ------------------------------------------------------------------------------*/
 
@@ -89,47 +99,67 @@ $(function(){
 	})
 });
 
+
+/*-----------------------------------------------------------------------------
+Initialisation des dates pas defaut pour les événements
+------------------------------------------------------------------------------*/
+function getBeginDate(){
+	if ($('#beginDate').length) {
+		var beginDate = new Date($('#beginDate').val());
+		beginDate.setDate(beginDate.getDate() - 3);
+		return beginDate;
+	}
+};
+
+function getEndDate(){
+	if ($('#endDate').length) {
+		var endDate = new Date($('#endDate').val());
+		endDate.setDate(endDate.getDate() + 3);
+		return endDate;
+	}
+};
+
+
+
 $(document).ready(function(){
+
+	tinymce.init(configTinyMce);
+
+	$('#loading-svg').hide();
 
 /*-----------------------------------------------------------------------------
 MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
 ------------------------------------------------------------------------------*/
 	$.datepicker.setDefaults($.datepicker.regional['fr']);
 
-	$('#begin_date').on('focusin', function(){
-		$(this).datepicker({
-			showAnim: 'clip',
-			showOtherMonths: true,
-			selectOtherMonths: true,
-			minDate: 0
-		});
+	$.datepicker.setDefaults({
+        showAnim: 'clip',
+		showOtherMonths: true,
+		selectOtherMonths: true,
+        dateFormat: 'dd/mm/yy'
+    });
+
+	$('#begin_date').datepicker({
+		minDate: 0,
+		onSelect:function(selected){
+			$("#end_date").datepicker("option","minDate", selected);
+		}
 	});
 
-	$('#end_date').on('focusin', function(){
-		var beginDate = $('#begin_date').val();
-		$(this).val(beginDate);
-		var dateArray = beginDate.split('/');
-		$(this).datepicker({
-			showAnim: 'clip',
-			showOtherMonths: true,
-			selectOtherMonths: true,
-			minDate: new Date(dateArray[2],dateArray[1],dateArray[0])
-		});
+
+	$('#end_date').datepicker({
+		onSelect:function(selected){
+			$("#begin_date").datepicker("option","maxDate", selected);
+		}
 	});
 
-	$('#datepicker').on('focus', function(){
-		var beginDate = $('#begin_date').val();
-		var endDate = $('#end_date').val();
-		var beginArray = beginDate.split('/');
-		var endArray = endDate.split('/');
-		$(this).datepicker({
-			showAnim: 'clip',
-			showOtherMonths: true,
-			selectOtherMonths: true,
-			minDate: new Date(beginArray[2],beginArray[1],beginArray[0]-3),
-			maxDate: new Date(endArray[2],endArray[1],endArray[0]-3),
-		});
-	})
+
+	$('#datepicker').datepicker({
+		minDate: new Date(getBeginDate()),
+		maxDate: new Date(getEndDate())
+	});
+
+
 
 /**************************************************
 ** SELECTION D'ARTISTES DANS UNE LISTE
@@ -410,7 +440,7 @@ MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
 ** d'ouvrir la modal.
 ***********************************************************************/
 	$('.delete-exhibit').on('click', function(){
-		var targetId = $(this).attr("data-id");
+		var targetExhibit = $(this).attr("data-id");
 		$.post(window.location.href, {targetId}, function(response){
 			$("#deleteExhibit").html($(response).find("#deleteExhibit").html());
 			$("#deleteExhibit").modal('show');
@@ -418,7 +448,7 @@ MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
 	});
 
 	$('.publish-exhibit').on('click', function(){
-		var targetId = $(this).attr("data-id");
+		var targetExhibit= $(this).attr("data-id");
 		$.ajax({
 			method: 'POST',
 			data : {
@@ -446,9 +476,18 @@ MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
 ** REFRESH AJAX APRES INSERT OU UPDATE
 ** DES TEXTES D'ACCOMPAGNEMENT D'EXPO 
 ************************************************/
+
 	if($('#insert-exhibit-text').length == 1 || $('#update-exhibit-text').length == 1){
+		$('#loading-svg').show();
+		var loaded = 0;
 		$.post(window.location.href, function(response){
-			$("#formTextArea").html($(response).find("#formTextArea").html());
+			tinymce.remove();
+			$("#formTextualContent").html($(response).find("#formTextualContent").html());
+			tinymce.init(configTinyMce);
+			loaded++;
+            if(loaded == 1) {
+				$('#loading-svg').hide();
+			}
 		});
 	};
 
@@ -457,9 +496,10 @@ MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
 ** D'UN EVENEMENT D'EXPO 
 ************************************************/
 	if($('#insert-exhibit-event').length == 1 || $('#update-exhibit-event').length == 1){
+		
 		$.post(window.location.href, function(response){
-			$("#alert-area-event").html($(response).find("#update-exhibit-event").html())
 			$("#exhibitEvent").html($(response).find("#exhibitEvent").html());
+			$("#alert-area-event").html($(response).find("#update-exhibit-event").html())
 		});
 	};
 	
@@ -493,9 +533,31 @@ MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
 		$('#selectedArtists li').each(function(){
 			listId.push($(this).attr('data-artistId'));
 		});
-		$.post(window.location.href, {actionLink : 'addArtist', artistId : listId}, function(response){
-			$("#exhibitLinkedArtist").html($(response).find("#exhibitLinkedArtist").html());
-			$("#alert-area-artist").html($(response).find("#update-exhibit-artist").html());
+		var exhibitId = $(this).attr('data-exhibitId')
+		$.post(window.location.href, {action : 'add-artist', artistId : listId, targetExhibit : exhibitId}, function(response){
+			$("#alert-area-artist").html($(response).find("#alert-area-artist").html());
+			$("#recordedArtists").html($(response).find("#recordedArtists").html());
+			$("#selectedArtists" ).html($(response).find("#selectedArtists" ).html());
+			$("#exhibitLinkedArtwork").html($(response).find("#exhibitLinkedArtwork").html());
+			$("#recordedArtists" ).sortable( "refresh" );
+			$("#selectedArtists" ).sortable( "refresh" );
+		});
+	})
+
+/**********************************************
+** EXECUTION REQUETE AJAX POUR ASSOCIER
+** DES OEUVRES SUR LE ZOOM EXHIBIT
+************************************************/
+
+	$('#btn-selectedArtwork').on('click', function(){
+		var listId = [];
+		$('#exhibitLinkedArtwork input:checked').each(function(){
+			listId.push($(this).val());
+		});
+		var exhibitId = $(this).attr('data-exhibitId')
+		$.post(window.location.href, {action : 'add-artwork', artworkId : listId, targetExhibit : exhibitId}, function(response){
+			$("#alert-area-artwork").html($(response).find("#alert-area-artwork").html());
+			$("#exhibitLinkedArtwork").html($(response).find("#exhibitLinkedArtwork").html());
 		});
 	})
 

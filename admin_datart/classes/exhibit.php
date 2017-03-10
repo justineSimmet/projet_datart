@@ -17,6 +17,7 @@ class Exhibit{
 	private $textual_content;
 	public $event;
 	private $artist_exposed;
+	private $artwork_displayed;
 
 	function __construct($id=''){
 
@@ -92,15 +93,21 @@ class Exhibit{
 			}
 			$this->artist_exposed = array();
 			$artist = requete_sql("SELECT artist_id FROM artist_exposed WHERE exhibit_id = '".$this->id."' ");
-				while ($a = $artist->fetch(PDO::FETCH_ASSOC) ) {
-					array_push($this->artist_exposed, new Artist($a['artist_id']));
-				}
+			while ($a = $artist->fetch(PDO::FETCH_ASSOC) ) {
+				array_push($this->artist_exposed, new Artist($a['artist_id']));
+			}
+			$this->artwork_displayed = array();
+			$artwork = requete_sql("SELECT artwork_id FROM artwork_displayed WHERE exhibit_id = '".$this->id."' ");
+			while ($a = $artwork->fetch(PDO::FETCH_ASSOC) ) {
+				array_push($this->artwork_displayed, new Artwork($a['artwork_id']));
+			}
 			
 		}
 		else {
         	$this->textual_content = array();
         	$this->event = array();
         	$this->artist_exposed = array();
+        	$this->artwork_displayed = array();
         }
 	}
 
@@ -231,10 +238,47 @@ class Exhibit{
 		return $this->artist_exposed;
 	}
 
-	function cleanArtistExposed(){
+	function resetArtistExposed(){
 		$this->artist_exposed = array();
+		return $this->artist_exposed;
+	}
+
+	function cleanArtistExposed(){
+		$res = requete_sql("DELETE FROM artist_exposed WHERE exhibit_id = '".$this->id."' ");
+		if($res){
+			$this->artist_exposed = array();
+			return TRUE;
+		}
+		else{
+			return FALSE;
+		}
+	}
+
+	function setArtworkDisplayed($id){
+		array_push($this->artwork_displayed, new Artwork($id));
 		return TRUE;
 	}
+
+	function getArtworkDisplayed(){
+		return $this->artwork_displayed;
+	}
+
+	function resetArtworkDisplayed(){
+		$this->artwork_displayed = array();
+		return $this->artwork_displayed;
+	}
+
+	function cleanArtworkdDisplayed(){
+		$res = requete_sql("DELETE FROM artwork_displayed WHERE exhibit_id = '".$this->id."' ");
+		if($res){
+			$this->artwork_displayed = array();
+			return TRUE;
+		}
+		else{
+			return FALSE;
+		}
+	}
+
 
 /*********************************
 **
@@ -356,22 +400,27 @@ class Exhibit{
 		$differentPlus = array_diff($array, $comparList);
 		$differentMinus = array_diff($comparList, $array);
 		$result = FALSE;
-		foreach ($differentMinus as $dm) {
-			$delete = requete_sql("DELETE FROM artist_exposed WHERE exhibit_id = '".$this->id."' AND artist_id = '".$dm."' ");
-			if ($delete) {
-				$result = TRUE;
-			}
-			else{
-				$result = FALSE;
-			}
+		if( empty($differentPlus) && empty($differentMinus) ){
+			$result = TRUE;
 		}
-		foreach ($differentPlus as $dp) {
-			$insert = requete_sql("INSERT INTO artist_exposed VALUES(NULL, '".$this->id."', '".$dp."' )");
-			if ($insert) {
-				$result = TRUE;
+		else{
+			foreach ($differentMinus as $dm) {
+				$delete = requete_sql("DELETE FROM artist_exposed WHERE exhibit_id = '".$this->id."' AND artist_id = '".$dm."' ");
+				if ($delete) {
+					$result = TRUE;
+				}
+				else{
+					$result = FALSE;
+				}
 			}
-			else{
-				$result = FALSE;
+			foreach ($differentPlus as $dp) {
+				$insert = requete_sql("INSERT INTO artist_exposed VALUES(NULL, '".$this->id."', '".$dp."' )");
+				if ($insert) {
+					$result = TRUE;
+				}
+				else{
+					$result = FALSE;
+				}
 			}
 		}
 		if($result != TRUE){
@@ -385,6 +434,58 @@ class Exhibit{
 
 /******************************************************
 **
+** OEUVRES LIEES
+** Enregistre la liste des oeuvres associées à l'expo
+**
+******************************************************/
+
+	function linkDisplayedArtwork($array){
+		$artworkLinkedList = $this->getArtworkDisplayed();
+		$comparList = array();
+		foreach ($artworkLinkedList as $art) {
+			$id = $art->getId();
+			array_push($comparList, $id);
+		};
+		$differentPlus = array_diff($array, $comparList);
+		$differentMinus = array_diff($comparList, $array);
+		$result = FALSE;
+		var_dump($differentPlus);
+		var_dump($differentMinus);
+		if( empty($differentPlus) && empty($differentMinus) ){
+			$result = TRUE;
+		}
+		else{
+			foreach ($differentMinus as $dm) {
+				$delete = requete_sql("DELETE FROM artwork_displayed WHERE exhibit_id = '".$this->id."' AND artwork_id = '".$dm."' ");
+				if ($delete) {
+					$result = TRUE;
+				}
+				else{
+					$result = FALSE;
+				}
+			}
+			foreach ($differentPlus as $dp) {
+				$insert = requete_sql("INSERT INTO artwork_displayed VALUES(NULL, '".$this->id."', '".$dp."' )");
+				if ($insert) {
+					$result = TRUE;
+				}
+				else{
+					$result = FALSE;
+				}
+			}
+		}
+		if($result != TRUE){
+			return FALSE;
+		}
+		else{
+			return TRUE;
+		}
+
+	}
+
+
+/******************************************************
+**
 ** FORMULAIRE
 ** Infos générales de l'expo
 **
@@ -394,34 +495,39 @@ class Exhibit{
 		<form method="POST" action="<?= $target ?>" class="form-horizontal clearfix">
 				<div class="form-group form-group-lg">
 					<label for="title" class="control-label col-sm-3">Titre de l'exposition :</label>
-					<div class="col-sm-8">
+					<div class="col-sm-9">
 					<input type="text" name="title" value="<?= $this->title ?>" class="form-control" required <?= !empty($this->getId()) && $this->getVisible() == FALSE?'disabled':''; ?> <?= !empty($this->id) && $this->getEndDate() < date('Y-m-d')?'readonly':''; ?> />
 					</div>
 				</div>
-				<div class="row">
-					<div class="col-sm-11 col-sm-offset-1">
-					<div class="form-group form-group-lg col-sm-6">
-						<label for="begin_date" class="control-label col-sm-5">Début :</label>
-						<div class="col-sm-7">
-						<input type="date" name="begin_date" id="begin_date" class="form-control" value="<?= dateFormat($this->begin_date) ?>" placeholder="ex. : 02/02/2017" required <?= !empty($this->getId()) && $this->getVisible() == FALSE?'disabled':''; ?> <?= !empty($this->id) && $this->getEndDate() < date('Y-m-d')?'readonly':''; ?> />
+
+				<div class="form-group form-group-lg">
+					<label class="control-label col-sm-3"></label>
+					<div class="col-sm-9">
+					<div class="row">
+						<div class="form-group form-group-lg col-sm-6">
+							<label for="begin_date" class="control-label col-sm-4">Début :</label>
+							<div class="col-sm-8">
+							<input type="date" name="begin_date" id="begin_date" class="form-control" value="<?= dateFormat($this->begin_date) ?>" placeholder="ex. : 02/02/2017" required <?= !empty($this->getId()) && $this->getVisible() == FALSE?'disabled':''; ?> <?= !empty($this->id) && $this->getEndDate() < date('Y-m-d')?'readonly':''; ?> />
+							</div>
 						</div>
-					</div>
-					<div class="form-group form-group-lg col-sm-6">
-						<label for="end_date" class="control-label col-sm-5">Fin :</label>
-						<div class="col-sm-7">
-						<input type="date" name="end_date" id="end_date" class="form-control" value="<?= dateFormat($this->end_date) ?>" placeholder="ex. : 02/02/2017" required <?= !empty($this->getId()) && $this->getVisible() == FALSE?'disabled':''; ?> <?= !empty($this->id) && $this->getEndDate() < date('Y-m-d')?'readonly':''; ?> />
+						<div class="form-group form-group-lg col-sm-6">
+							<label for="end_date" class="control-label col-sm-4">Fin :</label>
+							<div class="col-sm-8">
+							<input type="date" name="end_date" id="end_date" class="form-control" value="<?= dateFormat($this->end_date) ?>" placeholder="ex. : 02/02/2017" required <?= !empty($this->getId()) && $this->getVisible() == FALSE?'disabled':''; ?> <?= !empty($this->id) && $this->getEndDate() < date('Y-m-d')?'readonly':''; ?> />
+							</div>
 						</div>
 					</div>
 					</div>
 				</div>
+	
 				<div class="form-group form-group-lg">
 					<label for="public_opening" class="control-label col-sm-3">Horaires d'ouverture :</label>
-					<div class="col-sm-8">
+					<div class="col-sm-9">
 					<input type="text" name="public_opening" class="form-control" value="<?= $this->public_opening ?>" placeholder="Ex. : Ouvert du lundi au vendredi de 9h à 12h30 et de..." required <?= !empty($this->getId()) &&$this->getVisible() == FALSE?'disabled':''; ?> <?= !empty($this->id) && $this->getEndDate() < date('Y-m-d')?'readonly':''; ?> />
 					</div>
 				</div>
 				<input type="hidden" name="id" value="<?= $this->id ?>">
-				<input type="submit" value="<?= $action; ?>" class="btn btn-default btn-lg pull-right" <?= !empty($this->getId()) && $this->getVisible() == FALSE?'disabled':''; ?> <?= !empty($this->id) && $this->getEndDate() < date('Y-m-d')?'disabled':''; ?> />
+				<input type="submit" value="<?= $action; ?>" class="btn btn-default pull-right" <?= !empty($this->getId()) && $this->getVisible() == FALSE?'disabled':''; ?> <?= !empty($this->id) && $this->getEndDate() < date('Y-m-d')?'disabled':''; ?> />
 		</form>
 		<?php
 	}
@@ -434,7 +540,7 @@ class Exhibit{
 **********************************************************/
 	function formText($target, $action){
 		?>
-			<form method="POST" action="<?= $target ?>" class="form-horizontal clearfix">
+			<form method="POST" action="<?= $target ?>" class="form-horizontal clearfix" id="formTextualContent">
 				
 				<ul class="nav nav-tabs">
 					<li class="active"><a data-toggle="tab" href="#french">Français</a></li>
@@ -664,4 +770,20 @@ class Exhibit{
 		return $count;
 	}
 
+	function totalArtworkDisplayed(){
+		$count = count($this->getArtworkDisplayed());
+		return $count;
+	}
+
+	function totalAvaibleArtwork(){
+		$total = $this->getArtworkDisplayed();
+		$avaible = array();
+		foreach ($total as $t) {
+			if ($t->getDisponibility() == TRUE) {
+				array_push($avaible, $t);
+			}
+		}
+		$count = count($avaible);
+		return $count;
+	}
 }

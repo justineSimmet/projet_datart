@@ -146,7 +146,7 @@ include('header.php');
 									echo '<li><a href="artist_zoom?artist='.$l->getId().'">Artiste : '.$l->getIdentity().' - Enregistré le : '.dateFormat($l->getCreationDate()).'</a></li>';
 								}
 								else{
-									echo '<li><a href="artwork_zoom?artwork='.$l->getId().'">Oeuvre : '.$l->getIdentity().' - Enregistré le : '.dateFormat($l->getCreationDate()).'</a></li>';
+									echo '<li><a href="artwork_zoom?artwork='.$l->getId().'">Oeuvre : '.$l->getTitle().' - Enregistré le : '.dateFormat($l->getCreationDate()).'</a></li>';
 								}
 							}
 						?>

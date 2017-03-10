@@ -2,6 +2,7 @@
 
 require_once('classes/user.php');
 require_once('classes/artist.php');
+require_once('classes/artwork.php');
 require_once('classes/exhibit_textual_content.php');
 require_once('classes/event.php');
 require_once('classes/exhibit.php');
@@ -102,9 +103,9 @@ if (isset($_POST['title'])) {
 **
 ************************************************************************************************/
 
-if (isset($_POST['targetId']) && isset($_POST['action']) ) {
+if (isset($_POST['targetExhibit']) && isset($_POST['action']) ) {
+	$targetExhibit = new Exhibit($_POST['targetExhibit']);
 	if($_POST['action'] == 'publish'){
-		$targetExhibit = new Exhibit($_POST['targetId']);
 		$publish = $targetExhibit->publishExhibit();
 		if ($publish) {
 			$actionResultat = '<div class="alert alert-success alert-dismissable">
@@ -119,7 +120,6 @@ if (isset($_POST['targetId']) && isset($_POST['action']) ) {
 		}
 	}
 	elseif($_POST['action'] == 'delete-exhibit'){
-		$targetExhibit = new Exhibit($_POST['targetId']);
 		$check = $currentUser->passwordCheck($_POST['password']);
 		if ($check) {
 			$delete = $targetExhibit->deleteExhibit();
@@ -141,7 +141,7 @@ if (isset($_POST['targetId']) && isset($_POST['action']) ) {
 		}
 	}
 	elseif ($_POST['action'] == 'delete-event') {
-		$targetEvent = new Event($_POST['targetId']);
+		$targetEvent = new Event($_POST['targetEvent']);
 		$check = $currentUser->passwordCheck($_POST['password']);
 		if ($check) {
 			$delete = $targetEvent->deleteEvent();
@@ -161,6 +161,83 @@ if (isset($_POST['targetId']) && isset($_POST['action']) ) {
 			<strong>Votre mot de passe est incorrect.</strong> Vous ne pouvez pas supprimer l\'événement '.$targetEvent->getName().'.
 			</div>';	
 		}
+	}
+	elseif($_POST['action'] == 'add-artist'){
+		if(isset($_POST['artistId'])){
+			$artistExposed = $targetExhibit->linkExposedArtist($_POST['artistId']);
+			var_dump($artistExposed);
+			if ($artistExposed) {
+				$reset = $targetExhibit->resetArtistExposed();
+				foreach ($_POST['artistId'] as $artist) {
+					$targetExhibit->setArtistExposed($artist);
+				}
+				$actionResultatArtist = '<div id="update-exhibit-artist"><div class="alert alert-success alert-dismissable">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<strong> Les artistes ont bien été lié à l\'exposition.</strong>
+				</div></div>';
+			}
+			else{
+				$actionResultatArtist = '<div id="update-exhibit-artist"><div class="alert alert-danger alert-dismissable">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<strong>Erreur !</strong> Les artistes n\'ont pas été lié à l\'exposition.
+				</div></div>';
+			}
+		}
+		else{
+			$clean = $targetExhibit->cleanArtistExposed();
+			if ($clean) {
+				$actionResultatArtist = '<div id="update-exhibit-artist"><div class="alert alert-success alert-dismissable">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<strong> La liste des artistes exposés bien été vidée.</strong>
+				</div></div>';
+			}
+			else{
+				$actionResultatArtist = '<div id="update-exhibit-artist"><div class="alert alert-danger alert-dismissable">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<strong>Erreur !</strong> La liste des artistes exposés n\'a pas été vidée.
+				</div></div>';
+			}
+
+		}
+
+	}
+	elseif($_POST['action'] == 'add-artwork'){
+		if(isset($_POST['artworkId'])){
+			$artworkDisplayed = $targetExhibit->linkDisplayedArtwork($_POST['artworkId']);
+			if ($artworkDisplayed) {
+				$reset = $targetExhibit->resetArtworkDisplayed();
+				foreach ($_POST['artworkId'] as $artwork) {
+					$targetExhibit->setArtworkDisplayed($artwork);
+				}
+				$actionResultatArtwork = '<div id="update-exhibit-artwork"><div class="alert alert-success alert-dismissable">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<strong> Les oeuvres ont bien été associées à l\'exposition.</strong>
+				</div></div>';
+			}
+			else{
+				$actionResultatArtwork = '<div id="update-exhibit-artwork"><div class="alert alert-danger alert-dismissable">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<strong>Erreur !</strong> Les oeuvres n\'ont pas été associées à l\'exposition.
+				</div></div>';
+			}
+		}
+		else{
+			$clean = $targetExhibit->cleanArtworkDisplayed();
+			if ($clean) {
+				$actionResultatArtwork = '<div id="update-exhibit-artwork"><div class="alert alert-success alert-dismissable">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<strong> La liste des oeuvres exposées a bien été vidée.</strong>
+				</div></div>';
+			}
+			else{
+				$actionResultatArtwork = '<div id="update-exhibit-artwork"><div class="alert alert-danger alert-dismissable">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<strong>Erreur !</strong> La liste des oeuvres exposées n\'a pas été vidée.
+				</div></div>';
+			}
+
+		}
+
 	}
 }
 
@@ -327,32 +404,10 @@ if (isset($_POST['name']) && isset($_POST['date'])) {
 }
 
 
-/************************************************************************************************
-**
-** MANIPULATION DES ARTISTES LIES A L'EXPOSITION
-** Ajoute ou modifie des expositions en base de donnée
-**
-************************************************************************************************/
-if (isset($_POST['actionLink']) && $_POST['actionLink'] == 'addArtist') {
-	$artistExposed = $targetExhibit->linkExposedArtist($_POST['artistId']);
-	if ($artistExposed) {
-		$actionResultatArtist = '<div id="update-exhibit-artist"><div class="alert alert-success alert-dismissable">
-		<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-		<strong> Les artistes ont bien été lié à l\'exposition.</strong>
-		</div></div>';
-	}
-	else{
-		$actionResultatArtist = '<div id="update-exhibit-artist"><div class="alert alert-danger alert-dismissable">
-		<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-		<strong>Erreur !</strong> Les artistes n\'ont pas été lié à l\'exposition.
-		</div></div>';
-	}
-}
 
 $locationTitle = isset($targetExhibit)?$targetExhibit->getTitle():'Ajouter une exposition';
 
 include('header.php');
-
 
 ?>
 
@@ -502,10 +557,10 @@ include('header.php');
 					<?php
 						if (isset($targetExhibit)) {
 							if (!empty($targetExhibit->getTextualContent())) {
-								$targetExhibit->formText($_SERVER['PHP_SELF'].'?exhibit='.$targetExhibit->getId() ,'Modifier');
+								$targetExhibit->formText($_SERVER['PHP_SELF'].'?exhibit='.$targetExhibit->getId(),'Modifier');
 							}
 							else{
-								$targetExhibit->formText($_SERVER['PHP_SELF'].'?exhibit='.$targetExhibit->getId(), 'Ajouter');
+								$targetExhibit->formText($_SERVER['PHP_SELF'].'?exhibit='.$targetExhibit->getId(),'Ajouter');
 							}
 						}
 						else{
@@ -513,6 +568,7 @@ include('header.php');
 							$newExhibit->formText('','Ajouter');
 						}
 					?>
+					<div id="loading-svg"><img src="assets/images/ripple.svg"></div>
 					</div>
 				</div>
 			</section>
@@ -536,9 +592,10 @@ include('header.php');
 						<h2>Etape 2 : Artistes exposés</h2>
 						<div class="row" id="exhibitLinkedArtist">
 							<div class="col-sm-6">
-								<h3>Artistes disponibles</h3>
+								<h4>Artistes disponibles</h4>
 								<ul id="recordedArtists">
 									<?php
+									if(isset($targetExhibit) && !empty($targetExhibit->getId())){
 										$clone = Artist::compareList($recordedArtists, $selectedArtists);
 										if (!empty($clone)) {
 											foreach ($recordedArtists as $ra) {
@@ -556,11 +613,12 @@ include('header.php');
 											<?php
 											}
 										}
+									}
 									?>
 								</ul>
 							</div>
 							<div class="col-sm-6">
-								<h3>Artistes associés</h3>
+								<h4>Artistes associés</h4>
 								<ul id="selectedArtists">
 								<?php
 									if(isset($targetExhibit) && !empty($targetExhibit->getId())){
@@ -569,29 +627,57 @@ include('header.php');
 										<li data-artistId="<?= $ra->getId(); ?>"><?= $ra->getIdentity(); ?></li>
 									<?php
 										}
-									}
 									?>
 								</ul>
 							</div>
 							<div class="col-xs-12">
 								<div class="form-group" >
-									<label for="searchArtist">Rechercher un artiste dans les listes :</label>
-									<input type="text" name="searchArtist" id="searchArtist" placeholder="abc.." class="form-control" />
+									<label for="searchArtist" class="sr-only">Rechercher un artiste dans les listes :</label>
+									<input type="text" name="searchArtist" id="searchArtist" placeholder="Rechercher un artiste par son nom" class="form-control" />
 								</div>
-								<div class="alert alert-danger alert-dismissable">
-									<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+								<p class="alert-infos">
 									<strong>Attention !</strong> Retirer un artiste ayant des oeuvres prévues à l'exposition entraînera également le retrait de ses oeuvres.
-								</div>
+								</p>
 								<div class="form-group clearfix" >
-									<button class="btn btn-default pull-right" id="btn-selectedArtist">Enregistrer</button>
+									<button class="btn btn-default pull-right" id="btn-selectedArtist" data-exhibitId="<?= $targetExhibit->getId(); ?>" id>Enregistrer</button>
 								</div>
 							</div>
+							<?php 
+							}
+							?>
 						</div>
 					</section>	
 				</div>
 				<div class="col-md-6 col-xs-12">
 					<section>
+						<div class="col-sm-12" id="alert-area-artwork"> <!-- ZONE DES MESSAGES DE SUCCES OU D'ERREUR -->
+							<?= !empty($actionResultatArtwork)?$actionResultatArtwork:''; ?>
+						</div>
 						<h2>Etape 3 : Les oeuvres</h2>
+						<div class="row">
+							<div class="col-sm-12">
+							<div id="exhibitLinkedArtwork">
+							<?php
+								foreach ($targetExhibit->getArtistExposed() as $artist) {
+									echo '<h3>'.$artist->getIdentity().'</h3>';
+									echo '<div class="form-group form-group-lg">';
+									if ( !empty($artist->getArtwork()) ) {
+										foreach ($artist->getArtwork() as $artwork) {
+											?>
+											<label class="checkbox-inline"><input type="checkbox" value="<?= $artwork->getId() ?>" <?= in_array($artwork, $targetExhibit->getArtworkDisplayed())?'checked':''; ?> ><?= $artwork->getTitle(); ?></label>
+											<?php
+										}
+									}
+										echo '<p><a href="artwork_zoom.php?artist='.$artist->getId().'">Ajouter une oeuvre</a></p>';
+										echo '</div>';
+								}
+							?>
+							</div>
+								<div class="form-group clearfix" >
+									<button class="btn btn-default pull-right" id="btn-selectedArtwork" data-exhibitId="<?= $targetExhibit->getId(); ?>" id>Enregistrer</button>
+								</div>
+							</div>
+						</div>
 					</section>
 				</div>
 			</div>
@@ -624,12 +710,12 @@ include('header.php');
 				}
 			}
 			?>
-		</div>
-		<div class="col-xs-12" id="exhibitEvent">
-			<h2 class="col-xs-12">Vie de l'exposition</h2>
 			<div id="alert-area-event">
 				<?= !empty($actionResultatEvent)?$actionResultatEvent:''; ?>
 			</div>
+		</div>
+		<div class="col-xs-12" id="exhibitEvent">
+			<h2 class="col-xs-12">Vie de l'exposition</h2>
 			<section>
 				<div class="row">
 					<div class="col-lg-12 col-md-6 col-sm-12 col-xs-6">
@@ -684,21 +770,15 @@ include('header.php');
 							if(isset($targetExhibit)){
 								if(isset($targetEvent)){
 									$targetEvent->formEvent($_SERVER['PHP_SELF'].'?exhibit='.$targetExhibit->getId(), 'Modifier', $targetExhibit->getId());
-									echo '<input type="hidden" id="begin_date" value="'.$targetExhibit->getBeginDate().'" />';
-									echo '<input type="hidden" id="end_date" value="'.$targetExhibit->getEndDate().'" />';
 								}
 								else{
 									$newEvent = new Event();
 									$newEvent->formEvent($_SERVER['PHP_SELF'].'?exhibit='.$targetExhibit->getId(), 'Ajouter', $targetExhibit->getId());
-									echo '<input type="hidden" id="begin_date" value="'.$targetExhibit->getBeginDate().'" />';
-									echo '<input type="hidden" id="end_date" value="'.$targetExhibit->getEndDate().'" />';
 								}
 							}
 							else{
 								$newEvent = new Event();
 								$newEvent->formEvent('', 'Ajouter','');
-								echo '<input type="hidden" id="begin_date" value="'.$targetExhibit->getBeginDate().'" />';
-								echo '<input type="hidden" id="end_date" value="'.$targetExhibit->getEndDate().'" />';	
 							}
 						?>
 					</div>

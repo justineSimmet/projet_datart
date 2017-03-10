@@ -152,6 +152,20 @@ section > div:not(:first-child){
 .div-minus{
 	width: 90%;
 	margin: auto;
+	position: relative;
+}
+
+#loading-svg{
+	position: absolute;
+	top:0; bottom: 0; right: 0; left: 0;
+	background-color: #fff;
+	text-align: center;
+}
+
+#loading-svg img{
+	position: relative;
+	top: 50%;
+	transform: translateY(-50%);
 }
 
 .div-minus h3{
@@ -205,6 +219,12 @@ ul{
 	list-style-type: none;
 }
 
+.alert-infos{
+	font-size: 0.85em;
+	color: #d5313a;
+	text-align: center;
+}
+
 /*************************************************************
 **	CSS DU NAV
 *************************************************************/
@@ -236,7 +256,7 @@ ul{
 	display: block;
 	width: 100%;
 	padding-left: 10px;
-	font-size: 1.250em;
+	font-size: 1.1em;
 	line-height: 40px;
 	color: #fff;
 	text-decoration: none;
@@ -278,7 +298,6 @@ ul{
 
 #main-nav-menu li:hover{
 	width: 100%;
-	/*border-bottom: 1px solid #fff;*/
 	border-top: 1px solid #fff;
 }
 
@@ -288,7 +307,7 @@ ul{
 	width: 100%;
 	padding: 10px;
 	color: #778085;
-	font-size: 1.125em;
+	font-size: 1.1em;
 	text-decoration: none;
 }
 
@@ -317,7 +336,7 @@ ul{
 }
 
 #main-nav-menu a span{
-	margin-right: 10px;
+	margin-right: 5px;
 }
 
 .link-plus{
@@ -372,6 +391,10 @@ ul{
 
 #background-nav{
 	display: none;
+}
+
+.form-group-lg .form-control{
+	font-size: 16px;
 }
 
 /*************************MEDIA QUERIES DU NAV************************/
@@ -879,6 +902,7 @@ tbody{
 	padding: 5px;
 	background-color: #fff;
 	border: 1px solid #778085;
+	font-size: 0.95em;
 }
 
 #selectedArtists li{

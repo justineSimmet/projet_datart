@@ -2,6 +2,7 @@
 
 require_once('classes/user.php');
 require_once('classes/artist.php');
+require_once('classes/artwork.php');
 require_once('classes/exhibit.php');
 require_once('classes/exhibit_textual_content.php');
 require_once('classes/event.php');
@@ -162,7 +163,7 @@ include('header.php');
 						<div class="col-sm-8">
 							<select name="actions-expo" class="form-control actionExhibit">
 								<option> --- </option>
-								<option value="update" data-id="<?= $ce->getId(); ?>">Modifier</option>
+								<option value="update" data-id="<?= $ce->getId(); ?>">Voir / Modifier</option>
 								<option value="hide" data-id="<?= $ce->getId(); ?>" >Supprimer</option>
 							</select>
 						</div>
@@ -205,10 +206,10 @@ include('header.php');
 								<?= $ce->totalArtistExposed(); ?>
 							</td>
 							<td>
-								<!-- Fonction qui retourne le nombre d'oeuvres liés à l'expo -->
+								<?= $ce->totalArtworkDisplayed(); ?>
 							</td>
 							<td>
-								<!-- Fonction qui retourne le nombre d'oeuvres liés à l'expo et disponible à la galerie -->
+								<?= $ce->totalAvaibleArtwork(); ?> / <?= $ce->totalArtworkDisplayed(); ?>
 							</td>
 							<td>
 								<?= $ce->checkTrad('english') == TRUE?'<span class="fa fa-check red"></span>':'<span class="fa fa-circle-o red"></span>' ?>
@@ -300,10 +301,10 @@ include('header.php');
 								<?= $ln->totalArtistExposed(); ?>
 							</td>
 							<td>
-								<!-- Fonction qui retourne le nombre d'oeuvres liés à l'expo -->
+								<?= $ln->totalArtworkDisplayed(); ?>
 							</td>
 							<td>
-								<!-- Fonction qui retourne le nombre d'oeuvres liés à l'expo et disponible à la galerie -->
+								<?= $ln->totalAvaibleArtwork(); ?> / <?= $ln->totalArtworkDisplayed(); ?>
 							</td>
 							<td>
 								<?= $ln->checkTrad('english') == TRUE?'<span class="fa fa-check red"></span>':'<span class="fa fa-circle-o red"></span>' ?>

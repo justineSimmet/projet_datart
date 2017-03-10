@@ -42,46 +42,40 @@ function dateFormat($str){
 	$datetimeToNormalize = '#[2][0][0-9][0-9]-[0-1][0-9]-[0-3][0-9] [0-2][0-9]:[0-5][0-9]:[0-5][0-9]#';
 
 	if(preg_match($datetimeToNormalize, $str)){
-		list($date, $time) = split(' ', $str);
-		list($year, $month, $day) = split('[-]', $date);
-		list($hour, $minute, $seconds) = split('[:]', $time);
-		$formatedDate = $day.'/'.$month.'/'.$year.' à '.$hour.'h'.$minute;
-		return $formatedDate;	
+		$date = DateTime::createFromFormat('Y-m-d H:i:s', $str);
+		return $formatedDate =  $date->format('d/m/Y à H:s');	
 	}
 	elseif (preg_match($dbToNormalize, $str)) {
-		list($year, $month, $day) = split('[-]', $str);
-		$formatedDate = $day.'/'.$month.'/'.$year;
-		return $formatedDate;
+		$date = DateTime::createFromFormat('Y-m-d', $str);
+		return $formatedDate =  $date->format('d/m/Y');
 	}
 	// DD/MM/YYYY -> YYYY-MM-DD 
 	elseif (preg_match($normalizeToDb, $str)) {
-		list($day, $month, $year) = split('[/]', $str);
-		$formatedDate = $year.'-'.$month.'-'.$day;
-		return $formatedDate;
+		$date = DateTime::createFromFormat('d/m/Y', $str);
+		return $formatedDate =  $date->format('Y-m-d');
 	}
 	else{
 		return FALSE;
 	}
 };
 
+
 function timeFormat($str){
 	$dbToNormalize = '#[0-2][0-9]:[0-5][0-9]:[0-5][0-9]#';
 	$normalizeToDb = '#[0-2][0-9]h[0-5][0-9]#';
 	$errorToDb = '#[0-2][0-9]h#';
+
 	if (preg_match($dbToNormalize, $str)) {
-		list($hour, $minute, $seconds) = split('[:]', $str);
-		$formatedTime = $hour.'h'.$minute;
-		return $formatedTime;
+		$time = DateTime::createFromFormat('H:i:s', $str);
+		return $formatedTime =  $time->format('H\hi');
 	}
 	elseif (preg_match($normalizeToDb, $str)) {
-		list($hour, $minute) = split('h', $str);
-		$formatedTime = $hour.':'.$minute.':00';
-		return $formatedTime;
+		$time = DateTime::createFromFormat('H\hi', $str);
+		return $formatedTime =  $time->format('H:i:s');
 	}
 	elseif (preg_match($errorToDb, $str)) {
-		list($hour) = split('h', $str);
-		$formatedTime = $hour.':00:00';
-		return $formatedTime;
+		$time = DateTime::createFromFormat('H\h', $str);
+		return $formatedTime =  $time->format('H:i:s');
 	}
 	else{
 		return FALSE;

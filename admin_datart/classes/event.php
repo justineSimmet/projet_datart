@@ -154,7 +154,7 @@ class Event{
 				<fieldset <?= isset($targetExhibit) && ( empty($targetExhibit->getId()) || $targetExhibit->getEndDate() < date('Y-m-d') || $targetExhibit->getVisible() == FALSE)?'disabled':''; ?> >
 					<div class="form-group form-group-lg">
 						<label for="name" class="control-label">Titre :</label>
-						<input type="text" name="name" class="form-control" value="<?= !empty($this->getId())?$this->getName():''; ?>" <?= $this->getName() == 'Début' || $this->getName() == 'Fin' ?'disabled':''; ?> required />
+						<input type="text" name="name" class="form-control" value="<?= !empty($this->getId())?$this->getName():''; ?>" <?= $this->getName() == 'Début' || $this->getName() == 'Fin' ?'readonly':''; ?> required />
 					</div>
 					<div class="form-group form-group-lg">
 						<label for="description" class="control-label">Description :</label>
@@ -170,7 +170,9 @@ class Event{
 					</div>
 
 					<input type="hidden" name="id" value="<?= !empty($this->getId())?$this->getId():''; ?>">
-					<input type="hidden" name="id-exhibit" value="<?= !empty($this->getId())?$this->getExhibitId():$targetExhibit->getId(); ?>">
+					<input type="hidden" name="targetExhibit" value="<?= !empty($this->getId())?$this->getExhibitId():$targetExhibit->getId(); ?>">
+					<input type="hidden" id="beginDate" value="<?= isset($targetExhibit)?$targetExhibit->getBeginDate():''; ?>">
+					<input type="hidden" id="endDate" value="<?= isset($targetExhibit)?$targetExhibit->getEndDate():''; ?>">
 					<input type="submit" role="button" class="btn btn-default pull-right" value="<?= $action; ?>">
 				</fieldset>
 
