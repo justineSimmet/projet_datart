@@ -58,21 +58,21 @@ GRAND_ANGLE_EXPO
 	|
 	|//FICHIERS DE STRUCTURE DU PROJET
 	|
-	|-->header.php
+	|-->header.php XXX
 	|
-	|-->nav.php
+	|-->nav.php XXX
 	|
-	|-->footer.php
+	|-->footer.php XXX
 	|
 	|-->index.php  //Dashboard DatArt
 	|
-	|-->login.php
+	|-->login.php XXX
 	|
-	|-->logout.php
+	|-->logout.php XXX
 	|
-	|-->users_management.php
+	|-->users_management.php XXX
 	|
-	|-->user_account.php
+	|-->user_account.php XXX
 	|
 	|-->exhibit_management.php
 	|

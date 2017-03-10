@@ -1,4 +1,14 @@
 /*-----------------------------------------------------------------------------
+INITIALISATION TINYMCE
+------------------------------------------------------------------------------*/
+var configTinyMce = {selector: 'textarea',
+    				language: 'fr_FR',
+    				menubar: false,
+    				toolbar:'undo | redo | bold | italic | alignleft | aligncenter | alignright | cut | copy | paste',
+    				statusbar: false};
+
+
+/*-----------------------------------------------------------------------------
 ACTIONS SUR LE MENU HAMBURGER DE LA NAVIGATION
 ------------------------------------------------------------------------------*/
 
@@ -15,6 +25,7 @@ $('#close-nav').click(function(){
 	$(this).hide();
 	$('#open-nav').show();
 });
+
 
 /*-----------------------------------------------------------------------------
 GESTION LIEN ACTIFS
@@ -39,6 +50,7 @@ $(function() {
 			}
       	}
     });
+
 });
 
 // Vérifie si la classe .active-nav-link est positionnée sur un lien imbriqué.
@@ -54,6 +66,7 @@ $(function() {
 		}
 	});	
 });
+
 
 
 
@@ -88,26 +101,159 @@ $(function(){
 	})
 });
 
+/*-----------------------------------------------------------------------------
+Initialisation des dates pas defaut pour les événements
+------------------------------------------------------------------------------*/
+function getBeginDate(){
+	if ($('#beginDate').length) {
+		var beginDate = new Date($('#beginDate').val());
+		beginDate.setDate(beginDate.getDate() - 3);
+		return beginDate;
+	}
+};
+
+function getEndDate(){
+	if ($('#endDate').length) {
+		var endDate = new Date($('#endDate').val());
+		endDate.setDate(endDate.getDate() + 3);
+		return endDate;
+	}
+};
+
+
+
 $(document).ready(function(){
+
+	tinymce.init(configTinyMce);
+
+	$('#loading-svg').hide();
 
 /*-----------------------------------------------------------------------------
 MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
 ------------------------------------------------------------------------------*/
-$.datepicker.setDefaults($.datepicker.regional['fr']);
+	$.datepicker.setDefaults($.datepicker.regional['fr']);
 
-$('.datepicker').focusin(function(){
-	if ( $(this).attr('name') == 'end_date' && $(this).val() == ''){
-		$beginDate = $(this).parent().parent().prev().children().children().val();
-		$(this).val($beginDate);
-	}
-});
-
-$('.datepicker').datepicker({
-		showAnim: 'clip',
+	$.datepicker.setDefaults({
+        showAnim: 'clip',
 		showOtherMonths: true,
 		selectOtherMonths: true,
-		minDate: -7
-});
+        dateFormat: 'dd/mm/yy'
+    });
+
+	$('#begin_date').datepicker({
+		minDate: 0,
+		onSelect:function(selected){
+			$("#end_date").datepicker("option","minDate", selected);
+		}
+	});
+
+
+	$('#end_date').datepicker({
+		onSelect:function(selected){
+			$("#begin_date").datepicker("option","maxDate", selected);
+		}
+	});
+
+
+	$('#datepicker').datepicker({
+		minDate: new Date(getBeginDate()),
+		maxDate: new Date(getEndDate())
+	});
+
+
+
+/**************************************************
+** SELECTION D'ARTISTES DANS UNE LISTE
+****************************************************/
+// INPUT DE RECHERCHE DANS LA LISTE DES ARTISTES ENREGISTREE
+	var artistList = [];
+	$('#recordedArtists li').each(function(){
+		artistList.push($(this).text());
+	});
+	$('#selectedArtists li').each(function(){
+		artistList.push($(this).text());
+	});
+
+	//Widget JQuery UI qui reprend la liste des artistes dispos
+	$( "#searchArtist" ).autocomplete({
+    	source: artistList,
+    	select: function( event, ui ) {
+    		$("#searchArtist").val(ui.item.label);
+    		var result = ui.item.label.toLowerCase();
+    		$('#recordedArtists li').each(function() {
+			var text = $(this).text().toLowerCase();
+	    		if (text.indexOf(result) == 0) {
+	    			$(this).show();
+	    		}
+	    		else{
+	        		$(this).hide();
+	        	}
+	    	})
+	    	$('#selectedArtists li').each(function() {
+			var text = $(this).text().toLowerCase();
+	    		if (text.indexOf(result) == 0) {
+	    			$(this).show();
+	    		}
+	    		else{
+	        		$(this).hide();
+	        	}
+	    	})
+      	}
+    });
+
+    $( "#searchArtist" ).focusout(function(){
+    	$('#recordedArtists li').each(function(){
+			$(this).show();
+		});
+		$('#selectedArtists li').each(function(){
+			$(this).show();
+		});
+    })
+
+//MISE EN FORME - CLASSEMENT PAR ORDRE ALPHABETIQUE
+	function orderList(selector) {
+	    $(selector).children("li").sort(function(a, b) {
+	        var upA = $(a).text().toUpperCase();
+	        var upB = $(b).text().toUpperCase();
+	        return (upA < upB) ? -1 : (upA > upB) ? 1 : 0;
+	    }).appendTo(selector);
+	}
+	orderList("#recordedArtists");
+	orderList("#selectedArtists");
+
+    $( "#recordedArtists" ).sortable({
+      connectWith: "#selectedArtists",
+      cursor: "move",
+      update: function( event, ui ) {
+      	$('#searchArtist').val('');
+      	$('#recordedArtists li').each(function(){
+			$(this).show();
+		});
+		$('#selectedArtists li').each(function(){
+			$(this).show();
+		});
+      	orderList("#selectedArtists");
+      	orderList("#recordedArtists");
+      }
+    });
+
+    $( "#selectedArtists" ).sortable({
+      connectWith: "#recordedArtists",
+      cursor: "move",
+      update: function( event, ui ) {
+      	$('#recordedArtists li').each(function(){
+			$(this).show();
+		});
+		$('#selectedArtists li').each(function(){
+			$(this).show();
+		});
+      	orderList("#recordedArtists");
+      	orderList("#selectedArtists");
+      }
+    });
+
+
+>>>>>>> 207444f0b3dfe10a4182a4a8dd3d5c8596652251
 
 
 /**********************************************
@@ -241,52 +387,29 @@ $('.datepicker').datepicker({
 		});
 	};
 	
-/**********************************************
-** ACTIONS SUR LA LISTE DEROULANTE DES ACTIONS
-************************************************/
+/**************************************************
+** ACTIONS SUR LA LISTE DEROULANTE DES ACTIONS USERS
+***************************************************/
 	//Si une option est sélectionnée dans une liste déroulante actionUser
 	//et que ça valeur est update, on récupère la valeur de data-id dans userId.
-	//La valeur de userId est envoyée en POST via une requête ajax vers la page actuelle.
-	//C'est là que ça devient vicieux ^^
-	//Les données renvoyée correspondent à la page actuelle avec la création d'un objet User
-	//$targetUser. Pour afficher ces données, j'interviens directement sur DOM en lui disant de
-	//créer une variable newDoc qui correspond à l'ensemble de la page HTML présente (Doctype / Head / Body).
-	//Je remplace le contenu de cette page par les données retournée en ajac et referme la manipulation de doc.
+	//La valeur de userId est envoyée en POST via une requête ajax vers la page actuelle
+	//Je modifie l'élément nécéssaire (la modal ou le formulaire) via la reponse effectuée
+	//par le serveur.
 	$('.actionUser').on('change', function(){
 		if ($(this).val() == 'update'){
 			var userId = $(this).children('option:selected').attr("data-id");
-			$.ajax({
-				method: 'POST',
-				data : {
-					targetUser : userId
-				},
-				success: function(data){
-					var newDoc = document.open("text/html", "replace");
-					newDoc.write(data);
-					newDoc.close()
-				}	
+			$.post('users_management.php',{ targetUser : userId}, function(response){
+				$('#formArea').html($(response).find('#formArea').html());
 			});
 		 }
-
 		else if($(this).val() == 'delete'){
 			var userId = $(this).children('option:selected').attr("data-id");
-			$.ajax({
-				method: 'POST',
-				data : {
-					targetUser : userId
-				},
-				success: function(data){
-					var newDoc = document.open("text/html", "replace");
-					newDoc.write(data);
-					newDoc.close();
-					$("#mymodal").modal('show')
-				}	
+			$.post('users_management.php',{ targetUser : userId} , function(response){
+				$("#modalDeleteUser").html($(response).find("#modalDeleteUser").html());
+				$("#modalDeleteUser").modal('show');
 			});
-
 		 };			
 	});
-
-});
 
 
 /************************************************************
@@ -297,7 +420,7 @@ $('.datepicker').datepicker({
 	$('.actionArtist').on('change', function(){
 		if ($(this).val() == 'update'){
 			var artistId = $(this).children('option:selected').attr("data-id");
-			window.location.replace('zoom_artist?artist='+artistId);
+			window.location.replace('artist_zoom?artist='+artistId);
 		}
 	});
 
@@ -379,3 +502,158 @@ $('.datepicker').datepicker({
 			$(".formText_formPhoto").html($(response).find(".formText_formPhoto").html());
 		});
 	};
+
+
+/***************************************************
+** ACTIONS SUR LA LISTE DEROULANTE DES ACTIONS EXHIBIT
+****************************************************/
+	$('.actionExhibit').on('change', function(){
+		if ($(this).val() == 'update' || $(this).val() == 'show'){
+			var exhibitId = $(this).children('option:selected').attr("data-id");
+			window.location.replace('exhibit_zoom.php?exhibit='+exhibitId);
+		}
+		else if($(this).val() == 'hide'){
+			var targetId = $(this).children('option:selected').attr("data-id");
+			$.post('exhibit_management.php', {targetId}, function(response){
+				$("#hideExhibit").html($(response).find("#hideExhibit").html());
+				$("#hideExhibit").modal('show');
+			});
+		}
+		else if($(this).val() == 'publish'){
+			var targetId = $(this).children('option:selected').attr("data-id");
+			$.post('exhibit_management.php', {targetId : targetId, action : 'publish'}, function(response){
+				$("#managementExhibitList").html($(response).find("#managementExhibitList").html());
+				$("#alert-area").html($(response).find("#alert-area").html());
+			});
+		}		
+	});
+
+/**********************************************************************
+** OUVERTURE D'UNE MODAL SI CLIC SUR LE BOUTON SUPPRIMER DEFINITIVEMENT
+** Envoi le targetId de l'expo en Ajax et recharge la page avant
+** d'ouvrir la modal.
+***********************************************************************/
+	$('.delete-exhibit').on('click', function(){
+		var targetExhibit = $(this).attr("data-id");
+		$.post(window.location.href, {targetId}, function(response){
+			$("#deleteExhibit").html($(response).find("#deleteExhibit").html());
+			$("#deleteExhibit").modal('show');
+		});
+	});
+
+	$('.publish-exhibit').on('click', function(){
+		var targetExhibit= $(this).attr("data-id");
+		$.ajax({
+			method: 'POST',
+			data : {
+				targetId : targetId,
+				action : 'publish'
+			},
+			success: function(data){
+				var newDoc = document.open("text/html", "replace");
+				newDoc.write(data);
+				newDoc.close()
+			}
+		});
+	});
+
+/*********************************************************
+** RECHARGEMENT DE LA PAGE SI UNE EXPO A BIEN ETE UPDATE
+*********************************************************/
+	if($('#update-exhibit').length == 1){
+		$.post(window.location.href, function(response){
+			$("#exhibitMainInfo").html($(response).find("#exhibitMainInfo").html());
+		});
+	};
+
+/**********************************************
+** REFRESH AJAX APRES INSERT OU UPDATE
+** DES TEXTES D'ACCOMPAGNEMENT D'EXPO 
+************************************************/
+
+	if($('#insert-exhibit-text').length == 1 || $('#update-exhibit-text').length == 1){
+		$('#loading-svg').show();
+		var loaded = 0;
+		$.post(window.location.href, function(response){
+			tinymce.remove();
+			$("#formTextualContent").html($(response).find("#formTextualContent").html());
+			tinymce.init(configTinyMce);
+			loaded++;
+            if(loaded == 1) {
+				$('#loading-svg').hide();
+			}
+		});
+	};
+
+/**********************************************
+** REFRESH AJAX APRES INSERT OU UPDATE
+** D'UN EVENEMENT D'EXPO 
+************************************************/
+	if($('#insert-exhibit-event').length == 1 || $('#update-exhibit-event').length == 1){
+		
+		$.post(window.location.href, function(response){
+			$("#exhibitEvent").html($(response).find("#exhibitEvent").html());
+			$("#alert-area-event").html($(response).find("#update-exhibit-event").html())
+		});
+	};
+	
+
+/**********************************************
+** EXECUTION REQUETE AJAX POUR UPDATE OU DELETE
+** UN EVENEMENT SUR LE ZOOM EXHIBIT
+************************************************/
+	$('#exhibitEvent').on('click','.update-event', function(){
+		var targetEvent = $(this).attr("data-id");
+		$.post(window.location.href, {targetEvent : targetEvent}, function(response){
+			$("#exhibitEvent form").html($(response).find("#exhibitEvent form").html());
+		});
+	});
+
+	$('#exhibitEvent').on('click','.delete-event', function(){
+		var targetEvent = $(this).attr("data-id");
+		$.post(window.location.href, {targetEvent : targetEvent}, function(response){
+			$("#deleteEvent").html($(response).find("#deleteEvent").html());
+			$("#deleteEvent").modal('show');
+		});
+	});
+
+/**********************************************
+** EXECUTION REQUETE AJAX POUR LIER
+** DES ARTISTES SUR LE ZOOM EXHIBIT
+************************************************/
+
+	$('#btn-selectedArtist').on('click', function(){
+		var listId = [];
+		$('#selectedArtists li').each(function(){
+			listId.push($(this).attr('data-artistId'));
+		});
+		var exhibitId = $(this).attr('data-exhibitId')
+		$.post(window.location.href, {action : 'add-artist', artistId : listId, targetExhibit : exhibitId}, function(response){
+			$("#alert-area-artist").html($(response).find("#alert-area-artist").html());
+			$("#recordedArtists").html($(response).find("#recordedArtists").html());
+			$("#selectedArtists" ).html($(response).find("#selectedArtists" ).html());
+			$("#exhibitLinkedArtwork").html($(response).find("#exhibitLinkedArtwork").html());
+			$("#recordedArtists" ).sortable( "refresh" );
+			$("#selectedArtists" ).sortable( "refresh" );
+		});
+	})
+
+/**********************************************
+** EXECUTION REQUETE AJAX POUR ASSOCIER
+** DES OEUVRES SUR LE ZOOM EXHIBIT
+************************************************/
+
+	$('#btn-selectedArtwork').on('click', function(){
+		var listId = [];
+		$('#exhibitLinkedArtwork input:checked').each(function(){
+			listId.push($(this).val());
+		});
+		var exhibitId = $(this).attr('data-exhibitId')
+		$.post(window.location.href, {action : 'add-artwork', artworkId : listId, targetExhibit : exhibitId}, function(response){
+			$("#alert-area-artwork").html($(response).find("#alert-area-artwork").html());
+			$("#exhibitLinkedArtwork").html($(response).find("#exhibitLinkedArtwork").html());
+		});
+	})
+
+});
+

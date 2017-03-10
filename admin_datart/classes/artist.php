@@ -1,10 +1,10 @@
 <?php 
 
 /* ---------------------------
-	DatArt
-	Creation Date : 18/02/2017
-	classes/artist.php
-	author : ApplePie Cie
+  DatArt
+  Creation Date : 18/02/2017
+  classes/artist.php
+  author : ApplePie Cie
 ---------------------------- */
 
 // creation de ma class artist avec les attributs qu'on lui a crée en bdd
@@ -16,7 +16,7 @@ class Artist{
 	private $photographic_portrait;
 	private $creation_date;
 	private $visible;
-
+	private $artwork;
 
 // Le constructeur est la pour initialiser les attributs lors de la création d'un objet(artist)
 	function __construct($id = ''){  
@@ -34,66 +34,73 @@ class Artist{
     		$this->textual_content = array();
     		$text = requete_sql("SELECT id, language, subject FROM textual_content_artist WHERE artist_id = '".$id."' ");
 
-    		if (count($text) !== 0) {
+    		        if (count($text) !== 0) {
 
-    			while ($t = $text->fetch(PDO::FETCH_ASSOC)) {
+          while ($t = $text->fetch(PDO::FETCH_ASSOC)) {
 
-    				if ($t['language'] == 'french') {
-    					
-   	    				if ($t['subject'] == 'biography') {
-	     					array_push($this->textual_content, new ArtistFrenchBiography($t['id']));
-	    				}
-	    				else{
-	    					array_push($this->textual_content, new ArtistFrenchNote($t['id']));
-	    				}
-	    			}
-	    			elseif ($t['language'] == 'english') {
-	    				
-	    				if ($t['subject'] == 'biography') {
-	    					array_push($this->textual_content, new ArtistEnglishBiography($t['id']));
-	    				}
-	    				else{
-	    					array_push($this->textual_content, new ArtistEnglishNote($t['id']));
-	    				}		
-	    			}
-	       			elseif ($t['language'] == 'german') {
-	    				
-	    				if ($t['subject'] == 'biography') {
-	    					array_push($this->textual_content, new ArtistGermanBiography($t['id']));
-	    				}
-	    				else{
-	    					array_push($this->textual_content, new ArtistGermanNote($t['id']));
-	    				}		
-	    			}
-	    		    elseif ($t['language'] == 'russian') {
-	    				
-	    				if ($t['subject'] == 'biography') {
-	    					array_push($this->textual_content, new ArtistRussianBiography($t['id']));
-	    				}
-	    				else{
-	    					array_push($this->textual_content, new ArtistRussianNote($t['id']));
-	    				}		
-	    			}
-	    			elseif ($t['language'] == 'chinese') {
-	    				
-	    				if ($t['subject'] == 'biography') {
-	    					array_push($this->textual_content, new ArtistChineseBiography($t['id']));
-	    				}
-	    				else{
-	    					array_push($this->textual_content, new ArtistChineseNote($t['id']));
-	    				}		
-	    			}	    					
-    			}
-    		}
-    		else{
-    			$this->textual_content = array();
-    		}
-
-		}
-		else{
-			$this->textual_content = array();
-		}
-	}
+            if ($t['language'] == 'french') {
+              
+                if ($t['subject'] == 'biography') {
+                array_push($this->textual_content, new ArtistFrenchBiography($t['id']));
+              }
+              else{
+                array_push($this->textual_content, new ArtistFrenchNote($t['id']));
+              }
+            }
+            elseif ($t['language'] == 'english') {
+              
+              if ($t['subject'] == 'biography') {
+                array_push($this->textual_content, new ArtistEnglishBiography($t['id']));
+              }
+              else{
+                array_push($this->textual_content, new ArtistEnglishNote($t['id']));
+              }   
+            }
+              elseif ($t['language'] == 'german') {
+              
+              if ($t['subject'] == 'biography') {
+                array_push($this->textual_content, new ArtistGermanBiography($t['id']));
+              }
+              else{
+                array_push($this->textual_content, new ArtistGermanNote($t['id']));
+              }   
+            }
+              elseif ($t['language'] == 'russian') {
+              
+              if ($t['subject'] == 'biography') {
+                array_push($this->textual_content, new ArtistRussianBiography($t['id']));
+              }
+              else{
+                array_push($this->textual_content, new ArtistRussianNote($t['id']));
+              }   
+            }
+            elseif ($t['language'] == 'chinese') {
+              
+              if ($t['subject'] == 'biography') {
+                array_push($this->textual_content, new ArtistChineseBiography($t['id']));
+              }
+              else{
+                array_push($this->textual_content, new ArtistChineseNote($t['id']));
+              }   
+            }               
+          }
+        }
+        else{
+          $this->textual_content = array();
+        }
+        $this->artwork = array();
+        $artwork = requete_sql("SELECT id FROM artwork WHERE artist_id = '".$this->id."' ");
+        if (count($text) !== 0) {
+          while ($art = $artwork->fetch(PDO::FETCH_ASSOC)){
+            array_push($this->artwork, new Artwork($art['id']));
+          }
+        }
+    }
+    else{
+      $this->textual_content = array();
+      $this->artwork = array();
+    }
+  }
 
 	function getId(){
 	    return $this->id;
@@ -198,24 +205,30 @@ class Artist{
 	}
 
 	function getIdentity(){
-		if (!empty($this->name) && !empty($this->surname)) {
-			if (!empty($this->alias)) {
-				$retour = $this->name.' '.$this->surname.' ('.$this->alias.')';
-				return $retour; 
-			}
-			else{
-				$retour = $this->name.' '.$this->surname;
-				return $retour;
-			}
-		}
-		else{
-			$retour = $this->alias;
-			return $retour;
-		}
-	}
+    if (!empty($this->name) && !empty($this->surname)) {
+      if (!empty($this->alias)) {
+        $retour = $this->alias.' ('.$this->surname.' '.$this->name.')';
+        return $retour; 
+      }
+      else{
+        $retour = $this->surname.' '.$this->name;
+        return $retour;
+      }
+    }
+    else{
+      $retour = $this->alias;
+      return $retour;
+    }
+  }
+
+  function getArtwork(){
+    return $this->artwork;
+  }
+
 
 
 /***************************************************************************
+
 
 
 							Synchro avec la BDD
@@ -225,6 +238,7 @@ class Artist{
 soit à inserer une nouvelle entrée en bdd si on ne recoit pas d'id
 soit à faire un update des données de l'id reçue
 ***************************************************************************/
+
 
 	function synchroDb(){
 		if (empty($this->id)) { //  si l'id est vide alors on crée une variable create avec une requete sql pour inserer une nouvelle entrée
@@ -271,24 +285,26 @@ soit à faire un update des données de l'id reçue
 
 							Liste Artiste
 
+
 * retourne la liste de tout les artistes
 ***************************************************************************/
 
 
+  static function listArtist(){
+    $listArtist = requete_sql("SELECT id FROM artist WHERE visible = TRUE ORDER BY surname, alias ASC");
+    $listArtist = $listArtist->fetchAll(PDO::FETCH_ASSOC);
+    $tabList = array();
+    foreach ($listArtist as $artist){
+      $artist = new Artist($artist['id']);
+      array_push($tabList, $artist);
+    }
+    return $tabList;
+  }
 
-	static function listArtist(){
-		$listArtist = requete_sql("SELECT id FROM artist WHERE visible = TRUE ORDER BY name, alias ASC");
-		$listArtist = $listArtist->fetchAll(PDO::FETCH_ASSOC);
-		$tabList = array();
-		foreach ($listArtist as $artist){
-			$artist = new Artist($artist['id']);
-			array_push($tabList, $artist);
-		}
-		return $tabList;
-	}
 
 
 /***************************************************************************
+
 
 
 							Form créa artiste
@@ -445,13 +461,17 @@ soit à faire un update des données de l'id reçue
 	}
 
 
+
 /***************************************************************************
 
-						Controle sur les traductions de textes
+
+            		Controle sur les traductions de textes
+
 
 ****************************************************************************/
 
-function checkTrad($language){
+	function checkTrad($language){
+
 		if (!empty($this->getTextualContent())) {
 			switch ($language) {
 				case 'english':
@@ -504,7 +524,9 @@ function checkTrad($language){
 
 
 
+
 /***************************************************************************
+
 
 
 							Visibilité fiche artiste
@@ -524,7 +546,9 @@ function checkTrad($language){
 	}
 
 
+
 /***************************************************************************
+
 
 
 							Invisibilité d'une fiche artiste
@@ -547,10 +571,12 @@ function checkTrad($language){
 /***************************************************************************
 
 
+
 							Supprimer définitivement un artiste
 
 
 ***************************************************************************/
+
 
 	function deleteArtist(){
 		$deleteText = requete_sql("DELETE FROM textual_content_artist WHERE artist_id='".$this->id."'");
@@ -573,10 +599,13 @@ function checkTrad($language){
 /***************************************************************************
 
 
-				Liste des aristes cachés (en cours de suppression)
+
+				Liste des artistes cachés (en cours de suppression)
+
 
 
 ***************************************************************************/
+
 
 	static function listHidenArtist(){
 		$res = requete_sql("SELECT id FROM artist WHERE visible = FALSE ORDER BY name DESC");
@@ -589,13 +618,17 @@ function checkTrad($language){
 		return $list;
 	}
 
+
 /***************************************************************************
+
 
 
 							Upload photo
 
 
+
 ***************************************************************************/
+
 
 	function synchroPicture(){
 
@@ -608,6 +641,27 @@ function checkTrad($language){
 			return FALSE;
 		}
 	}
+
+/******************************
+	 Comparaison de liste
+*******************************/
+
+static function compareList($listA, $listB)
+{
+  $clone = array();
+  $count = count($listB);
+  foreach ($listA as $list) {
+    for ($i=0; $i < $count ; $i++) { 
+      if ($list->getId() == $listB[$i]->getId()) {
+        array_push($clone, $list->getId());
+      }
+    }
+  }
+
+  return $clone;
+}
+ 
+
 
 }
 

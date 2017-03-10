@@ -28,7 +28,7 @@ if(isset($_POST['public_name'])){
 			if ($updateUser) {
 				$actionResultat = '<div class="alert alert-success alert-dismissable" id="user-edited">
 				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-				<strong>Félicitation</strong> L\'utilisateur a bien été modifié.
+				<strong>Félicitation</strong> L\'utilisateur a bien été modifié. Merci de patienter, un e-mail de confirmation est en cours d\'envoi.
 				</div>';
 			}
 			else{
@@ -108,36 +108,37 @@ include('header.php');
 	<?= !empty($actionResultat)?$actionResultat:''; ?>
 </div>
 
-<div id="mymodal" class="modal fade">
+<div id="modalDeleteUser" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title">Attention!</h4>
             </div>
-            <?php if((isset($targetUser)) && ($targetUser->getStatus() == 0)) {
-          
-            echo '<div class="modal-body_admin">
-                <p> Vous ne pouvez pas supprimer un administrateur</p>
-            </div>';
-             } 
-			else{
-            ?><div class="modal-body_user">
-                <p> Etes vous sûr(e) de vouloir supprimer cet utilisateur?</p>
-                <p> Pour continuer la suppression, veuillez saisir votre mot de passe s\'il vous plaît</p>
+            <div class="modal-body">
+            <?php if(isset($targetUser)){
+            	if($targetUser->getStatus() == 0){
+            		?>
+	                <p>Vous ne pouvez pas supprimer un administrateur !</p>
+	                <p>Si vous souhaitez vraiment supprimer le compte de <?= $targetUser->getPublicName(); ?> <?= $targetUser->getPublicSurname(); ?>, vous devez d'abord changer son statut.</p>
+            		<?php
+            	}
+            	else{
+            		?>
+            		<p> Vous êtes sur le point de supprimer définitivement le compte de <?= $targetUser->getPublicName(); ?> <?= $targetUser->getPublicSurname(); ?>.</p>
+               		<p> Pour valider la suppression, veuillez saisir votre mot de passe.</p>
 
-                <form action="users_management.php" method="post">
+                	<form action="users_management.php" method="post">
 
-                <label for="inputPassword">Password</label>
-                <input type="password" name="password" placeholder="Votre mot de passe"  required />
-                <input type="hidden" value="<?= isset($targetUser)?$targetUser->getId():';' ?>" name="targetId">
-                <input type="submit" value="Supprimer" />
-
-                </form>
-
-            </div><?php
-            }
-            ?>
+                		<label for="inputPassword">Password</label>
+                		<input type="password" name="password" placeholder="Votre mot de passe"  required />
+                		<input type="hidden" value="<?= isset($targetUser)?$targetUser->getId():';' ?>" name="targetId">
+                		<input type="submit" value="Supprimer" />
+					</form>
+            		<?php
+            	}
+            }?>
+			</div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
             </div>
@@ -146,78 +147,84 @@ include('header.php');
 </div>
 
 <div class="row">
-	<section class="col-lg-12 col-md-12 col-sm-9 col-xs-9">
-	<h2>Liste des utilisateurs</h2>
-		<table>
-			<thead>
-				<tr>
-					<th>Utilisateur</th>
-					<th>Fonction</th>
-					<th>Email</th>
-					<th>Dernière connexion</th>
-					<th>Actions</th>
-				</tr>
-			</thead>
+	<div class="col-md-9 col-xs-12">
+		<section id="formUsers">
+		<h2>Liste des utilisateurs</h2>
+			<div class="table-responsive">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>Utilisateur</th>
+						<th>Fonction</th>
+						<th>Email</th>
+						<th>Dernière connexion</th>
+						<th>Actions</th>
+					</tr>
+				</thead>
 
-			<tbody>
-			<?php 
-				$liste = User::listUsers(); 
-				foreach ($liste as $l) {
-			?>
-				<tr>
-					<td>
-						<span class="<?= $l->getStatus() == 0?'fa fa-star':'fa fa-user'; ?>"></span> 
-						<?= $l->getPublicName(); ?> <?= $l->getPublicSurname(); ?>
-					</td>
-					<td>
-						<?= $l->getFunction(); ?>
-					</td>
-					<td>
-						<?= $l->getEmailAdress(); ?>
-					</td>
-					<td>
-						<?= !empty($l->getLastConnection())?$l->getLastConnection():'Aucune connexion'; ?>
-					</td>
-					<td>
-						<div class="form-group" >
-							<select class="form-control actionUser">
-								<option></option>
-								<option value="update" data-id="<?= $l->getId(); ?>">Modifier</option>
-								<option value="delete" data-id="<?= $l->getId(); ?>" >Supprimer</option>
-							</select>
-						</div>
-					</td>
-				</tr>
-			<?php 
-				};
-			?>
-			</tbody>
+				<tbody>
+				<?php 
+					$liste = User::listUsers(); 
+					foreach ($liste as $l) {
+				?>
+					<tr>
+						<td>
+							<span class="<?= $l->getStatus() == 0?'fa fa-star':'fa fa-user'; ?>"></span> 
+							<?= $l->getPublicName(); ?> <?= $l->getPublicSurname(); ?>
+						</td>
+						<td>
+							<?= $l->getFunction(); ?>
+						</td>
+						<td>
+							<?= $l->getEmailAdress(); ?>
+						</td>
+						<td>
+							<?= !empty($l->getLastConnection())?dateFormat($l->getLastConnection()):'Aucune connexion'; ?>
+						</td>
+						<td>
+							<div class="form-group" >
+								<select class="form-control actionUser">
+									<option> --- </option>
+									<option value="update" data-id="<?= $l->getId(); ?>">Modifier</option>
+									<option value="delete" data-id="<?= $l->getId(); ?>" >Supprimer</option>
+								</select>
+							</div>
+						</td>
+					</tr>
+				<?php 
+					};
+				?>
+				</tbody>
 
-		</table>
+			</table>
+			</div>
+		</section>
+	</div>
 
-	</section>
+	<div class="col-md-3 col-xs-12">
+		<section>
+		<div id="formArea">
+		 <?php
+			if(isset($targetUser)){
+				$targetUser->form($_SERVER['PHP_SELF'], 'Modifier', 'Modifier un utilisateur :', 'edit');
+				?>
+				<form action="<?= $_SERVER['PHP_SELF']; ?>" method="POST">
+					<input type="hidden" name="action" value="resetPassword">
+					<input type="hidden" name="id" value="<?= $targetUser->getId(); ?>" />
+					<input type="submit" value="Réinitialiser le mot de passe" class="btn btn-warning btn-md" />
+				</form>
+			<?php
+			}
+			else{
 
-	<section class="col-lg-12 col-md-12 col-sm-3 col-xs-3 ">
-	 <?php
-		if(isset($targetUser)){
-			$targetUser->form($_SERVER['PHP_SELF'], 'Modifier', 'Modifier un utilisateur :', 'edit');
-			?>
-			<form action="<?= $_SERVER['PHP_SELF']; ?>" method="POST">
-				<input type="hidden" name="action" value="resetPassword">
-				<input type="hidden" name="id" value="<?= $targetUser->getId(); ?>" />
-				<input type="submit" value="Réinitialiser le mot de passe" class="btn btn-warning btn-md" />
-			</form>
-		<?php
-		}
-		else{
+				$user = new User();
+				$user->form($_SERVER['PHP_SELF'],'Créer', 'Créer un utilisateur :', 'add');
 
-			$user = new User();
-			$user->form($_SERVER['PHP_SELF'],'Créer', 'Créer un utilisateur :', 'add');
-
-		}
-	?>
-
-	</section>
+			}
+		?>
+		</div>
+		</section>
+	</div>
 
 </div>
 <script type="text/javascript"> var adminData = <?php  if(isset($currentUser)){echo $currentUser->toJson() ;}else{echo "''";} ; ?></script>

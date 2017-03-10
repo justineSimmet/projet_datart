@@ -52,7 +52,7 @@ if (isset($_POST['id'])) {
 
 			if (!empty($_POST['surname'] && $_POST['name']) || $_POST['alias']) {
 				$addArtist = $targetArtist->synchroDb();
-				header('Location:zoom_artist.php?artist='.$addArtist);
+				header('Location:artist_zoom.php?artist='.$addArtist);
 			}
 			else{
 				$actionResultat = '<div class="alert alert-danger alert-dismissable">

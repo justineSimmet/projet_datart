@@ -129,7 +129,7 @@ include('header.php');
         </div>
 </div>
 
- <a href="zoom_artist.php" class="btn btn-default">Créer un nouvel artiste</a>
+ <a href="artist_zoom.php" class="btn btn-default">Créer un nouvel artiste</a>
 
 
 <!-- Liste des artistes -->

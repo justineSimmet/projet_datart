@@ -1,13 +1,12 @@
 <?php
 
-require_once('includes/include.php');
 require_once('classes/user.php');
+require_once('includes/include.php');
 
 if(isset($_POST['login']) && isset($_POST['password'])) {
 	$log = User::connect($_POST['login'], $_POST['password']);
-	var_dump($log);
 	if (!$log) {
-		$error = '<div class="alert alert-danger alert-dismissable">
+		$error = '<div class="alert alert-danger alert-dismissable text-center">
 					<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 					<strong>La connexion a échouée. Votre login et/ou votre mot de passe est incorrect.</strong><br>
 					Merci de vous rapprocher de votre administrateur :<br>
@@ -57,7 +56,7 @@ if(isset($_POST['login']) && isset($_POST['password'])) {
 			<div class="row">
 				<section class="col-lg-12 col-md-12 col-sm-12" id="login-form">
 					<div class="alert-area"><!-- Zone de message d'alerte-->
-						
+						<?= isset($error)?$error:''; ?>
 					</div>
 
 					<form action="login.php" method="POST" class="form-horizontal">

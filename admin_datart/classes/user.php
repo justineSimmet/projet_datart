@@ -166,10 +166,12 @@ class User{
 /*----------------------------------------------------------------
 	Deconnexion de l'application
 ----------------------------------------------------------------*/
+
 	function disconnect(){
 		session_destroy();
 		session_start();
 	}
+
 /*----------------------------------------------------------------
 	Fonction d'update de mot de passe depuis le compte utilisateur
 ----------------------------------------------------------------*/
@@ -195,6 +197,7 @@ class User{
 	du mot de passe.
 ----------------------------------------------------------------*/
 	function deleteUser($password, $targetUser){
+
         $adminCheck = $this->passwordCheck($password);
         if ($adminCheck) {
             $deleteTarget = requete_sql("DELETE FROM user WHERE id = '".$targetUser."' ");
@@ -290,38 +293,50 @@ class User{
 ----------------------------------------------------------------*/
 	function form($target, $action='', $titre, $description){
 	?>
-		<form action=<?= $target ?> method="POST" id="<?= $description; ?>-user-form" class="user-form">
+		<form action=<?= $target ?> method="POST" id="<?= $description; ?>-user-form" class="form-vertical clearfix">
 			<h2><?= $titre ?></h2>
-			<div class="form-group">
-				<label for="public_name">Prénom :</label>
-				<input type="text" name="public_name" id="public_name" onblur="getNameForm()" value="<?= $this->public_name ?>" required <?= strpos($_SERVER['PHP_SELF'],'admin_datart/user_account.php')?'disabled':''; ?> />
+			<div class="form-group form-group-lg">
+				<label for="public_name" class="control-label" >Prénom :</label>
+				<div>
+				<input type="text" name="public_name" id="public_name" onblur="getNameForm()" value="<?= $this->public_name ?>" class="form-control" required <?= strpos($_SERVER['PHP_SELF'],'admin_datart/user_account.php')?'disabled':''; ?> />
+				</div>
 			</div>
-			<div class="form-group">
-				<label for="public_surname">Nom :</label>
-				<input type="text" name="public_surname" id="public_surname" onblur="getSurnameForm()" value="<?= $this->public_surname ?>" required <?= strpos($_SERVER['PHP_SELF'],'admin_datart/user_account.php')?'disabled':''; ?> />
+			<div class="form-group form-group-lg">
+				<label for="public_surname" class="control-label" >Nom :</label>
+				<div>
+				<input type="text" name="public_surname" id="public_surname" onblur="getSurnameForm()" value="<?= $this->public_surname ?>" class="form-control" required <?= strpos($_SERVER['PHP_SELF'],'admin_datart/user_account.php')?'disabled':''; ?> />
+				</div>
 			</div>
-			<div class="form-group">
-				<label for="function">Fonction :</label>
-				<input type="text" name="function" id="function" value="<?= $this->function ?>" required <?= strpos($_SERVER['PHP_SELF'],'admin_datart/user_account.php')?'disabled':''; ?> />
+			<div class="form-group form-group-lg">
+				<label for="function" class="control-label" >Fonction :</label>
+				<div>
+				<input type="text" name="function" id="function" value="<?= $this->function ?>" class="form-control" required <?= strpos($_SERVER['PHP_SELF'],'admin_datart/user_account.php')?'disabled':''; ?> />
+				</div>
 			</div>
-			<div class="form-group">
-				<label for="login">Login :</label>
-				<input type="text" name="login" id="login" value="<?= $this->login ?>" readonly <?= strpos($_SERVER['PHP_SELF'],'admin_datart/user_account.php')?'disabled':''; ?>/>
+			<div class="form-group form-group-lg">
+				<label for="login" class="control-label" >Login :</label>
+				<div>
+				<input type="text" name="login" id="login" value="<?= $this->login ?>" class="form-control" readonly <?= strpos($_SERVER['PHP_SELF'],'admin_datart/user_account.php')?'disabled':''; ?>/>
+				</div>
 			</div>
-			<div class="form-group">
-				<label for="email">Adresse e-mail :</label>
-				<input type="mail" name="email" id="email" value="<?= $this->email_adress ?>" required/>
+			<div class="form-group form-group-lg">
+				<label for="email" class="control-label" >Adresse e-mail :</label>
+				<div>
+				<input type="mail" name="email" id="email" value="<?= $this->email_adress ?>" class="form-control" required/>
+				</div>
 			</div>
 
 			<?php
 				if (strpos($_SERVER['PHP_SELF'],'admin_datart/users_management.php')) {
 				?>
 				<div class="form-group">
-					<label for="status">Statut :</label>
+					<label for="status" class="control-label" >Statut :</label>
+					<div>
 					<select class="form-control" id="status" name="status">
 					    <option value="0" <?= $this->status=='0'?'selected="selected"':''; ?> >Administrateur</option>
 					    <option value="1" <?= $this->status=='1'?'selected="selected"':''; ?> >Utilisateur</option>
 					</select>
+					</div>
 				</div>
 				<?php
 				}
@@ -341,7 +356,7 @@ class User{
 			}
 			?>
 			<input type="hidden" name="id" value="<?= $this->id; ?>">
-			<input type="submit" value="<?= $action; ?>" />
+			<input type="submit" value="<?= $action; ?>" class="btn btn-default pull-right" />
 
 		</form>
 	<?php
