@@ -507,13 +507,13 @@ class Exhibit{
 						<div class="form-group form-group-lg col-sm-6">
 							<label for="begin_date" class="control-label col-sm-4">Début :</label>
 							<div class="col-sm-8">
-							<input type="date" name="begin_date" id="begin_date" class="form-control" value="<?= dateFormat($this->begin_date) ?>" placeholder="ex. : 02/02/2017" required <?= !empty($this->getId()) && $this->getVisible() == FALSE?'disabled':''; ?> <?= !empty($this->id) && $this->getEndDate() < date('Y-m-d')?'readonly':''; ?> />
+							<input type="text" name="begin_date" id="begin_date" class="form-control" value="<?= dateFormat($this->begin_date) ?>" placeholder="ex. : 02/02/2017" required <?= !empty($this->getId()) && $this->getVisible() == FALSE?'disabled':''; ?> <?= !empty($this->id) && $this->getEndDate() < date('Y-m-d')?'readonly':''; ?> />
 							</div>
 						</div>
 						<div class="form-group form-group-lg col-sm-6">
 							<label for="end_date" class="control-label col-sm-4">Fin :</label>
 							<div class="col-sm-8">
-							<input type="date" name="end_date" id="end_date" class="form-control" value="<?= dateFormat($this->end_date) ?>" placeholder="ex. : 02/02/2017" required <?= !empty($this->getId()) && $this->getVisible() == FALSE?'disabled':''; ?> <?= !empty($this->id) && $this->getEndDate() < date('Y-m-d')?'readonly':''; ?> />
+							<input type="text" name="end_date" id="end_date" class="form-control" value="<?= dateFormat($this->end_date) ?>" placeholder="ex. : 02/02/2017" required <?= !empty($this->getId()) && $this->getVisible() == FALSE?'disabled':''; ?> <?= !empty($this->id) && $this->getEndDate() < date('Y-m-d')?'readonly':''; ?> />
 							</div>
 						</div>
 					</div>
