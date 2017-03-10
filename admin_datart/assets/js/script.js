@@ -253,8 +253,6 @@ MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
     });
 
 
->>>>>>> 207444f0b3dfe10a4182a4a8dd3d5c8596652251
-
 
 /**********************************************
 ** EXECUTION REQUETE AJAX SI UN UTILISATEUR A
