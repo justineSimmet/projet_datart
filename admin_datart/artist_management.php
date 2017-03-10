@@ -2,6 +2,7 @@
 
 require_once('classes/artist.php');
 require_once('classes/user.php');
+require_once('classes/artist_textual_content.php');
 require_once('includes/include.php');
 
 
@@ -136,14 +137,14 @@ include('header.php');
  	<section>
  		<div class="row col-equal-height">
 	 		<table>
-<!-- 	 			<thead>
-		 			<tr>
+	 			<!-- <thead> -->
+<!-- 		 			<tr>
 			 			<th>Nom</th>
 			 			<th>Prénom</th>
 			 			<th>Pseudonyme</th>
-		 			</tr>
-				</thead> -->
-				<tbody>
+		 			</tr> -->
+				<!-- </thead> -->
+				<!-- <tbody> -->
 					<?php 
 						// creation de la liste avec un foreach et chaque l = un artiste
 						$liste = Artist::listArtist();
@@ -152,14 +153,8 @@ include('header.php');
 						 	<tr>
 							 	<td>
 							 		<?= $l->getIdentity(); ?>
-							 	</td>
-<!-- 							 	<td>
-							 		<?= $l->getName(); ?>
-							 	</td>
-							 	<td>
-							 		<?= $l->getAlias(); ?>
-							 	</td> -->
-							 	<td>
+<!-- 							 	</td> -->
+
 							 		<div class="form-group">
 							 			<!-- liste deroulante -->
 							 			<select class="form-control actionArtist">
@@ -173,7 +168,7 @@ include('header.php');
 						<?php 
 							};
 						?>
-					</tbody>
+					<!-- </tbody> -->
 	 		</table>
 		</div>
  	</section>

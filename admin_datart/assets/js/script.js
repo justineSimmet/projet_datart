@@ -367,3 +367,15 @@ $('.datepicker').datepicker({
 			});
 		};
 	});	
+
+
+
+/*************************************************************************
+** ACTION ACTUALISER AU CLIC DE LA MODIF DES TEXTES
+**************************************************************************/
+
+	if($('#insert-artist-text').length == 1 || $('#update-artist-text').length == 1){
+		$.post(window.location.href, function(response){
+			$(".formText_formPhoto").html($(response).find(".formText_formPhoto").html());
+		});
+	};

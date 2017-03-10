@@ -235,7 +235,7 @@ soit à faire un update des données de l'id reçue
 					'".addslashes($this->surname)."',
 					'".addslashes($this->name)."',
 					'".addslashes($this->alias)."',
-					'".addslashes($this->photographic_portrait)."',
+					NULL,
 					now(),
 					TRUE 
 				)"); // le true est pour le $visible qui retourne un booléen
@@ -252,8 +252,7 @@ soit à faire un update des données de l'id reçue
 				UPDATE artist SET 
 				surname = '".addslashes($this->surname)."',
 				name = '".addslashes($this->name)."',
-				alias = '".addslashes($this->alias)."',
-				photographic_portrait = '".addslashes($this->photographic_portrait)."'
+				alias = '".addslashes($this->alias)."'
 				WHERE id = '".$this->id."'
 				");
 			// je ne fais pas d'update sur creation_date car on a pas besoin de la changer et la même sur le visible
@@ -278,7 +277,7 @@ soit à faire un update des données de l'id reçue
 
 
 	static function listArtist(){
-		$listArtist = requete_sql("SELECT id FROM artist WHERE visible = TRUE");
+		$listArtist = requete_sql("SELECT id FROM artist WHERE visible = TRUE ORDER BY name, alias ASC");
 		$listArtist = $listArtist->fetchAll(PDO::FETCH_ASSOC);
 		$tabList = array();
 		foreach ($listArtist as $artist){
@@ -340,97 +339,87 @@ soit à faire un update des données de l'id reçue
 			</ul>
 			<div class="tab-content">
 				<div id="french" class="tab-pane fade in active">
-				<fieldset <?= empty($this->getId()) || $this->getVisible() == FALSE?'disabled':''; ?>  >
+					<fieldset <?= empty($this->getId()) || $this->getVisible() == FALSE?'disabled':''; ?>>
 						<div class="form-group form-group-lg">
-							<label for="biographyfrench" class="control-label col-lg-3 col-md-4 col-sm-4">Biographie :</label>
+							<label for="biographyFrench" class="control-label col-lg-3 col-md-4 col-sm-4">Biographie :</label>
 							<div class="col-lg-9 col-md-7 col-sm-7">
-							<textarea name="biographyFrench" class="form-control" value="<?= !empty($this->getTextualContent())?$this->getFrenchBiography()->getContent():'' ?>"> 
-							</textarea>
+								<textarea name="biographyFrench" class="form-control"><?= !empty($this->getTextualContent())?$this->getFrenchBiography()->getContent():'';?></textarea>
 							</div>
 						</div>
 						<div class="form-group form-group-lg">
-							<label for="notefrench" class="control-label col-lg-3 col-md-4 col-sm-4">Mot de l'artiste :</label>
+							<label for="noteFrench" class="control-label col-lg-3 col-md-4 col-sm-4">Mot de l'artiste :</label>
 							<div class="col-lg-9 col-md-7 col-sm-7">
-							<textarea name="noteFrench" class="form-control"><?= !empty($this->getTextualContent())?$this->getFrenchNote()->getContent():'' ?></textarea>
+								<textarea name="noteFrench" class="form-control"><?= !empty($this->getTextualContent())?$this->getFrenchNote()->getContent():'';?></textarea>
 							</div>
 						</div>
-				</fieldset>
+					</fieldset>
 				</div>
-
 				<div id="english" class="tab-pane fade">
 					<fieldset <?= empty($this->getId()) || $this->getVisible() == FALSE?'disabled':''; ?>>
 						<div class="form-group form-group-lg">
-							<label for="biographyEnglish" class="control-label col-lg-3 col-md-4 col-sm-4">Biographie :</label>
+							<label for="biographyEnglish" class="control-label col-lg-3 col-md-4 col-sm-4"erman>Biographie :</label>
 							<div class="col-lg-9 col-md-7 col-sm-7">
-							<textarea name="categoryEnglish" class="form-control" value="<?= !empty($this->getTextualContent())?$this->getEnglishBiography()->getContent():'' ?>" >
-							</textarea>
+								<textarea name="biographyEnglish" class="form-control"><?= !empty($this->getTextualContent())?$this->getEnglishBiography()->getContent():'';?></textarea>
 							</div>
 						</div>
 						<div class="form-group form-group-lg">
 							<label for="noteEnglish" class="control-label col-lg-3 col-md-4 col-sm-4">Mot de l'artiste :</label>
 							<div class="col-lg-9 col-md-7 col-sm-7">
-							<textarea name="noteEnglish" class="form-control"><?= !empty($this->getTextualContent())?$this->getEnglishNote()->getContent():'' ?></textarea>
+								<textarea name="noteEnglish" class="form-control"><?= !empty($this->getTextualContent())?$this->getEnglishNote()->getContent():'';?></textarea>
 							</div>
 						</div>
 					</fieldset>
 				</div>
-
 				<div id="german" class="tab-pane fade">
 					<fieldset <?= empty($this->getId()) || $this->getVisible() == FALSE?'disabled':''; ?>>
 						<div class="form-group form-group-lg">
 							<label for="biographyGerman" class="control-label col-lg-3 col-md-4 col-sm-4">Biographie :</label>
 							<div class="col-lg-9 col-md-7 col-sm-7">
-							<textarea name="biographyGerman" class="form-control" value="<?= !empty($this->getTextualContent())?$this->getGermanCategory()->getContent():'' ?>" >
-							</textarea>
+								<textarea name="biographyGerman" class="form-control"><?= !empty($this->getTextualContent())?$this->getGermanBiography()->getContent():'';?></textarea>
 							</div>
 						</div>
 						<div class="form-group form-group-lg">
 							<label for="noteGerman" class="control-label col-lg-3 col-md-4 col-sm-4">Mot de l'artiste :</label>
 							<div class="col-lg-9 col-md-7 col-sm-7">
-							<textarea name="noteGerman" class="form-control"><?= !empty($this->getTextualContent())?$this->getGermanNote()->getContent():'' ?>
-							</textarea>
+								<textarea name="noteGerman" class="form-control"><?= !empty($this->getTextualContent())?$this->getGermanNote()->getContent():'';?></textarea>
 							</div>
 						</div>
 					</fieldset>
 				</div>
-
 				<div id="russian" class="tab-pane fade">
 					<fieldset <?= empty($this->getId()) || $this->getVisible() == FALSE?'disabled':''; ?>>
 						<div class="form-group form-group-lg">
 							<label for="biographyRussian" class="control-label col-lg-3 col-md-4 col-sm-4">Biographie :</label>
 							<div class="col-lg-9 col-md-7 col-sm-7">
-							<textarea name="biographyRussian" class="form-control" value="<?= !empty($this->getTextualContent())?$this->getRussianBiography()->getContent():'' ?>" >
-							</textarea>
+								<textarea name="biographyRussian" class="form-control"><?= !empty($this->getTextualContent())?$this->getRussianBiography()->getContent():'';?></textarea>
 							</div>
 						</div>
 						<div class="form-group form-group-lg">
 							<label for="noteRussian" class="control-label col-lg-3 col-md-4 col-sm-4">Mot de l'artiste :</label>
 							<div class="col-lg-9 col-md-7 col-sm-7">
-							<textarea name="noteRussian" class="form-control"><?= !empty($this->getTextualContent())?$this->getRussianNote()->getContent():'' ?></textarea>
+								<textarea name="noteRussian" class="form-control"><?= !empty($this->getTextualContent())?$this->getRussianNote()->getContent():'';?></textarea>
 							</div>
 						</div>
 					</fieldset>
 				</div>
-
 				<div id="chinese" class="tab-pane fade">
 					<fieldset <?= empty($this->getId()) || $this->getVisible() == FALSE?'disabled':''; ?> >
 						<div class="form-group form-group-lg">
 							<label for="biographyChinese" class="control-label col-lg-3 col-md-4 col-sm-4">Biographie :</label>
 							<div class="col-lg-9 col-md-7 col-sm-7">
-							<textarea name="biographyChinese" class="form-control" value="<?= !empty($this->getTextualContent())?$this->getChineseBiography()->getContent():'' ?>" >
-							</textarea>
+								<textarea name="biographyChinese" class="form-control"><?= !empty($this->getTextualContent())?$this->getChineseBiography()->getContent():'';?></textarea>
 							</div>
 						</div>
 						<div class="form-group form-group-lg">
 							<label for="noteChinese" class="control-label col-lg-3 col-md-4 col-sm-4">Mot de l'artiste :</label>
 							<div class="col-lg-9 col-md-7 col-sm-7">
-							<textarea name="noteChinese" class="form-control"><?= !empty($this->getTextualContent())?$this->getChineseNote()->getContent():'' ?></textarea>
+								<textarea name="noteChinese" class="form-control"><?= !empty($this->getTextualContent())?$this->getChineseNote()->getContent():'';?></textarea>
 							</div>
 						</div>
-					</fieldset>				
+					</fieldset>
 				</div>
-				<input type="hidden" name="id" value="<?= isset($this)?$this->getId():'' ?>">
-				<input type="submit" value="<?= $action; ?>" class="btn btn-default pull-right" <?= !empty($this->getId()) &&  $this->getVisible() == FALSE?'disabled':''; ?> />
+				<input type="hidden" name="artistId" value="<?= isset($this)?$this->getId():'' ?>">
+				<input type="submit" value="<?= $action; ?>" class="btn btn-default pull-right" <?= empty($this->getId()) &&  $this->getVisible() == FALSE?'disabled':''; ?> />
 			</div>
 		</form>	
 
@@ -442,13 +431,13 @@ soit à faire un update des données de l'id reçue
 	?>
 		<form action=<?= $target ?> method="POST" enctype="multipart/form-data">
 			<fieldset <?= !empty($this->getId()) && $this->getVisible() == FALSE?'disabled':''; ?> >
-				<label for="titre">Titre de la photo (max. 50 caractères) :</label><br />
-     			<input type="text" name="titre" value="" id="titre" /><br />
 				<label for="file">Fichier (JPG | max. 2 Mo) :</label><br>
-				<input type="hidden" name="MAX_FILE_SIZE" value="2097152" />
-				<input type="file" name="photo" <?= empty($this->getId()) || $this->getVisible() == FALSE?'disabled':''; ?> />
+				<input type="hidden" name="taille Maxi" value="2097152" />
+				<input type="file" name="fichier" <?= empty($this->getId()) || $this->getVisible() == FALSE?'disabled':''; ?> />
 			</fieldset>
-			<input type="submit" name="upload" <?= !empty($this->getId()) && $this->getVisible() == FALSE?'disabled':''; ?>/>
+			<input type="hidden" name="action" value="addArtistPicture">
+			<input type="hidden" name="artistId" value="<?= isset($this)?$this->getId():'' ?>">
+			<input type="submit" value="<?= $action; ?>" class="btn btn-default pull-right" <?= empty($this->getId()) && $this->getVisible() == FALSE?'disabled':''; ?>/>
 		</form>	
 	<?php
 
@@ -564,15 +553,20 @@ function checkTrad($language){
 ***************************************************************************/
 
 	function deleteArtist(){
-		$delete = requete_sql("DELETE FROM artist WHERE id='".$this->id."'");
-		// $deleteText = requete_sql("DELETE * FROM textual_content_artist WHERE id='".$this->id."'");
-		if ($delete) {
-			return TRUE;
+		$deleteText = requete_sql("DELETE FROM textual_content_artist WHERE artist_id='".$this->id."'");
+		if ($deleteText) {
+			$delete = requete_sql("DELETE FROM artist WHERE id='".$this->id."'");
+		
+			if ($delete) {
+				return TRUE;
+			}
+			else{
+				return FALSE;
+			}
 		}
 		else{
 			return FALSE;
-		}
-
+		}	
 	}
 
 
@@ -595,16 +589,25 @@ function checkTrad($language){
 		return $list;
 	}
 
-
 /***************************************************************************
 
 
-							recuperation des photos
+							Upload photo
 
 
 ***************************************************************************/
 
+	function synchroPicture(){
 
+		$updatePicture = requete_sql("UPDATE artist SET photographic_portrait = '".$this->photographic_portrait."' WHERE id = '".$this->id."'");
+		
+		if ($updatePicture) {
+			return TRUE;
+		}
+		else{
+			return FALSE;
+		}
+	}
 
 }
 
