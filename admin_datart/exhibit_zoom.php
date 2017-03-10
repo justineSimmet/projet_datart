@@ -658,6 +658,7 @@ include('header.php');
 							<div class="col-sm-12">
 							<div id="exhibitLinkedArtwork">
 							<?php
+								if (isset($targetExhibit)) {
 								foreach ($targetExhibit->getArtistExposed() as $artist) {
 									echo '<h3>'.$artist->getIdentity().'</h3>';
 									echo '<div class="form-group form-group-lg">';
@@ -671,11 +672,18 @@ include('header.php');
 										echo '<p><a href="artwork_zoom.php?artist='.$artist->getId().'">Ajouter une oeuvre</a></p>';
 										echo '</div>';
 								}
+								}
 							?>
 							</div>
+							<?php
+								if(isset($targetExhibit)){
+							?>
 								<div class="form-group clearfix" >
 									<button class="btn btn-default pull-right" id="btn-selectedArtwork" data-exhibitId="<?= $targetExhibit->getId(); ?>" id>Enregistrer</button>
 								</div>
+							<?php
+								}
+							?>
 							</div>
 						</div>
 					</section>
