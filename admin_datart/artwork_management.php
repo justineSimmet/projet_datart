@@ -7,6 +7,75 @@ require_once('classes/exhibit.php');
 require_once('includes/include.php');
 
 $locationTitle = 'Gestion des Oeuvres';
+
+if (isset($_POST['targetId'])) {
+    $targetArtwork = new Artwork($_POST['targetId']);
+    $targetArtist = new Artist($targetArtwork->getArtistId());
+};
+
+
+if (isset($_POST['targetId']) && isset($_POST['action']) ) {
+    if ($_POST['action'] == 'hide') {
+        $targetArtwork = new Artwork($_POST['targetId']);
+        $hide = $targetArtwork->hideArtwork();
+        if ($hide) {
+            $actionResultat = '<div class="alert alert-success alert-dismissable"s>
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>Vous venez de supprimer l\'oeuvre "'.$targetArtwork->getTitle().'"" de '. $targetArtist->getIdentity().'. </strong>
+                </div>';
+        }
+        else{
+            $actionResultat = '<div class="alert alert-danger alert-dismissable">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>Erreur !</strong> L\'oeuvre '.$targetArtwork->getTitle().' n\'a pas été supprimée.
+            </div>';
+        }
+    }
+    elseif($_POST['action'] == 'publish'){
+        $targetArtwork = new Artwork($_POST['targetId']);
+        $publish = $targetArtwork->publishArtwork();
+        if ($publish) {
+            $actionResultat = '<div class="alert alert-success alert-dismissable"s>
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>Vous venez de re-publier l\'oeuvre '.$targetArtwork->getTitle().' . </strong>
+                </div>';
+        }
+        else{
+            $actionResultat = '<div class="alert alert-danger alert-dismissable">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>Erreur !</strong> L\'oeuvre '.$targetArtwork->getTitle().' n\'a pas pu être re-publiée.
+            </div>';
+        }
+    }
+    elseif($_POST['action'] == 'delete'){
+        $targetArtwork = new Artwork($_POST['targetId']);
+        $check = $currentUser->passwordCheck($_POST['password']);
+        if ($check) {
+            $delete = $targetArtwork->deleteArtwork();
+            if ($delete) {
+                $actionResultat = '<div class="alert alert-success alert-dismissable">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>Vous venez de supprimer définitivement l\'oeuvre '.$targetArtwork->getTitle().'. </strong>
+                </div>';
+            }
+            else{
+                $actionResultat = '<div class="alert alert-danger alert-dismissable">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>Erreur !</strong> L\'oeuvre '.$targetArtwork->getTitle().' n\'a pas été supprimée.
+                </div>';
+            }
+        }
+        else{
+            $actionResultat = '<div class="alert alert-danger alert-dismissable">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>Votre mot de passe est incorrect.</strong> Vous ne pouvez pas supprimer l\'oeuvre '.$targetArtwork->getTitle().'.
+            </div>';
+        }
+    
+    }
+}
+
+
 include('header.php');
 ?>
 
@@ -27,7 +96,7 @@ include('header.php');
         	<div class="modal-body">
         		<p> Vous êtes sur le point de supprimer l'oeuvre <?= isset($targetArtwork)?$targetArtwork->getTitle():''; ?>. </p>
                 <p> Voulez-vous confirmer cette action ?</p>
-                <form action="exhibit_management.php" method="POST">
+                <form action="<?= URL_ADMIN; ?>artwork_management.php" method="POST">
 	                <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
 	                <input type="hidden" name="targetId" value="<?= isset($targetArtwork)?$targetArtwork->getId():'' ; ?>" />
 	                <input type="hidden" name="action" value="hide" />
@@ -52,7 +121,7 @@ include('header.php');
         	<div class="modal-body">
         		<p> Vous êtes sur le point de supprimer <strong>définitivement</strong> l'oeuvre <?= isset($targetArtwork)?$targetArtwork->getTitle():''; ?>. </p>
                 <p> Pour confirmer cette action, merci de saisir votre mot de passe</p>
-                <form action="exhibit_management.php" method="POST">
+                <form action="?= URL_ADMIN; ?>artwork_management.php" method="POST">
 	                <label for="password">Mot de passe :</label>
 	                <input type="password" name="password" placeholder="Votre mot de passe"  required />
 	                <input type="hidden" name="action" value="delete" />
@@ -87,7 +156,7 @@ include('header.php');
                                     <div class="form-group">
                                         <label for="actions-artwork" class="control-label col-sm-4">Actions :</label>
                                         <div class="col-sm-8">
-                                            <select name="actions-expo" class="form-control actionArtworkt">
+                                            <select name="actions-artwork" class="form-control actionArtworkt">
                                                 <option> --- </option>
                                                 <option value="update" data-id="<?= $artwork->getId(); ?>">Voir / Modifier</option>
                                                 <option value="hide" data-id="<?= $artwork->getId(); ?>" >Supprimer</option>
@@ -97,7 +166,7 @@ include('header.php');
                                 </form>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row table-artwork">
                             <div class="col-sm-12">
                                 <div class="table-responsive">
                                 <table class="table text-center">
@@ -162,7 +231,10 @@ include('header.php');
 	<div class="col-lg-3" id="hiddenArtworkList">
         <h2>Oeuvres en cours de suppression</h2>
         <section>
-
+        <?php
+            $listHidden = Artwork::listHiddenArtwork();
+            var_dump($listHidden);
+        ?>
         </section>
 	</div>
     <?php

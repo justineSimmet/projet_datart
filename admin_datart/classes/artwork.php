@@ -185,6 +185,62 @@ class Artwork{
 
 /******************************************************
 **
+** CACHER L'OEUVRE AUX UTILISATEURS BASIQUES
+**
+******************************************************/
+
+	function hideArtwork(){
+		$this->setVisible(FALSE);
+		$res = requete_sql("UPDATE artwork SET visible = '".$this->visible."' WHERE id = '".$this->id."' ");
+		if ($res) {
+			return TRUE;
+		}
+		else{
+			return FALSE;
+		}
+	}
+
+/******************************************************
+**
+** RENDRE VISIBLE L'OEUVRE AUX UTILISATEURS BASIQUES
+**
+******************************************************/
+
+	function publishArtwork(){
+		$this->setVisible(TRUE);
+		$res = requete_sql("UPDATE artwork SET visible = ".$this->visible." WHERE id = '".$this->id."' ");
+		if ($res) {
+			return TRUE;
+		}
+		else{
+			return FALSE;
+		}
+	}
+	
+
+/******************************************************
+**
+** SUPPRIMER DEFINITIVEMENT L'OEUVRE
+**
+******************************************************/
+
+	function deleteArtwork(){
+		$cleanText = requete_sql("DELETE FROM textual_content_artwork WHERE artwork_id ='".$this->id."' ");
+		if ($cleanText) {
+			$delete = requete_sql("DELETE FROM artwork WHERE id ='".$this->id."' ");
+			if ($delete) {
+				return TRUE;
+			}
+			else{
+				return FALSE;
+			}
+		}
+		else{
+			return FALSE;
+		}
+	}
+/******************************************************
+**
 ** FORMULAIRE
 ** Infos générales de l'oeuvre
 **
@@ -259,11 +315,41 @@ class Artwork{
 		$listArtist = Artist::listArtist();
 		$list = array();
 		foreach ($listArtist as $artist) {
-			if (!empty($artist->getArtwork()) && $artist->getVisible() == TRUE ) {
+			if (!empty($artist->getArtwork()) ){
 				array_push($list, $artist);
 			}
 		}
 		return $list;
+	}
+
+	static function listHiddenArtwork(){
+		$res = requete_sql("SELECT GROUP_CONCAT(artwork.id) AS artwork, artist.id AS artiste FROM artwork LEFT JOIN artist ON artist.id = artwork.artist_id WHERE artwork.visible = FALSE OR artist.visible = FALSE GROUP BY artiste");
+		$hidden = $res->fetchAll(PDO::FETCH_ASSOC);
+		$list = array();
+		foreach ($hidden as $key => $value) {
+			$artist = new Artist($value['artiste']);
+			if(strpos($value['artwork'],',') != FALSE ){
+				$id = explode(',', $value['artwork']);
+				$listArtwork = array();
+				foreach ($id as $id) {
+					$artwork = new Artwork($id);
+					array_push($listArtwork, $artwork);
+				}
+				$list[$artist->getIdentity()][$key] = $listArtwork;
+			}
+			else{
+				$artist = new Artist($value['artiste']);
+				$artwork = new Artwork($value['artwork']);
+				$list[$artist->getIdentity()][$key] = $artwork;
+			}
+		}
+		var_dump($hidden);
+		var_dump($list);
+		/*foreach ($hidden as $key => $value) {
+			$list[$value['artiste']][$key] = $value;
+		}*/
+		/*$listHidden = ksort($list, SORT_NUMERIC);
+		return $listHidden;*/
 	}
 
 }
