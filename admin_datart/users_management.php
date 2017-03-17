@@ -13,54 +13,69 @@ if (isset($_POST['targetUser'])) {
 
 //INSERTIONS EN BASE DE DONNEE DU FORMULAIRE
 if(isset($_POST['public_name'])){
-	//Pour être plus précis qu'avec un simple isset $targetUser, je teste si l'id renvoyé par le formulaire n'est pas vide. Si c'est le cas, je fais un update.
-	if(!empty($_POST['id'])){
-		$targetUser = new User($_POST['id']);
-		$targetUser->setPublicName($_POST['public_name']);
-		$targetUser->setPublicSurname($_POST['public_surname']);
-		$targetUser->setFunction($_POST['function']);
-		$targetUser->setLogin($_POST['login']);
-		$targetUser->setEmailAdress($_POST['email']);
-		$targetUser->setStatus($_POST['status']);
-		$updateUser = $targetUser->synchroDb('', '');
-
-		
-			if ($updateUser) {
-				$actionResultat = '<div class="alert alert-success alert-dismissable" id="user-edited">
+	//VERIFICATION PHP DES DONNEES ENVOYEES
+	if( empty(trim($_POST['public_name'])) || empty(trim($_POST['public_surname'])) || empty(trim($_POST['function'])) || empty(trim($_POST['email'])) ){
+		$actionResultat = '<div class="alert alert-danger alert-dismissable">
 				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-				<strong>Félicitation</strong> L\'utilisateur a bien été modifié. Merci de patienter, un e-mail de confirmation est en cours d\'envoi.
+				<p><strong>Erreur !</strong> Il est nécéssaire de remplir tout les champs du formulaire.<p>
 				</div>';
-			}
-			else{
-				$actionResultat = '<div class="alert alert-danger alert-dismissable">
-				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-				<strong>Erreur</strong> L\'utilisateur n\'a pas été modifié.
-				</div>';
-		    }
 	}
-	//Si l'id est vide, je mets en place un insert.
 	else{
-	$newUser = new User();
-	$newUser->setPublicName($_POST['public_name']);
-	$newUser->setPublicSurname($_POST['public_surname']);
-	$newUser->setFunction($_POST['function']);
-	$newUser->setLogin($_POST['login']);
-	$newUser->setEmailAdress($_POST['email']);
-	$newUser->setStatus($_POST['status']);
-	$addUser = $newUser->synchroDb('','');
-		if ($addUser) {
-			$actionResultat = '<div class="alert alert-success alert-dismissable" id="user-added">
-			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-			<strong>Félicitation</strong> L\'utilisateur a bien été enregistré. Merci de patienter, un e-mail de confirmation est en cours d\'envoi.
-			</div>';
+		if (filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) == FALSE) {
+			$actionResultat = '<div class="alert alert-danger alert-dismissable">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<p><strong>Erreur !</strong> Vous devez saisir une adresse mail valide.<p>
+				</div>';
 		}
 		else{
-			$actionResultat = '<div class="alert alert-danger alert-dismissable">
-			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-			<strong>Erreur</strong> L\'utilisateur n\'a pas été enregistré.
-			</div>';
-		};
-	};
+			if(!empty($_POST['id'])){
+				$targetUser = new User($_POST['id']);
+				$targetUser->setPublicName($_POST['public_name']);
+				$targetUser->setPublicSurname($_POST['public_surname']);
+				$targetUser->setFunction($_POST['function']);
+				$targetUser->setLogin($_POST['login']);
+				$targetUser->setEmailAdress($_POST['email']);
+				$targetUser->setStatus($_POST['status']);
+				$updateUser = $targetUser->synchroDb('', '');
+		
+				if ($updateUser) {
+					$actionResultat = '<div class="alert alert-success alert-dismissable" id="user-edited">
+					<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+					<p><strong>Félicitation !</strong> L\'utilisateur a bien été modifié. Merci de patienter, un e-mail de confirmation est en cours d\'envoi.</p>
+					</div>';
+				}
+				else{
+					$actionResultat = '<div class="alert alert-danger alert-dismissable">
+					<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+					<p><strong>Erreur !</strong> L\'utilisateur n\'a pas été modifié.</p>
+					</div>';
+		   		 }
+			}
+			else{
+				$newUser = new User();
+				$newUser->setPublicName($_POST['public_name']);
+				$newUser->setPublicSurname($_POST['public_surname']);
+				$newUser->setFunction($_POST['function']);
+				$newUser->setLogin($_POST['login']);
+				$newUser->setEmailAdress($_POST['email']);
+				$newUser->setStatus($_POST['status']);
+				$addUser = $newUser->synchroDb('','');
+
+				if ($addUser) {
+					$actionResultat = '<div class="alert alert-success alert-dismissable" id="user-added">
+					<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+					<p><strong>Félicitation !</strong> L\'utilisateur a bien été enregistré. Merci de patienter, un e-mail de confirmation est en cours d\'envoi.</p>
+					</div>';
+				}
+				else{
+					$actionResultat = '<div class="alert alert-danger alert-dismissable">
+					<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+					<p><strong>Erreur !</strong> L\'utilisateur n\'a pas été enregistré.</p>
+					</div>';
+				};
+			};			
+		}
+	}
 };
 
 
@@ -70,13 +85,13 @@ if(isset($_POST['action']) && $_POST['action'] == 'resetPassword'){
 	if ($resetPassword) {
 		$actionResultat = '<div class="alert alert-success alert-dismissable" id="user-password">
 		<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-		<strong>Vous venez de réinitialiser le mot de passe de '.$targetUser->getPublicName().' '.$targetUser->getPublicSurname().'.</strong> Merci de patienter, un e-mail de confirmation est en cours d\'envoi.
+		<p><strong>Vous venez de réinitialiser le mot de passe de '.$targetUser->getPublicName().' '.$targetUser->getPublicSurname().'.</strong> Merci de patienter, un e-mail de confirmation est en cours d\'envoi.</p>
 		</div>';
 	}
 	else{
 		$actionResultat = '<div class="alert alert-danger alert-dismissable">
 		<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-		<strong>Erreur !</strong> le mot de passe de l\'utilisateur n\'a pas pu être réinitialiser.
+		<p><strong>Erreur !</strong> le mot de passe de l\'utilisateur n\'a pas pu être réinitialiser.</p>
 		</div>';
 	}
 }
@@ -87,12 +102,12 @@ if(isset($_POST['password'])){
 	if ($delete) {
 		$actionResultat = '<div class="alert alert-success alert-dismissable" >
 		<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-		<strong>Félicitation</strong> L\'utilisateur a bien été supprimé.</div>';			
+		<p><strong>Félicitation !</strong> L\'utilisateur a bien été supprimé.</p></div>';			
 	}
 	else{
 		$actionResultat = '<div class="alert alert-danger alert-dismissable">
 		<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-		<strong>Erreur</strong> Votre mot de passe ne correspond pas. L\'utilisateur n\'a pas pu été supprimé.
+		<p><strong>Erreur !</strong> Votre mot de passe ne correspond pas. L\'utilisateur n\'a pas pu été supprimé.</p>
 		</div>';			
 	}
 }
@@ -104,8 +119,10 @@ include('header.php');
 ?>
 
 
-<div class="row" id="alert-area">
-	<?= !empty($actionResultat)?$actionResultat:''; ?>
+<div class="row"">
+	<div class="col-xs-12 text-center" id="alert-area">
+		<?= !empty($actionResultat)?$actionResultat:''; ?>
+	</div>
 </div>
 
 <div id="modalDeleteUser" class="modal fade">
@@ -119,28 +136,29 @@ include('header.php');
             <?php if(isset($targetUser)){
             	if($targetUser->getStatus() == 0){
             		?>
-	                <p>Vous ne pouvez pas supprimer un administrateur !</p>
+	                <p class="alert-red">Vous ne pouvez pas supprimer un administrateur !</p>
 	                <p>Si vous souhaitez vraiment supprimer le compte de <?= $targetUser->getPublicName(); ?> <?= $targetUser->getPublicSurname(); ?>, vous devez d'abord changer son statut.</p>
             		<?php
             	}
             	else{
             		?>
-            		<p> Vous êtes sur le point de supprimer définitivement le compte de <?= $targetUser->getPublicName(); ?> <?= $targetUser->getPublicSurname(); ?>.</p>
+            		<p class="alert-red"> Vous êtes sur le point de supprimer définitivement le compte de <?= $targetUser->getPublicName(); ?> <?= $targetUser->getPublicSurname(); ?>.</p>
                		<p> Pour valider la suppression, veuillez saisir votre mot de passe.</p>
 
-                	<form action="users_management.php" method="post">
-
-                		<label for="inputPassword">Password</label>
-                		<input type="password" name="password" placeholder="Votre mot de passe"  required />
+                	<form action="users_management.php" method="post" class="form-inline clearfix">
+                		<div class="form-group">
+	                		<label for="password">Mot de passe :</label>
+	                		<input type="password" name="password" placeholder="Votre mot de passe" class="form-control" required />
+	                	</div>
                 		<input type="hidden" value="<?= isset($targetUser)?$targetUser->getId():';' ?>" name="targetId">
-                		<input type="submit" value="Supprimer" />
+                		<input type="submit" value="Supprimer" class="btn btn-danger pull-right" />
 					</form>
             		<?php
             	}
             }?>
 			</div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
             </div>
         </div>
     </div>
@@ -198,17 +216,21 @@ include('header.php');
 
 			</table>
 			</div>
+			<div>
+				<a href="<?= URL_ADMIN ?>users_management.php" class="btn btn-default btn-lg btn-custom"><span class="fa fa-plus-circle"></span> Ajouter un utilisateur</a>
+			</div>
 		</section>
 	</div>
 
 	<div class="col-md-3 col-xs-12">
+
 		<section>
 		<div id="formArea">
 		 <?php
 			if(isset($targetUser)){
-				$targetUser->form($_SERVER['PHP_SELF'], 'Modifier', 'Modifier un utilisateur :', 'edit');
+				$targetUser->form(URL_ADMIN.'users_management.php', 'Modifier', 'Modifier un utilisateur :', 'edit');
 				?>
-				<form action="<?= $_SERVER['PHP_SELF']; ?>" method="POST">
+				<form action="<?= URL_ADMIN; ?>users_management.php" method="POST" id="reset-password">
 					<input type="hidden" name="action" value="resetPassword">
 					<input type="hidden" name="id" value="<?= $targetUser->getId(); ?>" />
 					<input type="submit" value="Réinitialiser le mot de passe" class="btn btn-warning btn-md" />
@@ -218,7 +240,7 @@ include('header.php');
 			else{
 
 				$user = new User();
-				$user->form($_SERVER['PHP_SELF'],'Créer', 'Créer un utilisateur :', 'add');
+				$user->form(URL_ADMIN.'users_management.php','Créer', 'Créer un utilisateur :', 'add');
 
 			}
 		?>

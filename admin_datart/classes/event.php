@@ -162,11 +162,11 @@ class Event{
 					</div>
 					<div class="form-group form-group-lg">
 						<label for="date" class="control-label">Date de l'évènement :</label>
-						<input type="date" name="date" id="datepicker" class="form-control" value="<?= !empty($this->getId())?dateFormat($this->getEventDate()):''; ?>" required placeholder="ex. : 24/02/2017" />
+						<input type="text" name="date" id="datepicker" class="form-control" value="<?= !empty($this->getId())?dateFormat($this->getEventDate()):''; ?>" required placeholder="ex. : 24/02/2017" />
 					</div>
 					<div class="form-group form-group-lg">
 						<label for="start-time" class="control-label">Horaire de l'évènement :</label>
-						<input type="time" name="start-time" class="form-control" value="<?= !empty($this->getId())?timeFormat($this->getEventStartTime()):''; ?>" placeholder="ex. : 14h30" />
+						<input type="text" name="start-time" class="form-control" value="<?= !empty($this->getId())?timeFormat($this->getEventStartTime()):''; ?>" placeholder="ex. : 14h30" />
 					</div>
 
 					<input type="hidden" name="id" value="<?= !empty($this->getId())?$this->getId():''; ?>">

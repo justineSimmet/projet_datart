@@ -1,0 +1,210 @@
+#top-nav{
+	background-color: $datart-gray;
+	height : 40px;
+
+	h1{
+		font-size: 1.563em;
+		color: #fff;
+		line-height: 40px;
+		margin: 0;
+	}
+
+	#top-nav-ul{
+		padding-right: 0;
+
+		li{
+			display: inline-block;
+			width: 50% ;
+			@include shadow(3px, 0, 3px, rgba(0,0,0,0.3), true);
+			@include transition(background-color 1.5s);
+
+			&:hover{
+				background-color: #41474A;
+			}
+
+			a{
+				display: block;
+				width: 100%;
+				padding-left: 10px;
+				font-size: 1.1em;
+				line-height: 40px;
+				color: #fff;
+				text-decoration: none;
+
+				span{
+					margin-right: 10px;
+				}
+			}
+		}
+	}
+}
+
+#main-nav{
+	position: fixed;
+	z-index: 1000;
+	top:40px;
+	left: 0;
+	bottom: 0;
+	background-color: #fff;
+	@include shadow(5px, 0, 5px, rgba(0,0,0,0.2), false);
+
+	.nav-logo{
+		padding: 15px;
+		background-color: $datart-red;
+	}
+
+	#main-nav-menu{
+		display: inline-block;
+		width: 100%;
+
+		li{
+			width: 100%;
+			border-bottom: 1px solid $datart-gray;
+			border-top: 1px solid #fff;
+
+			a{
+				position: relative;
+				display: block;
+				width: 100%;
+				padding: 10px;
+				color: $datart-gray;
+				text-decoration: none;
+
+				&:hover{
+					color: #fff;
+					@include gradRedToRed();
+
+					.link-plus{
+						color: #fff;
+					}
+				}
+
+				span{
+					margin-right: 5px;
+					margin-left: 5px;
+				}
+			}
+		}
+		.active-nav-link{
+			@extend a:hover;
+
+			.link-plus{
+				color: #fff;
+			}
+		}
+		.link-plus{
+			color: #d5313a;
+			position: absolute;
+			margin:auto;
+			right: 0; top: 50%;
+			transform: translate(-50%,-50%);
+		}
+		.nav-submenu{
+			display: none;
+			@include shadow(0, 5px, 5px, rgba(150,150,150,0.4), true);
+
+			li{
+				border-bottom: none;
+
+				&:hover{
+					border-bottom: none;
+				}
+
+				a{
+					font-size: 1em;
+					color: #000;
+					padding-left: 10%;
+					background-color: transparent;
+
+					&:hover{
+						color: $datart-red;
+					}
+
+					span{
+						color: $datart-red;
+					}
+				}
+
+				.active-nav-link{
+					@extend a;
+				}
+			}
+		}
+	}
+}
+
+//MEDIA QUERIES NAVIGATION
+@media screen and (max-width: 992px){
+	#main-container{
+		padding-top: 120px;
+	}
+
+	#main-nav{
+		max-height: 100px;
+		min-height: 100px;
+		top:0px;
+		bottom: initial;
+
+		.nav-logo{
+			position: relative;
+			display: block;
+			height: 100px;
+			background-color: $datart-red;
+
+			img{
+				position: absolute;
+				max-width: 95%;
+				min-width: 95%;
+    			margin: 0;
+    			position: absolute;
+    			top: 50%; left: 50%;
+    			transform: translate(-50%, -50%);
+			}
+		}
+
+		.btn-nav{
+			padding: 25px 0;
+			text-align: center;
+			font-size: 1.3em;
+			line-height: 1em;
+			cursor: pointer;
+			z-index: 1000;
+		}
+
+		#close-nav{
+		display: none;
+		}
+
+		.h1{
+			font-size: 1.8em;
+			line-height: 100px;
+			margin: 0;
+			color: $datart-gray;
+		}
+
+		#main-nav-menu{
+			display: none;
+			position: fixed;
+			top: 0; bottom: 0; left: 0;
+			padding-top: 100px;
+			margin-bottom: 0;
+			width: 35%;
+			background-color: #fff;
+			z-index: 500;
+		}
+	}
+
+	#background-nav{
+		display: none;
+		position: fixed;
+		top: 0; bottom: 0; left: 0; right: 0;
+		background-color: $datart-gray ;
+		opacity: 0.5;
+	}
+}
+
+@media screen and (max-width: 770px){
+	#main-nav h1{
+		display: none;
+	}
+}

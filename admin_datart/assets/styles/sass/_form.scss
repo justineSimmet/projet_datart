@@ -1,0 +1,73 @@
+.gutter-left{
+	margin-left: -15px;
+}
+
+.gutter-right{
+	margin-right: -15px;
+}
+
+@media screen and (max-width: 768px){
+	.gutter-left{
+		margin-right: -15px;
+		margin-left: -15px;
+	}
+
+	.gutter-right{
+		margin-right: -15px;
+		margin-left: -15px;
+	}
+}
+
+textarea{
+	min-width: 100%;
+	max-width: 100%;
+}
+
+fieldset textarea{
+	min-height: 200px;
+	height: 400px;
+}
+
+form select{
+	border-bottom: 1px solid;
+}
+
+form option{
+	padding: 5px;
+}
+
+
+.nav-tabs{
+	border-color: $datart-gray;
+
+	li.active > a {
+		border: 1px solid $datart-gray;
+		border-bottom-color: transparent;
+
+		&:hover{
+			cursor: pointer;
+		}
+	}
+
+	li > a {
+		background-color: #ede8e8;
+		border: 1px solid transparent;
+		border-bottom-color: $datart-gray;
+		color: $datart-gray;
+
+		&:hover{
+			background-color: $datart-gray;
+			border: 1px solid $datart-gray;
+			color: #ede8e8;
+			cursor: pointer;
+		}
+	}
+}
+
+.tab-content{
+	padding: 20px 5%;
+	border: 1px solid  $datart-gray;
+	border-top: none;
+	margin-bottom: 20px;
+	padding-bottom: 50px;
+}

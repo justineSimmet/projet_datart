@@ -1,7 +1,7 @@
 /*-----------------------------------------------------------------------------
 INITIALISATION TINYMCE
 ------------------------------------------------------------------------------*/
-var configTinyMce = {selector: 'textarea',
+var configTinyMce = {selector: '.textarea-avaible',
     				language: 'fr_FR',
     				menubar: false,
     				toolbar:'undo | redo | bold | italic | alignleft | aligncenter | alignright | cut | copy | paste',
@@ -38,7 +38,7 @@ GESTION LIEN ACTIFS
 // de classe .nav-submenu. Si c'est le cas, il va faire apparaître le 
 // lien imbriqué caché et cacher le picto + du lien parent.
 $(function() {
-	var locationPath = window.location.pathname.split( '/' ).pop();
+	var locationPath = window.location;
 	$("#main-nav-menu a").each(function(){
 		if($(this).attr("href") == locationPath){
 			$(this).addClass("active-nav-link");
@@ -149,6 +149,7 @@ MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
 
 
 	$('#end_date').datepicker({
+		minDate: new Date(getBeginDate()),
 		onSelect:function(selected){
 			$("#begin_date").datepicker("option","maxDate", selected);
 		}
@@ -282,18 +283,20 @@ MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
 				if (obj.response == 'success') {
 					var divSuccess ='<div class="alert alert-success alert-dismissable">'
 					+'<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'
-					+'<strong>Un email de confirmation a été envoyé.</strong>'
+					+'<p><strong>Un email de confirmation a été envoyé.</strong><p>'
 					+'</div>';
 
-					$('#alert-area').append(divSuccess);	
+					$('#alert-area').append(divSuccess);
+					$('.user-form').removeData();	
 				}
 				else{
 					var divError ='<div class="alert alert-danger alert-dismissable">'
 					+'<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'
-					+'<strong>Un email de confirmation n\'a pas pu être envoyé.</strong> Merci de vérifier l\'état de votre connexion'
+					+'<p><strong>Un email de confirmation n\'a pas pu être envoyé.</strong> Merci de vérifier l\'état de votre connexion</p>'
 					+'</div>';
 
 					$('#alert-area').append(divError);
+					$('.user-form').removeData();
 				}
 			},
 		});
@@ -328,18 +331,20 @@ MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
 				if (obj.response == 'success') {
 					var divSuccess ='<div class="alert alert-success alert-dismissable">'
 					+'<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'
-					+'<strong>Un email de confirmation a été envoyé.</strong>'
+					+'<p><strong>Un email de confirmation a été envoyé.</strong></p>'
 					+'</div>';
 
-					$('#alert-area').append(divSuccess);	
+					$('#alert-area').append(divSuccess);
+					$('.user-form').removeData();
 				}
 				else{
 					var divError ='<div class="alert alert-danger alert-dismissable">'
 					+'<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'
-					+'<strong>Un email de confirmation n\'a pas pu être envoyé.</strong> Merci de vérifier l\'état de votre connexion'
+					+'<p><strong>Un email de confirmation n\'a pas pu être envoyé.</strong> Merci de vérifier l\'état de votre connexion</p>'
 					+'</div>';
 
 					$('#alert-area').append(divError);
+					$('.user-form').removeData();
 				}
 			},
 		});
@@ -368,7 +373,7 @@ MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
 				if (obj.response == 'success') {
 					var divSuccess ='<div class="alert alert-success alert-dismissable">'
 					+'<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'
-					+'<strong>Un email de confirmation a été envoyé.</strong>'
+					+'<p><strong>Un email de confirmation a été envoyé.</strong></p>'
 					+'</div>';
 
 					$('#alert-area').append(divSuccess);	
@@ -376,7 +381,7 @@ MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
 				else{
 					var divError ='<div class="alert alert-danger alert-dismissable">'
 					+'<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'
-					+'<strong>Un email de confirmation n\'a pas pu être envoyé.</strong> Merci de vérifier l\'état de votre connexion'
+					+'<p><strong>Un email de confirmation n\'a pas pu être envoyé.</strong> Merci de vérifier l\'état de votre connexion</p>'
 					+'</div>';
 
 					$('#alert-area').append(divError);
@@ -416,79 +421,33 @@ MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
 
 
 	$('.actionArtist').on('change', function(){
-		if ($(this).val() == 'update'){
+		if ($(this).val() == 'update' || $(this).val() == 'show' ){
 			var artistId = $(this).children('option:selected').attr("data-id");
 			window.location.replace('artist_zoom?artist='+artistId);
 		}
-	});
-
-
-	$('.actionArtist').on('change', function(){
-		if ($(this).val() == 'delete'){
+		else if($(this).val() == 'hide'){
 			var artistId = $(this).children('option:selected').attr("data-id");
-			$.ajax({
-				method: 'POST',
-				data : {
-					targetId : artistId
-				},
-				success: function(data){
-					var newDoc = document.open("text/html", "replace");
-					newDoc.write(data);
-					newDoc.close();
-					$("#hideartist").modal('show')
-
-				}
+			$.post('artist_management.php',{ targetId : artistId} , function(response){
+				$("#hideartist").html($(response).find("#hideartist").html());
+				$("#hideartist").modal('show');
 			});
-		};
-	});	
-
-
-/*************************************************************************
-** ACTIONS SUR LA LISTE DEROULANTE DES ACTIONS SUR LES ARTISTES CACHES
-**************************************************************************/
-
-	$('.btn-delete').on('click', function(){
-			var artistId = $(this).attr("data-id");
-			$.ajax({
-				method: 'POST',
-				data : {
-						targetId : artistId
-				},
-				success: function(data){
-					var newDoc = document.open("text/html", "replace");
-					newDoc.write(data);
-					newDoc.close();
-					$("#deleteArtist").modal('show')
-
-				},
-			});
-		});	
-
-	$('.actionArtistAdmin').on('change', function(){
-		if ($(this).val() == 'show'){
+		}
+		else if($(this).val() == 'publish'){
 			var artistId = $(this).children('option:selected').attr("data-id");
-			window.location.replace('zoom_artist?artist='+artistId);
+			$.post('artist_management.php', {targetId : artistId, action : 'publish'}, function(response){
+				$("#artistManagementList").html($(response).find("#artistManagementList").html());
+				$("#alert-area").html($(response).find("#alert-area").html());
+			});
 		}
 	});
 
-		$('.actionArtistAdmin').on('change', function(){
-		if ($(this).val() == 'publish'){
-			var artistId = $(this).children('option:selected').attr("data-id");
-			$.ajax({
-				method: 'POST',
-				data : {
-					targetId : artistId,
-					action : 'publish'
-				},
-				success: function(data){
-					var newDoc = document.open("text/html", "replace");
-					newDoc.write(data);
-					newDoc.close();
-				}
+	$('.delete-artist').on('click', function(){
+			var artistId = $(this).attr("data-id");
+			$.post(window.location.href,{ targetId : artistId}, function(response){
+				$("#deleteArtist").html($(response).find("#deleteArtist").html());
+				$("#deleteArtist").modal('show');
 			});
-		};
-	});	
-
+		});	
 
 
 /*************************************************************************
@@ -561,6 +520,7 @@ MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
 	if($('#update-exhibit').length == 1){
 		$.post(window.location.href, function(response){
 			$("#exhibitMainInfo").html($(response).find("#exhibitMainInfo").html());
+			$("#exhibitEvent").html($(response).find("#exhibitEvent").html());
 		});
 	};
 

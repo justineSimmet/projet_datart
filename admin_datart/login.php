@@ -15,7 +15,7 @@ if(isset($_POST['login']) && isset($_POST['password'])) {
 	}
 	else{
 		$_SESSION['id'] = $log;
-		header('Location:index.php');
+		header('Location:'.URL_ADMIN.'index.php');
 	}
 }
 
@@ -28,10 +28,10 @@ if(isset($_POST['login']) && isset($_POST['password'])) {
   	<meta http-equiv="X-UA-Compatible" content="IE=edge">
  	<title>Connexion à l'application DATART / Grand Angle</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
- 	<link rel="stylesheet" type="text/css" href="assets/css/reset.css" />
- 	<link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css" />
- 	<link rel="stylesheet" type="text/css" href="assets/css/font-awesome.min.css" />
- 	<link rel="stylesheet" type="text/css" href="assets/css/style.css" />
+	<link rel="stylesheet" type="text/css" href="<?= URL_ASSETS ?>styles/css/reset.css" />
+ 	<link rel="stylesheet" type="text/css" href="<?= URL_ASSETS ?>styles/css/bootstrap.min.css" />
+ 	<link rel="stylesheet" type="text/css" href="<?= URL_ASSETS ?>styles/css/font-awesome.min.css" />
+ 	<link rel="stylesheet" type="text/css" href="<?= URL_ASSETS ?>styles/css/styles.css" />
  </head>
  <body>
 
@@ -46,10 +46,10 @@ if(isset($_POST['login']) && isset($_POST['password'])) {
 
 			<div class="row" id="login-img-container">
 				<div class="col-lg-6 col-md-6 col-sm-6">
-					<img src="assets/images/datart-rvb.png" alt="Logotype de l'application DATART" class="img-responsive" />
+					<img src="<?= URL_IMAGES ?>datart-rvb.png" alt="Logotype de l'application DATART" class="img-responsive" />
 				</div>
 				<div class="col-lg-6 col-md-6 col-sm-6">
-					<img src="assets/images/grand-angle-rvb.png" alt="Logotype de la galerie Grand Angle" class="img-responsive" />
+					<img src="<?= URL_IMAGES ?>grand-angle-rvb.png" alt="Logotype de la galerie Grand Angle" class="img-responsive" />
 				</div>
 			</div>
 
@@ -86,8 +86,7 @@ if(isset($_POST['login']) && isset($_POST['password'])) {
 	
 </div>
 
-<script type="text/javascript" src="assets/js/jquery-3.1.1.js"></script>
-<script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="assets/js/script.js"></script>
-</body>
+<script type="text/javascript" src="<?= URL_ASSETS ?>js/jquery-3.1.1.js"></script>
+<script type="text/javascript" src="<?= URL_ASSETS ?>js/bootstrap.min.js"></script>
+<script type="text/javascript" src="assets/<?= URL_ASSETS ?>
 </html>

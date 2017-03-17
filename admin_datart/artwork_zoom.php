@@ -32,7 +32,7 @@ if (isset($_POST['title'])){
 		$newArtwork->setArtistRequest($_POST['artistRequest']);
 		$create = $newArtwork->synchroDb();
 		if ($create) {
-			header('Location:artwork_zoom.php?artwork='.$create);
+			header('Location:'.URL_ADMIN.'artwork_zoom.php?artwork='.$create);
 		}
 		else{
 			$actionResultat = '<div class="alert alert-danger alert-dismissable">

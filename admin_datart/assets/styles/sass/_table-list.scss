@@ -1,0 +1,198 @@
+.col-equal-height{
+	overflow: hidden;
+
+	[class*="col-"]{
+		margin-bottom: -99999px;
+    	padding-bottom: 99999px;
+	}
+
+	form{
+		margin-top: 20px;
+	}
+
+	button{
+		margin-top: 20px;
+	}
+}
+
+.major-list-date{
+	font-family: 'kelson-bold','arial', 'helvetica', sans-serif; ;
+	color: #969ca0 ;
+}
+
+
+table{
+	border-left: 1px solid #dadada;
+	border-right: 1px solid #dadada;
+
+	thead{
+		background-color: #c1c6c9;
+		border: none;
+
+		th{
+			text-align: center;
+			font-weight: normal;
+			border-bottom: none;
+			border-top: none;
+			border-right: 1px solid #dadada;	
+			border-left: 1px solid #dadada;
+		}
+	}
+
+	tbody{
+		border-top: none;
+		border-bottom: 1px solid #dadada;
+
+		td{
+			vertical-align:middle;
+			border-top: none;
+			border-right: 1px solid #dadada;	
+			border-left: 1px solid #dadada;
+		}
+	}
+}
+
+.minor-list{
+	padding: 0;
+	box-shadow: none;
+	ul{
+		margin:0;
+
+		li{
+			position: relative;
+			display: block;
+			padding: 5px;
+
+			&:nth-child(odd){
+				background-color: #ede8e8;
+			}
+		}
+	}
+
+	h5{
+		font-size: 1em;
+		margin: 0;
+		margin-bottom: 5px;
+	}
+
+	a{
+		display: inline-block;
+		position: absolute;
+		top:0; right: 0; bottom: 0; left: 0;
+		color: #c1c6c9;
+		transition: color 0.5s;
+		@include transition(color 0.5s);
+
+		&:hover{
+			color: #9d9d9d
+		}
+	}
+
+	span{
+		position: absolute;
+		right: 5px; bottom: 5px; 
+		font-size: 1.5em;
+	}
+}
+
+.minor-date{
+	font-size: 0.875em;
+	font-style: italic;
+	color: $datart-gray ;
+	margin-bottom: 0;
+}
+
+
+.event-list{
+	padding: 15px 0 0 0;
+
+	ul{
+		margin: 0;
+
+		li{
+			display: flex;
+			flex-direction: row;
+			flex-wrap: nowrap;
+			justify-content: space-between;
+			padding: 10px;
+
+			&:nth-child(odd){
+				background-color: #ede8e8;
+
+				.btn-group a{
+					background-color: #fff;
+				}
+			}
+
+			.btn-group a{
+				color: $datart-red ;
+				background-color: #ede8e8;
+
+				&:hover{
+					color: $datart-gray;
+				}
+			}
+
+			.event-action{
+				width: 20%;
+				text-align: right;
+			}
+		}
+	}
+
+	h4{
+		color: $datart-red;
+		margin: 0;
+	}
+
+	p{
+		margin: 0;
+	}
+
+	.event-date{
+		font-size: 1em;
+		color: $datart-red;
+	}
+
+	.event-description{
+		font-size: 0.95em;
+	}
+}
+
+
+#recordedArtists{
+	padding: 10px;
+	background-color: #dadada;
+	border: 1px solid $datart-gray;
+	max-height: 200px;
+	height: 200px;
+	overflow-y: scroll;
+
+	li{
+		padding: 5px;
+		background-color: #fff;
+		border: 1px solid $datart-gray;
+		font-size: 0.95em;
+
+		&:not(:last-child){
+			margin-bottom: 5px;
+		}
+	}
+}
+
+#selectedArtists{
+	@extend #recordedArtists;
+	background-color: #fafafa;
+	border: 1px solid $datart-red;
+
+	li{
+		padding: 5px;
+		background-color: #fff;
+		border: 1px solid $datart-red;
+		font-size: 0.95em;
+
+		&:not(:last-child){
+			margin-bottom: 5px;
+		}
+	}
+}
