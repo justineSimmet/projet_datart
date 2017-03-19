@@ -81,7 +81,7 @@ h3{
 
 h4{
 	@include title();
-	Color : $datart-gray;
+	color : $datart-gray;
 	font-size: 1.1em;
 }
 
@@ -257,10 +257,31 @@ ul{
 *****************************************************/
 #managementArtworkList{
 	.listClassification{
-		color:#fff;
-		background-color: $datart-gray;
+		color: #A6AAAC;
+		background-color: #e8e8e8;
 		padding:10px;
-		margin:-15px -15px 0 -15px;
+		margin:0px -15px 0 -15px;
+
+		&:first-child{
+			margin:-15px -15px 0 -15px;	
+		}
+	}
+}
+
+#artwork-main-visual{
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+
+	#main-visual-one, #main-visual-two, #main-visual-three{
+		min-width: 30%;
+		p{
+			text-align: center;
+		}
+		form{
+			border: 2px dashed $datart-gray;
+			min-height: 100px;
+		}
 	}
 }
 

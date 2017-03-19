@@ -419,7 +419,6 @@ MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
 ** ACTIONS SUR LA LISTE DEROULANTE DES ACTIONS SUR L'ARTISTE
 *************************************************************/
 
-
 	$('.actionArtist').on('change', function(){
 		if ($(this).val() == 'update' || $(this).val() == 'show' ){
 			var artistId = $(this).children('option:selected').attr("data-id");
@@ -492,7 +491,7 @@ MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
 ***********************************************************************/
 	$('.delete-exhibit').on('click', function(){
 		var targetExhibit = $(this).attr("data-id");
-		$.post(window.location.href, {targetId}, function(response){
+		$.post(window.location.href, {targetExhibit}, function(response){
 			$("#deleteExhibit").html($(response).find("#deleteExhibit").html());
 			$("#deleteExhibit").modal('show');
 		});
@@ -612,6 +611,60 @@ MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
 			$("#exhibitLinkedArtwork").html($(response).find("#exhibitLinkedArtwork").html());
 		});
 	})
+
+/***************************************************
+** ACTIONS SUR LA LISTE DEROULANTE DES ACTIONS ARTWORK
+****************************************************/
+	$('.actionArtwork').on('change', function(){
+		if ($(this).val() == 'update' || $(this).val() == 'show'){
+			var artworkId = $(this).children('option:selected').attr("data-id");
+			window.location.replace('artwork_zoom.php?artwork='+artworkId);
+		}
+		else if($(this).val() == 'hide'){
+			var targetId = $(this).children('option:selected').attr("data-id");
+			$.post('artwork_management.php', {targetId}, function(response){
+				$("#hideArtwork").html($(response).find("#hideArtwork").html());
+				$("#hideArtwork").modal('show');
+			});
+		}
+		else if($(this).val() == 'publish'){
+			var targetId = $(this).children('option:selected').attr("data-id");
+			$.post('artwork_management.php', {targetId : targetId, action : 'publish'}, function(response){
+				$("#managementArtworkList").html($(response).find("#managementArtworkList").html());
+				$("#hiddenArtworkList").html($(response).find("#hiddenArtworkList").html());
+				$("#alert-area").html($(response).find("#alert-area").html());
+			});
+		}		
+	});
+
+/**********************************************************************
+** OUVERTURE D'UNE MODAL SI CLIC SUR LE BOUTON SUPPRIMER DEFINITIVEMENT
+** Envoi le targetId de l'expo en Ajax et recharge la page avant
+** d'ouvrir la modal.
+***********************************************************************/
+	$('.delete-artwork').on('click', function(){
+		var targetArtwork = $(this).attr("data-id");
+		$.post(window.location.href, {targetId : targetArtwork}, function(response){
+			$("#deleteArtwork").html($(response).find("#deleteArtwork").html());
+			$("#deleteArtwork").modal('show');
+		});
+	});
+
+	$('.publish-artwork').on('click', function(){
+		var targetArtwork= $(this).attr("data-id");
+		$.ajax({
+			method: 'POST',
+			data : {
+				targetId : targetArtwork,
+				action : 'publish'
+			},
+			success: function(data){
+				var newDoc = document.open("text/html", "replace");
+				newDoc.write(data);
+				newDoc.close()
+			}
+		});
+	});
 
 });
 

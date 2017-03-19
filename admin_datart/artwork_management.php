@@ -2,6 +2,7 @@
 
 require_once('classes/user.php');
 require_once('classes/artwork.php');
+require_once('classes/artwork_textual_content.php');
 require_once('classes/artist.php');
 require_once('classes/exhibit.php');
 require_once('includes/include.php');
@@ -121,13 +122,15 @@ include('header.php');
         	<div class="modal-body">
         		<p> Vous êtes sur le point de supprimer <strong>définitivement</strong> l'oeuvre <?= isset($targetArtwork)?$targetArtwork->getTitle():''; ?>. </p>
                 <p> Pour confirmer cette action, merci de saisir votre mot de passe</p>
-                <form action="?= URL_ADMIN; ?>artwork_management.php" method="POST">
-	                <label for="password">Mot de passe :</label>
-	                <input type="password" name="password" placeholder="Votre mot de passe"  required />
-	                <input type="hidden" name="action" value="delete" />
-	                <input type="hidden" value="<?= isset($targetArtwork)?$targetArtwork->getId():';' ?>" name="targetId">
-	                <input type="submit" value="Supprimer" />
-                </form>
+                <form action="?= URL_ADMIN; ?>artwork_management.php" method="POST" class="form-inline clearfix">
+                        <div class="form-group">
+                            <label for="password">Mot de passe :</label>
+                            <input type="password" name="password" placeholder="Votre mot de passe" class="form-control" required />
+                        </div>
+                        <input type="hidden" name="action" value="delete" />
+                        <input type="hidden" value="<?= isset($targetArtwork)?$targetArtwork->getId():';' ?>" name="targetId">
+                        <input type="submit" value="Supprimer" class="btn btn-danger pull-right" />
+                    </form>
         	</div>
         	<div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
@@ -156,7 +159,7 @@ include('header.php');
                                     <div class="form-group">
                                         <label for="actions-artwork" class="control-label col-sm-4">Actions :</label>
                                         <div class="col-sm-8">
-                                            <select name="actions-artwork" class="form-control actionArtworkt">
+                                            <select name="actions-artwork" class="form-control actionArtwork">
                                                 <option> --- </option>
                                                 <option value="update" data-id="<?= $artwork->getId(); ?>">Voir / Modifier</option>
                                                 <option value="hide" data-id="<?= $artwork->getId(); ?>" >Supprimer</option>
@@ -225,21 +228,77 @@ include('header.php');
         </section>
 	</div>
 
+	<div class="col-lg-3" id="hiddenArtworkList">
+    <a href="<?= URL_ADMIN ?>artwork_zoom.php" class="btn btn-default btn-block btn-lg btn-custom"><span class="fa fa-plus-circle"></span> Nouvelle oeuvre</a>
     <?php 
         if ($currentUser->getStatus() == FALSE) {
     ?>
-	<div class="col-lg-3" id="hiddenArtworkList">
         <h2>Oeuvres en cours de suppression</h2>
         <section>
+            <ul>
         <?php
             $listHidden = Artwork::listHiddenArtwork();
-            var_dump($listHidden);
+            $statut = '';
+            $actionList = '';
+
+            foreach ($listHidden as $artist => $artwork) {
+                ?>
+                    <li>
+                    <h4><?= $artist ?></h4>
+                    <?php
+                    foreach ($artwork as $artwork) {
+                        if (is_array($artwork)) {
+                            foreach ($artwork as $artwork) {
+                                $creator = new Artist($artwork->getArtistId());
+                                $actionList= '<div><form><div class="form-group">
+                                                <label for="actions-artwork" class="control-label">Actions :</label>
+                                                    <select name="actions-artwork" class="form-control actionArtwork">
+                                                        <option> --- </option>
+                                                        <option value="show" data-id="'.$artwork->getId().'">Visionner</option>
+                                                        <option value="publish" data-id="'.$artwork->getId().'" >Publier</option>
+                                                    </select>
+                                                </div></form><button type="button" class="btn btn-danger btn-block delete-artwork" data-id="'.$artwork->getId().'" >Supprimer définitivement</button></div>';
+                                if ($creator->getVisible() != TRUE){
+                                    $statut = '<p class="artist-statut">Artiste en cours de suppression</p>';
+                                }
+                               ?>
+                                <h3><?= $artwork->getTitle(); ?></h3>
+                                <p>Créé le : <?= dateFormat($artwork->getCreationDate()); ?></p>
+                                <?= !empty($statut)?$statut:$actionList; ?>
+                                <?php
+                            }
+                        }
+                        else{
+                            $creator = new Artist($artwork->getArtistId());
+                            $actionList= '<div><form><div class="form-group">
+                                            <label for="actions-artwork" class="control-label">Actions :</label>
+                                                <select name="actions-artwork" class="form-control actionArtwork">
+                                                    <option> --- </option>
+                                                    <option value="show" data-id="'.$artwork->getId().'">Visionner</option>
+                                                    <option value="publish" data-id="'.$artwork->getId().'" >Publier</option>
+                                                </select>
+                                            </div></form><button type="button" class="btn btn-danger btn-block delete-artwork" data-id="'.$artwork->getId().'" >Supprimer définitivement</button></div>';
+                              if ($creator->getVisible() != TRUE){
+                                    $statut = '<p class="artist-statut">Artiste en cours de suppression</p>';
+                                }
+                            ?>
+                            <h3><?= $artwork->getTitle(); ?></h3>
+                            <p>Créé le : <?= dateFormat($artwork->getCreationDate()); ?></p>
+                            <?= !empty($statut)?$statut:$actionList; ?>
+                            <?php
+                        }
+                    }
+                    ?>
+                    </li>
+                <?php
+            }
         ?>
+            </ul>
         </section>
-	</div>
     <?php
         }
     ?>
+	</div>
 
 </div>
 

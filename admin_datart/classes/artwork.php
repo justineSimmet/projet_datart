@@ -34,6 +34,58 @@ class Artwork{
 			$this->qrcode = $artwork['qrcode'];
 			$this->creation_date = $artwork['creation_date'];
 			$this->visible = $artwork['visible'];
+			$this->textual_content = array();
+			$text = requete_sql("SELECT id, language, subject FROM textual_content_artwork WHERE artwork_id = '".$id."' ");
+			if (count($text) !== 0) {
+				while ( $t = $text->fetch(PDO::FETCH_ASSOC)) {
+					if ($t['language'] == 'french') {
+						if ($t['subject'] == 'characteristic_feature') {
+							array_push($this->textual_content, new ArtworkFrenchCharacteristic($t['id']));
+						}
+						else{
+							array_push($this->textual_content, new ArtworkFrenchMain($t['id']));
+						}
+					}
+					elseif ($t['language'] == 'english') {
+						if ($t['subject'] == 'characteristic_feature') {
+							array_push($this->textual_content, new ArtworkEnglishCharacteristic($t['id']));
+						}
+						else{
+							array_push($this->textual_content, new ArtworkEnglishMain($t['id']));
+						}
+					}
+					elseif ($t['language'] == 'german') {
+						if ($t['subject'] == 'characteristic_feature') {
+							array_push($this->textual_content, new ArtworkGermanCharacteristic($t['id']));
+						}
+						else{
+							array_push($this->textual_content, new ArtworkGermanMain($t['id']));
+						}
+					}
+					elseif ($t['language'] == 'russian') {
+						if ($t['subject'] == 'characteristic_feature') {
+							array_push($this->textual_content, new ArtworkRussianCharacteristic($t['id']));
+						}
+						else{
+							array_push($this->textual_content, new ArtworkRussianMain($t['id']));
+						}
+					}
+					elseif ($t['language'] == 'chinese') {
+						if ($t['subject'] == 'characteristic_feature') {
+							array_push($this->textual_content, new ArtworkChineseCharacteristic($t['id']));
+						}
+						else{
+							array_push($this->textual_content, new ArtworkChineseMain($t['id']));
+						}
+					}
+				}	
+			}
+			else{
+				$this->textual_content = array();
+			}
+		}
+		else{
+			$this->textual_content = array();
 		}
 	}
 
@@ -122,6 +174,51 @@ class Artwork{
 		return $this->visible;
 	}
 
+	function getTextualContent(){
+		return $this->textual_content;
+	}
+
+	function getFrenchCharacteristic(){
+		return $this->textual_content[0];
+	}
+
+	function getFrenchMain(){
+		return $this->textual_content[1];
+	}
+
+	function getEnglishCharacteristic(){
+		return $this->textual_content[2];
+	}
+
+	function getEnglishMain(){
+		return $this->textual_content[3];
+	}
+
+	function getGermanCharacteristic(){
+		return $this->textual_content[4];
+	}
+
+	function getGermanMain(){
+		return $this->textual_content[5];
+	}
+
+	function getRussianCharacteristic(){
+		return $this->textual_content[6];
+	}
+
+	function getRussianMain(){
+		return $this->textual_content[7];
+	}
+
+	function getChineseCharacteristic(){
+		return $this->textual_content[8];
+	}
+
+	function getChineseMain(){
+		return $this->textual_content[9];
+	}
+
+
 /*********************************
 **
 ** SYNCHRO AVEC LA BASE DE DONNEES
@@ -190,8 +287,8 @@ class Artwork{
 ******************************************************/
 
 	function hideArtwork(){
-		$this->setVisible(FALSE);
-		$res = requete_sql("UPDATE artwork SET visible = '".$this->visible."' WHERE id = '".$this->id."' ");
+		$this->setVisible('FALSE');
+		$res = requete_sql("UPDATE artwork SET visible = ".$this->visible." WHERE id = '".$this->id."' ");
 		if ($res) {
 			return TRUE;
 		}
@@ -207,7 +304,7 @@ class Artwork{
 ******************************************************/
 
 	function publishArtwork(){
-		$this->setVisible(TRUE);
+		$this->setVisible('TRUE');
 		$res = requete_sql("UPDATE artwork SET visible = ".$this->visible." WHERE id = '".$this->id."' ");
 		if ($res) {
 			return TRUE;
@@ -227,9 +324,15 @@ class Artwork{
 	function deleteArtwork(){
 		$cleanText = requete_sql("DELETE FROM textual_content_artwork WHERE artwork_id ='".$this->id."' ");
 		if ($cleanText) {
-			$delete = requete_sql("DELETE FROM artwork WHERE id ='".$this->id."' ");
-			if ($delete) {
-				return TRUE;
+			$cleanDisplay = requete_sql("DELETE FROM artwork_displayed WHERE artwork_id ='".$this->id."' ");
+			if ($cleanDisplay) {
+				$delete = requete_sql("DELETE FROM artwork WHERE id ='".$this->id."' ");
+				if ($delete) {
+					return TRUE;
+				}
+				else{
+					return FALSE;
+				}
 			}
 			else{
 				return FALSE;
@@ -305,6 +408,112 @@ class Artwork{
 	}
 
 
+/**********************************************************
+**
+** FORMULAIRE DES TEXTES COMPLEMENTAIRES
+**
+**********************************************************/
+	function formText($target, $action){
+		?>
+			<form method="POST" action="<?= $target ?>" class="form-horizontal clearfix" id="formTextualContent">
+				
+				<ul class="nav nav-tabs">
+					<li class="active"><a data-toggle="tab" href="#french">Français</a></li>
+					<li><a data-toggle="tab" href="#english">Anglais</a></li>
+				    <li><a data-toggle="tab" href="#german">Allemand</a></li>
+					<li><a data-toggle="tab" href="#russian">Russe</a></li>
+					<li><a data-toggle="tab" href="#chinese">Chinois</a></li>
+				</ul>
+				<div class="tab-content">
+					<div id="french" class="tab-pane fade in active">
+					<fieldset <?= empty($this->getId()) || $this->getVisible() == FALSE?'disabled':''; ?>  >
+						<div class="form-group form-group-lg">
+							<label for="characteristicfrench" class="control-label col-lg-2 col-md-2 col-sm-3">Nature :</label>
+							<div class="col-lg-10 col-md-10 col-sm-12">
+							<input type="text" name="characteristicFrench" class="form-control" value="<?= !empty($this->getTextualContent())?$this->getFrenchCharacteristic()->getContent():'' ?>" <?= !empty($this->id) && $this->getVisible() == FALSE?'readonly':''; ?> >
+							</div>
+						</div>
+						<div class="form-group form-group-lg">
+							<label for="mainfrench" class="control-label col-lg-2 col-md-2 col-sm-3">Description :</label>
+							<div class="col-lg-10 col-md-10 col-sm-12">
+							<textarea name="mainFrench" <?= !empty($this->id) && $this->getVisible() == FALSE?' class="form-control" readonly':'class="form-control textarea-avaible"'; ?> ><?= !empty($this->getTextualContent())?$this->getFrenchMain()->getContent():'' ?></textarea>
+							</div>
+						</div>
+					</fieldset>
+					</div>
+					<div id="english" class="tab-pane fade">
+					<fieldset <?= empty($this->getId()) || $this->getVisible() == FALSE?'disabled':''; ?>>
+						<div class="form-group form-group-lg">
+							<label for="characteristicEnglish" class="control-label col-lg-2 col-md-2 col-sm-3">Nature :</label>
+							<div class="col-lg-10 col-md-10 col-sm-12">
+							<input type="text" name="characteristicEnglish" class="form-control" value="<?= !empty($this->getTextualContent())?$this->getEnglishCharacteristic()->getContent():'' ?>" <?= !empty($this->id) && $this->getVisible() == FALSE?'readonly':''; ?> >
+							</div>
+						</div>
+						<div class="form-group form-group-lg">
+							<label for="mainEnglish" class="control-label col-lg-2 col-md-2 col-sm-3">Description :</label>
+							<div class="col-lg-10 col-md-10 col-sm-12">
+							<textarea name="mainEnglish" <?= !empty($this->id) && $this->getVisible() == FALSE?' class="form-control" readonly':'class="form-control textarea-avaible"'; ?> ><?= !empty($this->getTextualContent())?$this->getEnglishMain()->getContent():''; ?></textarea>
+							</div>
+						</div>
+					</fieldset>
+					</div>
+					<div id="german" class="tab-pane fade">
+					<fieldset <?= empty($this->getId()) || $this->getVisible() == FALSE?'disabled':''; ?>>
+						<div class="form-group form-group-lg">
+							<label for="characteristicGerman" class="control-label col-lg-2 col-md-2 col-sm-3">Nature :</label>
+							<div class="col-lg-10 col-md-10 col-sm-12">
+							<input type="text" name="characteristicGerman" class="form-control" value="<?= !empty($this->getTextualContent())?$this->getGermanCharacteristic()->getContent():'' ?>" <?= !empty($this->id) && $this->getVisible() == FALSE?'readonly':''; ?> >
+							</div>
+						</div>
+						<div class="form-group form-group-lg">
+							<label for="mainGerman" class="control-label col-lg-2 col-md-2 col-sm-3">Description :</label>
+							<div class="col-lg-10 col-md-10 col-sm-12">
+							<textarea name="mainGerman" <?= !empty($this->id) && $this->getVisible() == FALSE?' class="form-control" readonly':'class="form-control textarea-avaible"'; ?> ><?= !empty($this->getTextualContent())?$this->getGermanMain()->getContent():'' ?></textarea>
+							</div>
+						</div>
+					</fieldset>
+					</div>
+					<div id="russian" class="tab-pane fade">
+					<fieldset <?= empty($this->getId()) || $this->getVisible() == FALSE?'disabled':''; ?>>
+						<div class="form-group form-group-lg">
+							<label for="characteristicRussian" class="control-label col-lg-2 col-md-2 col-sm-3">Nature :</label>
+							<div class="col-lg-10 col-md-10 col-sm-12">
+							<input type="text" name="characteristicRussian" class="form-control" value="<?= !empty($this->getTextualContent())?$this->getRussianCharacteristic()->getContent():'' ?>" <?= !empty($this->id) && $this->getVisible() == FALSE?'readonly':''; ?> >
+							</div>
+						</div>
+						<div class="form-group form-group-lg">
+							<label for="mainRussian" class="control-label col-lg-2 col-md-2 col-sm-3">Description :</label>
+							<div class="col-lg-10 col-md-10 col-sm-12">
+							<textarea name="mainRussian" <?= !empty($this->id) && $this->getVisible() == FALSE?' class="form-control" readonly':'class="form-control textarea-avaible"'; ?> ><?= !empty($this->getTextualContent())?$this->getRussianMain()->getContent():'' ?></textarea>
+							</div>
+						</div>
+					</fieldset>
+					</div>
+					<div id="chinese" class="tab-pane fade">
+					<fieldset <?= empty($this->getId()) || $this->getVisible() == FALSE?'disabled':''; ?>>
+						<div class="form-group form-group-lg">
+							<label for="characteristicChinese" class="control-label col-lg-2 col-md-2 col-sm-3">Nature :</label>
+							<div class="col-lg-10 col-md-10 col-sm-12">
+							<input type="text" name="characteristicChinese" class="form-control" value="<?= !empty($this->getTextualContent())?$this->getChineseCharacteristic()->getContent():'' ?>" <?= !empty($this->id) && $this->getVisible() == FALSE?'readonly':''; ?> >
+							</div>
+						</div>
+						<div class="form-group form-group-lg">
+							<label for="mainChinese" class="control-label col-lg-2 col-md-2 col-sm-3">Description :</label>
+							<div class="col-lg-10 col-md-10 col-sm-12">
+							<textarea name="mainChinese" <?= !empty($this->id) && $this->getVisible() == FALSE?' class="form-control" readonly':'class="form-control textarea-avaible"'; ?> ><?= !empty($this->getTextualContent())?$this->getChineseMain()->getContent():'' ?></textarea>
+							</div>
+						</div>
+					</fieldset>				
+					</div>
+				<input type="hidden" name="id" value="<?= isset($this)?$this->getId():'' ?>">
+				<input type="submit" value="<?= $action; ?>" class="btn btn-default pull-right" <?= !empty($this->getId()) && $this->getVisible() == FALSE?'disabled':''; ?> />
+				</div>
+			
+			</form>
+	<?php
+	}
+
+
 /******************************************************
 **
 ** LISTES DE TOUTES LES OEUVRES
@@ -343,13 +552,7 @@ class Artwork{
 				$list[$artist->getIdentity()][$key] = $artwork;
 			}
 		}
-		var_dump($hidden);
-		var_dump($list);
-		/*foreach ($hidden as $key => $value) {
-			$list[$value['artiste']][$key] = $value;
-		}*/
-		/*$listHidden = ksort($list, SORT_NUMERIC);
-		return $listHidden;*/
+		return $list;
 	}
 
 }
