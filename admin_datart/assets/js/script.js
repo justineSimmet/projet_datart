@@ -254,6 +254,59 @@ MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
     });
 
 
+/**********************************************
+** GESTION AJAX DE L'UPLOAD DES PHOTOS D'OEUVRES
+************************************************/
+
+	$('#main-one').on('submit', function(e){
+		e.preventDefault();
+		var $form = $(this);
+        var formdata = (window.FormData) ? new FormData($form[0]) : null;
+        var data = (formdata !== null) ? formdata : $form.serialize();
+
+        $.ajax({
+            url: $form.attr('action'),
+            type: $form.attr('method'),
+            contentType: false, // obligatoire pour de l'upload
+            processData: false, // obligatoire pour de l'upload
+            dataType: 'json', // selon le retour attendu
+            data: data,
+            success: function (response) {
+                //Test si il n'y a pas d'erreur sur l'image envoyée
+                if(response.file.image.error == 0 ){
+                }
+                else{
+                	alert('Image pas ok');
+                }
+            }
+        })
+	})
+
+    $('#main-one').find('input[name="image"]').on('change', function (e) {
+        var files = $(this)[0].files;
+ 
+        if (files.length > 0) {
+            // On part du principe qu'il n'y qu'un seul fichier
+            // étant donné que l'on a pas renseigné l'attribut "multiple"
+            var file = files[0];
+            var $image_preview = $('#visual-one');
+            var $caption = $('#caption-one');
+
+            // Ici on injecte les informations recoltées sur le fichier pour l'utilisateur
+            $caption.removeClass('hidden');
+            $image_preview.find('img').attr('src', window.URL.createObjectURL(file));
+            $caption.find(' p:first').html(file.name);
+        }
+    });
+ 
+    // Bouton "Annuler" pour vider le champ d'upload
+    $('#caption-one').find('button[type="button"]').on('click', function (e) {
+        e.preventDefault();
+ 
+        $('#main-one').find('input[name="image"]').val('');
+        $('#visual-one').find('img').attr('src', '');
+        $('#caption-one').addClass('hidden');
+    });
 
 /**********************************************
 ** EXECUTION REQUETE AJAX SI UN UTILISATEUR A

@@ -18,6 +18,7 @@ class Artwork{
 	private $qrcode;
 	private $creation_date;
 	private $visible;
+	private $visual;
 
 	function __construct($id=''){
 		if ($id != 0) {
@@ -83,9 +84,20 @@ class Artwork{
 			else{
 				$this->textual_content = array();
 			}
+			$this->visual = array();
+			$visuals = requete_sql("SELECT id FROM visual WHERE artwork_id = '".$this->id."' ");
+			if (count($visuals) !== 0){
+				while ( $v = $visuals->fetch(PDO::FETCH_ASSOC)) {
+					array_push($this->visual, new Visual($v['id']));
+				}
+			}
+			else{
+				$this->visual = array();
+			}
 		}
 		else{
 			$this->textual_content = array();
+			$this->visual = array();
 		}
 	}
 
@@ -216,6 +228,10 @@ class Artwork{
 
 	function getChineseMain(){
 		return $this->textual_content[9];
+	}
+
+	function getVisual(){
+		return $this->visual;
 	}
 
 

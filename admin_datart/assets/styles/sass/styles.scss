@@ -273,18 +273,62 @@ ul{
 	flex-direction: row;
 	justify-content: space-around;
 
-	#main-visual-one, #main-visual-two, #main-visual-three{
+	div{
 		min-width: 30%;
+
 		p{
 			text-align: center;
 		}
-		form{
+		#visual-one{
+			margin: auto;
+			position: relative;
 			border: 2px dashed $datart-gray;
-			min-height: 100px;
+			border-radius : 15px;
+			/* min-height: 100px; */
+			height: 200px;
+			/* min-width: 100px; */
+			width: 200px;
+			background-color: transparent;
+			margin-bottom: 10px;
+			overflow: hidden;
+
+			&::after{
+				position : absolute;
+				z-index: 1;
+				content: '\f1c5';
+				font-family: 'FontAwesome';
+				text-align: center;
+				vertical-align: middle;
+				color: $datart-gray;
+				font-size: 5em;
+				width: 50%;
+  				margin: auto;
+				top: 50%; left: 50%;
+  				-webkit-transform: translate(-50%,-50%);
+				-ms-transform: translate(-50%,-50%);
+				transform: translate(-50%,-50%);
+			}
+
+			img{
+				position: absolute;
+				z-index: 2;
+				min-width: 200%;
+				top: 50%; left: 50%;
+  				-webkit-transform: translate(-50%,-50%);
+				-ms-transform: translate(-50%,-50%);
+				transform: translate(-50%,-50%);
+			}
+		}
+		#caption-one{
+			font-size: 0.85em;
 		}
 	}
+
 }
 
+.hidden{
+	display: none;
+}
 
 //IMPORT
 @import '_form.scss';

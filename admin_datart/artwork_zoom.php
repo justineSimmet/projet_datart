@@ -4,6 +4,7 @@ require_once('classes/user.php');
 require_once('classes/artist.php');
 require_once('classes/artwork.php');
 require_once('classes/artwork_textual_content.php');
+require_once('classes/artwork_visual.php');
 require_once('classes/artist.php');
 require_once('classes/exhibit.php');
 require_once('classes/exhibit_textual_content.php');
@@ -169,6 +170,13 @@ if(isset($_POST['characteristicFrench']) && isset($_POST['mainFrench']) ) {
 	}
 }
 
+/************************************************************************************************
+**
+** Gestion en base de donnée des 3 visuels principaux
+**
+************************************************************************************************/
+
+
 $locationTitle = isset($targetArtwork)?$targetArtwork->getTitle():'Ajouter une oeuvre';
 include('header.php');
 
@@ -291,23 +299,35 @@ include('header.php');
 				<h2>Etape 3 : Visuels</h2>
 				<h4>Visuels principaux</h4>
 				<div id="artwork-main-visual">
-					<div id="main-visual-one">
+					<div>
 						<p>Visuel 1</p>
-						<form action="/file-upload" class="dropzone" id="my-awesome-dropzone">
-						
+						<form action="<?= URL_ADMIN ?>picture_process.php" method="POST" enctype="multipart/form-data" class="text-center form-vertical" id="main-one">
+							<div id="visual-one"><img src="" class="img-responsive" /></div>
+							<div id="caption-one" class="hidden">
+								<p></p>
+								<p>
+									<button type="button" class="btn btn-danger">Annuler</button>
+								</p>
+							</div>
+							<div class="form-group">
+								<input type="file" name="image" accept="image/jpeg" required>
+							</div>
+							<div class="form-group">
+								<label for="legend" class="control-label">Légende du visuel :</label>
+								<textarea name="legend" placeholder="Légende" class="form-control"></textarea>
+							</div>
+							<input type="hidden" name="artworkId" value="<?= isset($targetArtwork)?$targetArtwork->getId():''; ?>">
+							<input type="hidden" name="action" value="add-picture-one">
+							<button type="submit">Envoyer</button>
 						</form>
 					</div>
-					<div id="main-visual-two">
+					<div>
 						<p>Visuel 2</p>
-						<form action="/file-upload" class="dropzone" id="my-awesome-dropzone">
-
-						</form>
+						<div class="main-visual"></div>
 					</div>
-					<div id="main-visual-three">
+					<div>
 						<p>Visuel 3</p>
-						<form action="/file-upload" class="dropzone" id="my-awesome-dropzone">
-
-						</form>
+						<div class="main-visual"></div>
 					</div>
 				</div>
 			</section>
@@ -316,7 +336,6 @@ include('header.php');
 
 </div>
 
-<script src="<?= URL_ASSETS ?>js/dropzone.js"></script>
 <?php
 	}
 include('footer.php');
