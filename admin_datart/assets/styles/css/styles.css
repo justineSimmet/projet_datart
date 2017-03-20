@@ -475,7 +475,7 @@ ul {
     min-width: 30%; }
     #artwork-main-visual div p {
       text-align: center; }
-    #artwork-main-visual div #visual-one {
+    #artwork-main-visual div #visual-one, #artwork-main-visual div #visual-two, #artwork-main-visual div #visual-three {
       margin: auto;
       position: relative;
       border: 2px dashed #778085;
@@ -487,7 +487,7 @@ ul {
       background-color: transparent;
       margin-bottom: 10px;
       overflow: hidden; }
-      #artwork-main-visual div #visual-one::after {
+      #artwork-main-visual div #visual-one::after, #artwork-main-visual div #visual-two::after, #artwork-main-visual div #visual-three::after {
         position: absolute;
         z-index: 1;
         content: '\f1c5';
@@ -503,7 +503,7 @@ ul {
         -webkit-transform: translate(-50%, -50%);
         -ms-transform: translate(-50%, -50%);
         transform: translate(-50%, -50%); }
-      #artwork-main-visual div #visual-one img {
+      #artwork-main-visual div #visual-one img, #artwork-main-visual div #visual-two img, #artwork-main-visual div #visual-three img {
         position: absolute;
         z-index: 2;
         min-width: 200%;
@@ -512,8 +512,12 @@ ul {
         -webkit-transform: translate(-50%, -50%);
         -ms-transform: translate(-50%, -50%);
         transform: translate(-50%, -50%); }
-    #artwork-main-visual div #caption-one {
+    #artwork-main-visual div #caption-one, #artwork-main-visual div #caption-two, #artwork-main-visual div #caption-three {
       font-size: 0.85em; }
+    #artwork-main-visual div textarea {
+      min-width: 100%;
+      max-width: 100%;
+      min-height: 100px; }
 
 .hidden {
   display: none; }

@@ -17,6 +17,7 @@ class Visual{
 		if ($id != 0) {
 			$res = requete_sql("SELECT * FROM visual WHERE id = '".$id."' ");
 			$visual = $res->fetch(PDO::FETCH_ASSOC);
+			$this->id = $visual['id'];
 			$this->artwork_id = $visual['artwork_id'];
 			$this->target = $visual['target'];
 			$this->legend = $visual['legend'];
@@ -74,11 +75,31 @@ class Visual{
 				'".addslashes($this->display_order)."'
 				)");
 			if ($create) {
+				return $create;
+			}
+			else{
+				return FALSE;
+			}
+		}else{
+			$update = requete_sql("UPDATE visual SET 
+				legend = '".addslashes($this->legend)."' 
+				WHERE id = '".$this->id."' ");
+			if ($update) {
 				return TRUE;
 			}
 			else{
 				return FALSE;
 			}
+		}
+	}
+
+	function delete(){
+		$delete = requete_sql("DELETE FROM visual WHERE id ='".$this->id."' ");
+		if ($delete) {
+			return TRUE;
+		}
+		else{
+			return FALSE;
 		}
 	}
 

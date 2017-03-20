@@ -121,6 +121,119 @@ function getEndDate(){
 };
 
 
+/***************************************************************************************
+** INITIALISATION DE LA FONCTION D'ACTION SUR LE SUBMIT DE VISUELS PRINCIPAUX DES OEUVRES
+***************************************************************************************/
+function mainPictureAction(mainTarget, visualArea, captionArea){
+	$(mainTarget).on('submit', function(e){
+		e.preventDefault();
+		var $form = $(this);
+        var formdata = (window.FormData) ? new FormData($form[0]) : null;
+        var data = (formdata !== null) ? formdata : $form.serialize();
+
+        $.ajax({
+            url: $form.attr('action'),
+            type: $form.attr('method'),
+            contentType: false, // obligatoire pour de l'upload
+            processData: false, // obligatoire pour de l'upload
+            dataType: 'json', // selon le retour attendu
+            data: data,
+            success: function (response) {
+                //Test si il n'y a pas d'erreur sur l'image envoyée
+                if(response.file.image.error == 0 ){
+                	var success ='<div class="alert alert-success alert-dismissable">'
+					+'<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'
+					+'<p><strong>Le visuel a bien été enregistré.</strong><p>'
+					+'</div>';
+                	$form.find('.alert-area-picture').html(success);
+                	$form.find('input[name="pictureId"]').val(response.text.pictureId);
+                	$form.find('button[type="submit"]').html('Modifier');
+                	$(mainTarget).find('input[name="image"]').val('');
+                	$(captionArea).addClass('hidden');
+                }
+                else{
+                	var error ='<div class="alert alert-success alert-dismissable">'
+					+'<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'
+					+'<p><strong>Erreur !</strong>'+response.file.image.error+'<p>'
+					+'</div>';
+                	$form.find('.alert-area-picture').html(error);
+                	$(mainTarget).find('input[name="image"]').val('');
+                	$(captionArea).addClass('hidden');
+                }
+            }
+        })
+	})
+
+    $(mainTarget).find('input[name="image"]').on('change', function (e) {
+        var files = $(this)[0].files;
+ 
+        if (files.length > 0) {
+            // On part du principe qu'il n'y qu'un seul fichier
+            // étant donné que l'on a pas renseigné l'attribut "multiple"
+            var file = files[0];
+            var $image_preview = $(visualArea);
+            var $caption = $(captionArea);
+
+            // Ici on injecte les informations recoltées sur le fichier pour l'utilisateur
+            $caption.removeClass('hidden');
+            $image_preview.find('img').attr('src', window.URL.createObjectURL(file));
+            $caption.find('p:first').html(file.name);
+        }
+    });
+ 
+    // Bouton "Annuler" pour vider le champ d'upload
+    $(captionArea).find('button[type="button"]').on('click', function (e) {
+        e.preventDefault();
+ 
+        $(mainTarget).find('input[name="image"]').val('');
+        $(visualArea).find('img').attr('src', '');
+        $(captionArea).addClass('hidden');
+    });
+
+    // Bouton "Supprimer" pour effacer une photo de la base de donnée et des fichiers
+    $(mainTarget).find('.delete-main-picture').on('click', function(e){
+    	e.preventDefault();
+		var $form = $(this);
+		var actiondDetail = $form.attr("data-action");
+		var picture = $form.attr("data-picture");
+		$.post('picture_process.php',{ action : actiondDetail, pictureId : picture}, function(response){
+				
+	});
+
+/*        $.ajax({
+            url: $form.attr('action'),
+            type: $form.attr('method'),
+            dataType: 'json', // selon le retour attendu
+            data: data,
+            success: function (response) {
+                //Test si il n'y a pas d'erreur sur l'image envoyée
+                if(response.file.image.error == 0 ){
+                	var success ='<div class="alert alert-success alert-dismissable">'
+					+'<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'
+					+'<p><strong>Le visuel a bien été enregistré.</strong><p>'
+					+'</div>';
+                	$form.find('.alert-area-picture').html(success);
+                	$form.find('input[name="pictureId"]').val(response.text.pictureId);
+                	$form.find('button[type="submit"]').html('Modifier');
+                	$(mainTarget).find('input[name="image"]').val('');
+                	$(captionArea).addClass('hidden');
+                }
+                else{
+                	var error ='<div class="alert alert-success alert-dismissable">'
+					+'<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'
+					+'<p><strong>Erreur !</strong>'+response.file.image.error+'<p>'
+					+'</div>';
+                	$form.find('.alert-area-picture').html(error);
+                	$(mainTarget).find('input[name="image"]').val('');
+                	$(captionArea).addClass('hidden');
+                }
+            }
+        })*/
+
+    })
+	
+}
+
 
 $(document).ready(function(){
 
@@ -257,56 +370,11 @@ MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
 /**********************************************
 ** GESTION AJAX DE L'UPLOAD DES PHOTOS D'OEUVRES
 ************************************************/
+mainPictureAction('#main-one', '#visual-one', '#caption-one');
+mainPictureAction('#main-two', '#visual-two', '#caption-two');
+mainPictureAction('#main-three', '#visual-three', '#caption-three');
 
-	$('#main-one').on('submit', function(e){
-		e.preventDefault();
-		var $form = $(this);
-        var formdata = (window.FormData) ? new FormData($form[0]) : null;
-        var data = (formdata !== null) ? formdata : $form.serialize();
 
-        $.ajax({
-            url: $form.attr('action'),
-            type: $form.attr('method'),
-            contentType: false, // obligatoire pour de l'upload
-            processData: false, // obligatoire pour de l'upload
-            dataType: 'json', // selon le retour attendu
-            data: data,
-            success: function (response) {
-                //Test si il n'y a pas d'erreur sur l'image envoyée
-                if(response.file.image.error == 0 ){
-                }
-                else{
-                	alert('Image pas ok');
-                }
-            }
-        })
-	})
-
-    $('#main-one').find('input[name="image"]').on('change', function (e) {
-        var files = $(this)[0].files;
- 
-        if (files.length > 0) {
-            // On part du principe qu'il n'y qu'un seul fichier
-            // étant donné que l'on a pas renseigné l'attribut "multiple"
-            var file = files[0];
-            var $image_preview = $('#visual-one');
-            var $caption = $('#caption-one');
-
-            // Ici on injecte les informations recoltées sur le fichier pour l'utilisateur
-            $caption.removeClass('hidden');
-            $image_preview.find('img').attr('src', window.URL.createObjectURL(file));
-            $caption.find(' p:first').html(file.name);
-        }
-    });
- 
-    // Bouton "Annuler" pour vider le champ d'upload
-    $('#caption-one').find('button[type="button"]').on('click', function (e) {
-        e.preventDefault();
- 
-        $('#main-one').find('input[name="image"]').val('');
-        $('#visual-one').find('img').attr('src', '');
-        $('#caption-one').addClass('hidden');
-    });
 
 /**********************************************
 ** EXECUTION REQUETE AJAX SI UN UTILISATEUR A

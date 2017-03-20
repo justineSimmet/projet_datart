@@ -279,7 +279,7 @@ ul{
 		p{
 			text-align: center;
 		}
-		#visual-one{
+		#visual-one, #visual-two, #visual-three{
 			margin: auto;
 			position: relative;
 			border: 2px dashed $datart-gray;
@@ -319,8 +319,14 @@ ul{
 				transform: translate(-50%,-50%);
 			}
 		}
-		#caption-one{
+		#caption-one, #caption-two, #caption-three{
 			font-size: 0.85em;
+		}
+
+		textarea{
+			min-width: 100%;
+			max-width: 100%;
+			min-height: 100px;
 		}
 	}
 

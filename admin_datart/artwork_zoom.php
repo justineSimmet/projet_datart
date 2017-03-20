@@ -180,6 +180,8 @@ if(isset($_POST['characteristicFrench']) && isset($_POST['mainFrench']) ) {
 $locationTitle = isset($targetArtwork)?$targetArtwork->getTitle():'Ajouter une oeuvre';
 include('header.php');
 
+
+var_dump($targetArtwork);
 ?>
 <!--
 ************************************************************************************************
@@ -301,33 +303,39 @@ include('header.php');
 				<div id="artwork-main-visual">
 					<div>
 						<p>Visuel 1</p>
-						<form action="<?= URL_ADMIN ?>picture_process.php" method="POST" enctype="multipart/form-data" class="text-center form-vertical" id="main-one">
-							<div id="visual-one"><img src="" class="img-responsive" /></div>
-							<div id="caption-one" class="hidden">
-								<p></p>
-								<p>
-									<button type="button" class="btn btn-danger">Annuler</button>
-								</p>
-							</div>
-							<div class="form-group">
-								<input type="file" name="image" accept="image/jpeg" required>
-							</div>
-							<div class="form-group">
-								<label for="legend" class="control-label">Légende du visuel :</label>
-								<textarea name="legend" placeholder="Légende" class="form-control"></textarea>
-							</div>
-							<input type="hidden" name="artworkId" value="<?= isset($targetArtwork)?$targetArtwork->getId():''; ?>">
-							<input type="hidden" name="action" value="add-picture-one">
-							<button type="submit">Envoyer</button>
-						</form>
+						<?php
+							if (isset($targetArtwork) && !empty($targetArtwork)) {
+								$targetArtwork->formMainPictures('one');
+							}
+							else{
+								$newArtwork = new Artwork(); 
+								$newArtwork->formMainPictures('one') ;
+							}
+						?>
 					</div>
 					<div>
 						<p>Visuel 2</p>
-						<div class="main-visual"></div>
+						<?php
+							if (isset($targetArtwork) && !empty($targetArtwork)) {
+								$targetArtwork->formMainPictures('two');
+							}
+							else{
+								$newArtwork = new Artwork(); 
+								$newArtwork->formMainPictures('two') ;
+							}
+						?>
 					</div>
 					<div>
 						<p>Visuel 3</p>
-						<div class="main-visual"></div>
+						<?php
+							if (isset($targetArtwork) && !empty($targetArtwork)) {
+								$targetArtwork->formMainPictures('three');
+							}
+							else{
+								$newArtwork = new Artwork(); 
+								$newArtwork->formMainPictures('three') ;
+							}
+						?>
 					</div>
 				</div>
 			</section>

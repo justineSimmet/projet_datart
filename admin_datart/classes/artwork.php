@@ -234,6 +234,29 @@ class Artwork{
 		return $this->visual;
 	}
 
+	function getPictureOne(){
+		foreach ($this->visual as $visual) {
+			if ($visual->getDisplayOrder() == 1) {
+				return $visual;
+			}
+		}
+	}
+
+	function getPictureTwo(){
+		foreach ( $this->visual as $visual) {
+			if ($visual->getDisplayOrder() == 2) {
+				return $visual;
+			}
+		}
+	}
+
+	function getPictureThree(){
+		foreach ( $this->visual as $visual) {
+			if ($visual->getDisplayOrder() == 3) {
+				return $visual;
+			}
+		}
+	}
 
 /*********************************
 **
@@ -528,6 +551,59 @@ class Artwork{
 			</form>
 	<?php
 	}
+
+/**********************************************************
+**
+** FORMULAIRE DES VISUELS PRINCIPAUX
+**
+**********************************************************/
+	function formMainPictures($number){
+		$picture = '';
+		if ($number == 'one') {
+			$picture = $this->getPictureOne();
+		}
+		elseif ($number == 'two') {
+			$picture = $this->getPictureTwo();
+		}
+		else{
+			$picture = $this->getPictureThree();
+		}
+		?>
+		<form action="<?= URL_ADMIN ?>picture_process.php" method="POST" enctype="multipart/form-data" class="text-center form-vertical" id="main-<?= $number ?>">
+			<fieldset <?= empty($this->id)?'disabled':''; ?> class="clearfix">
+				<div id="visual-<?= $number ?>"><img src="<?= !empty($this->getId()) && !empty($picture)?$picture->getTarget():'' ?>" class="img-responsive" /></div>
+				<div class="alert-area-picture">
+					
+				</div>
+				<div id="caption-<?= $number ?>" class="hidden">
+					<p></p>
+					<p>
+						<button type="button" class="btn btn-danger">Annuler</button>
+					</p>
+				</div>
+				<div class="form-group">
+					<input type="file" name="image" accept="image/jpeg" required>
+				</div>
+				<div class="form-group">
+					<label for="legend" class="control-label">Légende du visuel :</label>
+					<textarea name="legend" placeholder="Légende" class="form-control"><?= !empty($this->getId()) && !empty($picture)?$picture->getLegend():'' ?></textarea>
+				</div>
+				<input type="hidden" name="artworkId" value="<?= !empty($this->getId())?$this->getId():''; ?>">
+				<input type="hidden" name="action" value="add-picture-<?= $number ?>">
+				<input type="hidden" name="pictureId" value="<?= !empty($this->getId()) && !empty($picture)?$picture->getId():'' ?>" >
+				<?php
+				if(!empty($this->getId()) && !empty($picture)){
+					?>
+					<button class="btn btn-danger pull-left delete-main-picture" data-action="deletePicture" data-picture="<?= !empty($this->getId()) && !empty($picture)?$picture->getId():'' ?>">Supprimer</button>
+					<?php
+				}
+				?>
+				<button type="submit" class="btn btn-default pull-right"><?= !empty($this->getId()) && !empty($picture)?'Modifier':'Ajouter' ?></button>
+			</fieldset>
+		</form>
+		<?php
+	}
+
 
 
 /******************************************************
