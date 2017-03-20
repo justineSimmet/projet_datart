@@ -110,4 +110,3 @@ function lastCreateElement(){
 	}
 	return $last;
 }
-

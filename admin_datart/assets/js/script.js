@@ -426,18 +426,9 @@ MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
 	$('.actionArtist').on('change', function(){
 		if ($(this).val() == 'delete'){
 			var artistId = $(this).children('option:selected').attr("data-id");
-			$.ajax({
-				method: 'POST',
-				data : {
-					targetId : artistId
-				},
-				success: function(data){
-					var newDoc = document.open("text/html", "replace");
-					newDoc.write(data);
-					newDoc.close();
-					$("#hideartist").modal('show')
-
-				}
+			$.post('artist_management.php',{targetId : artistId}, function(response){
+				$("#hideartist").html($(response).find("#hideartist").html());
+				$("#hideartist").modal('show');
 			});
 		};
 	});	
@@ -458,7 +449,7 @@ MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
 					var newDoc = document.open("text/html", "replace");
 					newDoc.write(data);
 					newDoc.close();
-					$("#deleteArtist").modal('show')
+					$("#deleteArtist").modal('show');
 
 				},
 			});
@@ -467,7 +458,7 @@ MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
 	$('.actionArtistAdmin').on('change', function(){
 		if ($(this).val() == 'show'){
 			var artistId = $(this).children('option:selected').attr("data-id");
-			window.location.replace('zoom_artist?artist='+artistId);
+			window.location.replace('artist_zoom?artist='+artistId);
 		}
 	});
 

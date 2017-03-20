@@ -1,6 +1,7 @@
 <?php 
 
 require_once('classes/artist.php');
+require_once('classes/artwork.php');
 require_once('classes/user.php');
 require_once('classes/artist_textual_content.php');
 require_once('includes/include.php');
@@ -80,13 +81,12 @@ include('header.php');
 <!-- Modal pour mettre un artiste en false dc disparait pour les users -->
 <div id="hideartist" class="modal fade" role="dialog">
     <div class="modal-dialog">
-    </div>
         	<div class="modal-content">
 	        <div class="modal-header">
 	                <button type="button" class="close" data-dismiss="modal">&times;</button>
 	                <h4 class="modal-title">Attention !</h4>
 	        </div>
-	        <div class="modal-body_test">
+	        <div class="modal-body">
 	           		<p> Vous êtes sur le point de supprimer l'artiste <?= isset($targetArtist)?$targetArtist->getIdentity():''; ?> </p>
 	           		<p>Voulez-vous confirmer cette action ?</p>
 	           			<form action="artist_management.php" method="POST">
@@ -100,6 +100,7 @@ include('header.php');
 	            	<button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
 	            </div>
         	</div>
+    </div>
 </div>
 
 

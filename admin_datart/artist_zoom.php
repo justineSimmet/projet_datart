@@ -2,6 +2,7 @@
 
 
 require_once('classes/artist.php');
+require_once('classes/artwork.php');
 require_once('classes/user.php');
 require_once('classes/artist_textual_content.php');
 require_once('includes/include.php');
@@ -250,12 +251,12 @@ Insertion en bdd et recuperation en bdd des images de l'artiste
 					}
 	 				else //Sinon (la fonction renvoie FALSE).
 					{
-						echo 'Echec de l\'upload !';
+						$erreur = 'Echec de l\'upload !';
 					}
 				}
 		else
 		{
-		     echo $erreur;
+		     $actionResultat = '<div class="alert alert-danger alert-dismissable"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>Erreur !</strong>'.$erreur.'</div>';
 		}
 
 
@@ -314,9 +315,6 @@ include('header.php');
 						<h3>2 - Textes et Photos </h3>
 					<div class="formText_formPhoto">
 
-					<div>
-						
-					</div>
 				<?php
 
 					if (isset($targetArtist)){	

@@ -786,4 +786,43 @@ class Exhibit{
 		$count = count($avaible);
 		return $count;
 	}
+
+	function listAvailableArtwork(){
+		$res = requete_sql("
+			SELECT artwork.artist_id AS artist_id,
+			GROUP_CONCAT(artwork_displayed.artwork_id) AS artwork
+			FROM artwork_displayed 
+			LEFT JOIN artwork ON artwork_displayed.artwork_id = artwork.id 
+			LEFT JOIN artist ON artwork.artist_id = artist.id 
+			WHERE artwork_displayed.exhibit_id = '".$this->id."' 
+			AND artist.visible = TRUE
+			GROUP BY artist_id
+			ORDER BY artist.name, artist.alias ASC
+			");
+		$res = $res->fetchAll(PDO::FETCH_ASSOC);
+		$list = array();
+        foreach ($res as $key => $value) {
+            $artist = new Artist($value['artist_id']);
+            if(strpos($value['artwork'],',') != FALSE ){
+                $id = explode(',', $value['artwork']);
+                $listArtwork = array();
+                foreach ($id as $key => $id) {
+                    $artwork = new Artwork($id);
+                    // array_push($listArtwork, $artwork);
+                    $list[$artist->getIdentity()][$key] = $artwork;
+                }
+                 // = $listArtwork;
+            }
+            else{
+                $artist = new Artist($value['artist_id']);
+                $artwork = new Artwork($value['artwork']);
+                $list[$artist->getIdentity()][$key] = $artwork;
+            }
+            
+        }
+
+        return $list;
+
+	}		
+		
 }

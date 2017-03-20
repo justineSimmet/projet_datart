@@ -1,13 +1,13 @@
-<?php
+ <?php
 
 require_once('classes/user.php');
 require_once('classes/artist.php');
+require_once('classes/artist_textual_content.php');
 require_once('classes/artwork.php');
 require_once('classes/exhibit_textual_content.php');
 require_once('classes/event.php');
 require_once('classes/exhibit.php');
 require_once('includes/include.php');
-
 
 // INITIALISE UN OBJET EXHIBIT SI ID EN GET
 if (isset($_GET['exhibit'])) {
@@ -18,6 +18,8 @@ if (isset($_GET['exhibit'])) {
 if (isset($_POST['targetEvent'])) {
 	$targetEvent = new Event($_POST['targetEvent']);
 }
+
+
 
 
 /************************************************************************************************
@@ -408,6 +410,7 @@ if (isset($_POST['name']) && isset($_POST['date'])) {
 $locationTitle = isset($targetExhibit)?$targetExhibit->getTitle():'Ajouter une exposition';
 
 include('header.php');
+var_dump($targetExhibit->listAvailableArtwork());
 
 ?>
 
@@ -508,7 +511,7 @@ include('header.php');
 ?>
 	<div class="hidden-lg hidden-sm btn-area-row">
 		<a href="#" class="btn btn-default btn-custom btn-lg" role="button"><span class="fa fa-cubes"></span> Placer les oeuvres</a>
-		<a href="#" class="btn btn-default btn-custom btn-lg" role="button"><span class="fa fa-file-text"></span> Dossier technique</a>
+		<a href="exhibit_technical_doc.php?id=<?= $targetExhibit->getId() ?>" class="btn btn-default btn-custom btn-lg" role="button"><span class="fa fa-file-text"></span> Dossier technique</a>
 		<a href="#" class="btn btn-default btn-custom btn-lg" role="button"><span class="fa fa-desktop"></span> Voir la page visiteur</a>
 	</div>
 <?php
@@ -703,7 +706,7 @@ include('header.php');
 			?>
 				<div class="hidden-md hidden-xs btn-area-col">
 					<a href="#" class="btn btn-default btn-custom btn-md" role="button"><span class="fa fa-cubes"></span> Placer les oeuvres</a>
-					<a href="#" class="btn btn-default btn-custom btn-md" role="button"><span class="fa fa-file-text"></span> Dossier technique</a>
+					<a href="exhibit_technical_doc.php?id=<?= $targetExhibit->getId() ?>" class="btn btn-default btn-custom btn-md" role="button"><span class="fa fa-file-text"></span> Dossier technique</a>
 					<a href="#" class="btn btn-default btn-custom btn-md" role="button"><span class="fa fa-desktop"></span> Voir la page visiteur</a>
 				</div>
 			<?php
