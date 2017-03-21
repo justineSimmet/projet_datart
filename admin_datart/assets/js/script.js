@@ -427,17 +427,19 @@ MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
 		}
 		else if($(this).val() == 'hide'){
 			var artistId = $(this).children('option:selected').attr("data-id");
-			$.post('artist_management.php',{targetId : artistId}, function(response){
+			$.post('artist_management.php',{ targetId : artistId} , function(response){
 				$("#hideartist").html($(response).find("#hideartist").html());
 				$("#hideartist").modal('show');
 			});
-		};
-	});	
-
-
-/*************************************************************************
-** ACTIONS SUR LA LISTE DEROULANTE DES ACTIONS SUR LES ARTISTES CACHES
-**************************************************************************/
+		}
+		else if($(this).val() == 'publish'){
+			var artistId = $(this).children('option:selected').attr("data-id");
+			$.post('artist_management.php', {targetId : artistId, action : 'publish'}, function(response){
+				$("#artistManagementList").html($(response).find("#artistManagementList").html());
+				$("#alert-area").html($(response).find("#alert-area").html());
+			});
+		}
+	});
 
 	$('.delete-artist').on('click', function(){
 			var artistId = $(this).attr("data-id");
@@ -445,18 +447,7 @@ MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
 				$("#deleteArtist").html($(response).find("#deleteArtist").html());
 				$("#deleteArtist").modal('show');
 			});
-		else if($(this).val() == 'publish'){
-			var artistId = $(this).children('option:selected').attr("data-id");
-
-			window.location.replace('artist_zoom?artist='+artistId);
-			$.post('artist_management.php', {targetId : artistId, action : 'publish'}, function(response){
-				$("#artistManagementList").html($(response).find("#artistManagementList").html());
-				$("#alert-area").html($(response).find("#alert-area").html());
-			});
-
-		}
-	});
-
+		});	
 
 
 /*************************************************************************
@@ -623,4 +614,3 @@ MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
 	})
 
 });
-
