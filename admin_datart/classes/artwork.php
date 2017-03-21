@@ -583,7 +583,7 @@ class Artwork{
 				</div>
 				<div class="form-group input-image">
 					<label for="image-<?= $number ?>" class="control-label btn btn-default">Choisir un visuel</label>
-					<input id ="image-<?= $number ?>" class="input-file" type="file" name="image" accept="image/jpeg" required>
+					<input id ="image-<?= $number ?>" class="input-file" type="file" name="file" accept="image/jpeg" required>
 				</div>
 				<div class="form-group">
 					<label for="legend" class="control-label">Légende du visuel :</label>

@@ -140,7 +140,7 @@ function mainPictureAction(mainTarget, visualArea, captionArea){
             data: data,
             success: function (response) {
                 //Test si il n'y a pas d'erreur sur l'image envoyée
-                if(response.file.image.error == 0 ){
+                if(response.file.file.error == 0 ){
                 	var success ='<div class="alert alert-success alert-dismissable">'
 					+'<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'
 					+'<p>Le visuel a bien été enregistré.<p>'
@@ -152,24 +152,24 @@ function mainPictureAction(mainTarget, visualArea, captionArea){
                 	$form.find('input[name="pictureId"]').val(response.text.pictureId);
                 	$(mainTarget).find('.input-image').removeClass('hidden');
                 	$form.find('button[type="submit"]').html('Modifier');
+                	$form.find('.delete-main-picture').remove();
                 	$(btnPicture).insertBefore($form.find('button[type="submit"]'));
-                	$(mainTarget).find('input[name="image"]').val('');
+                	$(mainTarget).find('input[name="file"]').val('');
                 	$(captionArea).addClass('hidden');
                 }
                 else{
-                	var error ='<div class="alert alert-success alert-dismissable">'
+                	var error ='<div class="alert alert-danger alert-dismissable">'
 					+'<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'
-					+'<p><strong>Erreur !</strong>'+response.file.image.error+'<p>'
+					+'<p><strong>Erreur ! </strong>'+response.file.file.error+'<p>'
 					+'</div>';
                 	$form.find('.alert-area-picture').html(error);
-                	$(mainTarget).find('input[name="image"]').val('');
-                	$(captionArea).addClass('hidden');
+                	$(mainTarget).find('input[name="file"]').val('');
                 }
             }
         })
 	})
 
-    $(mainTarget).find('input[name="image"]').on('change', function (e) {
+    $(mainTarget).find('input[name="file"]').on('change', function (e) {
         var files = $(this)[0].files;
  
         if (files.length > 0) {
@@ -191,7 +191,7 @@ function mainPictureAction(mainTarget, visualArea, captionArea){
     $(captionArea).find('button[type="button"]').on('click', function (e) {
         e.preventDefault();
  
-        $(mainTarget).find('input[name="image"]').val('');
+        $(mainTarget).find('input[name="file"]').val('');
         $(mainTarget).find('.input-image').removeClass('hidden');
         $(visualArea).find('img').attr('src', '');
         $(captionArea).addClass('hidden');
@@ -204,12 +204,8 @@ function mainPictureAction(mainTarget, visualArea, captionArea){
 		var actiondDetail = $form.attr("data-action");
 		var picture = $form.attr("data-picture");
 		$.post('picture_process.php',{action : actiondDetail, pictureId : picture}, function(response){
-			if (response == 'success') {
-				var success ='<div class="alert alert-success alert-dismissable">'
-					+'<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'
-					+'<p>Le visuel a bien été enregistré.<p>'
-					+'</div>';
-				$(mainTarget).find('input[name="image"]').val('');
+			if (response.response == 'success') {
+				$(mainTarget).find('input[name="file"]').val('');
 				$(mainTarget).find('input[name="legend"]').val('');
 				$(visualArea).find('img').attr('src', '');
 				$(mainTarget).find('.delete-main-picture').remove();
@@ -217,7 +213,7 @@ function mainPictureAction(mainTarget, visualArea, captionArea){
 				$form.find('input[name="pictureId"]').val('');
 			}
 			else{
-				var error ='<div class="alert alert-success alert-dismissable">'
+				var error ='<div class="alert alert-danger alert-dismissable">'
 					+'<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'
 					+'<p><strong>Erreur !</strong> L\'image n\'a pas pu être supprimée.<p>'
 					+'</div>';
@@ -369,14 +365,12 @@ MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
 	mainPictureAction('#main-three', '#visual-three', '#caption-three');
 
 	Dropzone.options.picturesUpload = {
-	  paramName: "file", // The name that will be used to transfer the file
-	  maxFilesize: 2.5, // MB
-	  accept: function(file, done) {
-	    if (file.name == "justinbieber.jpg") {
-	      done("Naha, you don't.");
-	    }
-	    else { done(); }
-	  }
+		url: 'picture_process.php',
+		acceptedFiles: '.jpg, .jpeg',
+		dictDefaultMessage: 'Déposez vos images ici, ou cliquez pour en sélectionner une.',
+		init: function() {
+	    	this.on("addedfile", function(file) { alert("Added file."); });
+		}
 	};
 /**********************************************
 ** EXECUTION REQUETE AJAX SI UN UTILISATEUR A

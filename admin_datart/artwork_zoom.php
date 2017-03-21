@@ -347,7 +347,7 @@ include('header.php');
 				    			foreach ($visualList as $v) {
 				    				if ($v->getDisplayOrder() !== '1' && $v->getDisplayOrder() != '2' && $v->getDisplayOrder() != '3' ) {
 				    					?>
-			    						<div class="col-sm-3">
+			    						<div class="col-sm-2">
 			    							<div class="thumbnail">
 				    							<div class="img-container">
 				    								<img src="<?= $v->getTarget(); ?>" class="responsive">
@@ -363,8 +363,11 @@ include('header.php');
 				    		}
     					?>
     				</div>
-					
+
 				<form action="<?= URL_ADMIN ?>picture_process.php" method="POST" id="picturesUpload" class="dropzone">
+					<div class="fallback">
+						<input name="file" type="file" />
+					</div>
 					<input type="hidden" name="artworkId" value="<?= isset($targetArtwork) && !empty($targetArtwork->getId())?$targetArtwork->getId():''; ?>">
 					<input type="hidden" name="action" value="uploadPictures">
 				</form>
