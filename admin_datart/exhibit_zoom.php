@@ -55,7 +55,7 @@ if (isset($_POST['title'])) {
 			$closeEvent->synchroDb();
 
 			// Redirection vers la fiche Expo créé
-			header('Location:exhibit_zoom.php?exhibit='.$create);
+			header('Location:'.URL_ADMIN.'exhibit_zoom.php?exhibit='.$create);
 		}
 		else{
 			$actionResultat = '<div class="alert alert-danger alert-dismissable">
@@ -98,13 +98,6 @@ if (isset($_POST['title'])) {
 	}
 }
 
-/************************************************************************************************
-**
-** Actions sur les expositions masquées /visible == FALSE/
-** Permet leur publication ou leur suppression définitive 
-**
-************************************************************************************************/
-
 if (isset($_POST['targetExhibit']) && isset($_POST['action']) ) {
 	$targetExhibit = new Exhibit($_POST['targetExhibit']);
 	if($_POST['action'] == 'publish'){
@@ -126,7 +119,7 @@ if (isset($_POST['targetExhibit']) && isset($_POST['action']) ) {
 		if ($check) {
 			$delete = $targetExhibit->deleteExhibit();
 			if ($delete) {
-				header('Location:exhibit_management.php');
+				header('Location:'.URL_ADMIN.'exhibit_management.php');
 			}
 			else{
 				$actionResultat = '<div class="alert alert-danger alert-dismissable">
@@ -148,7 +141,10 @@ if (isset($_POST['targetExhibit']) && isset($_POST['action']) ) {
 		if ($check) {
 			$delete = $targetEvent->deleteEvent();
 			if ($delete) {
-				header('Location:exhibit_zoom.php?exhibit='.$targetExhibit->getId());
+				$actionResultatEvent = '<div class="alert alert-success alert-dismissable" id="update-event">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<strong>Vous venez de supprimer un événement.</strong>
+				</div>';
 			}
 			else{
 				$actionResultatEvent = '<div class="alert alert-danger alert-dismissable">
@@ -463,7 +459,8 @@ var_dump($targetExhibit->listAvailableArtwork());
 		                <label for="password">Mot de passe :</label>
 		                <input type="password" name="password" placeholder="Votre mot de passe" required />
 		                <input type="hidden" name="action" value="delete-event" />
-		                <input type="hidden" value="<?= isset($targetEvent)?$targetEvent->getId():';' ?>" name="targetId">
+		                <input type="hidden" value="<?= isset($targetEvent)?$targetEvent->getId():''; ?>" name="targetEvent">
+		                <input type="hidden" value="<?= isset($targetExhibit)?$targetExhibit->getId():''; ?>" name="targetExhibit">
 		                <input type="submit" value="Supprimer" />
 	                </form>
 	        	</div>
@@ -488,8 +485,8 @@ var_dump($targetExhibit->listAvailableArtwork());
 	<div class="col-lg-6 col-lg-offset-3 col-md-6 col-lg-offset-3 col-sm-12 col-xs-12">
 		<div class="alert alert-warning text-center">
 		  <strong>L'exposition que vous souhaitez consulter n'est plus disponible.</strong><br>
-		  <a href="index.php" class="btn btn-default" role="button">Retour au tableau de bord</a>
-		  <a href="exhibit_management.php" class="btn btn-default" role="button">Retour aux expositions</a>
+		  <a href="<?= URL_ADMIN ?>index.php" class="btn btn-default" role="button">Retour au tableau de bord</a>
+		  <a href="<?= URL_ADMIN ?>exhibit_management.php" class="btn btn-default" role="button">Retour aux expositions</a>
 		</div>
 	</div>
 
@@ -507,7 +504,7 @@ var_dump($targetExhibit->listAvailableArtwork());
 <div class="col-xs-12">
 <?php
 	if (isset($targetExhibit)){
-		if ($targetExhibit->getVisible() == TRUE) {
+		if ($targetExhibit->getVisible() == TRUE && $targetExhibit->getEndDate() > date('Y-m-d')) {
 ?>
 	<div class="hidden-lg hidden-sm btn-area-row">
 		<a href="#" class="btn btn-default btn-custom btn-lg" role="button"><span class="fa fa-cubes"></span> Placer les oeuvres</a>
@@ -516,7 +513,7 @@ var_dump($targetExhibit->listAvailableArtwork());
 	</div>
 <?php
 	}
-	else{
+	elseif($targetExhibit->getVisible() == FALSE && $targetExhibit->getEndDate() > date('Y-m-d')){
 ?>
 	<div class="hidden-lg hidden-sm btn-area-row">
 		<button class="btn btn-default btn-custom btn-lg publish-exhibit" role="button" data-id="<?= $targetExhibit->getId(); ?>" ><span class="fa fa-eye"></span> Publier l'exposition</button>
@@ -571,7 +568,7 @@ var_dump($targetExhibit->listAvailableArtwork());
 							$newExhibit->formText('','Ajouter');
 						}
 					?>
-					<div id="loading-svg"><img src="assets/images/ripple.svg"></div>
+					<div id="loading-svg"><img src="<?= URL_IMAGES ?>ripple.svg"></div>
 					</div>
 				</div>
 			</section>
@@ -672,7 +669,7 @@ var_dump($targetExhibit->listAvailableArtwork());
 											<?php
 										}
 									}
-										echo '<p><a href="artwork_zoom.php?artist='.$artist->getId().'">Ajouter une oeuvre</a></p>';
+										echo '<p><a href="<?= URL_ADMIN ?>artwork_zoom.php?artist='.$artist->getId().'">Ajouter une oeuvre</a></p>';
 										echo '</div>';
 								}
 								}
@@ -702,7 +699,7 @@ var_dump($targetExhibit->listAvailableArtwork());
 		<div class="col-xs-12">
 			<?php
 				if (isset($targetExhibit)){
-					if ($targetExhibit->getVisible() == TRUE) {
+					if ($targetExhibit->getVisible() == TRUE && $targetExhibit->getEndDate() > date('Y-m-d')) {
 			?>
 				<div class="hidden-md hidden-xs btn-area-col">
 					<a href="#" class="btn btn-default btn-custom btn-md" role="button"><span class="fa fa-cubes"></span> Placer les oeuvres</a>
@@ -711,7 +708,7 @@ var_dump($targetExhibit->listAvailableArtwork());
 				</div>
 			<?php
 				}
-				else{
+				elseif($targetExhibit->getVisible() == FALSE && $targetExhibit->getEndDate() > date('Y-m-d')){
 			?>
 				<div class="hidden-md hidden-xs btn-area-col">
 					<button class="btn btn-default btn-custom btn-md publish-exhibit" role="button" data-id="<?= $targetExhibit->getId(); ?>" ><span class="fa fa-eye"></span> Publier l'exposition</button>

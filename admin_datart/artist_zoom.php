@@ -89,7 +89,7 @@ if (isset($_POST['targetArtist']) && isset($_POST['action']) ) {
 		if ($check) {
 			$delete = $targetArtist->deleteArtist();
 			if ($delete) {
-				header('Location:exhibit_management.php');
+				header('Location:'.URL_ADMIN.'exhibit_management.php');
 			}
 			else{
 				$actionResultat = '<div class="alert alert-danger alert-dismissable">

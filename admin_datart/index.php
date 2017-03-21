@@ -37,7 +37,7 @@ include('header.php');
 					$currentExhibit = Exhibit::currentExhibit();
 					if (count($currentExhibit) == 1 ) {
 						?>
-						<div class="current-exhibit">
+						<div id="current-exhibit">
 						<div>
 							<h2><?= $currentExhibit[0]->getTitle(); ?></h2>
 							<p class="date">
@@ -63,13 +63,14 @@ include('header.php');
 								<div>
 									<h2><?= $ce->getTitle(); ?></h2>
 									<p class="date">
-									<?=  dateFormat($ce->getBeginDate()); ?> > <?=  dateFormat($ce->getEndDate()); ?>
+										<?=  dateFormat($ce->getBeginDate()); ?> > <?=  dateFormat($ce->getEndDate()); ?>
 									</p>
 									<p class="summary">
 									<?php
-										if (!empty($ce->getTextualContent()) ) {
+										if (!empty($ce->getFrenchSummary()->getContent()) ) {
 											if (strlen($ce->getFrenchSummary()->getContent()) > 150 ) {
-												echo substr($ce->getFrenchSummary()->getContent(),0,144).' (...)';
+												$paragraphe = array('<p>','</p>');
+												echo substr(str_replace($paragraphe, '', $ce->getFrenchSummary()->getContent()) ,0,144).' (...)';
 											}
 											else{
 												echo $ce->getFrenchSummary()->getContent();
@@ -81,12 +82,12 @@ include('header.php');
 									?>
 									</p>
 									<p class="text-center">
-										<a href="exhibit_zoom.php?exhibit=<?= $ce->getId(); ?>" class="btn btn-default">Voir / Modifier l'exposition</a>
+										<a href="<?= URL_ADMIN ?>exhibit_zoom.php?exhibit=<?= $ce->getId(); ?>" class="btn btn-default">Voir / Modifier l'exposition</a>
 										<a href="#" class="btn btn-default">Voir la page visiteur</a>
 									</p>
 								</div>
 								<div class="exhibit-picture"><!-- Photo aléatoire tirée d'une oeuvre de l'expo -->
-									<img src="assets/images/artwork/temp2.gif">
+									<img src="<?= URL_IMAGES ?>artwork/temp2.gif">
 								</div>
 							</div>
 
@@ -124,7 +125,7 @@ include('header.php');
 										echo '' ;
 									}
 								?>
-								<a href="exhibit_zoom.php?exhibit=<?= $nextExhibit[0]->getId(); ?>" class="btn btn-default">Voir / Modifier l'exposition</a>
+								<a href="<?= URL_ADMIN ?>exhibit_zoom.php?exhibit=<?= $nextExhibit[0]->getId(); ?>" class="btn btn-default">Voir / Modifier l'exposition</a>
 							</p>
 
 						<?php
@@ -146,13 +147,13 @@ include('header.php');
 							$last = lastCreateElement();
 							foreach ($last as $l) {
 								if (is_a($l, 'Exhibit')) {
-									echo '<li><a href="exhibit_zoom?exhibit='.$l->getId().'">Expo : '.$l->getTitle().' - Enregistré le : '.dateFormat($l->getCreationDate()).'</a></li>';
+									echo '<li><a href="<?= URL_ADMIN ?>exhibit_zoom?exhibit='.$l->getId().'">Expo : '.$l->getTitle().' - Enregistré le : '.dateFormat($l->getCreationDate()).'</a></li>';
 								}
 								elseif (is_a($l, 'Artist')) {
-									echo '<li><a href="artist_zoom?artist='.$l->getId().'">Artiste : '.$l->getIdentity().' - Enregistré le : '.dateFormat($l->getCreationDate()).'</a></li>';
+									echo '<li><a href="<?= URL_ADMIN ?>artist_zoom?artist='.$l->getId().'">Artiste : '.$l->getIdentity().' - Enregistré le : '.dateFormat($l->getCreationDate()).'</a></li>';
 								}
 								else{
-									echo '<li><a href="artwork_zoom?artwork='.$l->getId().'">Oeuvre : '.$l->getTitle().' - Enregistré le : '.dateFormat($l->getCreationDate()).'</a></li>';
+									echo '<li><a href="<?= URL_ADMIN ?>artwork_zoom?artwork='.$l->getId().'">Oeuvre : '.$l->getTitle().' - Enregistré le : '.dateFormat($l->getCreationDate()).'</a></li>';
 								}
 							}
 						?>

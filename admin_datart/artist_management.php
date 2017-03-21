@@ -28,12 +28,12 @@ if(isset($_POST['targetId']) && isset($_POST['action']) ){
 		if ($hide) {
 			$actionResultat = '<div class="alert alert-success alert-dismissable" >
 		<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-		<strong>Félicitations </strong>'.$targetArtist->getIdentity().' a été supprimé.</div>';	
+		<p><strong>Félicitations !</strong> '.$targetArtist->getIdentity().' a été supprimé.</p></div>';	
 		}
 		else{
 			$actionResultat = '<div class="alert alert-danger alert-dismissable">
 		<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-		<strong>Erreur</strong> '.$targetArtist->getIdentity().' n\'a pas pu être supprimé.</div>';	
+		<p><strong>Erreur !</strong> '.$targetArtist->getIdentity().' n\'a pas pu être supprimé.</p></div>';	
 		}
 	}
 
@@ -50,20 +50,20 @@ if(isset($_POST['targetId']) && isset($_POST['action']) ){
 			if ($delete) {
 				$actionResultat = '<div class="alert alert-success alert-dismissable">
 				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-				<strong>Vous venez de supprimer définitivement l\'artiste '.$targetArtist->getIdentity().' </strong>
+				<p><strong>Vous venez de supprimer définitivement l\'artiste '.$targetArtist->getIdentity().' </strong></p>
 				</div>';	
 			}
 			else{
 				$actionResultat = '<div class="alert alert-danger alert-dismissable">
 				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-				<strong>Erreur !</strong> L\'artiste '.$targetArtist->getIdentity().' n\'a pas été supprimé.
+				<p><strong>Erreur !</strong> L\'artiste '.$targetArtist->getIdentity().' n\'a pas été supprimé.</p>
 				</div>';
 			}
 		}
 		else{
 			$actionResultat = '<div class="alert alert-danger alert-dismissable">
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-			<strong>Votre mot de passe est incorrect.</strong> Vous ne pouvez pas supprimer l\'artiste '.$targetArtist->getIdentity().'
+			<p><strong>Votre mot de passe est incorrect.</strong> Vous ne pouvez pas supprimer l\'artiste '.$targetArtist->getIdentity().'</p>
 			</div>';			
 		}
 	}
@@ -75,7 +75,9 @@ include('header.php');
 
 
 <div class="row" id="alert-area">
-	<?= !empty($actionResultat)?$actionResultat:''; ?>
+	<div class="col-sm-12 text-center">
+		<?= !empty($actionResultat)?$actionResultat:''; ?>
+	</div>
 </div>
 
 <!-- Modal pour mettre un artiste en false dc disparait pour les users -->
@@ -89,11 +91,11 @@ include('header.php');
 	        <div class="modal-body">
 	           		<p> Vous êtes sur le point de supprimer l'artiste <?= isset($targetArtist)?$targetArtist->getIdentity():''; ?> </p>
 	           		<p>Voulez-vous confirmer cette action ?</p>
-	           			<form action="artist_management.php" method="POST">
+	           			<form action="<?= URL_ADMIN; ?>artist_management.php" method="POST">
 	           				<button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
 							<input type="hidden" value="<?= isset($targetArtist)?$targetArtist->getId():'' ; ?>" name="targetId"/>
 							<input type="hidden" name="action" value="hide">
-			               	<input type="submit" class="btn btn-default" value="Supprimer" />
+			               	<input type="submit" value="Supprimer" class="btn btn-danger pull-right" />
 			            </form>
 	            </div> 
 	            <div class="modal-footer">
@@ -107,115 +109,175 @@ include('header.php');
 <!-- Modal pour confirmer la suppression definitive par l'admin -->
 <div id="deleteArtist" class="modal fade" role="dialog" >
 	<div class="modal-dialog">
-	</div>
 		<div class="modal-content">
         	<div class="modal-header">
         		<button type="button" class="close" data-dismiss="modal">&times;</button>
         		<h4 class="modal-title">Attention !</h4>
         	</div>
-        	<div class="modal-body_test">
+        	<div class="modal-body">
         		<p> Vous êtes sur le point de supprimer <strong>définitivement</strong> l'artiste <?= isset($targetArtist)?$targetArtist->getIdentity():''; ?> </p>
                 <p> Pour confirmer cette action, merci de saisir votre mot de passe</p>
-                <form action="artist_management.php" method="POST">
-	                <label for="password">Mot de passe :</label>
-	                <input type="password" name="password" placeholder="Votre mot de passe"  required />
-	                <input type="hidden" name="action" value="delete" />
-	                <input type="hidden" value="<?= isset($targetArtist)?$targetArtist->getId():';' ?>" name="targetId">
-	                <input type="submit" value="Supprimer" />
-                </form>
+                <form action="<?= URL_ADMIN; ?>artist_management.php" method="POST" class="form-inline clearfix">
+                	<div class="form-group">
+	                	<label for="password">Mot de passe :</label>
+	                	<input type="password" name="password" placeholder="Votre mot de passe" class="form-control" required />
+	                </div>
+                	<input type="hidden" value="<?= isset($targetArtist)?$targetArtist->getId():';' ?>" name="targetId">
+                	<input type="submit" value="Supprimer" class="btn btn-danger pull-right" />
+				</form>
         	</div>
         	<div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
             </div>
         </div>
+	</div>
 </div>
 
- <a href="artist_zoom.php" class="btn btn-default">Créer un nouvel artiste</a>
 
+<div class="row" id="artistManagementList">
 
-<!-- Liste des artistes -->
- <h2>Liste des artistes</h2>
- 	<section>
- 		<div class="row col-equal-height">
-	 		<table>
-	 			<!-- <thead> -->
-<!-- 		 			<tr>
-			 			<th>Nom</th>
-			 			<th>Prénom</th>
-			 			<th>Pseudonyme</th>
-		 			</tr> -->
-				<!-- </thead> -->
-				<!-- <tbody> -->
-					<?php 
-						// creation de la liste avec un foreach et chaque l = un artiste
-						$liste = Artist::listArtist();
-							foreach ($liste as $l) {
-					?>
-						 	<tr>
-							 	<td>
-							 		<?= $l->getIdentity(); ?>
-<!-- 							 	</td> -->
+	<div class="col-sm-9 col-xs-12">
+		 <h2>Artistes enregistrés</h2>
 
-							 		<div class="form-group">
-							 			<!-- liste deroulante -->
-							 			<select class="form-control actionArtist">
-								 			<option> --- </option>
-								 			<option value="update" data-id="<?= $l->getId(); ?>">Voir / Modifier</option> 
-								 			<option value="delete" data-id="<?= $l->getId(); ?>">Supprimer</option> 
-								 		</select>
-							 		</div>
-							 	</td>
-							</tr>
-						<?php 
-							};
-						?>
-					<!-- </tbody> -->
-	 		</table>
-		</div>
- 	</section>
-
-
-<!-- Liste des artistes en cours de suppression -->
-
-	<?php
-		if($currentUser->getStatus() == FALSE ){
-	?>
-		<h2>Artistes en cours de suppression</h2>
-
- 			<section>
-				<?php 
-					$listHide = Artist::listHidenArtist();
-					foreach ($listHide as $lh){ 
-				?>
-						<div class="row col-equal-height">
-							<div class="col-sm-5">
-								<h4><?= $lh->getIdentity(); ?></h4>
-							</div>
-							<div class="col-sm-4">
-								<form class="form-horizontal">
-									<div class="form-group">
-										<label for="actions-artiste" class="control-label col-sm-4">Actions </label>
-										<div class="col-sm-8">
-											<select name="actions-artiste" class="form-control actionArtistAdmin">
-												<option> --- </option>
-												<option value="show" data-id="<?= $lh->getId(); ?>">Visionner</option>
-												<option value="publish" data-id="<?= $lh->getId(); ?>">Publier</option>
-											</select>
-										</div>
-									</div>
-								</form>	
-							</div>
-							<div class="col-sm-3">
-								<button type="button" class="btn btn-default btn-delete" data-id="<?= $lh->getId(); ?>" >Supprimer définitivement</button>
+		 <section class="listing">
+		 	<?php 
+				// creation de la liste avec un foreach et chaque l = un artiste
+				$artistes = Artist::listArtist();
+				foreach ($artistes as $a) {
+			?>
+			<div class="row col-equal-height">
+				<div class="col-sm-6">
+					<h3><?= $a->getIdentity(); ?></h3>
+				</div>
+				<div class="col-sm-6">
+					<form class="form-horizontal">
+						<div class="form-group">
+							<label for="actions-artist" class="control-label col-sm-4">Actions :</label>
+							<div class="col-sm-8">
+								<select name="actions-artist" class="form-control actionArtist">
+									<option> --- </option>
+									<option value="update" data-id="<?= $a->getId(); ?>">Voir / Modifier</option>
+									<option value="hide" data-id="<?= $a->getId(); ?>" >Supprimer</option>
+								</select>
 							</div>
 						</div>
-				<?php 
-					}
-				?>
-				
- 			</section>
-		<?php
+					</form>
+				</div>
+			</div>
+			<div class="row">
+                <div class="col-sm-12">
+                    <div class="table-responsive">
+                    <table class="table text-center">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Oeuvres associées
+                                </th>
+                                <th>
+                                    Biographie
+                                </th>
+                                <th>
+                                    Note
+                                </th>
+                                <th>
+                                    Anglais
+                                </th>
+                                <th>
+                                    Allemand
+                                </th>
+                                <th>
+                                    Russe
+                                </th>
+                                <th>
+                                    Chinois
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <!-- NOMBRE D'OEUVRES -->
+                                </td>
+                                <td>
+                                     <!-- BIOGRAPHIE -->
+                                </td>
+                                <td>
+                                     <!-- NOTE -->
+                                </td>
+                                <td>
+                                    <!-- TRAD FRENCH -->
+                                </td>
+                                <td>
+                                    <!-- TRAD GERMAN -->
+                                </td>
+                                <td>
+                                    <!-- TRAD RUSSIAN -->
+                                </td>
+                                <td>
+                                    <!-- TRAD CHINESE -->
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    </div>              
+                </div>
+			</div>
+			<?php
+				}
+			?>
+		 </section>
 
-		}
+	</div>
+	<div class="col-sm-3 col-xs-12">
+		<div>
+			<a href="<?= URL_ADMIN ?>artist_zoom.php" class="btn btn-default btn-block btn-custom"><span class="fa fa-plus-circle"></span> Créer un nouvel artiste</a>
+		</div>
+	</div>
+</div>
 
+<?php
+if($currentUser->getStatus() == FALSE ){
+?>
+
+<div class="row">
+	<div class="col-sm-12">
+		<h2>Artistes en cours de suppression</h2>
+		<section>
+			<?php 
+				$artistHide = Artist::listHidenArtist();
+				foreach ($artistHide as $ah){ 
+			?>
+				<div class="row col-equal-height">
+					<div class="col-sm-4">
+						<h3><?= $ah->getIdentity(); ?></h3>
+						<p class="date">Créé le : <?= dateFormat($ah->getCreationDate()); ?></p>
+					</div>
+					<div class="col-sm-4">
+						<form class="form-horizontal">
+							<div class="form-group">
+								<label for="actions-artist" class="control-label col-sm-5">Actions :</label>
+								<div class="col-sm-7">
+									<select name="actions-artist" class="form-control actionArtist">
+										<option> --- </option>
+										<option value="show" data-id="<?= $ah->getId(); ?>">Visionner</option>
+										<option value="publish" data-id="<?= $ah->getId(); ?>" >Publier</option>
+									</select>
+								</div>
+							</div>
+						</form>
+					</div>
+					<div class="col-sm-4">
+						<button type="button" class="btn btn-danger btn-block delete-artist" data-id="<?= $ah->getId(); ?>" >Supprimer définitivement</button>
+					</div>
+				</div>
+			<?php 
+				}
+			?>
+		</section>
+	</div>
+</div>
+	
+
+<?php
+}
 include('footer.php');

@@ -5,6 +5,6 @@ require_once('includes/include.php');
 
 if (isset($currentUser)) {
 	$deco = $currentUser->disconnect();
-	header('Location:login.php');
+	header('Location:'.URL_ADMIN.'login.php');
 }
 

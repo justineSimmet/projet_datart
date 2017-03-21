@@ -89,7 +89,7 @@ class Artist{
           $this->textual_content = array();
         }
         $this->artwork = array();
-        $artwork = requete_sql("SELECT id FROM artwork WHERE artist_id = '".$this->id."' ");
+        $artwork = requete_sql("SELECT id FROM artwork WHERE artist_id = '".$this->id."' AND visible = TRUE ");
         if (count($text) !== 0) {
           while ($art = $artwork->fetch(PDO::FETCH_ASSOC)){
             array_push($this->artwork, new Artwork($art['id']));
@@ -291,7 +291,7 @@ soit à faire un update des données de l'id reçue
 
 
   static function listArtist(){
-    $listArtist = requete_sql("SELECT id FROM artist WHERE visible = TRUE ORDER BY surname, alias ASC");
+    $listArtist = requete_sql("SELECT id, CONCAT_WS(' ',alias,surname) AS identity FROM artist WHERE visible = TRUE ORDER BY identity ASC");
     $listArtist = $listArtist->fetchAll(PDO::FETCH_ASSOC);
     $tabList = array();
     foreach ($listArtist as $artist){

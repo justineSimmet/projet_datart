@@ -248,4 +248,22 @@ class Artwork{
 		<?php
 	}
 
+
+/******************************************************
+**
+** LISTES DE TOUTES LES OEUVRES
+**
+******************************************************/
+
+	static function listArtwork(){
+		$listArtist = Artist::listArtist();
+		$list = array();
+		foreach ($listArtist as $artist) {
+			if (!empty($artist->getArtwork()) && $artist->getVisible() == TRUE ) {
+				array_push($list, $artist);
+			}
+		}
+		return $list;
+	}
+
 }

@@ -92,12 +92,12 @@ class Exhibit{
 				}
 			}
 			$this->artist_exposed = array();
-			$artist = requete_sql("SELECT artist_id FROM artist_exposed WHERE exhibit_id = '".$this->id."' ");
+			$artist = requete_sql("SELECT artist_exposed.artist_id FROM artist_exposed LEFT JOIN artist ON artist_exposed.artist_id = artist.id WHERE exhibit_id = '".$this->id."' AND visible = TRUE ");
 			while ($a = $artist->fetch(PDO::FETCH_ASSOC) ) {
 				array_push($this->artist_exposed, new Artist($a['artist_id']));
 			}
 			$this->artwork_displayed = array();
-			$artwork = requete_sql("SELECT artwork_id FROM artwork_displayed WHERE exhibit_id = '".$this->id."' ");
+			$artwork = requete_sql("SELECT artwork_displayed.artwork_id FROM artwork_displayed LEFT JOIN artwork ON artwork_displayed.artwork_id = artwork.id  WHERE exhibit_id = '".$this->id."' AND visible = TRUE ");
 			while ($a = $artwork->fetch(PDO::FETCH_ASSOC) ) {
 				array_push($this->artwork_displayed, new Artwork($a['artwork_id']));
 			}
@@ -507,13 +507,13 @@ class Exhibit{
 						<div class="form-group form-group-lg col-sm-6">
 							<label for="begin_date" class="control-label col-sm-4">Début :</label>
 							<div class="col-sm-8">
-							<input type="date" name="begin_date" id="begin_date" class="form-control" value="<?= dateFormat($this->begin_date) ?>" placeholder="ex. : 02/02/2017" required <?= !empty($this->getId()) && $this->getVisible() == FALSE?'disabled':''; ?> <?= !empty($this->id) && $this->getEndDate() < date('Y-m-d')?'readonly':''; ?> />
+							<input type="text" name="begin_date" id="begin_date" class="form-control" value="<?= dateFormat($this->begin_date) ?>" placeholder="ex. : 02/02/2017" required <?= !empty($this->getId()) && $this->getVisible() == FALSE?'disabled':''; ?> <?= !empty($this->id) && $this->getEndDate() < date('Y-m-d')?'readonly':''; ?> />
 							</div>
 						</div>
 						<div class="form-group form-group-lg col-sm-6">
 							<label for="end_date" class="control-label col-sm-4">Fin :</label>
 							<div class="col-sm-8">
-							<input type="date" name="end_date" id="end_date" class="form-control" value="<?= dateFormat($this->end_date) ?>" placeholder="ex. : 02/02/2017" required <?= !empty($this->getId()) && $this->getVisible() == FALSE?'disabled':''; ?> <?= !empty($this->id) && $this->getEndDate() < date('Y-m-d')?'readonly':''; ?> />
+							<input type="text" name="end_date" id="end_date" class="form-control" value="<?= dateFormat($this->end_date) ?>" placeholder="ex. : 02/02/2017" required <?= !empty($this->getId()) && $this->getVisible() == FALSE?'disabled':''; ?> <?= !empty($this->id) && $this->getEndDate() < date('Y-m-d')?'readonly':''; ?> />
 							</div>
 						</div>
 					</div>
@@ -561,7 +561,7 @@ class Exhibit{
 						<div class="form-group form-group-lg">
 							<label for="summaryfrench" class="control-label col-lg-2 col-md-2 col-sm-3">Résumé :</label>
 							<div class="col-lg-10 col-md-10 col-sm-12">
-							<textarea name="summaryFrench" class="form-control" <?= !empty($this->id) && $this->getEndDate() < date('Y-m-d')?'readonly':''; ?> ><?= !empty($this->getTextualContent())?$this->getFrenchSummary()->getContent():'' ?></textarea>
+							<textarea name="summaryFrench" <?= !empty($this->id) && $this->getEndDate() < date('Y-m-d')?' class="form-control" readonly':'class="form-control textarea-avaible"'; ?> ><?= !empty($this->getTextualContent())?$this->getFrenchSummary()->getContent():'' ?></textarea>
 							</div>
 						</div>
 					</fieldset>
@@ -577,7 +577,7 @@ class Exhibit{
 						<div class="form-group form-group-lg">
 							<label for="summaryEnglish" class="control-label col-lg-2 col-md-2 col-sm-3">Résumé :</label>
 							<div class="col-lg-10 col-md-10 col-sm-12">
-							<textarea name="summaryEnglish" class="form-control" <?= !empty($this->id) && $this->getEndDate() < date('Y-m-d')?'readonly':''; ?> ><?= !empty($this->getTextualContent())?$this->getEnglishSummary()->getContent():'' ?></textarea>
+							<textarea name="summaryEnglish" <?= !empty($this->id) && $this->getEndDate() < date('Y-m-d')?' class="form-control" readonly':'class="form-control textarea-avaible"'; ?> ><?= !empty($this->getTextualContent())?$this->getEnglishSummary()->getContent():'' ?></textarea>
 							</div>
 						</div>
 					</fieldset>
@@ -593,7 +593,7 @@ class Exhibit{
 						<div class="form-group form-group-lg">
 							<label for="summaryGerman" class="control-label col-lg-2 col-md-2 col-sm-3">Résumé :</label>
 							<div class="col-lg-10 col-md-10 col-sm-12">
-							<textarea name="summaryGerman" class="form-control" <?= !empty($this->id) && $this->getEndDate() < date('Y-m-d')?'readonly':''; ?> ><?= !empty($this->getTextualContent())?$this->getGermanSummary()->getContent():'' ?></textarea>
+							<textarea name="summaryGerman" <?= !empty($this->id) && $this->getEndDate() < date('Y-m-d')?' class="form-control" readonly':'class="form-control textarea-avaible"'; ?> ><?= !empty($this->getTextualContent())?$this->getGermanSummary()->getContent():'' ?></textarea>
 							</div>
 						</div>
 					</fieldset>
@@ -609,7 +609,7 @@ class Exhibit{
 						<div class="form-group form-group-lg">
 							<label for="summaryRussian" class="control-label col-lg-2 col-md-2 col-sm-3">Résumé :</label>
 							<div class="col-lg-10 col-md-10 col-sm-12">
-							<textarea name="summaryRussian" class="form-control" <?= !empty($this->id) && $this->getEndDate() < date('Y-m-d')?'readonly':''; ?> ><?= !empty($this->getTextualContent())?$this->getRussianSummary()->getContent():'' ?></textarea>
+							<textarea name="summaryRussian" <?= !empty($this->id) && $this->getEndDate() < date('Y-m-d')?' class="form-control" readonly':'class="form-control textarea-avaible"'; ?> ><?= !empty($this->getTextualContent())?$this->getRussianSummary()->getContent():'' ?></textarea>
 							</div>
 						</div>
 					</fieldset>
@@ -625,7 +625,7 @@ class Exhibit{
 						<div class="form-group form-group-lg">
 							<label for="summaryChinese" class="control-label col-lg-2 col-md-2 col-sm-3">Résumé :</label>
 							<div class="col-lg-10 col-md-10 col-sm-12">
-							<textarea name="summaryChinese" class="form-control" <?= !empty($this->id) && $this->getEndDate() < date('Y-m-d')?'readonly':''; ?> ><?= !empty($this->getTextualContent())?$this->getChineseSummary()->getContent():'' ?></textarea>
+							<textarea name="summaryChinese" <?= !empty($this->id) && $this->getEndDate() < date('Y-m-d')?' class="form-control" readonly':'class="form-control textarea-avaible"'; ?> ><?= !empty($this->getTextualContent())?$this->getChineseSummary()->getContent():'' ?></textarea>
 							</div>
 						</div>
 					</fieldset>				

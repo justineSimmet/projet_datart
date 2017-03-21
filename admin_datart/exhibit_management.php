@@ -147,7 +147,7 @@ include('header.php');
 ************************************************************************************************
 -->
 	<h2>Exposition en cours</h2>
-	<section>
+	<section class="listing">
 		<?php
 		$currentExhibit = Exhibit::currentExhibit();
 		foreach ($currentExhibit as $ce){
@@ -242,7 +242,7 @@ include('header.php');
 ************************************************************************************************
 -->
 	<h2>Expositions à venir</h2>
-	<section>
+	<section class="listing">
 		<?php
 		$listNext = Exhibit::listNextExhibit();
 		foreach ($listNext as $ln) {
@@ -383,7 +383,7 @@ include('header.php');
 ************************************************************************************************
 -->	
 	<div class="col-lg-3">
-		<a href="exhibit_zoom.php" class="btn btn-default btn-block btn-lg btn-custom"><span class="fa fa-plus-circle"></span> Nouvelle exposition</a>	
+		<a href="<?= URL_ADMIN ?>exhibit_zoom.php" class="btn btn-default btn-block btn-lg btn-custom"><span class="fa fa-plus-circle"></span> Nouvelle exposition</a>	
 
 		<h4>Expositions passées</h4>
 		<section class="minor-list">
@@ -395,7 +395,7 @@ include('header.php');
 				<li>
 					<h5><?= $lo->getTitle(); ?></h5>
 					<p class="minor-date"><?= dateFormat($lo->getBeginDate()); ?> > <?= dateFormat($lo->getEndDate()); ?></p>
-					<a href="exhibit_zoom.php?exhibit=<?= $lo->getId(); ?>"><span class="fa fa-eye"></span></a>
+					<a href="<?= URL_ADMIN ?>exhibit_zoom.php?exhibit=<?= $lo->getId(); ?>"><span class="fa fa-eye"></span></a>
 				</li>
 			<?php
 				}

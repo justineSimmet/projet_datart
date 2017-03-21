@@ -293,36 +293,36 @@ class User{
 ----------------------------------------------------------------*/
 	function form($target, $action='', $titre, $description){
 	?>
-		<form action=<?= $target ?> method="POST" id="<?= $description; ?>-user-form" class="form-vertical clearfix">
+		<form action=<?= $target ?> method="POST" id="<?= $description; ?>-user-form" class="form-vertical clearfix user-form">
 			<h2><?= $titre ?></h2>
 			<div class="form-group form-group-lg">
 				<label for="public_name" class="control-label" >Prénom :</label>
 				<div>
-				<input type="text" name="public_name" id="public_name" onblur="getNameForm()" value="<?= $this->public_name ?>" class="form-control" required <?= strpos($_SERVER['PHP_SELF'],'admin_datart/user_account.php')?'disabled':''; ?> />
+				<input type="text" name="public_name" id="public_name" onblur="getNameForm()" value="<?= isset($_POST['public_name'])?$_POST['public_name']:$this->public_name; ?>" class="form-control" required <?= strpos($_SERVER['PHP_SELF'],'admin_datart/user_account.php')?'disabled':''; ?> />
 				</div>
 			</div>
 			<div class="form-group form-group-lg">
 				<label for="public_surname" class="control-label" >Nom :</label>
 				<div>
-				<input type="text" name="public_surname" id="public_surname" onblur="getSurnameForm()" value="<?= $this->public_surname ?>" class="form-control" required <?= strpos($_SERVER['PHP_SELF'],'admin_datart/user_account.php')?'disabled':''; ?> />
+				<input type="text" name="public_surname" id="public_surname" onblur="getSurnameForm()" value="<?= isset($_POST['public_surname'])?$_POST['public_surname']:$this->public_surname; ?>" class="form-control" required <?= strpos($_SERVER['PHP_SELF'],'admin_datart/user_account.php')?'disabled':''; ?> />
 				</div>
 			</div>
 			<div class="form-group form-group-lg">
 				<label for="function" class="control-label" >Fonction :</label>
 				<div>
-				<input type="text" name="function" id="function" value="<?= $this->function ?>" class="form-control" required <?= strpos($_SERVER['PHP_SELF'],'admin_datart/user_account.php')?'disabled':''; ?> />
+				<input type="text" name="function" id="function" value="<?= isset($_POST['function'])?$_POST['function']:$this->function ?>" class="form-control" required <?= strpos($_SERVER['PHP_SELF'],'admin_datart/user_account.php')?'disabled':''; ?> />
 				</div>
 			</div>
 			<div class="form-group form-group-lg">
 				<label for="login" class="control-label" >Login :</label>
 				<div>
-				<input type="text" name="login" id="login" value="<?= $this->login ?>" class="form-control" readonly <?= strpos($_SERVER['PHP_SELF'],'admin_datart/user_account.php')?'disabled':''; ?>/>
+				<input type="text" name="login" id="login" value="<?= isset($_POST['public_surname'])?$_POST['public_surname']:$this->login ?>" class="form-control" readonly <?= strpos($_SERVER['PHP_SELF'],'admin_datart/user_account.php')?'disabled':''; ?>/>
 				</div>
 			</div>
 			<div class="form-group form-group-lg">
 				<label for="email" class="control-label" >Adresse e-mail :</label>
 				<div>
-				<input type="mail" name="email" id="email" value="<?= $this->email_adress ?>" class="form-control" required/>
+				<input type="mail" name="email" id="email" value="<?= isset($_POST['email'])?$_POST['email']:$this->email_adress ?>" class="form-control" required/>
 				</div>
 			</div>
 
@@ -342,14 +342,14 @@ class User{
 				}
 				else{
 				?>
-				<fieldset>
-					<div class="form-group">
+				<fieldset class="row">
+					<div class="col-sm-6 form-group">
 						<label for="old-password">Mot de passe actuel :</label>
-						<input type="password" name="old-password" id="old-password" />
+						<input type="password" name="old-password" id="old-password" class="form-control" />
 					</div>
-					<div class="form-group">
+					<div class="col-sm-6 form-group">
 						<label for="new-password">Nouveau mot de passe :</label>
-						<input type="password" name="new-password" id="new-password" />
+						<input type="password" name="new-password" id="new-password" class="form-control" />
 					</div>
 				</fieldset>
 			<?php
