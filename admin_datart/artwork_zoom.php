@@ -181,7 +181,6 @@ $locationTitle = isset($targetArtwork)?$targetArtwork->getTitle():'Ajouter une o
 include('header.php');
 
 
-var_dump($targetArtwork);
 ?>
 <!--
 ************************************************************************************************
@@ -337,6 +336,39 @@ var_dump($targetArtwork);
 							}
 						?>
 					</div>
+				</div>
+				<div id="artwork-secondary-visual">
+				<h4>Visuels annexes</h4>
+
+				    <div class="row preview-gallery">
+				    	<?php
+				    		if (isset($targetArtwork) && !empty($targetArtwork->getId())) {
+				    			$visualList =$targetArtwork->getVisual();
+				    			foreach ($visualList as $v) {
+				    				if ($v->getDisplayOrder() !== '1' && $v->getDisplayOrder() != '2' && $v->getDisplayOrder() != '3' ) {
+				    					?>
+			    						<div class="col-sm-3">
+			    							<div class="thumbnail">
+				    							<div class="img-container">
+				    								<img src="<?= $v->getTarget(); ?>" class="responsive">
+				    							</div>
+				    							<div class="caption">
+				    								<input type="text" name="legend" value="<?= !empty($v->getLegend())?$v->getLegend():''; ?>" readonly data-artwork="<?= !empty($v->getArtworkId())?$v->getArtworkId():''; ?>" data-visual="<?= !empty($v->getId())?$v->getId():''; ?>">
+				    							</div>
+			    							</div>
+			    						</div>
+				    					<?php
+				    				}
+				    			}
+				    		}
+    					?>
+    				</div>
+					
+				<form action="<?= URL_ADMIN ?>picture_process.php" method="POST" id="picturesUpload" class="dropzone">
+					<input type="hidden" name="artworkId" value="<?= isset($targetArtwork) && !empty($targetArtwork->getId())?$targetArtwork->getId():''; ?>">
+					<input type="hidden" name="action" value="uploadPictures">
+				</form>
+
 				</div>
 			</section>
 		</div>

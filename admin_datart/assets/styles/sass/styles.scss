@@ -312,11 +312,12 @@ ul{
 			img{
 				position: absolute;
 				z-index: 2;
-				min-width: 200%;
-				top: 50%; left: 50%;
-  				-webkit-transform: translate(-50%,-50%);
-				-ms-transform: translate(-50%,-50%);
-				transform: translate(-50%,-50%);
+				width: 100%;
+				margin: auto;
+				top: 0;
+				bottom: 0;
+				left: 0;
+				right: 0;
 			}
 		}
 		#caption-one, #caption-two, #caption-three{
@@ -325,15 +326,46 @@ ul{
 
 		textarea{
 			min-width: 100%;
+			width: 100%;
 			max-width: 100%;
-			min-height: 100px;
+			min-height: 50px;
+			height: 50px;
 		}
 	}
 
 }
 
+input.input-file{
+    display: none;
+}
+
 .hidden{
 	display: none;
+}
+
+#artwork-secondary-visual{
+	margin-top:50px;
+
+	.preview-gallery{
+		.img-container{
+			position: relative;
+			height: 150px;
+			overflow: hidden;
+		}
+		img{
+			position: absolute;
+			margin: auto;
+			top: 0;
+			bottom: 0;
+		}
+	}
+/* 	input[type="file"]{
+		width: 100%;
+	} */
+
+//IMPORT
+@import '_dropzone.scss';
+
 }
 
 //IMPORT

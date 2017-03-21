@@ -6,6 +6,7 @@
 	<script src="<?= URL_ASSETS ?>js/jquery-ui.min.js"></script>
 	<script src="<?= URL_ASSETS ?>js/datepicker-fr.js"></script>
 	<script src="<?= URL_ASSETS ?>js/bootstrap.min.js"></script>
+	<script src="<?= URL_ASSETS ?>js/dropzone.js"></script>
 	<script src="<?= URL_ASSETS ?>js/script.js"></script>
 </footer>
 </body>

@@ -4,9 +4,41 @@
 	require_once('classes/artwork_visual.php');
 	require_once('includes/include.php');
 
-if(isset($data['file'])){
     $data['file'] = $_FILES;
     $data['text'] = $_POST;
+
+if (isset($_POST['action']) && $_POST['action'] == 'deletePicture') {
+   $newVisual  = new Visual($_POST['pictureId']);
+   $filename = 'art'.$newVisual->getArtworkId().'_img'.$newVisual->getDisplayOrder().'.';
+   $path = __DIR__."\assets\images\artwork\\".$newVisual->getArtworkId().'\\';
+   $clear = '';
+   foreach (glob($path . $filename . '*') as $file) {
+       $clear = unlink($file);
+   }
+   if ($clear) {
+        $delete = $newVisual->delete();
+        if ($delete) {
+            $res = array ('response'=>'success');
+            echo json_encode($res); 
+        }
+        else{
+            $res = array ('response'=>'error');
+            echo json_encode($res); 
+        }
+   }
+   else{
+        $res = array ('response'=>'error');
+        echo json_encode($res); 
+   }
+}
+elseif(isset($_POST['action']) && $_POST['action'] == 'uploadPictures'){
+    var_dump($_POST);
+    var_dump($_FILES);
+    $targetArtwork = new Artwork($_POST['artworkId']);
+    $path = __DIR__."\assets\images\artwork\\".$targetArtwork->getId().'\\';
+    /$filename = 'art'.$newVisual->getArtworkId().'_img'.$newVisual->getDisplayOrder().'.';
+}
+else{
     $maxSize = 2097152;
     $size = filesize($_FILES['image']['tmp_name']);
     $uploadFormat = array('.jpg','.jpeg');
@@ -26,14 +58,14 @@ if(isset($data['file'])){
     			$data['file']['image']['error'] = 'Votre visuel doit être au format jpeg.';
     			echo json_encode($data);
     		}
-    		elseif ($size>$maxSize) {
+    		elseif ($size>$maxSize){
     			$data['file']['image']['error'] = 'Votre visuel ne doit pas dépasser 2,5 Mo.';
     			echo json_encode($data);
     		}
     		else{
                 if($_POST['action'] == 'add-picture-one'){
                     if (empty($_POST['pictureId'])) {
-                        $namePicture = 'art'.$targetArtwork->getId().'_img001'.$extension;
+                        $namePicture = 'art'.$targetArtwork->getId().'_img1'.$extension;
             			$newVisual = new Visual();
             			$artworkId = $targetArtwork->getId();
             			$newVisual->setArtworkId($artworkId);
@@ -58,7 +90,7 @@ if(isset($data['file'])){
             			}
                     }
                     else{
-                       $namePicture = 'art'.$targetArtwork->getId().'_img001'.$extension;
+                       $namePicture = 'art'.$targetArtwork->getId().'_img1'.$extension;
                        $newVisual = new Visual($_POST['pictureId']);
                        $newVisual->setLegend($_POST['legend']);
                        $synch = $newVisual->synchroDb();
@@ -81,7 +113,7 @@ if(isset($data['file'])){
                 }
                 elseif($_POST['action'] == 'add-picture-two'){
                     if (empty($_POST['pictureId'])) {
-                        $namePicture = 'art'.$targetArtwork->getId().'_img002'.$extension;
+                        $namePicture = 'art'.$targetArtwork->getId().'_img2'.$extension;
                         $newVisual = new Visual();
                         $artworkId = $targetArtwork->getId();
                         $newVisual->setArtworkId($artworkId);
@@ -106,7 +138,7 @@ if(isset($data['file'])){
                         }
                     }
                     else{
-                       $namePicture = 'art'.$targetArtwork->getId().'_img002'.$extension;
+                       $namePicture = 'art'.$targetArtwork->getId().'_img2'.$extension;
                        $newVisual = new Visual($_POST['pictureId']);
                        $newVisual->setLegend($_POST['legend']);
                        $synch = $newVisual->synchroDb();
@@ -129,7 +161,7 @@ if(isset($data['file'])){
                 }
                 elseif($_POST['action'] == 'add-picture-three'){
                     if (empty($_POST['pictureId'])) {
-                        $namePicture = 'art'.$targetArtwork->getId().'_img003'.$extension;
+                        $namePicture = 'art'.$targetArtwork->getId().'_img3'.$extension;
                         $newVisual = new Visual();
                         $artworkId = $targetArtwork->getId();
                         $newVisual->setArtworkId($artworkId);
@@ -154,7 +186,7 @@ if(isset($data['file'])){
                         }
                     }
                     else{
-                       $namePicture = 'art'.$targetArtwork->getId().'_img003'.$extension;
+                       $namePicture = 'art'.$targetArtwork->getId().'_img3'.$extension;
                        $newVisual = new Visual($_POST['pictureId']);
                        $newVisual->setLegend($_POST['legend']);
                        $synch = $newVisual->synchroDb();
@@ -180,24 +212,5 @@ if(isset($data['file'])){
     }
 }
 
-if (isset($_POST['action']) && $_POST['action'] == 'deletePicture') {
-   $newVisual  = new Visual($_POST['pictureId']);
-   $clear = unlink($newVisual->getTarget());
-   if ($clear) {
-        $delete = $newVisual->delete();
-        if ($delete) {
-            $res = array ('response'=>'success');
-            echo json_encode($res); 
-        }
-        else{
-            $res = array ('response'=>'error');
-            echo json_encode($res); 
-        }
-   }
-   else{
-        $res = array ('response'=>'error');
-        echo json_encode($res); 
-   }
-}
     
 ?>
