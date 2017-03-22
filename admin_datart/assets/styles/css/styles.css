@@ -545,6 +545,8 @@ input.input-file {
     margin: auto;
     top: 0;
     bottom: 0; }
+  #artwork-secondary-visual .preview-gallery .caption input {
+    width: 100%; }
 @-webkit-keyframes passing-through {
   0% {
     opacity: 0;

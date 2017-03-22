@@ -142,7 +142,7 @@ function mainPictureAction(mainTarget, visualArea, captionArea){
                 //Test si il n'y a pas d'erreur sur l'image envoyée
                 if(response.file.image.error == 0 ){
                 	var success ='<p class="text-success">Le visuel a bien été enregistré.<p>';
-					var btnPicture = '<button class="btn btn-danger pull-left delete-main-picture"'
+					var btnPicture = '<button type="button" class="btn btn-danger pull-left delete-main-picture"'
 					+' data-action="deletePicture" data-picture="'+response.text.pictureId+'">Supprimer</button>';
 
                 	$form.find('.alert-area-picture').html(success);
@@ -163,7 +163,7 @@ function mainPictureAction(mainTarget, visualArea, captionArea){
         })
 	})
 
-    $(mainTarget).find('input[name="file"]').on('change', function (e) {
+    $(mainTarget).find('input[name="image"]').on('change', function (e) {
         var files = $(this)[0].files;
  
         if (files.length > 0) {
@@ -182,17 +182,17 @@ function mainPictureAction(mainTarget, visualArea, captionArea){
     });
  
     // Bouton "Annuler" pour vider le champ d'upload
-    $(captionArea).find('button[type="button"]').on('click', function (e) {
+    $(captionArea).find('button[name="cancel"]').on('click', function (e) {
         e.preventDefault();
  
-        $(mainTarget).find('input[name="file"]').val('');
+        $(mainTarget).find('input[name="image"]').val('');
         $(mainTarget).find('.input-image').removeClass('hidden');
         $(visualArea).find('img').attr('src', '');
         $(captionArea).addClass('hidden');
     });
 
     // Bouton "Supprimer" pour effacer une photo de la base de donnée et des fichiers
-    $(mainTarget).find('.delete-main-picture').on('click', function(e){
+    $(mainTarget).on('click','.delete-main-picture', function(e){
     	e.preventDefault();
 		var $form = $(this);
 		var actiondDetail = $form.attr("data-action");
@@ -216,17 +216,42 @@ function mainPictureAction(mainTarget, visualArea, captionArea){
 		});		
 	});
 }
-
+/*dz-processing
+dz-error*/
 Dropzone.options.picturesUpload = {
 	paramName : "image",
-	/*maxFilesize: 2,*/
+	maxFilesize: 2,
 	acceptedFiles: ".jpeg, .jpg",
 	dictDefaultMessage : 'Déposez vos fichiers ici ou cliquez pour les sélectionner.',
 	dictFallbackMessage : 'Votre navigateur est trop vieux pour le glisser-déposer, merci d\'utiliser le transfert d\'image comme au bon vieux temps.',
 	dictInvalidFileType : 'Votre fichier n\'est pas au bon format. Pour les visuels seul les jpeg sont acceptés.',
 	dictFileTooBig : 'Votre fichier est trop lourd, il ne doit pas dépasser 2 Mo.',
-  	success: function(response){
-           console.log(response);
+  	success: function(file, response){
+  		var obj = JSON.parse(response);
+  		var thumbnail ='<div class="col-sm-2">'
+			    +'<div class="thumbnail">'
+				+'<div class="img-container">'
+				+'<img src="'+obj.text.target+'" class="responsive">'
+				+'</div>'
+				+'<div class="caption">'
+				+'<input type="text" name="legend" readonly data-artwork="'+obj.text.artworkId+'" data-visual="">'
+				+'</div>'
+			    +'</div>'
+			    +'</div>';
+		var correctStyle = {opacity : '1' , color : '#1FBA2E'} ;
+		var errorStyle = {opacity : '1' , color : '#E00B33'};
+    	if(obj.file.image.error == 0){
+    		var div = this.element.querySelector('.dz-success-mark');
+        	$('.preview-gallery').append(thumbnail);
+        	$(div).css(correctStyle);
+        }else{
+        	var container = this.element.querySelector('.dz-preview');
+    		var div = this.element.querySelector('.dz-error-mark');
+    		var span = this.element.querySelector('.dz-error-message');
+        	$(container).removeClass('dz-processing');
+        	$(container).addClass('dz-error');
+        	$(span).find('span').text(obj.file.image.error);
+        }
     }
 };
 

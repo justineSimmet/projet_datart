@@ -358,6 +358,11 @@ input.input-file{
 			top: 0;
 			bottom: 0;
 		}
+		.caption{
+			input{
+				width: 100%;
+			}
+		}
 	}
 /* 	input[type="file"]{
 		width: 100%;

@@ -57,12 +57,12 @@ elseif(isset($_POST['action']) && $_POST['action'] == 'uploadPictures'){
         $uploadFile = __DIR__."\assets\images\artwork\\".$targetArtwork->getId().'\\';
 
         if(!in_array($extension, $uploadFormat)){
-            $res = array ('error'=>'Votre visuel doit être au format jpeg.');
-            echo json_encode($res);
+            $data['file']['image']['error'] = 'Votre visuel doit être au format jpeg.';
+                echo json_encode($data);
         }
         elseif ($size>$maxSize){
-            $res = array ('error'=>'Votre fichier est trop lourd. Max : 2Mo.');
-            echo json_encode($res);
+            $data['file']['image']['error'] = 'Votre fichier est trop lourd. Max : 2Mo.';
+            echo json_encode($data);
         }
         else{
             $newVisual = new Visual();
@@ -88,15 +88,16 @@ elseif(isset($_POST['action']) && $_POST['action'] == 'uploadPictures'){
                 $synch = $newVisual->synchroDb();
                 if ($synch) {
                     $data['text']['pictureId'] = $synch;
+                    $data['text']['target'] = $newVisual->getTarget();
                     echo json_encode($data);
                 }
                 else{
-                    $res = array ('error'=>'Une erreur s\'est produite lors de l\'enregistrement du fichier.');
+                    $data['file']['image']['error'] = 'Une erreur s\'est produite lors de l\'enregistrement du fichier.';
                     echo json_encode($res);
                 }
             }
             else{
-                $res = array ('error'=>'Une erreur s\'est produite lors du transfert de fichier.');
+                $data['file']['image']['error'] = 'Une erreur s\'est produite lors du transfert de fichier.';
                 echo json_encode($res);
 
             }
@@ -110,20 +111,21 @@ elseif(isset($_POST['action']) && $_POST['action'] == 'uploadPictures'){
 **********************************************************************/
 else{
     $maxSize = 2097152;
-    $size = filesize($_FILES['file']['tmp_name']);
+    $size = filesize($_FILES['image']['tmp_name']);
     $uploadFormat = array('.jpg','.jpeg');
-    $extension = strrchr($_FILES['file']['name'], '.');
+    $extension = strrchr($_FILES['image']['name'], '.');
     if(isset($_POST['action']) && isset($_FILES)){
     	$targetArtwork = new Artwork($_POST['artworkId']);
     	$path = __DIR__."\assets\images\artwork\\".$targetArtwork->getId().'\\';
     	if(!file_exists($path)){
     		$newFolder = mkdir($path, 0755, TRUE);
     	}
-    	if (!empty($_FILES['file'])){
+    	if (!empty($_FILES['image'])){
     		$uploadTarget = URL_IMAGES."artwork/".$targetArtwork->getId();
+            $uploadFile = __DIR__."\assets\images\artwork\\".$targetArtwork->getId().'\\';
 
     		if(!in_array($extension, $uploadFormat)){
-    			$data['file']['file']['error'] = 'Votre visuel doit être au format jpeg.';
+    			$data['file']['image']['error'] = 'Votre visuel doit être au format jpeg.';
     			echo json_encode($data);
     		}
     		elseif ($size>$maxSize){

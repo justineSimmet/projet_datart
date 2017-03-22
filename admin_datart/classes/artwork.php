@@ -578,12 +578,12 @@ class Artwork{
 				<div id="caption-<?= $number ?>" class="hidden">
 					<p></p>
 					<p>
-						<button type="button" class="btn btn-danger">Annuler</button>
+						<button type="button" name="cancel" class="btn btn-danger">Annuler</button>
 					</p>
 				</div>
 				<div class="form-group input-image">
 					<label for="image-<?= $number ?>" class="control-label btn btn-default">Choisir un visuel</label>
-					<input id ="image-<?= $number ?>" class="input-file" type="file" name="file" accept="image/jpeg" required>
+					<input id ="image-<?= $number ?>" class="input-file" type="file" name="image" accept="image/jpeg" required>
 				</div>
 				<div class="form-group">
 					<label for="legend" class="control-label">Légende du visuel :</label>
@@ -595,7 +595,7 @@ class Artwork{
 				<?php
 				if(!empty($this->getId()) && !empty($picture)){
 					?>
-					<button class="btn btn-danger pull-left delete-main-picture" data-action="deletePicture" data-picture="<?= !empty($this->getId()) && !empty($picture)?$picture->getId():'' ?>">Supprimer</button>
+					<button type="button" class="btn btn-danger pull-left delete-main-picture" data-action="deletePicture" data-picture="<?= !empty($this->getId()) && !empty($picture)?$picture->getId():'' ?>">Supprimer</button>
 					<?php
 				}
 				?>
