@@ -366,8 +366,8 @@ include('header.php');
 
 				<form action="<?= URL_ADMIN ?>picture_process.php" method="POST" id="picturesUpload" class="dropzone">
 					<div class="fallback">
-						<input name="file" type="file" />
-					</div>
+	    				<input name="image" type="file" />
+	  				</div>
 					<input type="hidden" name="artworkId" value="<?= isset($targetArtwork) && !empty($targetArtwork->getId())?$targetArtwork->getId():''; ?>">
 					<input type="hidden" name="action" value="uploadPictures">
 				</form>

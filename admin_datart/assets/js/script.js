@@ -140,28 +140,22 @@ function mainPictureAction(mainTarget, visualArea, captionArea){
             data: data,
             success: function (response) {
                 //Test si il n'y a pas d'erreur sur l'image envoyée
-                if(response.file.file.error == 0 ){
-                	var success ='<div class="alert alert-success alert-dismissable">'
-					+'<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'
-					+'<p>Le visuel a bien été enregistré.<p>'
-					+'</div>';
+                if(response.file.image.error == 0 ){
+                	var success ='<p class="text-success">Le visuel a bien été enregistré.<p>';
 					var btnPicture = '<button class="btn btn-danger pull-left delete-main-picture"'
 					+' data-action="deletePicture" data-picture="'+response.text.pictureId+'">Supprimer</button>';
 
                 	$form.find('.alert-area-picture').html(success);
                 	$form.find('input[name="pictureId"]').val(response.text.pictureId);
                 	$(mainTarget).find('.input-image').removeClass('hidden');
+                	$(captionArea).addClass('hidden');
                 	$form.find('button[type="submit"]').html('Modifier');
                 	$form.find('.delete-main-picture').remove();
                 	$(btnPicture).insertBefore($form.find('button[type="submit"]'));
-                	$(mainTarget).find('input[name="file"]').val('');
-                	$(captionArea).addClass('hidden');
+                	$(mainTarget).find('input[name="image"]').val('');
                 }
                 else{
-                	var error ='<div class="alert alert-danger alert-dismissable">'
-					+'<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'
-					+'<p><strong>Erreur ! </strong>'+response.file.file.error+'<p>'
-					+'</div>';
+                	var error ='<p class="text-danger"><strong>Erreur !</strong>'+response.file.image.error+'<p>';
                 	$form.find('.alert-area-picture').html(error);
                 	$(mainTarget).find('input[name="file"]').val('');
                 }
@@ -204,19 +198,18 @@ function mainPictureAction(mainTarget, visualArea, captionArea){
 		var actiondDetail = $form.attr("data-action");
 		var picture = $form.attr("data-picture");
 		$.post('picture_process.php',{action : actiondDetail, pictureId : picture}, function(response){
-			if (response.response == 'success') {
-				$(mainTarget).find('input[name="file"]').val('');
+			var obj = JSON.parse(response);
+			if (obj.response == 'success') {
+				var success ='<p class="text-success">Le visuel a bien été supprimé.<p>';
+				$(mainTarget).find('input[name="image"]').val('');
 				$(mainTarget).find('input[name="legend"]').val('');
 				$(visualArea).find('img').attr('src', '');
 				$(mainTarget).find('.delete-main-picture').remove();
-				$form.find('button[type="submit"]').html('Ajouter');
-				$form.find('input[name="pictureId"]').val('');
+				$(mainTarget).find('button[type="submit"]').html('Ajouter');
+				$(mainTarget).find('input[name="pictureId"]').val('');
 			}
 			else{
-				var error ='<div class="alert alert-danger alert-dismissable">'
-					+'<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>'
-					+'<p><strong>Erreur !</strong> L\'image n\'a pas pu être supprimée.<p>'
-					+'</div>';
+				var error ='<p class="text-danger"><strong>Erreur !</strong> L\'image n\'a pas pu être supprimée.<p>';
                 $form.find('.alert-area-picture').html(error);
                 $(captionArea).addClass('hidden');
 			}
@@ -224,6 +217,18 @@ function mainPictureAction(mainTarget, visualArea, captionArea){
 	});
 }
 
+Dropzone.options.picturesUpload = {
+	paramName : "image",
+	/*maxFilesize: 2,*/
+	acceptedFiles: ".jpeg, .jpg",
+	dictDefaultMessage : 'Déposez vos fichiers ici ou cliquez pour les sélectionner.',
+	dictFallbackMessage : 'Votre navigateur est trop vieux pour le glisser-déposer, merci d\'utiliser le transfert d\'image comme au bon vieux temps.',
+	dictInvalidFileType : 'Votre fichier n\'est pas au bon format. Pour les visuels seul les jpeg sont acceptés.',
+	dictFileTooBig : 'Votre fichier est trop lourd, il ne doit pas dépasser 2 Mo.',
+  	success: function(response){
+           console.log(response);
+    }
+};
 
 $(document).ready(function(){
 
@@ -364,14 +369,6 @@ MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
 	mainPictureAction('#main-two', '#visual-two', '#caption-two');
 	mainPictureAction('#main-three', '#visual-three', '#caption-three');
 
-	Dropzone.options.picturesUpload = {
-		url: 'picture_process.php',
-		acceptedFiles: '.jpg, .jpeg',
-		dictDefaultMessage: 'Déposez vos images ici, ou cliquez pour en sélectionner une.',
-		init: function() {
-	    	this.on("addedfile", function(file) { alert("Added file."); });
-		}
-	};
 /**********************************************
 ** EXECUTION REQUETE AJAX SI UN UTILISATEUR A
 ** ETE AJOUTE EN BD CORRECTEMENT 

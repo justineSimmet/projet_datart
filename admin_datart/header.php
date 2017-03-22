@@ -13,6 +13,7 @@
  	<link rel="stylesheet" type="text/css" href="<?= URL_ASSETS ?>styles/css/reset.css" />
  	<link rel="stylesheet" type="text/css" href="<?= URL_ASSETS ?>styles/css/styles.css" />
  	<script src="<?= URL_ASSETS ?>js/tinymce.min.js"></script>
+ 	<script src="<?= URL_ASSETS ?>js/dropzone.min.js"></script>
  </head>
  <body>
 <div class="container-fluid">

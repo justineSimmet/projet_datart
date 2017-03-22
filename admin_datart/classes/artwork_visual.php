@@ -65,6 +65,25 @@ class Visual{
 		return $this->display_order;
 	}
 
+	function defineDisplayOrderAnnexe($countMain){
+		$total = requete_sql("SELECT COUNT(*) AS total FROM visual WHERE artwork_id = '".$this->artwork_id."' ");
+		$total = $total->fetch(PDO::FETCH_ASSOC);
+		$total = $total['total'];
+
+		$last = requete_sql("SELECT display_order FROM visual WHERE artwork_id = '".$this->artwork_id."' ORDER BY display_order DESC LIMIT 1");
+		$last = $last->fetch(PDO::FETCH_ASSOC);
+		$last = $last['display_order'];
+
+		if ($countMain == $total ) {
+			return 4;
+		}
+		elseif ($countMain < $total) {
+			$last ++;
+			return $last;
+		}
+
+	}
+
 	function synchroDb(){
 		if (empty($this->id)) {
 			$create = requete_sql("INSERT INTO visual VALUES(
@@ -85,7 +104,7 @@ class Visual{
 				legend = '".addslashes($this->legend)."' 
 				WHERE id = '".$this->id."' ");
 			if ($update) {
-				return TRUE;
+				return $this->id;
 			}
 			else{
 				return FALSE;
