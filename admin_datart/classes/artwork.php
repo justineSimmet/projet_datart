@@ -258,6 +258,16 @@ class Artwork{
 		}
 	}
 
+	function getExhibit(){
+		$exhibit = requete_sql("SELECT exhibit_id FROM artwork_displayed WHERE artwork_id = '".$this->id."' ");
+		$exhibit = $exhibit->fetchAll(PDO::FETCH_ASSOC);
+		$listExhibit = array();
+		foreach ($exhibit as $ex) {
+			array_push($listExhibit, new Exhibit($ex['exhibit_id']));
+		}
+		return $listExhibit;
+	}
+
 /*********************************
 **
 ** SYNCHRO AVEC LA BASE DE DONNEES
@@ -571,19 +581,15 @@ class Artwork{
 		?>
 		<form action="<?= URL_ADMIN ?>picture_process.php" method="POST" enctype="multipart/form-data" class="text-center form-vertical" id="main-<?= $number ?>">
 			<fieldset <?= empty($this->id)?'disabled':''; ?> class="clearfix">
-				<div id="visual-<?= $number ?>"><img src="<?= !empty($this->getId()) && !empty($picture)?$picture->getTarget():'' ?>" class="img-responsive" /></div>
-				<div class="alert-area-picture">
-					
-				</div>
+				<div id="visual-<?= $number ?>"><img src="<?= !empty($this->getId()) && !empty($picture)?$picture->getTarget():'' ?>" /></div>
 				<div id="caption-<?= $number ?>" class="hidden">
-					<p></p>
 					<p>
 						<button type="button" name="cancel" class="btn btn-danger">Annuler</button>
 					</p>
 				</div>
 				<div class="form-group input-image">
 					<label for="image-<?= $number ?>" class="control-label btn btn-default">Choisir un visuel</label>
-					<input id ="image-<?= $number ?>" class="input-file" type="file" name="image" accept="image/jpeg" required>
+					<input id ="image-<?= $number ?>" class="input-file" type="file" name="image" accept="image/jpeg" value="<?= !empty($this->getId()) && !empty($picture)?$picture->getTarget():'' ?>">
 				</div>
 				<div class="form-group">
 					<label for="legend" class="control-label">Légende du visuel :</label>
@@ -601,6 +607,9 @@ class Artwork{
 				?>
 				<button type="submit" class="btn btn-default pull-right"><?= !empty($this->getId()) && !empty($picture)?'Modifier':'Ajouter' ?></button>
 			</fieldset>
+				<p class="target-file hidden"></p>
+				<div class="alert-area-picture"></div>
+
 		</form>
 		<?php
 	}

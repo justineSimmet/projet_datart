@@ -53,6 +53,27 @@ $datart-gray : #778085 ;
 
 // STYLES GENERIQUES
 
+/*IE9*/
+img::selection 
+{
+    background-color:transparent;
+} 
+*::-moz-selection
+{
+    background-color:transparent;
+}
+*
+{        
+    -webkit-user-select: none;
+    -moz-user-select: -moz-none;
+    /*IE10*/
+    -ms-user-select: none;
+    user-select: none;
+
+    /*You just need this if you are only concerned with android and not desktop browsers.*/
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}  
+
 body{
 	font:{
 		family:'kelson', 'arial', 'helvetica', sans-serif;
@@ -275,6 +296,8 @@ ul{
 
 	div{
 		min-width: 30%;
+		padding: 0 10px;
+
 
 		p{
 			text-align: center;
@@ -291,6 +314,11 @@ ul{
 			background-color: transparent;
 			margin-bottom: 10px;
 			overflow: hidden;
+			padding: 0;
+			display: inline-block;
+			text-align: center;
+
+
 
 			&::after{
 				position : absolute;
@@ -311,13 +339,12 @@ ul{
 
 			img{
 				position: absolute;
+				min-width: 150%;
+				top: 50%; left: 50%;
+  				-webkit-transform: translate(-50%,-50%);
+				-ms-transform: translate(-50%,-50%);
+				transform: translate(-50%,-50%);
 				z-index: 2;
-				width: 100%;
-				margin: auto;
-				top: 0;
-				bottom: 0;
-				left: 0;
-				right: 0;
 			}
 		}
 		#caption-one, #caption-two, #caption-three{
@@ -349,24 +376,34 @@ input.input-file{
 	.preview-gallery{
 		.img-container{
 			position: relative;
-			height: 150px;
 			overflow: hidden;
+			padding: 0;
+			display: inline-block;
+			text-align: center;
+			height: 150px;
+			width: 100%;
 		}
 		img{
 			position: absolute;
-			margin: auto;
-			top: 0;
-			bottom: 0;
+			min-width: 150%;
+			top: 50%; left: 50%;
+  			-webkit-transform: translate(-50%,-50%);
+			-ms-transform: translate(-50%,-50%);
+			transform: translate(-50%,-50%);
 		}
 		.caption{
-			input{
+			textarea{
 				width: 100%;
+				min-width: 100%;
+				max-width: 100%;
+				min-height: 50px;
+				height: 50px;
+				border-radius:5px;
+				padding: 5px;
+				margin-bottom: 10px;
 			}
 		}
 	}
-/* 	input[type="file"]{
-		width: 100%;
-	} */
 
 //IMPORT
 @import '_dropzone.scss';

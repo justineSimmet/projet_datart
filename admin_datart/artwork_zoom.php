@@ -252,11 +252,13 @@ include('header.php');
 ?>
 </div>
 
-<div class="col-lg-9 col-md-12 col-sm-9 col-xs-12">
+<div class="col-xs-12">
 	<div class="row" id="alert-area">
 		<?= !empty($actionResultat)?$actionResultat:''; ?>
 	</div>
+</div>
 
+<div class="col-lg-9 col-md-12 col-sm-9 col-xs-12">
 	<div class="row">
 		<div class="col-sm-12">
 			<section>
@@ -347,13 +349,18 @@ include('header.php');
 				    			foreach ($visualList as $v) {
 				    				if ($v->getDisplayOrder() !== '1' && $v->getDisplayOrder() != '2' && $v->getDisplayOrder() != '3' ) {
 				    					?>
-			    						<div class="col-sm-2">
+			    						<div class="col-sm-3">
 			    							<div class="thumbnail">
 				    							<div class="img-container">
-				    								<img src="<?= $v->getTarget(); ?>" class="responsive">
+				    								<img src="<?= $v->getTarget(); ?>">
 				    							</div>
-				    							<div class="caption">
-				    								<input type="text" name="legend" value="<?= !empty($v->getLegend())?$v->getLegend():''; ?>" readonly data-artwork="<?= !empty($v->getArtworkId())?$v->getArtworkId():''; ?>" data-visual="<?= !empty($v->getId())?$v->getId():''; ?>">
+				    							<div class="caption" data-artwork="<?= !empty($v->getArtworkId())?$v->getArtworkId():''; ?>" data-visual="<?= !empty($v->getId())?$v->getId():''; ?>">
+				    								<textarea name="legend" disabled placeholder="Légende"><?= !empty($v->getLegend())?$v->getLegend():''; ?></textarea>
+				    								<p class="action-area clearfix">
+				    									<button type="button" class="delete-visual-annexe btn btn-danger pull-left" disabled><span class="fa fa-trash"></span></button>
+				    									<button type="button" class="update-visual-annexe btn btn-default pull-right" disabled><span class="fa fa-save"></span></button>
+				    								</p>
+
 				    							</div>
 			    							</div>
 			    						</div>
@@ -376,7 +383,39 @@ include('header.php');
 			</section>
 		</div>
 	</div>
+</div>
 
+<div class="col-lg-3 col-md-12 col-sm-3 col-xs-12">
+	<div class="row">
+		<div class="col-xs-12">
+			<a href="#" class="btn btn-default btn-custom btn-md btn-block" role="button"><span class="fa fa-desktop"></span> Voir la page visiteur</a>
+		</div>
+		<div class="col-xs-12">
+			<section>
+				<h2>Exposée dans :</h2>
+				<ul>
+					<?php
+						$exhibit = $targetArtwork->getExhibit();
+						foreach ($exhibit as $ex) {
+							?>
+							<li>
+								<h3><?= $ex->getTitle() ?></h3>
+								<p><?= dateFormat($ex->getBeginDate()) ?> > <?= dateFormat($ex->getEndDate()) ?></p>
+								<?php
+									if ($ex->getEndDate() < date('Y-m-d')) {
+										if (empty($targetArtwork->getQrCode())) {
+											echo '<button type="button" class="btn btn-custom btn-block"><span class="fa fa-qrcode"></span>Générer QR Code</button>';
+										}
+									}
+								?>
+							</li>
+							<?php
+						}
+					?>
+				</ul>
+			</section>
+		</div>
+	</div>
 </div>
 
 <?php

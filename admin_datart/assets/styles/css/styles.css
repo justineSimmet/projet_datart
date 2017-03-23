@@ -24,6 +24,22 @@
   font-weight: normal;
   font-style: normal; }
 /* $generic-shadow : 0, 0, 0, rgba(100,100,100,0.25), false; */
+/*IE9*/
+img::selection {
+  background-color: transparent; }
+
+*::-moz-selection {
+  background-color: transparent; }
+
+* {
+  -webkit-user-select: none;
+  -moz-user-select: -moz-none;
+  /*IE10*/
+  -ms-user-select: none;
+  user-select: none;
+  /*You just need this if you are only concerned with android and not desktop browsers.*/
+  -webkit-tap-highlight-color: transparent; }
+
 body {
   font-family: 'kelson', 'arial', 'helvetica', sans-serif;
   font-size: 16px; }
@@ -472,7 +488,8 @@ ul {
   flex-direction: row;
   justify-content: space-around; }
   #artwork-main-visual div {
-    min-width: 30%; }
+    min-width: 30%;
+    padding: 0 10px; }
     #artwork-main-visual div p {
       text-align: center; }
     #artwork-main-visual div #visual-one, #artwork-main-visual div #visual-two, #artwork-main-visual div #visual-three {
@@ -486,7 +503,10 @@ ul {
       width: 200px;
       background-color: transparent;
       margin-bottom: 10px;
-      overflow: hidden; }
+      overflow: hidden;
+      padding: 0;
+      display: inline-block;
+      text-align: center; }
       #artwork-main-visual div #visual-one::after, #artwork-main-visual div #visual-two::after, #artwork-main-visual div #visual-three::after {
         position: absolute;
         z-index: 1;
@@ -505,13 +525,13 @@ ul {
         transform: translate(-50%, -50%); }
       #artwork-main-visual div #visual-one img, #artwork-main-visual div #visual-two img, #artwork-main-visual div #visual-three img {
         position: absolute;
-        z-index: 2;
-        width: 100%;
-        margin: auto;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0; }
+        min-width: 150%;
+        top: 50%;
+        left: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+        z-index: 2; }
     #artwork-main-visual div #caption-one, #artwork-main-visual div #caption-two, #artwork-main-visual div #caption-three {
       font-size: 0.85em; }
     #artwork-main-visual div textarea {
@@ -529,24 +549,35 @@ input.input-file {
 
 #artwork-secondary-visual {
   margin-top: 50px;
-  /* 	input[type="file"]{
-  		width: 100%;
-  	} */
   /*
    * The MIT License
    * Copyright (c) 2012 Matias Meno <m@tias.me>
    */ }
   #artwork-secondary-visual .preview-gallery .img-container {
     position: relative;
+    overflow: hidden;
+    padding: 0;
+    display: inline-block;
+    text-align: center;
     height: 150px;
-    overflow: hidden; }
+    width: 100%; }
   #artwork-secondary-visual .preview-gallery img {
     position: absolute;
-    margin: auto;
-    top: 0;
-    bottom: 0; }
-  #artwork-secondary-visual .preview-gallery .caption input {
-    width: 100%; }
+    min-width: 150%;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%); }
+  #artwork-secondary-visual .preview-gallery .caption textarea {
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+    min-height: 50px;
+    height: 50px;
+    border-radius: 5px;
+    padding: 5px;
+    margin-bottom: 10px; }
 @-webkit-keyframes passing-through {
   0% {
     opacity: 0;
@@ -718,6 +749,9 @@ input.input-file {
   #artwork-secondary-visual .dropzone, #artwork-secondary-visual .dropzone * {
     box-sizing: border-box; }
   #artwork-secondary-visual .dropzone {
+    -webkit-box-shadow: inset 0 0 10px rgba(100, 100, 100, 0.25);
+    -moz-box-shadow: inset 0 0 10px rgba(100, 100, 100, 0.25);
+    box-shadow: inset 0 0 10px rgba(100, 100, 100, 0.25);
     min-height: 150px;
     border: 2px solid rgba(0, 0, 0, 0.3);
     background: white;

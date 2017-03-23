@@ -145,7 +145,6 @@ function mainPictureAction(mainTarget, visualArea, captionArea){
 					var btnPicture = '<button type="button" class="btn btn-danger pull-left delete-main-picture"'
 					+' data-action="deletePicture" data-picture="'+response.text.pictureId+'">Supprimer</button>';
 
-                	$form.find('.alert-area-picture').html(success);
                 	$form.find('input[name="pictureId"]').val(response.text.pictureId);
                 	$(mainTarget).find('.input-image').removeClass('hidden');
                 	$(captionArea).addClass('hidden');
@@ -153,10 +152,12 @@ function mainPictureAction(mainTarget, visualArea, captionArea){
                 	$form.find('.delete-main-picture').remove();
                 	$(btnPicture).insertBefore($form.find('button[type="submit"]'));
                 	$(mainTarget).find('input[name="image"]').val('');
+                	$(mainTarget).find('.target-file').addClass('hidden');
+                	$(mainTarget).find('.alert-area-picture').html(success);
                 }
                 else{
-                	var error ='<p class="text-danger"><strong>Erreur !</strong>'+response.file.image.error+'<p>';
-                	$form.find('.alert-area-picture').html(error);
+                	var error ='<p class="text-danger"><strong>Erreur ! </strong>'+response.file.image.error+'<p>';
+                	$(mainTarget).find('.alert-area-picture').html(error);
                 	$(mainTarget).find('input[name="file"]').val('');
                 }
             }
@@ -177,7 +178,7 @@ function mainPictureAction(mainTarget, visualArea, captionArea){
             $caption.removeClass('hidden');
             $(mainTarget).find('.input-image').addClass('hidden');
             $image_preview.find('img').attr('src', window.URL.createObjectURL(file));
-            $caption.find('p:first').html(file.name);
+            $(mainTarget).find('.target-file').removeClass('hidden').html(file.name);
         }
     });
  
@@ -189,6 +190,7 @@ function mainPictureAction(mainTarget, visualArea, captionArea){
         $(mainTarget).find('.input-image').removeClass('hidden');
         $(visualArea).find('img').attr('src', '');
         $(captionArea).addClass('hidden');
+        $(mainTarget).find('.target-file').addClass('hidden');
     });
 
     // Bouton "Supprimer" pour effacer une photo de la base de donnée et des fichiers
@@ -207,10 +209,13 @@ function mainPictureAction(mainTarget, visualArea, captionArea){
 				$(mainTarget).find('.delete-main-picture').remove();
 				$(mainTarget).find('button[type="submit"]').html('Ajouter');
 				$(mainTarget).find('input[name="pictureId"]').val('');
+				$(mainTarget).find('input[name="pictureId"]').val('');
+				$(mainTarget).find('.alert-area-picture').html(success);
+
 			}
 			else{
 				var error ='<p class="text-danger"><strong>Erreur !</strong> L\'image n\'a pas pu être supprimée.<p>';
-                $form.find('.alert-area-picture').html(error);
+                $(mainTarget).find('.alert-area-picture').html(error);
                 $(captionArea).addClass('hidden');
 			}
 		});		
@@ -221,36 +226,38 @@ dz-error*/
 Dropzone.options.picturesUpload = {
 	paramName : "image",
 	maxFilesize: 2,
-	acceptedFiles: ".jpeg, .jpg",
-	dictDefaultMessage : 'Déposez vos fichiers ici ou cliquez pour les sélectionner.',
+	acceptedFiles: ".jpeg, .jpg, .JPG",
+	dictDefaultMessage : 'Déposez vos fichiers ici ou cliquez pour les sélectionner.<br/>(Format valide : .jpeg, .jpg ou .JPG - Maximum 2 Mo)',
 	dictFallbackMessage : 'Votre navigateur est trop vieux pour le glisser-déposer, merci d\'utiliser le transfert d\'image comme au bon vieux temps.',
 	dictInvalidFileType : 'Votre fichier n\'est pas au bon format. Pour les visuels seul les jpeg sont acceptés.',
 	dictFileTooBig : 'Votre fichier est trop lourd, il ne doit pas dépasser 2 Mo.',
   	success: function(file, response){
   		var obj = JSON.parse(response);
-  		var thumbnail ='<div class="col-sm-2">'
+  		var thumbnail ='<div class="col-sm-3">'
 			    +'<div class="thumbnail">'
 				+'<div class="img-container">'
 				+'<img src="'+obj.text.target+'" class="responsive">'
 				+'</div>'
-				+'<div class="caption">'
-				+'<input type="text" name="legend" readonly data-artwork="'+obj.text.artworkId+'" data-visual="">'
+				+'<div class="caption" data-artwork="'+obj.text.artworkId+'" data-visual="'+obj.text.pictureId+'" >'
+				+'<textarea name="legend" disabled placeholder="Légende">'
+				+'</textarea>'
+				+'<p class="action-area clearfix">'
+				+'<button type="button" class="delete-visual-annexe btn btn-danger pull-left" disabled><span class="fa fa-trash"></span></button>'
+				+'<button type="button" class="update-visual-annexe btn btn-default pull-right" disabled><span class="fa fa-save"></span></button>'
+				+'</p>'
 				+'</div>'
 			    +'</div>'
 			    +'</div>';
+
 		var correctStyle = {opacity : '1' , color : '#1FBA2E'} ;
 		var errorStyle = {opacity : '1' , color : '#E00B33'};
+    	var container = this.element;
     	if(obj.file.image.error == 0){
-    		var div = this.element.querySelector('.dz-success-mark');
         	$('.preview-gallery').append(thumbnail);
-        	$(div).css(correctStyle);
+        	$(container).find('.dz-success-mark').css('opacity', '1' );
         }else{
-        	var container = this.element.querySelector('.dz-preview');
-    		var div = this.element.querySelector('.dz-error-mark');
-    		var span = this.element.querySelector('.dz-error-message');
-        	$(container).removeClass('dz-processing');
-        	$(container).addClass('dz-error');
-        	$(span).find('span').text(obj.file.image.error);
+        	$(container).find('.dz-preview').removeClass('dz-processing').addClass('dz-error');
+        	$(container).find('.dz-error-message').find('span').text(obj.file.image.error);
         }
     }
 };
@@ -393,6 +400,47 @@ MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
 	mainPictureAction('#main-one', '#visual-one', '#caption-one');
 	mainPictureAction('#main-two', '#visual-two', '#caption-two');
 	mainPictureAction('#main-three', '#visual-three', '#caption-three');
+
+
+// Activation des légendes sur les visuels secondaires
+	$('.preview-gallery').on('dblclick', '.caption', function(){
+		// console.log($(this));
+		$(this).find('textarea').removeAttr('disabled');
+		$(this).find('button').removeAttr('disabled');
+	});
+
+// Delete d'un visuel secondaires
+	$('.preview-gallery').on('click', '.delete-visual-annexe', function(){
+		var artworkId = $(this).parents('.caption').attr('data-artwork');
+		var pictureId = $(this).parents('.caption').attr('data-visual');
+		var container = $(this).parents('.col-sm-3');
+		$.post('picture_process.php',{action:'deleteAnnexePicture', artworkId: artworkId, pictureId:pictureId} , function(response){
+			var obj = JSON.parse(response);
+			if (obj.response == 'success') {
+				container.remove();
+			}/*else{
+
+			}*/
+		})
+	})
+
+// Update de la légende d'un visuel annexe
+	$('.preview-gallery').on('click', '.update-visual-annexe', function(){
+		var artworkId = $(this).parents('.caption').attr('data-artwork');
+		var pictureId = $(this).parents('.caption').attr('data-visual');
+		var textarea = $(this).parents('.caption').find('textarea').val();
+		var container = $(this).parents('.col-sm-3');
+		$.post('picture_process.php',{action:'updateAnnexePicture', artworkId: artworkId, pictureId: pictureId, legend: textarea} , function(response){
+			var obj = JSON.parse(response);
+			if (obj.response == 'success') {
+				container.find('textarea').css('background-color', '#DAFFCA');
+				container.find('textarea').css('border', '1px solid #21E012');
+			}else{
+				container.find('textarea').css('background-color', '#FFBFBF');
+				container.find('textarea').css('border', '1px solid #F80C28');
+			}
+		})
+	})
 
 /**********************************************
 ** EXECUTION REQUETE AJAX SI UN UTILISATEUR A

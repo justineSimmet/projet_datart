@@ -38,13 +38,55 @@ if (isset($_POST['action']) && $_POST['action'] == 'deletePicture') {
 }
 /**********************************************************************
 **
+** DELETE VISUEL ANNEXE
+**
+**********************************************************************/
+elseif (isset($_POST['action']) && $_POST['action'] == 'deleteAnnexePicture') {
+   $newVisual  = new Visual($_POST['pictureId']);
+   $filename = 'art'.$newVisual->getArtworkId().'_img'.$newVisual->getDisplayOrder().'.';
+   $path = __DIR__."\assets\images\artwork\\".$newVisual->getArtworkId().'\\';
+   $clear = '';
+   foreach (glob($path . $filename . '*') as $file) {
+       $clear = unlink($file);
+   }
+   if ($clear) {
+        $delete = $newVisual->delete();
+        if ($delete) {
+            $res = array ('response'=>'success');
+            echo json_encode($res); 
+        }
+        else{
+            $res = array ('response'=>'error');
+            echo json_encode($res); 
+        }
+   }
+   else{
+        $res = array ('response'=>'error');
+        echo json_encode($res); 
+   }
+}
+elseif (isset($_POST['action']) && $_POST['action'] == 'updateAnnexePicture') {
+    $newVisual = new Visual($_POST['pictureId']);
+    $newVisual->setLegend($_POST['legend']);
+    $synch = $newVisual->synchroDb();
+        if ($synch) {
+            $res = array ('response'=>'success');
+            echo json_encode($res); 
+        }
+        else{
+            $res = array ('response'=>'error');
+            echo json_encode($res); 
+        }
+}
+/**********************************************************************
+**
 ** UPLOAD D'UN VISUEL ANNEXE
 **
 **********************************************************************/
 elseif(isset($_POST['action']) && $_POST['action'] == 'uploadPictures'){
     $maxSize = 2097152;
     $size = filesize($_FILES['image']['tmp_name']);
-    $uploadFormat = array('.jpg','.jpeg');
+    $uploadFormat = array('.jpg','.jpeg', '.JPG');
     $extension = strrchr($_FILES['image']['name'], '.');
 
     $targetArtwork = new Artwork($_POST['artworkId']);
@@ -112,7 +154,7 @@ elseif(isset($_POST['action']) && $_POST['action'] == 'uploadPictures'){
 else{
     $maxSize = 2097152;
     $size = filesize($_FILES['image']['tmp_name']);
-    $uploadFormat = array('.jpg','.jpeg');
+    $uploadFormat = array('.jpg','.jpeg', '.JPG');
     $extension = strrchr($_FILES['image']['name'], '.');
     if(isset($_POST['action']) && isset($_FILES)){
     	$targetArtwork = new Artwork($_POST['artworkId']);
@@ -120,7 +162,7 @@ else{
     	if(!file_exists($path)){
     		$newFolder = mkdir($path, 0755, TRUE);
     	}
-    	if (!empty($_FILES['image'])){
+    	if (!empty($_FILES['image']['tmp_name'])){
     		$uploadTarget = URL_IMAGES."artwork/".$targetArtwork->getId();
             $uploadFile = __DIR__."\assets\images\artwork\\".$targetArtwork->getId().'\\';
 
@@ -289,6 +331,20 @@ else{
                 }
     		}
     	}
+        else{
+            $newVisual = new Visual($_POST['pictureId']);
+            $newVisual->setLegend($_POST['legend']);
+            $synch = $newVisual->synchroDb();
+            if ($synch) {
+                $data['text']['pictureId'] = $synch;
+                $data['file']['image']['error'] = 0;
+                echo json_encode($data);
+            }
+            else{
+                $data['file']['image']['error'] = 'Une erreur s\'est produite lors de l\'enregistrement du fichier.';
+                echo json_encode($data);
+            }
+        }
     }
 }
 
