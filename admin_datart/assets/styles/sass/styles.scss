@@ -404,11 +404,34 @@ input.input-file{
 			}
 		}
 	}
-
-//IMPORT
-@import '_dropzone.scss';
+}
+#artwork-display{
+	.exhibit-passed{
+		background-color: #e8e8e8;
+		margin: 0 -15px;
+    	padding: 5px 10px;
+    	h3{
+			color: $datart-gray;
+		}
+	}
+	.qrcode-area{
+		#qart{
+			text-align: center;
+		}
+		p{
+			font-size: 0.7em;
+			font-style: italic;
+			text-align: center;
+			color: $datart-red;
+		}
+	}
 
 }
+
+
+//IMPORT DROPZONE
+@import '_dropzone.scss';
+
 
 //IMPORT
 @import '_form.scss';

@@ -391,20 +391,28 @@ include('header.php');
 			<a href="#" class="btn btn-default btn-custom btn-md btn-block" role="button"><span class="fa fa-desktop"></span> Voir la page visiteur</a>
 		</div>
 		<div class="col-xs-12">
-			<section>
+			<section id="artwork-display">
 				<h2>Exposée dans :</h2>
 				<ul>
 					<?php
 						$exhibit = $targetArtwork->getExhibit();
 						foreach ($exhibit as $ex) {
 							?>
-							<li>
+							<li <?= $ex->getEndDate() < date('Y-m-d')?'class="exhibit-passed"':'' ; ?> >
 								<h3><?= $ex->getTitle() ?></h3>
 								<p><?= dateFormat($ex->getBeginDate()) ?> > <?= dateFormat($ex->getEndDate()) ?></p>
 								<?php
-									if ($ex->getEndDate() < date('Y-m-d')) {
+									if ($ex->getEndDate() > date('Y-m-d')) {
 										if (empty($targetArtwork->getQrCode())) {
-											echo '<button type="button" class="btn btn-custom btn-block"><span class="fa fa-qrcode"></span>Générer QR Code</button>';
+											?>
+											<div class="qrcode-area">
+												<script src="<?= URL_ASSETS ?>js/qart.min.js""></script>
+												<script src="<?= URL_ASSETS ?>js/qrcode.js""></script>
+												<script src="<?= URL_ASSETS ?>js/canvas2svg.js""></script>
+												<button type="button" class="btn btn-custom btn-block generateCode" data-artwork="<?= $targetArtwork->getId() ?>" data-picture="<?= !empty($targetArtwork->getPictureOne())?$targetArtwork->getPictureOne()->getTarget():'' ?>" data-exhibit="<?= $ex->getId() ?>"><span class="fa fa-qrcode"></span>Générer QR Code</button>
+												<p>(N'oubliez pas d'associer un visuel principal à l'oeuvre pour un rendu original, et de sauvegarder le QR Code après sa génération)</p>
+											</div>
+											<?php
 										}
 									}
 								?>

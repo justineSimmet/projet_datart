@@ -262,6 +262,16 @@ Dropzone.options.picturesUpload = {
     }
 };
 
+function qartGenerator(value, path){
+	new QArt({
+		value: value,
+		imagePath: path,
+		filter: 'color',
+		version : 40
+		}).make(document.getElementById('qart'));
+}
+
+
 $(document).ready(function(){
 
 	tinymce.init(configTinyMce);
@@ -440,6 +450,33 @@ MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
 				container.find('textarea').css('border', '1px solid #F80C28');
 			}
 		})
+	})
+
+
+/**********************************************
+** GENERATION D'UN QR CODE CANVAS AVEC QART
+************************************************/
+	$('.generateCode').on('click', function(){
+		artworkId = $(this).attr('data-artwork');
+		pictureTarget = $(this).attr('data-picture');
+		exhibitId = $(this).attr('data-exhibitId');
+		$(this).parents('.qrcode-area').prepend('<div id="qart"></div>');
+		var value = './exhibit.php?id='+exhibitId+'/artwork.php?id='+artworkId;
+		qartGenerator(value, pictureTarget);
+		$(this).parents('.qrcode-area').append('<button type="button" class="btn btn-custom btn-block saveCode" data-artwork="'+artworkId+'">Sauvegarder le QR Code</button>');
+		$(this).parents('.qrcode-area').append('<button type="button" class="btn btn-custom btn-block cancelCode">Annuler</button>');
+		$(this).remove();
+	})
+
+	$('.qrcode-area').on('click', '.saveCode', function(){
+		var canvas = document.getElementsByTagName("canvas");
+		var img = canvas[0].toDataURL('image/jpeg', 1.0);
+		$(this).parents('.qrcode-area').prepend('<img src="'+img+'" />');
+		console.log(img);
+	})
+
+	$('.saveCode').on('click', '.cancelCode', function(){
+		location.reload(true);
 	})
 
 /**********************************************
