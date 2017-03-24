@@ -180,7 +180,6 @@ if(isset($_POST['characteristicFrench']) && isset($_POST['mainFrench']) ) {
 $locationTitle = isset($targetArtwork)?$targetArtwork->getTitle():'Ajouter une oeuvre';
 include('header.php');
 
-
 ?>
 <!--
 ************************************************************************************************
@@ -406,11 +405,16 @@ include('header.php');
 										if (empty($targetArtwork->getQrCode())) {
 											?>
 											<div class="qrcode-area">
-												<script src="<?= URL_ASSETS ?>js/qart.min.js""></script>
-												<script src="<?= URL_ASSETS ?>js/qrcode.js""></script>
-												<script src="<?= URL_ASSETS ?>js/canvas2svg.js""></script>
+												<div id="qrcode"><img src="" /></div>
 												<button type="button" class="btn btn-custom btn-block generateCode" data-artwork="<?= $targetArtwork->getId() ?>" data-picture="<?= !empty($targetArtwork->getPictureOne())?$targetArtwork->getPictureOne()->getTarget():'' ?>" data-exhibit="<?= $ex->getId() ?>"><span class="fa fa-qrcode"></span>Générer QR Code</button>
-												<p>(N'oubliez pas d'associer un visuel principal à l'oeuvre pour un rendu original, et de sauvegarder le QR Code après sa génération)</p>
+											</div>
+											<?php
+										}
+										else{
+											?>
+											<div class="qrcode-area">
+												<div id="qrcode"><img src="<?= URL_IMAGES ?>/artwork/<?= $targetArtwork->getId() ?>/<?= $targetArtwork->getQrCode() ?>" /></div>
+												<button type="button" class="btn btn-custom btn-block saveCode" data-artwork="<?= $targetArtwork->getId() ?>" data-picture="<?= !empty($targetArtwork->getPictureOne())?$targetArtwork->getPictureOne()->getTarget():'' ?>" data-exhibit="<?= $ex->getId() ?>"><span class="fa fa-qrcode"></span>Télécharger le QR Code</button>
 											</div>
 											<?php
 										}

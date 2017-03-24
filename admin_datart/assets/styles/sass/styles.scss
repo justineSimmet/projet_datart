@@ -415,14 +415,15 @@ input.input-file{
 		}
 	}
 	.qrcode-area{
-		#qart{
-			text-align: center;
-		}
 		p{
 			font-size: 0.7em;
 			font-style: italic;
 			text-align: center;
 			color: $datart-red;
+		}
+		#qrcode{
+			text-align: center;
+			text-align: center;
 		}
 	}
 

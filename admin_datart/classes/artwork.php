@@ -287,7 +287,7 @@ class Artwork{
 					'".addslashes($this->disponibility)."',
 					NULL,
 					'".addslashes($this->artist_request)."',
-					NULL,
+					'".addslashes($this->qrcode)."',
 					now(),
 					TRUE
 				)");
@@ -316,7 +316,8 @@ class Artwork{
 				artwork_title = '".addslashes($this->artwork_title)."',
 				dimensions =  '".addslashes($this->dimensions)."',
 				disponibility = '".addslashes($this->disponibility)."',
-				artist_request = '".addslashes($this->artist_request)."'
+				artist_request = '".addslashes($this->artist_request)."',
+				qrcode = '".addslashes($this->qrcode)."'
 				WHERE id = '".$this->id."'
 				");
 			if ($update) {

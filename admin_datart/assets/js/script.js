@@ -154,6 +154,7 @@ function mainPictureAction(mainTarget, visualArea, captionArea){
                 	$(mainTarget).find('input[name="image"]').val('');
                 	$(mainTarget).find('.target-file').addClass('hidden');
                 	$(mainTarget).find('.alert-area-picture').html(success);
+                	$('.generateCode').attr('data-picture',response.text.pictureId );
                 }
                 else{
                 	var error ='<p class="text-danger"><strong>Erreur ! </strong>'+response.file.image.error+'<p>';
@@ -261,7 +262,7 @@ Dropzone.options.picturesUpload = {
         }
     }
 };
-
+/*
 function qartGenerator(value, path){
 	new QArt({
 		value: value,
@@ -270,7 +271,7 @@ function qartGenerator(value, path){
 		version : 40
 		}).make(document.getElementById('qart'));
 }
-
+*/
 
 $(document).ready(function(){
 
@@ -457,7 +458,23 @@ MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
 ** GENERATION D'UN QR CODE CANVAS AVEC QART
 ************************************************/
 	$('.generateCode').on('click', function(){
-		artworkId = $(this).attr('data-artwork');
+		var artworkId = $(this).attr('data-artwork');
+		var exhibitId = $(this).attr('data-exhibit');
+		var target = 'www.grand-angle.fr/exhibit.php?id='+exhibitId+'/artwork.php?id='+artworkId;
+		$.post('qrcode.php',{action:'generateCode', artworkId: artworkId, target: target} , function(response){
+			var obj = JSON.parse(response);
+			if (obj.response == 'success') {
+				$(this).parents('.qrcode-area').find('#qrcode img').attr('src',obj.target);
+				$(this).parents('.qrcode-area').append('<button type="button" class="btn btn-custom btn-block saveCode" data-artwork="'+artworkId+'">Télécharger le QR Code</button>');
+				$(this).next('p').remove();
+				$(this).remove();
+			}else{
+				$(this).parents('.qrcode-area').find('#qrcode').html('<p class="red">Une erreur est survenue, le QR Code n\'a pas été généré correctement.</p>');
+			}
+		})
+
+		
+		/* artworkId = $(this).attr('data-artwork');
 		pictureTarget = $(this).attr('data-picture');
 		exhibitId = $(this).attr('data-exhibitId');
 		$(this).parents('.qrcode-area').prepend('<div id="qart"></div>');
@@ -465,7 +482,7 @@ MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
 		qartGenerator(value, pictureTarget);
 		$(this).parents('.qrcode-area').append('<button type="button" class="btn btn-custom btn-block saveCode" data-artwork="'+artworkId+'">Sauvegarder le QR Code</button>');
 		$(this).parents('.qrcode-area').append('<button type="button" class="btn btn-custom btn-block cancelCode">Annuler</button>');
-		$(this).remove();
+		$(this).remove();*/
 	})
 
 	$('.qrcode-area').on('click', '.saveCode', function(){
@@ -475,7 +492,7 @@ MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
 		console.log(img);
 	})
 
-	$('.saveCode').on('click', '.cancelCode', function(){
+	$('.qrcode-area').on('click', '.cancelCode', function(){
 		location.reload(true);
 	})
 

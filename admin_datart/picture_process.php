@@ -1,7 +1,7 @@
 <?php
 	require_once('classes/user.php');
 	require_once('classes/artwork.php');
-	require_once('classes/artwork_visual.php');
+    require_once('classes/artwork_visual.php');
 	require_once('includes/include.php');
 
     $data['file'] = $_FILES;
@@ -146,6 +146,7 @@ elseif(isset($_POST['action']) && $_POST['action'] == 'uploadPictures'){
         }
     }
 }
+
 /**********************************************************************
 **
 ** INSERTION DES VISUELS PRINCIPAUX

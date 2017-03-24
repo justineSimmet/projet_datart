@@ -581,13 +581,14 @@ input.input-file {
   padding: 5px 10px; }
   #artwork-display .exhibit-passed h3 {
     color: #778085; }
-#artwork-display .qrcode-area #qart {
-  text-align: center; }
 #artwork-display .qrcode-area p {
   font-size: 0.7em;
   font-style: italic;
   text-align: center;
   color: #d5313a; }
+#artwork-display .qrcode-area #qrcode {
+  text-align: center;
+  text-align: center; }
 
 /*
  * The MIT License
