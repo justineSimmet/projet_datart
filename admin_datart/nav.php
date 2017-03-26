@@ -41,7 +41,7 @@
                 $currentUser->getStatus() == 0?'<li><a href="'.URL_ADMIN.'users_management.php"><span class="fa fa-users"></span>Gestion des utilisateurs</a></li>':'';
             ?>
             <li class="hidden-lg hidden-md"><a href="<?= URL_ADMIN ?>user_account.php"><span class="fa fa-user"></span>Mon compte</a></li>
-            <li><a href="<?= URL_ADMIN ?>planning.php"><span class="fa fa-calendar"></span>Agenda</a></li>
+            <li class="disabled-link"><a><span class="fa fa-calendar"></span>Agenda (prochainement)</a></li>
             <li><a href="<?= URL_ADMIN ?>exhibit_management.php"><span class="fa fa-archive"></span>Les expositions <span class="fa fa-plus-circle link-plus"></span></a>
                 <ul class="nav-submenu">
 
@@ -59,7 +59,7 @@
                     <li><a href="<?= URL_ADMIN ?>artwork_zoom.php"><span class="fa fa-plus-circle"></span>Ajouter une oeuvre</a></li>
                 </ul>
             </li>
-            <li><a href="<?= URL_ADMIN ?>statistics.php"><span class="fa fa-bar-chart"></span>Statistiques</a></li>
+            <li class="disabled-link"><a href=""><span class="fa fa-bar-chart"></span>Statistiques (prochainement)</a></li>
         </ul>
         <div id="background-nav"></div>
     </div>

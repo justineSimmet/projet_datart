@@ -62,6 +62,17 @@
 			border-bottom: 1px solid $datart-gray;
 			border-top: 1px solid #fff;
 
+			&.disabled-link{
+				a{
+					font-style: italic;
+					&:hover{
+						color: $datart-gray;
+						background-color: #fff;
+						cursor: not-allowed	;
+					}
+				}
+			}
+
 			a{
 				position: relative;
 				display: block;
@@ -83,6 +94,8 @@
 					margin-right: 5px;
 					margin-left: 5px;
 				}
+
+
 			}
 		}
 		.active-nav-link{
