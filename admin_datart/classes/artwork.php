@@ -19,6 +19,7 @@ class Artwork{
 	private $creation_date;
 	private $visible;
 	private $visual;
+	private $additionnal;
 
 	function __construct($id=''){
 		if ($id != 0) {
@@ -94,10 +95,21 @@ class Artwork{
 			else{
 				$this->visual = array();
 			}
+			$this->additional = array();
+			$additionals = requete_sql("SELECT id FROM additional_content WHERE artwork_id = '".$this->id."' ");
+			if (count($additionals) !== 0){
+				while ( $ad = $additionals->fetch(PDO::FETCH_ASSOC)) {
+					array_push($this->additional, new Additional($ad['id']));
+				}
+			}
+			else{
+				$this->additional = array();
+			}
 		}
 		else{
 			$this->textual_content = array();
 			$this->visual = array();
+			$this->additional = array();
 		}
 	}
 
@@ -258,6 +270,10 @@ class Artwork{
 		}
 	}
 
+	function getAdditional(){
+		return $this->additional;
+	}
+
 	function getExhibit(){
 		$exhibit = requete_sql("SELECT exhibit_id FROM artwork_displayed WHERE artwork_id = '".$this->id."' ");
 		$exhibit = $exhibit->fetchAll(PDO::FETCH_ASSOC);
@@ -376,9 +392,15 @@ class Artwork{
 		if ($cleanText) {
 			$cleanDisplay = requete_sql("DELETE FROM artwork_displayed WHERE artwork_id ='".$this->id."' ");
 			if ($cleanDisplay) {
-				$delete = requete_sql("DELETE FROM artwork WHERE id ='".$this->id."' ");
-				if ($delete) {
-					return TRUE;
+				$cleanAdd = requete_sql("DELETE FROM additional_content WHERE artwork_id ='".$this->id."' ");
+				if ($cleanAdd) {
+					$delete = requete_sql("DELETE FROM artwork WHERE id ='".$this->id."' ");
+					if ($delete) {
+						return TRUE;
+					}
+					else{
+						return FALSE;
+					}
 				}
 				else{
 					return FALSE;

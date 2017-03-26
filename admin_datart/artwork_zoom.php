@@ -5,6 +5,7 @@ require_once('classes/artist.php');
 require_once('classes/artwork.php');
 require_once('classes/artwork_textual_content.php');
 require_once('classes/artwork_visual.php');
+require_once('classes/artwork_additional.php');
 require_once('classes/artist.php');
 require_once('classes/exhibit.php');
 require_once('classes/exhibit_textual_content.php');
@@ -380,6 +381,100 @@ include('header.php');
 
 				</div>
 			</section>
+			<section>
+				<div id="artwork-additionnal-content">
+				<h2>Etape 4 : Documents additionnels</h2>
+
+				    <div class="row preview-list">
+					<?php
+						if (isset($targetArtwork) && !empty($targetArtwork->getId())) {
+				    		$additionalList =$targetArtwork->getAdditional();
+				    	?>						    
+				    	<div class="col-sm-4">
+				    		<h4>PDF :</h4>
+				    		<ul id="add-pdf">
+				    		<?php
+				    			foreach ($additionalList as $add) {
+				    				if ($add->getFormat() == 'pdf') {
+				    					?>
+				    					<li class="clearfix">
+				    						<input type="text" name="add-name" class="form-control" value="<?= $add->getName() ?>" readonly>
+				    						<div class="btn-group pull-right" data-addId="<?= $add->getId() ?>">
+				    							<a href="<?= $add->getTarget() ?>" target="_blank" class="btn btn-default"><span class="fa fa-eye"></span></a>
+												<button type="button" class="btn btn-default edit-add"><span class="fa fa-pencil"></button>
+												<button type="button" class="btn btn-danger delete-add"><span class="fa fa-trash"></button>
+											</div>
+				    					</li>
+				    					<?php
+				    				}
+				    			}
+				    		?>
+				    		</ul>
+				    	</div>
+				    	<div class="col-sm-4">
+				    		<h4>Vidéo / Son :</h4>
+				    		<ul id="add-media">
+				    		<?php
+				    			foreach ($additionalList as $add) {
+				    				if ($add->getFormat() != 'pdf' && $add->getFormat() != 'link' ) {
+				    					?>
+				    					<li class="clearfix">
+				    						<input type="text" name="add-name" class="form-control" value="<?= $add->getName() ?>" readonly>
+				    						<div class="btn-group pull-right" data-addId="<?= $add->getId() ?>">
+				    							<a href="<?= $add->getTarget() ?>" target="_blank" class="btn btn-default"><span class="fa fa-eye"></span></a>
+												<button type="button" class="btn btn-default edit-add"><span class="fa fa-pencil"></button>
+												<button type="button" class="btn btn-danger delete-add"><span class="fa fa-trash"></button>
+											</div>
+				    					</li>
+				    					<?php
+				    				}
+				    			}
+				    		?>
+				    		</ul>
+				    	</div>
+				    	<div class="col-sm-4">
+				    		<h4>Liens :</h4>
+				    		<ul id="add-link" data-artwork="<?= $targetArtwork->getId(); ?>" >
+				    		<?php
+				    			foreach ($additionalList as $add) {
+				    				if ($add->getFormat() == 'link' ) {
+				    					?>
+				    					<li class="clearfix">
+				    						<input type="text" name="add-name" class="form-control" value="<?= $add->getName() ?>" readonly>
+				    						<input type="text" name="add-target" class="form-control" value="<?= $add->getTarget() ?>" readonly>
+				    						<div class="btn-group pull-right" data-addId="<?= $add->getId() ?>">
+				    							<a href="<?= $add->getTarget() ?>" target="_blank" class="btn btn-default"><span class="fa fa-eye"></span></a>
+												<button type="button" class="btn btn-default edit-add"><span class="fa fa-pencil"></button>
+												<button type="button" class="btn btn-danger delete-add"><span class="fa fa-trash"></button>
+											</div>
+				    					</li>
+				    					<?php
+				    				}
+				    			}
+				    		?>
+				    			<li class="clearfix">
+				    				<input type="text" name="add-name" class="form-control" placeholder="Titre du lien">
+				    				<input type="text" name="add-target" class="form-control" placeholder="Cible du lien">
+				    				<button type="button" class="btn btn-default add-link pull-right"><span class="fa fa-plus"></button>
+				    			</li>
+				    		</ul>
+				    	</div>
+				    <?php
+				    		
+				    	}
+    				?>
+    				</div>
+
+				<form action="<?= URL_ADMIN ?>additional_content.php" method="POST" id="filesUpload" class="dropzone">
+					<div class="fallback">
+	    				<input name="file" type="file" />
+	  				</div>
+					<input type="hidden" name="artworkId" value="<?= isset($targetArtwork) && !empty($targetArtwork->getId())?$targetArtwork->getId():''; ?>">
+					<input type="hidden" name="action" value="uploadFiles">
+				</form>
+
+				</div>
+			</section>
 		</div>
 	</div>
 </div>
@@ -413,8 +508,8 @@ include('header.php');
 										else{
 											?>
 											<div class="qrcode-area">
-												<div id="qrcode"><img src="<?= URL_IMAGES ?>/artwork/<?= $targetArtwork->getId() ?>/<?= $targetArtwork->getQrCode() ?>" /></div>
-												<button type="button" class="btn btn-custom btn-block saveCode" data-artwork="<?= $targetArtwork->getId() ?>" data-picture="<?= !empty($targetArtwork->getPictureOne())?$targetArtwork->getPictureOne()->getTarget():'' ?>" data-exhibit="<?= $ex->getId() ?>"><span class="fa fa-qrcode"></span>Télécharger le QR Code</button>
+												<div id="qrcode"><img src="<?= URL_IMAGES ?>artwork/<?= $targetArtwork->getId() ?>/<?= $targetArtwork->getQrCode() ?>" /></div>
+												<a type="button" class="btn btn-custom btn-block saveCode" href="<?= URL_IMAGES ?>artwork/<?= $targetArtwork->getId() ?>/<?= $targetArtwork->getQrCode() ?>" download><span class="fa fa-qrcode"></span>Télécharger le QR Code</a>
 											</div>
 											<?php
 										}

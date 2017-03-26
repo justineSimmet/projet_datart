@@ -152,6 +152,12 @@ section {
       width: 100%;
       border-bottom: 1px solid #778085;
       border-top: 1px solid #fff; }
+      #main-nav #main-nav-menu li.disabled-link a, #main-nav #main-nav-menu .nav-submenu li.disabled-link .active-nav-link {
+        font-style: italic; }
+        #main-nav #main-nav-menu li.disabled-link a:hover, #main-nav #main-nav-menu li.disabled-link .active-nav-link, #main-nav #main-nav-menu .nav-submenu li.disabled-link .active-nav-link:hover {
+          color: #778085;
+          background-color: #fff;
+          cursor: not-allowed; }
       #main-nav #main-nav-menu li a, #main-nav #main-nav-menu .nav-submenu li .active-nav-link {
         position: relative;
         display: block;
@@ -589,6 +595,17 @@ input.input-file {
 #artwork-display .qrcode-area #qrcode {
   text-align: center;
   text-align: center; }
+
+#artwork-additionnal-content li {
+  padding-bottom: 15px; }
+  #artwork-additionnal-content li input {
+    border-bottom-right-radius: 0; }
+  #artwork-additionnal-content li .btn {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-top: 0; }
+  #artwork-additionnal-content li input + input {
+    margin-top: 5px; }
 
 /*
  * The MIT License

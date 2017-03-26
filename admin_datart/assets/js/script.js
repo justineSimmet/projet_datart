@@ -222,8 +222,7 @@ function mainPictureAction(mainTarget, visualArea, captionArea){
 		});		
 	});
 }
-/*dz-processing
-dz-error*/
+
 Dropzone.options.picturesUpload = {
 	paramName : "image",
 	maxFilesize: 2,
@@ -262,16 +261,43 @@ Dropzone.options.picturesUpload = {
         }
     }
 };
-/*
-function qartGenerator(value, path){
-	new QArt({
-		value: value,
-		imagePath: path,
-		filter: 'color',
-		version : 40
-		}).make(document.getElementById('qart'));
-}
-*/
+
+
+Dropzone.options.filesUpload = {
+	paramName : "file",
+	maxFilesize: 5,
+	acceptedFiles: ".pdf, .mp3, .mp4, .wav",
+	dictDefaultMessage : 'Déposez vos fichiers ici ou cliquez pour les sélectionner.<br/>(Format valide : .pdf, .mp3, .mp4 ou .wa - Maximum 5 Mo)',
+	dictFallbackMessage : 'Votre navigateur est trop vieux pour le glisser-déposer, merci d\'utiliser le transfert d\'image comme au bon vieux temps.',
+	dictInvalidFileType : 'Désolé, votre fichier n\'est pas au bon format.',
+	dictFileTooBig : 'Votre fichier est trop lourd, il ne doit pas dépasser 5 Mo.',
+  	success: function(file, response){
+  		var obj = JSON.parse(response);
+  		var listElement = '<li class="clearfix">'
+  						+'<input type="text" name="add-name" class="form-control" value="'+obj.text.name+'" readonly>'
+  						+'<div class="btn-group pull-right" data-addId="'+obj.text.addId+'">'
+  						+'<a href="'+obj.text.target+'" target="_blank" class="btn btn-default"><span class="fa fa-eye"></span></a>'
+  						+'<button type="button" class="btn btn-default"><span class="fa fa-pencil"></button>'
+  						+'<button type="button" class="btn btn-danger"><span class="fa fa-trash"></button>'
+  						+'</div'
+  						+'</li>';
+		var correctStyle = {opacity : '1' , color : '#1FBA2E'} ;
+		var errorStyle = {opacity : '1' , color : '#E00B33'};
+    	var container = this.element;
+    	if(obj.file.file.error == 0){
+        	$(container).find('.dz-success-mark').css('opacity', '1' );
+        	if(obj.text.format == "pdf"){
+        		$('#add-pdf').append(listElement);
+        	}
+        	else if(obj.text.format == "mp3" || obj.text.format == "mp4" || obj.text.format == "wav"){
+        		$('#add-media').append(listElement);
+        	}
+        }else{
+        	$(container).find('.dz-preview').removeClass('dz-processing').addClass('dz-error');
+        	$(container).find('.dz-error-message').find('span').text(obj.file.image.error);
+        }
+    }
+};
 
 $(document).ready(function(){
 
@@ -454,47 +480,113 @@ MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
 	})
 
 
-/**********************************************
-** GENERATION D'UN QR CODE CANVAS AVEC QART
-************************************************/
+/*******************************************************
+** GENERATION D'UN QR CODE AVEC APPEL AU SCRIP qrcode.php
+*********************************************************/
 	$('.generateCode').on('click', function(){
 		var artworkId = $(this).attr('data-artwork');
 		var exhibitId = $(this).attr('data-exhibit');
 		var target = 'www.grand-angle.fr/exhibit.php?id='+exhibitId+'/artwork.php?id='+artworkId;
+		var qrCodeArea = $(this).parents('.qrcode-area');
 		$.post('qrcode.php',{action:'generateCode', artworkId: artworkId, target: target} , function(response){
 			var obj = JSON.parse(response);
 			if (obj.response == 'success') {
-				$(this).parents('.qrcode-area').find('#qrcode img').attr('src',obj.target);
-				$(this).parents('.qrcode-area').append('<button type="button" class="btn btn-custom btn-block saveCode" data-artwork="'+artworkId+'">Télécharger le QR Code</button>');
-				$(this).next('p').remove();
-				$(this).remove();
+				qrCodeArea.find('img').attr('src','http://localhost/projet_datart/admin_datart/assets/images/artwork/'+artworkId+'/'+obj.target);
+				qrCodeArea.find('.generateCode').remove();
+				qrCodeArea.append('<a type="button" class="btn btn-custom btn-block" href="http://localhost/projet_datart/admin_datart/assets/images/artwork/'+artworkId+'/'+obj.target+'" download>Télécharger le QR Code</a>');
+				qrCodeArea.find('p').remove();
 			}else{
-				$(this).parents('.qrcode-area').find('#qrcode').html('<p class="red">Une erreur est survenue, le QR Code n\'a pas été généré correctement.</p>');
+				qrCodeArea.find('#qrcode').html('<p class="red">Une erreur est survenue, le QR Code n\'a pas été généré correctement.</p>');
 			}
 		})
 
-		
-		/* artworkId = $(this).attr('data-artwork');
-		pictureTarget = $(this).attr('data-picture');
-		exhibitId = $(this).attr('data-exhibitId');
-		$(this).parents('.qrcode-area').prepend('<div id="qart"></div>');
-		var value = './exhibit.php?id='+exhibitId+'/artwork.php?id='+artworkId;
-		qartGenerator(value, pictureTarget);
-		$(this).parents('.qrcode-area').append('<button type="button" class="btn btn-custom btn-block saveCode" data-artwork="'+artworkId+'">Sauvegarder le QR Code</button>');
-		$(this).parents('.qrcode-area').append('<button type="button" class="btn btn-custom btn-block cancelCode">Annuler</button>');
-		$(this).remove();*/
 	})
 
-	$('.qrcode-area').on('click', '.saveCode', function(){
-		var canvas = document.getElementsByTagName("canvas");
-		var img = canvas[0].toDataURL('image/jpeg', 1.0);
-		$(this).parents('.qrcode-area').prepend('<img src="'+img+'" />');
-		console.log(img);
+/*******************************************************
+** GESTION DES FICHIERS ANNEXES DES OEUVRES
+*********************************************************/	
+	$('.preview-list').on('click', 'button', function(){
+		var addElement = $(this).parents('div').attr('data-addId');
+		var inputName = $(this).parents('li').find('input[name = "add-name"]')
+		var inputTarget = $(this).parents('li').find('input[name = "add-target"]')
+		var button = $(this);
+		var artwork = $(this).parents('ul').attr('data-artwork');
+		var container = $(this).parents('li');
+		var nameContent = inputName.val();
+		var targetContent = inputTarget.val();
+		if (button.hasClass('edit-add') == true) {
+			inputName.removeAttr('readonly');
+			inputTarget.removeAttr('readonly');
+			inputName.focus();
+			button.html('<span class="fa fa-save"></span>');
+			button.removeClass('edit-add').addClass('save-add');
+
+		}
+		else if(button.hasClass('save-add') == true){
+			$.post('additional_content.php',{action: 'editFiles', addId: addElement, name: nameContent, target: targetContent}, function(response){
+				var obj = JSON.parse(response);
+				if (obj.response == 'success') {
+					container.find('input').each(function(){
+						$(this).css('background-color', '#DAFFCA');
+						$(this).css('border', '1px solid #21E012');
+						$(this).attr('readonly');
+					});
+					button.html('<span class="fa fa-pencil"></span>');
+					button.removeClass('save-add').addClass('edit-add');
+				}
+				else{
+					container.find('input').each(function(){
+						$(this).css('background-color', '#FFBFBF');
+						$(this).css('border', '1px solid #F80C28');
+						$(this).attr('readonly');
+					});
+					inputName.val('Une erreur s\'est produite durant l\'enregistrement.')
+					button.html('<span class="fa fa-pencil"></span>');
+					button.removeClass('save-add').addClass('edit-add')
+				}
+			}) 
+		}
+		else if(button.hasClass('add-link') == true){
+			$.post('additional_content.php',{action: 'addLink', target: targetContent, name: nameContent, artwork: artwork}, function(response){
+				var obj = JSON.parse(response);
+				if (obj.response == 'success') {
+					var newLi = '<li class="clearfix">'
+								+'<input type="text" name="add-name" class="form-control" value="'+obj.name+'" readonly>'
+								+'<input type="text" name="add-target" class="form-control" value="'+obj.target+'" readonly>'
+								+'<div class="btn-group pull-right" data-addId="'+obj.id+'">'
+								+'<a href="'+obj.target+'" target="_blank" class="btn btn-default"><span class="fa fa-eye"></span></a>'
+								+'<button type="button" class="btn btn-default edit-add"><span class="fa fa-pencil"></button>'
+								+'<button type="button" class="btn btn-danger delete-add"><span class="fa fa-trash"></button>'
+								+'</div>'
+								+'</li>';
+					inputName.val('');
+					inputTarget.val('');
+					container.prepend(newLi);
+				}
+				else{
+					inputName.css('background-color', '#FFBFBF');
+					inputName.css('border', '1px solid #F80C28');
+					inputTarget.css('background-color', '#FFBFBF');
+					inputTarget.css('border', '1px solid #F80C28');
+					container.append('<p class="red">Une erreur s\'est produite lors de l\'enregistrement du lien.</p>');
+				}
+			})
+		}
+		else{
+			$.post('additional_content.php',{action: 'deleteFiles', addId: addElement}, function(response){
+				var obj = JSON.parse(response);
+				if (obj.response == 'success') {
+					container.remove();
+				}
+				else{
+					input.css('background-color', '#FFBFBF');
+					input.css('border', '1px solid #F80C28');
+					input.val('Une erreur s\'est produite durant la suppression.')
+				}
+			})
+		}
 	})
 
-	$('.qrcode-area').on('click', '.cancelCode', function(){
-		location.reload(true);
-	})
 
 /**********************************************
 ** EXECUTION REQUETE AJAX SI UN UTILISATEUR A

@@ -429,6 +429,26 @@ input.input-file{
 
 }
 
+#artwork-additionnal-content{
+	li {
+		padding-bottom: 15px;
+
+		input{
+		border-bottom-right-radius: 0;
+		}
+
+		.btn{
+			border-top-left-radius: 0;
+			border-top-right-radius: 0;
+			border-top: 0;
+		}
+
+		input + input{
+			margin-top: 5px;
+		}
+	}
+}
+
 
 //IMPORT DROPZONE
 @import '_dropzone.scss';

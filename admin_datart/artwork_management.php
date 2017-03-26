@@ -4,6 +4,7 @@ require_once('classes/user.php');
 require_once('classes/artwork.php');
 require_once('classes/artwork_textual_content.php');
 require_once('classes/artwork_visual.php');
+require_once('classes/artwork_additional.php');
 require_once('classes/artist.php');
 require_once('classes/exhibit.php');
 require_once('includes/include.php');
