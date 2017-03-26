@@ -409,7 +409,6 @@ if (isset($_POST['name']) && isset($_POST['date'])) {
 $locationTitle = isset($targetExhibit)?$targetExhibit->getTitle():'Ajouter une exposition';
 
 include('header.php');
-var_dump($targetExhibit->listAvailableArtwork());
 
 ?>
 
@@ -510,8 +509,8 @@ var_dump($targetExhibit->listAvailableArtwork());
 		if ($targetExhibit->getVisible() == TRUE && $targetExhibit->getEndDate() > date('Y-m-d')) {
 ?>
 	<div class="hidden-lg hidden-sm btn-area-row">
-		<a href="#" class="btn btn-default btn-custom btn-lg" role="button"><span class="fa fa-cubes"></span> Placer les oeuvres</a>
-		<a href="exhibit_technical_doc.php?id=<?= $targetExhibit->getId() ?>" class="btn btn-default btn-custom btn-lg" role="button"><span class="fa fa-file-text"></span> Dossier technique</a>
+		<a href="<?= URL_ADMIN ?>exhibit_zoning.php?id=<?= $targetExhibit->getId() ?>" target="_blank" class="btn btn-default btn-custom btn-lg" role="button"><span class="fa fa-cubes"></span> Placer les oeuvres</a>
+		<a href="<?= URL_ADMIN ?>exhibit_technical_doc.php?id=<?= $targetExhibit->getId() ?>" target="_blank" class="btn btn-default btn-custom btn-lg" role="button"><span class="fa fa-file-text"></span> Dossier technique</a>
 		<a href="#" class="btn btn-default btn-custom btn-lg" role="button"><span class="fa fa-desktop"></span> Voir la page visiteur</a>
 	</div>
 <?php
@@ -705,8 +704,8 @@ var_dump($targetExhibit->listAvailableArtwork());
 					if ($targetExhibit->getVisible() == TRUE && $targetExhibit->getEndDate() > date('Y-m-d')) {
 			?>
 				<div class="hidden-md hidden-xs btn-area-col">
-					<a href="#" class="btn btn-default btn-custom btn-md" role="button"><span class="fa fa-cubes"></span> Placer les oeuvres</a>
-					<a href="exhibit_technical_doc.php?id=<?= $targetExhibit->getId() ?>" class="btn btn-default btn-custom btn-md" role="button"><span class="fa fa-file-text"></span> Dossier technique</a>
+					<a href="<?= URL_ADMIN ?>exhibit_zoning.php?id=<?= $targetExhibit->getId() ?>" target="_blank" class="btn btn-default btn-custom btn-md" role="button"><span class="fa fa-cubes"></span> Placer les oeuvres</a>
+					<a href="<?= URL_ADMIN ?>exhibit_technical_doc.php?id=<?= $targetExhibit->getId() ?>" target="_blank" class="btn btn-default btn-custom btn-md" role="button"><span class="fa fa-file-text"></span> Dossier technique</a>
 					<a href="#" class="btn btn-default btn-custom btn-md" role="button"><span class="fa fa-desktop"></span> Voir la page visiteur</a>
 				</div>
 			<?php

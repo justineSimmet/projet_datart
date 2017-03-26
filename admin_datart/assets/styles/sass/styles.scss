@@ -269,8 +269,6 @@ ul{
 	}
 }
 
-
-
 /****************************************************
 **
 ** CSS ARTWORK MANAGEMENT
@@ -450,6 +448,20 @@ input.input-file{
 }
 
 
+/****************************************************
+**
+** CSS EXHIBIT ZONING
+**
+*****************************************************/
+#zoning-header{
+	padding: 0;
+	height: 100px;
+	@include shadow(0, 0, 10px, rgba(100,100,100,0.25), false);
+	.nav-logo{
+		background-color: $datart-red;
+		padding: 25px;
+	}	
+}
 //IMPORT DROPZONE
 @import '_dropzone.scss';
 

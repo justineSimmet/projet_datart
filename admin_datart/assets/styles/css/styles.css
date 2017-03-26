@@ -607,6 +607,21 @@ input.input-file {
   #artwork-additionnal-content li input + input {
     margin-top: 5px; }
 
+/****************************************************
+**
+** CSS EXHIBIT ZONING
+**
+*****************************************************/
+#zoning-header {
+  padding: 0;
+  height: 100px;
+  -webkit-box-shadow: 0 0 10px rgba(100, 100, 100, 0.25);
+  -moz-box-shadow: 0 0 10px rgba(100, 100, 100, 0.25);
+  box-shadow: 0 0 10px rgba(100, 100, 100, 0.25); }
+  #zoning-header .nav-logo {
+    background-color: #d5313a;
+    padding: 25px; }
+
 /*
  * The MIT License
  * Copyright (c) 2012 Matias Meno <m@tias.me>
