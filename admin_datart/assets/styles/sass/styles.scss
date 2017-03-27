@@ -53,6 +53,27 @@ $datart-gray : #778085 ;
 
 // STYLES GENERIQUES
 
+/*IE9*/
+img::selection 
+{
+    background-color:transparent;
+} 
+*::-moz-selection
+{
+    background-color:transparent;
+}
+*
+{        
+    -webkit-user-select: none;
+    -moz-user-select: -moz-none;
+    /*IE10*/
+    -ms-user-select: none;
+    user-select: none;
+
+    /*You just need this if you are only concerned with android and not desktop browsers.*/
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}  
+
 body{
 	font:{
 		family:'kelson', 'arial', 'helvetica', sans-serif;
@@ -81,7 +102,7 @@ h3{
 
 h4{
 	@include title();
-	Color : $datart-gray;
+	color : $datart-gray;
 	font-size: 1.1em;
 }
 
@@ -257,12 +278,180 @@ ul{
 *****************************************************/
 #managementArtworkList{
 	.listClassification{
-		color:#fff;
-		background-color: $datart-gray;
+		color: #A6AAAC;
+		background-color: #e8e8e8;
 		padding:10px;
-		margin:-15px -15px 0 -15px;
+		margin:0px -15px 0 -15px;
+
+		&:first-child{
+			margin:-15px -15px 0 -15px;	
+		}
 	}
 }
+
+#artwork-main-visual{
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+
+	div{
+		min-width: 30%;
+		padding: 0 10px;
+
+
+		p{
+			text-align: center;
+		}
+		#visual-one, #visual-two, #visual-three{
+			margin: auto;
+			position: relative;
+			border: 2px dashed $datart-gray;
+			border-radius : 15px;
+			/* min-height: 100px; */
+			height: 200px;
+			/* min-width: 100px; */
+			width: 200px;
+			background-color: transparent;
+			margin-bottom: 10px;
+			overflow: hidden;
+			padding: 0;
+			display: inline-block;
+			text-align: center;
+
+
+
+			&::after{
+				position : absolute;
+				z-index: 1;
+				content: '\f1c5';
+				font-family: 'FontAwesome';
+				text-align: center;
+				vertical-align: middle;
+				color: $datart-gray;
+				font-size: 5em;
+				width: 50%;
+  				margin: auto;
+				top: 50%; left: 50%;
+  				-webkit-transform: translate(-50%,-50%);
+				-ms-transform: translate(-50%,-50%);
+				transform: translate(-50%,-50%);
+			}
+
+			img{
+				position: absolute;
+				min-width: 150%;
+				top: 50%; left: 50%;
+  				-webkit-transform: translate(-50%,-50%);
+				-ms-transform: translate(-50%,-50%);
+				transform: translate(-50%,-50%);
+				z-index: 2;
+			}
+		}
+		#caption-one, #caption-two, #caption-three{
+			font-size: 0.85em;
+		}
+
+		textarea{
+			min-width: 100%;
+			width: 100%;
+			max-width: 100%;
+			min-height: 50px;
+			height: 50px;
+		}
+	}
+
+}
+
+input.input-file{
+    display: none;
+}
+
+.hidden{
+	display: none;
+}
+
+#artwork-secondary-visual{
+	margin-top:50px;
+
+	.preview-gallery{
+		.img-container{
+			position: relative;
+			overflow: hidden;
+			padding: 0;
+			display: inline-block;
+			text-align: center;
+			height: 150px;
+			width: 100%;
+		}
+		img{
+			position: absolute;
+			min-width: 150%;
+			top: 50%; left: 50%;
+  			-webkit-transform: translate(-50%,-50%);
+			-ms-transform: translate(-50%,-50%);
+			transform: translate(-50%,-50%);
+		}
+		.caption{
+			textarea{
+				width: 100%;
+				min-width: 100%;
+				max-width: 100%;
+				min-height: 50px;
+				height: 50px;
+				border-radius:5px;
+				padding: 5px;
+				margin-bottom: 10px;
+			}
+		}
+	}
+}
+#artwork-display{
+	.exhibit-passed{
+		background-color: #e8e8e8;
+		margin: 0 -15px;
+    	padding: 5px 10px;
+    	h3{
+			color: $datart-gray;
+		}
+	}
+	.qrcode-area{
+		p{
+			font-size: 0.7em;
+			font-style: italic;
+			text-align: center;
+			color: $datart-red;
+		}
+		#qrcode{
+			text-align: center;
+			text-align: center;
+		}
+	}
+
+}
+
+#artwork-additionnal-content{
+	li {
+		padding-bottom: 15px;
+
+		input{
+		border-bottom-right-radius: 0;
+		}
+
+		.btn{
+			border-top-left-radius: 0;
+			border-top-right-radius: 0;
+			border-top: 0;
+		}
+
+		input + input{
+			margin-top: 5px;
+		}
+	}
+}
+
+
+//IMPORT DROPZONE
+@import '_dropzone.scss';
 
 
 //IMPORT

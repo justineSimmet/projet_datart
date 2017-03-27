@@ -74,21 +74,21 @@ GRAND_ANGLE_EXPO
 	|
 	|-->user_account.php XXX
 	|
-	|-->exhibit_management.php
+	|-->exhibit_management.php XX
 	|
-	|-->exhibit_zoom.php
+	|-->exhibit_zoom.php XX
 	|
 	|-->exhibit_zoning.php
 	|
-	|-->exhibit-_technical-sheet.php
+	|-->exhibit-_technical-sheet.php XX
 	|
-	|-->artist_management.php
+	|-->artist_management.php XX
 	|
-	|-->artist_zoom.php
+	|-->artist_zoom.php XX
 	|
-	|-->artwork_management.php
+	|-->artwork_management.php XX
 	|
-	|-->artwork_zoom.php
+	|-->artwork_zoom.php XX
 	|
 	|-->planning.php
 	|

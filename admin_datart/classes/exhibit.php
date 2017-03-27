@@ -32,7 +32,7 @@ class Exhibit{
 			$this->public_opening = $exhibit['public_opening'];	
 			$this->visible = $exhibit['visible'];	
 			$this->creation_date = $exhibit['creation_date'];
-			$this->textual_content =  array();
+			$this->textual_content = array();
 			$text = requete_sql("SELECT id, language, subject FROM textual_content_exhibit WHERE exhibit_id = '".$id."' ");
 
 			if (count($text) !== 0) {

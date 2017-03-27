@@ -121,6 +121,183 @@ function getEndDate(){
 };
 
 
+/***************************************************************************************
+** INITIALISATION DE LA FONCTION D'ACTION SUR LE SUBMIT DE VISUELS PRINCIPAUX DES OEUVRES
+***************************************************************************************/
+function mainPictureAction(mainTarget, visualArea, captionArea){
+	$(mainTarget).on('submit', function(e){
+		e.preventDefault();
+		var $form = $(this);
+        var formdata = (window.FormData) ? new FormData($form[0]) : null;
+        var data = (formdata !== null) ? formdata : $form.serialize();
+
+        $.ajax({
+            url: $form.attr('action'),
+            type: $form.attr('method'),
+            contentType: false, // obligatoire pour de l'upload
+            processData: false, // obligatoire pour de l'upload
+            dataType: 'json', // selon le retour attendu
+            data: data,
+            success: function (response) {
+                //Test si il n'y a pas d'erreur sur l'image envoyée
+                if(response.file.image.error == 0 ){
+                	var success ='<p class="text-success">Le visuel a bien été enregistré.<p>';
+					var btnPicture = '<button type="button" class="btn btn-danger pull-left delete-main-picture"'
+					+' data-action="deletePicture" data-picture="'+response.text.pictureId+'">Supprimer</button>';
+
+                	$form.find('input[name="pictureId"]').val(response.text.pictureId);
+                	$(mainTarget).find('.input-image').removeClass('hidden');
+                	$(captionArea).addClass('hidden');
+                	$form.find('button[type="submit"]').html('Modifier');
+                	$form.find('.delete-main-picture').remove();
+                	$(btnPicture).insertBefore($form.find('button[type="submit"]'));
+                	$(mainTarget).find('input[name="image"]').val('');
+                	$(mainTarget).find('.target-file').addClass('hidden');
+                	$(mainTarget).find('.alert-area-picture').html(success);
+                	$('.generateCode').attr('data-picture',response.text.pictureId );
+                }
+                else{
+                	var error ='<p class="text-danger"><strong>Erreur ! </strong>'+response.file.image.error+'<p>';
+                	$(mainTarget).find('.alert-area-picture').html(error);
+                	$(mainTarget).find('input[name="file"]').val('');
+                }
+            }
+        })
+	})
+
+    $(mainTarget).find('input[name="image"]').on('change', function (e) {
+        var files = $(this)[0].files;
+ 
+        if (files.length > 0) {
+            // On part du principe qu'il n'y qu'un seul fichier
+            // étant donné que l'on a pas renseigné l'attribut "multiple"
+            var file = files[0];
+            var $image_preview = $(visualArea);
+            var $caption = $(captionArea);
+
+            // Ici on injecte les informations recoltées sur le fichier pour l'utilisateur
+            $caption.removeClass('hidden');
+            $(mainTarget).find('.input-image').addClass('hidden');
+            $image_preview.find('img').attr('src', window.URL.createObjectURL(file));
+            $(mainTarget).find('.target-file').removeClass('hidden').html(file.name);
+        }
+    });
+ 
+    // Bouton "Annuler" pour vider le champ d'upload
+    $(captionArea).find('button[name="cancel"]').on('click', function (e) {
+        e.preventDefault();
+ 
+        $(mainTarget).find('input[name="image"]').val('');
+        $(mainTarget).find('.input-image').removeClass('hidden');
+        $(visualArea).find('img').attr('src', '');
+        $(captionArea).addClass('hidden');
+        $(mainTarget).find('.target-file').addClass('hidden');
+    });
+
+    // Bouton "Supprimer" pour effacer une photo de la base de donnée et des fichiers
+    $(mainTarget).on('click','.delete-main-picture', function(e){
+    	e.preventDefault();
+		var $form = $(this);
+		var actiondDetail = $form.attr("data-action");
+		var picture = $form.attr("data-picture");
+		$.post('picture_process.php',{action : actiondDetail, pictureId : picture}, function(response){
+			var obj = JSON.parse(response);
+			if (obj.response == 'success') {
+				var success ='<p class="text-success">Le visuel a bien été supprimé.<p>';
+				$(mainTarget).find('input[name="image"]').val('');
+				$(mainTarget).find('input[name="legend"]').val('');
+				$(visualArea).find('img').attr('src', '');
+				$(mainTarget).find('.delete-main-picture').remove();
+				$(mainTarget).find('button[type="submit"]').html('Ajouter');
+				$(mainTarget).find('input[name="pictureId"]').val('');
+				$(mainTarget).find('input[name="pictureId"]').val('');
+				$(mainTarget).find('.alert-area-picture').html(success);
+
+			}
+			else{
+				var error ='<p class="text-danger"><strong>Erreur !</strong> L\'image n\'a pas pu être supprimée.<p>';
+                $(mainTarget).find('.alert-area-picture').html(error);
+                $(captionArea).addClass('hidden');
+			}
+		});		
+	});
+}
+
+Dropzone.options.picturesUpload = {
+	paramName : "image",
+	maxFilesize: 2,
+	acceptedFiles: ".jpeg, .jpg, .JPG",
+	dictDefaultMessage : 'Déposez vos fichiers ici ou cliquez pour les sélectionner.<br/>(Format valide : .jpeg, .jpg ou .JPG - Maximum 2 Mo)',
+	dictFallbackMessage : 'Votre navigateur est trop vieux pour le glisser-déposer, merci d\'utiliser le transfert d\'image comme au bon vieux temps.',
+	dictInvalidFileType : 'Votre fichier n\'est pas au bon format. Pour les visuels seul les jpeg sont acceptés.',
+	dictFileTooBig : 'Votre fichier est trop lourd, il ne doit pas dépasser 2 Mo.',
+  	success: function(file, response){
+  		var obj = JSON.parse(response);
+  		var thumbnail ='<div class="col-sm-3">'
+			    +'<div class="thumbnail">'
+				+'<div class="img-container">'
+				+'<img src="'+obj.text.target+'" class="responsive">'
+				+'</div>'
+				+'<div class="caption" data-artwork="'+obj.text.artworkId+'" data-visual="'+obj.text.pictureId+'" >'
+				+'<textarea name="legend" disabled placeholder="Légende">'
+				+'</textarea>'
+				+'<p class="action-area clearfix">'
+				+'<button type="button" class="delete-visual-annexe btn btn-danger pull-left" disabled><span class="fa fa-trash"></span></button>'
+				+'<button type="button" class="update-visual-annexe btn btn-default pull-right" disabled><span class="fa fa-save"></span></button>'
+				+'</p>'
+				+'</div>'
+			    +'</div>'
+			    +'</div>';
+
+		var correctStyle = {opacity : '1' , color : '#1FBA2E'} ;
+		var errorStyle = {opacity : '1' , color : '#E00B33'};
+    	var container = this.element;
+    	if(obj.file.image.error == 0){
+        	$('.preview-gallery').append(thumbnail);
+        	$(container).find('.dz-success-mark').css('opacity', '1' );
+        }else{
+        	$(container).find('.dz-preview').removeClass('dz-processing').addClass('dz-error');
+        	$(container).find('.dz-error-message').find('span').text(obj.file.image.error);
+        }
+    }
+};
+
+
+Dropzone.options.filesUpload = {
+	paramName : "file",
+	maxFilesize: 5,
+	acceptedFiles: ".pdf, .mp3, .mp4, .wav",
+	dictDefaultMessage : 'Déposez vos fichiers ici ou cliquez pour les sélectionner.<br/>(Format valide : .pdf, .mp3, .mp4 ou .wa - Maximum 5 Mo)',
+	dictFallbackMessage : 'Votre navigateur est trop vieux pour le glisser-déposer, merci d\'utiliser le transfert d\'image comme au bon vieux temps.',
+	dictInvalidFileType : 'Désolé, votre fichier n\'est pas au bon format.',
+	dictFileTooBig : 'Votre fichier est trop lourd, il ne doit pas dépasser 5 Mo.',
+  	success: function(file, response){
+  		var obj = JSON.parse(response);
+  		var listElement = '<li class="clearfix">'
+  						+'<input type="text" name="add-name" class="form-control" value="'+obj.text.name+'" readonly>'
+  						+'<div class="btn-group pull-right" data-addId="'+obj.text.addId+'">'
+  						+'<a href="'+obj.text.target+'" target="_blank" class="btn btn-default"><span class="fa fa-eye"></span></a>'
+  						+'<button type="button" class="btn btn-default"><span class="fa fa-pencil"></button>'
+  						+'<button type="button" class="btn btn-danger"><span class="fa fa-trash"></button>'
+  						+'</div'
+  						+'</li>';
+		var correctStyle = {opacity : '1' , color : '#1FBA2E'} ;
+		var errorStyle = {opacity : '1' , color : '#E00B33'};
+    	var container = this.element;
+    	if(obj.file.file.error == 0){
+        	$(container).find('.dz-success-mark').css('opacity', '1' );
+        	if(obj.text.format == "pdf"){
+        		$('#add-pdf').append(listElement);
+        	}
+        	else if(obj.text.format == "mp3" || obj.text.format == "mp4" || obj.text.format == "wav"){
+        		$('#add-media').append(listElement);
+        	}
+        }else{
+        	$(container).find('.dz-preview').removeClass('dz-processing').addClass('dz-error');
+        	$(container).find('.dz-error-message').find('span').text(obj.file.image.error);
+        }
+    }
+};
 
 $(document).ready(function(){
 
@@ -253,6 +430,162 @@ MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
       }
     });
 
+
+/**********************************************
+** GESTION AJAX DE L'UPLOAD DES PHOTOS D'OEUVRES
+************************************************/
+	mainPictureAction('#main-one', '#visual-one', '#caption-one');
+	mainPictureAction('#main-two', '#visual-two', '#caption-two');
+	mainPictureAction('#main-three', '#visual-three', '#caption-three');
+
+
+// Activation des légendes sur les visuels secondaires
+	$('.preview-gallery').on('dblclick', '.caption', function(){
+		// console.log($(this));
+		$(this).find('textarea').removeAttr('disabled');
+		$(this).find('button').removeAttr('disabled');
+	});
+
+// Delete d'un visuel secondaires
+	$('.preview-gallery').on('click', '.delete-visual-annexe', function(){
+		var artworkId = $(this).parents('.caption').attr('data-artwork');
+		var pictureId = $(this).parents('.caption').attr('data-visual');
+		var container = $(this).parents('.col-sm-3');
+		$.post('picture_process.php',{action:'deleteAnnexePicture', artworkId: artworkId, pictureId:pictureId} , function(response){
+			var obj = JSON.parse(response);
+			if (obj.response == 'success') {
+				container.remove();
+			}/*else{
+
+			}*/
+		})
+	})
+
+// Update de la légende d'un visuel annexe
+	$('.preview-gallery').on('click', '.update-visual-annexe', function(){
+		var artworkId = $(this).parents('.caption').attr('data-artwork');
+		var pictureId = $(this).parents('.caption').attr('data-visual');
+		var textarea = $(this).parents('.caption').find('textarea').val();
+		var container = $(this).parents('.col-sm-3');
+		$.post('picture_process.php',{action:'updateAnnexePicture', artworkId: artworkId, pictureId: pictureId, legend: textarea} , function(response){
+			var obj = JSON.parse(response);
+			if (obj.response == 'success') {
+				container.find('textarea').css('background-color', '#DAFFCA');
+				container.find('textarea').css('border', '1px solid #21E012');
+			}else{
+				container.find('textarea').css('background-color', '#FFBFBF');
+				container.find('textarea').css('border', '1px solid #F80C28');
+			}
+		})
+	})
+
+
+/*******************************************************
+** GENERATION D'UN QR CODE AVEC APPEL AU SCRIP qrcode.php
+*********************************************************/
+	$('.generateCode').on('click', function(){
+		var artworkId = $(this).attr('data-artwork');
+		var exhibitId = $(this).attr('data-exhibit');
+		var target = 'www.grand-angle.fr/exhibit.php?id='+exhibitId+'/artwork.php?id='+artworkId;
+		var qrCodeArea = $(this).parents('.qrcode-area');
+		$.post('qrcode.php',{action:'generateCode', artworkId: artworkId, target: target} , function(response){
+			var obj = JSON.parse(response);
+			if (obj.response == 'success') {
+				qrCodeArea.find('img').attr('src','http://localhost/projet_datart/admin_datart/assets/images/artwork/'+artworkId+'/'+obj.target);
+				qrCodeArea.find('.generateCode').remove();
+				qrCodeArea.append('<a type="button" class="btn btn-custom btn-block" href="http://localhost/projet_datart/admin_datart/assets/images/artwork/'+artworkId+'/'+obj.target+'" download>Télécharger le QR Code</a>');
+				qrCodeArea.find('p').remove();
+			}else{
+				qrCodeArea.find('#qrcode').html('<p class="red">Une erreur est survenue, le QR Code n\'a pas été généré correctement.</p>');
+			}
+		})
+
+	})
+
+/*******************************************************
+** GESTION DES FICHIERS ANNEXES DES OEUVRES
+*********************************************************/	
+	$('.preview-list').on('click', 'button', function(){
+		var addElement = $(this).parents('div').attr('data-addId');
+		var inputName = $(this).parents('li').find('input[name = "add-name"]')
+		var inputTarget = $(this).parents('li').find('input[name = "add-target"]')
+		var button = $(this);
+		var artwork = $(this).parents('ul').attr('data-artwork');
+		var container = $(this).parents('li');
+		var nameContent = inputName.val();
+		var targetContent = inputTarget.val();
+		if (button.hasClass('edit-add') == true) {
+			inputName.removeAttr('readonly');
+			inputTarget.removeAttr('readonly');
+			inputName.focus();
+			button.html('<span class="fa fa-save"></span>');
+			button.removeClass('edit-add').addClass('save-add');
+
+		}
+		else if(button.hasClass('save-add') == true){
+			$.post('additional_content.php',{action: 'editFiles', addId: addElement, name: nameContent, target: targetContent}, function(response){
+				var obj = JSON.parse(response);
+				if (obj.response == 'success') {
+					container.find('input').each(function(){
+						$(this).css('background-color', '#DAFFCA');
+						$(this).css('border', '1px solid #21E012');
+						$(this).attr('readonly');
+					});
+					button.html('<span class="fa fa-pencil"></span>');
+					button.removeClass('save-add').addClass('edit-add');
+				}
+				else{
+					container.find('input').each(function(){
+						$(this).css('background-color', '#FFBFBF');
+						$(this).css('border', '1px solid #F80C28');
+						$(this).attr('readonly');
+					});
+					inputName.val('Une erreur s\'est produite durant l\'enregistrement.')
+					button.html('<span class="fa fa-pencil"></span>');
+					button.removeClass('save-add').addClass('edit-add')
+				}
+			}) 
+		}
+		else if(button.hasClass('add-link') == true){
+			$.post('additional_content.php',{action: 'addLink', target: targetContent, name: nameContent, artwork: artwork}, function(response){
+				var obj = JSON.parse(response);
+				if (obj.response == 'success') {
+					var newLi = '<li class="clearfix">'
+								+'<input type="text" name="add-name" class="form-control" value="'+obj.name+'" readonly>'
+								+'<input type="text" name="add-target" class="form-control" value="'+obj.target+'" readonly>'
+								+'<div class="btn-group pull-right" data-addId="'+obj.id+'">'
+								+'<a href="'+obj.target+'" target="_blank" class="btn btn-default"><span class="fa fa-eye"></span></a>'
+								+'<button type="button" class="btn btn-default edit-add"><span class="fa fa-pencil"></button>'
+								+'<button type="button" class="btn btn-danger delete-add"><span class="fa fa-trash"></button>'
+								+'</div>'
+								+'</li>';
+					inputName.val('');
+					inputTarget.val('');
+					container.prepend(newLi);
+				}
+				else{
+					inputName.css('background-color', '#FFBFBF');
+					inputName.css('border', '1px solid #F80C28');
+					inputTarget.css('background-color', '#FFBFBF');
+					inputTarget.css('border', '1px solid #F80C28');
+					container.append('<p class="red">Une erreur s\'est produite lors de l\'enregistrement du lien.</p>');
+				}
+			})
+		}
+		else{
+			$.post('additional_content.php',{action: 'deleteFiles', addId: addElement}, function(response){
+				var obj = JSON.parse(response);
+				if (obj.response == 'success') {
+					container.remove();
+				}
+				else{
+					input.css('background-color', '#FFBFBF');
+					input.css('border', '1px solid #F80C28');
+					input.val('Une erreur s\'est produite durant la suppression.')
+				}
+			})
+		}
+	})
 
 
 /**********************************************
@@ -419,7 +752,6 @@ MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
 ** ACTIONS SUR LA LISTE DEROULANTE DES ACTIONS SUR L'ARTISTE
 *************************************************************/
 
-
 	$('.actionArtist').on('change', function(){
 		if ($(this).val() == 'update' || $(this).val() == 'show' ){
 			var artistId = $(this).children('option:selected').attr("data-id");
@@ -492,7 +824,7 @@ MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
 ***********************************************************************/
 	$('.delete-exhibit').on('click', function(){
 		var targetExhibit = $(this).attr("data-id");
-		$.post(window.location.href, {targetId}, function(response){
+		$.post(window.location.href, {targetExhibit}, function(response){
 			$("#deleteExhibit").html($(response).find("#deleteExhibit").html());
 			$("#deleteExhibit").modal('show');
 		});
@@ -612,5 +944,59 @@ MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
 			$("#exhibitLinkedArtwork").html($(response).find("#exhibitLinkedArtwork").html());
 		});
 	})
+
+/***************************************************
+** ACTIONS SUR LA LISTE DEROULANTE DES ACTIONS ARTWORK
+****************************************************/
+	$('.actionArtwork').on('change', function(){
+		if ($(this).val() == 'update' || $(this).val() == 'show'){
+			var artworkId = $(this).children('option:selected').attr("data-id");
+			window.location.replace('artwork_zoom.php?artwork='+artworkId);
+		}
+		else if($(this).val() == 'hide'){
+			var targetId = $(this).children('option:selected').attr("data-id");
+			$.post('artwork_management.php', {targetId}, function(response){
+				$("#hideArtwork").html($(response).find("#hideArtwork").html());
+				$("#hideArtwork").modal('show');
+			});
+		}
+		else if($(this).val() == 'publish'){
+			var targetId = $(this).children('option:selected').attr("data-id");
+			$.post('artwork_management.php', {targetId : targetId, action : 'publish'}, function(response){
+				$("#managementArtworkList").html($(response).find("#managementArtworkList").html());
+				$("#hiddenArtworkList").html($(response).find("#hiddenArtworkList").html());
+				$("#alert-area").html($(response).find("#alert-area").html());
+			});
+		}		
+	});
+
+/**********************************************************************
+** OUVERTURE D'UNE MODAL SI CLIC SUR LE BOUTON SUPPRIMER DEFINITIVEMENT
+** Envoi le targetId de l'expo en Ajax et recharge la page avant
+** d'ouvrir la modal.
+***********************************************************************/
+	$('.delete-artwork').on('click', function(){
+		var targetArtwork = $(this).attr("data-id");
+		$.post(window.location.href, {targetId : targetArtwork}, function(response){
+			$("#deleteArtwork").html($(response).find("#deleteArtwork").html());
+			$("#deleteArtwork").modal('show');
+		});
+	});
+
+	$('.publish-artwork').on('click', function(){
+		var targetArtwork= $(this).attr("data-id");
+		$.ajax({
+			method: 'POST',
+			data : {
+				targetId : targetArtwork,
+				action : 'publish'
+			},
+			success: function(data){
+				var newDoc = document.open("text/html", "replace");
+				newDoc.write(data);
+				newDoc.close()
+			}
+		});
+	});
 
 });
