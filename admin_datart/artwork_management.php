@@ -201,22 +201,22 @@ include('header.php');
                                     <tbody>
                                         <tr>
                                             <td>
-                                                <!-- NATURE DE L'OEUVRE -->
+                                                <?= !empty($artwork->getFrenchCharacteristic())?$artwork->getFrenchCharacteristic()->getContent():'---'; ?>
                                             </td>
                                             <td>
                                                 <?= $artwork->getReferenceNumber(); ?>
                                             </td>
                                             <td>
-                                                <!-- TRAD FRENCH -->
+                                               <?= $artwork->checkTrad('english') == TRUE?'<span class="fa fa-check red"></span>':'<span class="fa fa-circle-o red"></span>' ?>
                                             </td>
                                             <td>
-                                                <!-- TRAD GERMAN -->
+                                                <?= $artwork->checkTrad('german') == TRUE?'<span class="fa fa-check red"></span>':'<span class="fa fa-circle-o red"></span>' ?>
                                             </td>
                                             <td>
-                                                <!-- TRAD RUSSIAN -->
+                                                <?= $artwork->checkTrad('russian') == TRUE?'<span class="fa fa-check red"></span>':'<span class="fa fa-circle-o red"></span>' ?>
                                             </td>
                                             <td>
-                                                <!-- TRAD CHINESE -->
+                                                <?= $artwork->checkTrad('chinese') == TRUE?'<span class="fa fa-check red"></span>':'<span class="fa fa-circle-o red"></span>' ?>
                                             </td>
                                         </tr>
                                     </tbody>

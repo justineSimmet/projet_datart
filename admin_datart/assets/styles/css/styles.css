@@ -478,7 +478,7 @@ ul {
 
 /****************************************************
 **
-** CSS ARTWORK MANAGEMENT
+** CSS ARTWORK 
 **
 *****************************************************/
 #managementArtworkList .listClassification {
@@ -492,7 +492,8 @@ ul {
 #artwork-main-visual {
   display: flex;
   flex-direction: row;
-  justify-content: space-around; }
+  justify-content: space-around;
+  flex-wrap: wrap; }
   #artwork-main-visual div {
     min-width: 30%;
     padding: 0 10px; }
@@ -503,9 +504,9 @@ ul {
       position: relative;
       border: 2px dashed #778085;
       border-radius: 15px;
-      /* min-height: 100px; */
+      min-height: 100px;
       height: 200px;
-      /* min-width: 100px; */
+      min-width: 100px;
       width: 200px;
       background-color: transparent;
       margin-bottom: 10px;
@@ -614,13 +615,26 @@ input.input-file {
 *****************************************************/
 #zoning-header {
   padding: 0;
-  height: 100px;
+  height: 110px;
   -webkit-box-shadow: 0 0 10px rgba(100, 100, 100, 0.25);
   -moz-box-shadow: 0 0 10px rgba(100, 100, 100, 0.25);
   box-shadow: 0 0 10px rgba(100, 100, 100, 0.25); }
   #zoning-header .nav-logo {
     background-color: #d5313a;
+    height: 110px;
+    line-height: 110px; }
+    #zoning-header .nav-logo img {
+      display: inline-block;
+      vertical-align: middle; }
+  #zoning-header .nav-btn {
     padding: 25px; }
+    #zoning-header .nav-btn a, #zoning-header .nav-btn #main-nav #main-nav-menu .nav-submenu li .active-nav-link, #main-nav #main-nav-menu .nav-submenu li #zoning-header .nav-btn .active-nav-link {
+      color: #000;
+      font-size: 1.3em;
+      text-decoration: none;
+      vertical-align: middle; }
+      #zoning-header .nav-btn a span, #zoning-header .nav-btn #main-nav #main-nav-menu .nav-submenu li .active-nav-link span, #main-nav #main-nav-menu .nav-submenu li #zoning-header .nav-btn .active-nav-link span {
+        font-size: 1.5em; }
 
 /*
  * The MIT License

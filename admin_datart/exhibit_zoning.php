@@ -41,19 +41,23 @@ if (isset($_GET['id'])) {
 
 //////////////////////////////////////////////////////////////// -->
 	<header class="col-sm-12" id="zoning-header">
-        <div class="col-xs-10">
+        <div class="col-sm-9 col-xs-6">
             <div class="row">
-            	<div class="col-xs-2">
-            		<a href=""><span class="fa fa-arrow-circle-o-left"></span><br/>Retour</a>
+            	<div class="col-sm-2 col-xs-12 nav-btn text-center">
+            		<a href="JavaScript:window.close()"><span class="fa fa-arrow-circle-o-left"></span><br/>Retour</a>
             	</div>
-            	<div class="col-sm-10">
+            	<div class="col-sm-10 hidden-xs">
 	                <h1>Placement des oeuvres</h1>
-	                <h4><?= isset($targetExhibit)?$targetExhibit->getTitle():''; ?></h4>
+	                <h4>Exposition : <?= isset($targetExhibit)?$targetExhibit->getTitle():''; ?></h4>
             	</div>
             </div>
         </div>
-		<div class="col-sm-2 nav-logo">
+		<div class="col-sm-3 col-xs-6 nav-logo">
            <img src="<?= URL_IMAGES ?>DAgrand-angle_vecto-blanc.png">
+        </div>
+        <div class="hidden-lg hidden-md hidden-sm col-xs-12 text-center">
+        	<h1>Placement des oeuvres</h1>
+	        <h4>Exposition : <?= isset($targetExhibit)?$targetExhibit->getTitle():''; ?></h4>
         </div>
 	</div>
 

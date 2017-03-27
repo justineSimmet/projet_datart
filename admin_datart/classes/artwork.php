@@ -203,43 +203,63 @@ class Artwork{
 	}
 
 	function getFrenchCharacteristic(){
-		return $this->textual_content[0];
+		if (!empty($this->getTextualContent())){
+			return $this->textual_content[0];
+		}
 	}
 
 	function getFrenchMain(){
-		return $this->textual_content[1];
+		if (!empty($this->getTextualContent())){
+			return $this->textual_content[1];
+		}
 	}
 
 	function getEnglishCharacteristic(){
-		return $this->textual_content[2];
+		if (!empty($this->getTextualContent())){
+			return $this->textual_content[2];
+		}
 	}
 
 	function getEnglishMain(){
-		return $this->textual_content[3];
+		if (!empty($this->getTextualContent())){
+			return $this->textual_content[3];
+		}
 	}
 
 	function getGermanCharacteristic(){
-		return $this->textual_content[4];
+		if (!empty($this->getTextualContent())){
+			return $this->textual_content[4];
+		}
 	}
 
 	function getGermanMain(){
-		return $this->textual_content[5];
+		if (!empty($this->getTextualContent())){
+			return $this->textual_content[5];
+		}
 	}
 
 	function getRussianCharacteristic(){
-		return $this->textual_content[6];
+		if (!empty($this->getTextualContent())){
+			return $this->textual_content[6];
+		}
 	}
 
 	function getRussianMain(){
-		return $this->textual_content[7];
+		if (!empty($this->getTextualContent())){
+			return $this->textual_content[7];
+		}
 	}
 
 	function getChineseCharacteristic(){
-		return $this->textual_content[8];
+		if (!empty($this->getTextualContent())){
+			return $this->textual_content[8];
+		}
 	}
 
 	function getChineseMain(){
-		return $this->textual_content[9];
+		if (!empty($this->getTextualContent())){
+			return $this->textual_content[9];
+		}
 	}
 
 	function getVisual(){
@@ -680,4 +700,53 @@ class Artwork{
 		return $list;
 	}
 
+	function checkTrad($language){
+
+		if (!empty($this->getTextualContent())) {
+			switch ($language) {
+				case 'english':
+					if (!empty($this->getEnglishCharacteristic()->getContent()) && !empty($this->getEnglishMain()->getContent())) {
+					return TRUE;
+					}
+					else{
+						return FALSE;
+					}
+					break;
+				
+				case 'german':
+					if (!empty($this->getGermanCharacteristic()->getContent()) && !empty($this->getGermanMain()->getContent())) {
+					return TRUE;
+					}
+					else{
+						return FALSE;
+					}
+					break;
+				
+				case 'russian':
+					if (!empty($this->getRussianCharacteristic()->getContent()) && !empty($this->getRussianMain()->getContent())) {
+					return TRUE;
+					}
+					else{
+						return FALSE;
+					}
+					break;
+				
+				case 'chinese':
+					if (!empty($this->getChineseCharacteristic()->getContent()) && !empty($this->getChineseMain()->getContent())) {
+					return TRUE;
+					}
+					else{
+						return FALSE;
+					}
+					break;
+				
+				default:
+					return FALSE;
+					break;
+			}
+		}
+		else{
+			return FALSE;
+		}		
+	}
 }

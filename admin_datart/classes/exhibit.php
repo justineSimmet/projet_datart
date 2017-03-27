@@ -174,43 +174,63 @@ class Exhibit{
 	}
 
 	function getFrenchCategory(){
-		return $this->textual_content[0];
+		if(!empty($this->getTextualContent())){
+			return $this->textual_content[0];
+		}
 	}
 
 	function getFrenchSummary(){
-		return $this->textual_content[1];
+		if(!empty($this->getTextualContent())){
+			return $this->textual_content[1];
+		}
 	}
 
 	function getEnglishCategory(){
-		return $this->textual_content[2];
+		if(!empty($this->getTextualContent())){
+			return $this->textual_content[2];
+		}
 	}
 
 	function getEnglishSummary(){
-		return $this->textual_content[3];
+		if(!empty($this->getTextualContent())){
+			return $this->textual_content[3];
+		}
 	}
 
 	function getGermanCategory(){
-		return $this->textual_content[4];
+		if(!empty($this->getTextualContent())){
+			return $this->textual_content[4];
+		}
 	}
 
 	function getGermanSummary(){
-		return $this->textual_content[5];
+		if(!empty($this->getTextualContent())){
+			return $this->textual_content[5];
+		}
 	}
 
 	function getRussianCategory(){
-		return $this->textual_content[6];
+		if(!empty($this->getTextualContent())){
+			return $this->textual_content[6];
+		}
 	}
 
 	function getRussianSummary(){
-		return $this->textual_content[7];
+		if(!empty($this->getTextualContent())){
+			return $this->textual_content[7];
+		}
 	}
 
 	function getChineseCategory(){
-		return $this->textual_content[8];
+		if(!empty($this->getTextualContent())){
+			return $this->textual_content[8];
+		}
 	}
 
 	function getChineseSummary(){
-		return $this->textual_content[9];
+		if(!empty($this->getTextualContent())){
+			return $this->textual_content[9];
+		}
 	}
 
 	//Récupère l'ID de l'événement d'ouverture

@@ -277,8 +277,8 @@ Dropzone.options.filesUpload = {
   						+'<input type="text" name="add-name" class="form-control" value="'+obj.text.name+'" readonly>'
   						+'<div class="btn-group pull-right" data-addId="'+obj.text.addId+'">'
   						+'<a href="'+obj.text.target+'" target="_blank" class="btn btn-default"><span class="fa fa-eye"></span></a>'
-  						+'<button type="button" class="btn btn-default"><span class="fa fa-pencil"></button>'
-  						+'<button type="button" class="btn btn-danger"><span class="fa fa-trash"></button>'
+  						+'<button type="button" class="btn btn-default edit-add"><span class="fa fa-pencil"></button>'
+  						+'<button type="button" class="btn btn-default delete-add"><span class="fa fa-trash"></button>'
   						+'</div'
   						+'</li>';
 		var correctStyle = {opacity : '1' , color : '#1FBA2E'} ;

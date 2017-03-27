@@ -271,7 +271,7 @@ ul{
 
 /****************************************************
 **
-** CSS ARTWORK MANAGEMENT
+** CSS ARTWORK 
 **
 *****************************************************/
 #managementArtworkList{
@@ -291,6 +291,7 @@ ul{
 	display: flex;
 	flex-direction: row;
 	justify-content: space-around;
+	flex-wrap: wrap;
 
 	div{
 		min-width: 30%;
@@ -305,9 +306,9 @@ ul{
 			position: relative;
 			border: 2px dashed $datart-gray;
 			border-radius : 15px;
-			/* min-height: 100px; */
+			min-height: 100px;
 			height: 200px;
-			/* min-width: 100px; */
+			min-width: 100px;
 			width: 200px;
 			background-color: transparent;
 			margin-bottom: 10px;
@@ -455,12 +456,31 @@ input.input-file{
 *****************************************************/
 #zoning-header{
 	padding: 0;
-	height: 100px;
+	height: 110px;
 	@include shadow(0, 0, 10px, rgba(100,100,100,0.25), false);
 	.nav-logo{
 		background-color: $datart-red;
-		padding: 25px;
+		height: 110px;
+		line-height: 110px;
+		img{
+			display: inline-block;
+			vertical-align: middle;
+		}
 	}	
+	.nav-btn{
+		padding:25px;
+
+		a{
+			color: #000;
+			font-size: 1.3em;
+			text-decoration: none;
+			vertical-align: middle;
+
+			span{
+				font-size: 1.5em;
+			}
+		}
+	}
 }
 //IMPORT DROPZONE
 @import '_dropzone.scss';
