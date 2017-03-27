@@ -59,8 +59,6 @@ if (isset($_GET['id'])) {
         	<h1>Placement des oeuvres</h1>
 	        <h4>Exposition : <?= isset($targetExhibit)?$targetExhibit->getTitle():''; ?></h4>
         </div>
-	</div>
-
 
 
 <!-- ////////////////////////////////////////////////////////////////
@@ -69,19 +67,73 @@ if (isset($_GET['id'])) {
 
 //////////////////////////////////////////////////////////////// -->
 
+	</header>
+	<nav class="navbar navbar-default col-sm-12" id="action-header">
+		<div class="container-fluid">
+    		<div class="navbar-header">
+	    	</div>
+		    <ul class="nav navbar-nav">
+		      <li><a href="#">Enregistrer</a></li>
+		      <li><a href="#">Annuler</a></li>
+		      <li><a href="#">Réinitialiser</a></li>
+		    </ul>
+		</div>
+	</nav>
 
+	<div class="col-sm-12">
+		<div class="row">
 <!-- ////////////////////////////////////////////////////////////////
 
 	LISTING DES OEUVRES
 
 //////////////////////////////////////////////////////////////// -->
-
+			<div class="col-sm-3">
+				<section id="availble-artwork">
+					<h2>Oeuvres enregistrées : </h2>
+					<ul>
+					<?php
+						$listElement = $targetExhibit->listAvailableArtwork();
+						foreach ($listElement as $artist => $artwork) {
+							?>
+							<li>
+								<h4><?= $artist ;?></h4>
+								<?php
+									foreach ($artwork as $artwork) {
+										?>
+										<div class="list-element">
+											<div class="text-area">
+												<h3><?= $artwork->getTitle(); ?></h3>
+												<p><?= !empty($artwork->getFrenchCharacteristic())?$artwork->getFrenchCharacteristic()->getContent():'---';?> | Réf. : <?= $artwork->getReferenceNumber(); ?></p>
+											</div>
+											<div class="drag-area">
+												<span class="fa fa-arrows"></span>
+												<p class="artwork-ref"><?= $artwork->getReferenceNumber(); ?></p>
+											</div>
+										</div>
+										<?php
+									}
+								?>
+							</li>
+							<?php
+						}
+					?>
+					</ul>
+				</section>
+			</div>
+			<div class="col-sm-9">
+				<div id="drop-area">
+					<img src="<?= URL_IMAGES ?>galerie-ga.svg">
+					<div id="drop-target"></div>
+				</div>
+			</div>
 
 <!-- ////////////////////////////////////////////////////////////////
 
 	PLAN DE POSITIONNEMENT
 
 //////////////////////////////////////////////////////////////// -->
+		</div>
+	</div>	
 	</div>
 </div>
 <footer>

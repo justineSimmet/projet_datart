@@ -505,9 +505,10 @@ include('header.php');
 		</div>
 		<div class="col-xs-12">
 			<section id="artwork-display">
-				<h2>Exposée :</h2>
+				<h2>Exposée dans:</h2>
 				<ul>
 					<?php
+					if(isset($targetArtwork)){
 						$exhibit = $targetArtwork->getExhibit();
 						foreach ($exhibit as $ex) {
 							?>
@@ -537,6 +538,7 @@ include('header.php');
 							</li>
 							<?php
 						}
+					}
 					?>
 				</ul>
 			</section>

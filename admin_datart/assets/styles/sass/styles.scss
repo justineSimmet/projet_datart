@@ -456,12 +456,13 @@ input.input-file{
 *****************************************************/
 #zoning-header{
 	padding: 0;
-	height: 110px;
+	height: 120px;
+	z-index:10;
 	@include shadow(0, 0, 10px, rgba(100,100,100,0.25), false);
 	.nav-logo{
 		background-color: $datart-red;
-		height: 110px;
-		line-height: 110px;
+		height: 120px;
+		line-height: 120px;
 		img{
 			display: inline-block;
 			vertical-align: middle;
@@ -482,6 +483,112 @@ input.input-file{
 		}
 	}
 }
+#action-header{
+	width:100%;
+	border-radius:0;
+	background-color: #ede8e8;
+	a:hover{
+		background-color: $datart-gray;
+		color: #fff;
+	}
+}
+#availble-artwork{
+	max-height:700px;
+	overflow: auto;
+
+	h4{
+		margin-top: 20px;
+		margin-bottom: 5px;
+	}
+
+	.list-element{
+		clear: both;
+		border-top:1px solid $datart-gray;
+		border-bottom:1px solid $datart-gray;
+		height: 65px;
+		margin-bottom: 5px;
+
+		.text-area{
+			display: inline-block;
+
+			h3{
+				margin-bottom: 5px;
+			}
+
+			p{
+				margin-bottom: 0;
+			}
+		}
+
+	}
+}
+
+.drag-area{
+	position: relative;
+	float: right;
+	height: 63.4px;
+	padding: 10px 15px;
+	font-size: 1.8em;
+	text-align: center;
+	background-color: #c8c8c8;
+	color: #fff;
+	border-left: 1px solid #c8c8c8;
+	border-right: 1px solid #c8c8c8;
+
+	&:hover{
+		border-left: 1px solid $datart-gray;
+		border-right: 1px solid $datart-gray;
+		color: $datart-gray;
+		cursor: move;
+	}
+	
+	.artwork-ref{
+		position:absolute;
+		display: none;
+		z-index: 1000;
+		text-align: center;
+		padding: 5px;
+		background-color: #fff;
+		color: #000;
+		font-size: 0.4em;
+    	bottom: -40px;
+    	left: 50%;
+		-webkit-transform: translateX(-50%);
+		transform: translateX(-50%)
+	}
+}
+
+.ui-draggable-helper{
+	width:20px;
+	height:20px;
+	border-radius:20px;
+	background-color: $datart-red;
+	color: $datart-red;
+}
+
+.ui-draggable-dropped{
+	position:absolute;
+	z-index: 2000;
+	width:20px;
+	height:20px;
+	border-radius:20px;
+	border:1px solid $datart-red;
+	background-color: #fff;
+	color: #fff;
+}
+
+#drop-area{
+	position: relative;
+	@include shadow(0, 0, 10px, rgba(100,100,100,0.15), true);
+	padding:25px;
+	background: url("../../images/tiny_grid.png") repeat;
+
+	img{
+		position: relative;
+		z-index: 0;
+	}
+}
+
 //IMPORT DROPZONE
 @import '_dropzone.scss';
 
