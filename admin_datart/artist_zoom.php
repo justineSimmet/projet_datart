@@ -13,6 +13,15 @@ if (isset($_GET['artist'])) {
 }
 
 
+
+
+
+/************************************************************************************************
+**
+** Insertion ou update en base de donnée après un submit du formulaire 1 (Infos générale)
+**
+************************************************************************************************/
+
 if (isset($_POST['id'])) {
 	
 
@@ -281,71 +290,89 @@ include('header.php');
 
  ?>
 
-
-<div class="row" id="alert-area">
+<div class="col-lg-9 col-md-12 col-sm-9 col-xs-12">
+	<div class="row" id="alert-area">
 	<?= !empty($actionResultat)?$actionResultat:''; ?>
-</div>
+	</div>
 
 
- <div class="row">
+ 	<div class="row">
+ 		<div class="col-sm-12">
+			<section>
 
-	<div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+<!-- *************************** FORMULAIRE Infos générales *************************** -->	
 
-		<div class="row">
-
-			<section class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-				<div class="row" id="alert-area">
-					
-				</div>
-					<div>
-						<h3>1 - Informations générales</h3>
-
-							<?php
-								if (isset($targetArtist)) {
-									$targetArtist->formInfos($_SERVER['PHP_SELF'].'?artist='.$targetArtist->getId(),'Modifier');
-								}
-								else{
-									$artist = new Artist();
-									$artist->formInfos($_SERVER['PHP_SELF'],'Créer');
-								}
-
-							?>
-					</div>
-
-						<h3>2 - Textes et Photos </h3>
-					<div class="formText_formPhoto">
-
-				<?php
-
-					if (isset($targetArtist)){	
-						if (!empty($targetArtist->getTextualContent())) {
-							$targetArtist->formText($_SERVER['PHP_SELF'].'?artist='.$targetArtist->getId(), 'Modifier');
-							$targetArtist->formPhoto($_SERVER['PHP_SELF'].'?artist='.$targetArtist->getId(), 'Modifier');	
+				<div id="artistMainInfo">
+					<h2>1 : Informations Générales</h2>
+					<?php
+						
+						if (isset($targetArtist)) {
+							$targetArtist->formInfos($_SERVER['PHP_SELF'].'?artist='.$targetArtist->getId(),'Modifier');
 						}
 						else{
-							$targetArtist->formText($_SERVER['PHP_SELF'].'?artist='.$targetArtist->getId(), 'Ajouter');
-							$targetArtist->formPhoto($_SERVER['PHP_SELF'].'?artist='.$targetArtist->getId(), 'Ajouter');
+							$artist = new Artist();
+							$artist->formInfos($_SERVER['PHP_SELF'],'Créer');
 						}
-					}
-					else{
-						$newArtist = new Artist();
-						$newArtist->formText('','Ajouter');
-						$newArtist->formPhoto('','Ajouter');
-					}
 
-				?>
+					?>
+				</div>
+
+<!-- *************** FORMULAIRE Textes accompagnemt et photos*************************** -->					
+
+				<div class="div-minus">
+					<h3> Textes</h3>
+					<div id="formTextArea">
+					<?php
+						if (isset($targetArtist)){	
+							if (!empty($targetArtist->getTextualContent())) {
+							$targetArtist->formText($_SERVER['PHP_SELF'].'?artist='.$targetArtist->getId(), 'Modifier');
+						}
+							else{
+							$targetArtist->formText($_SERVER['PHP_SELF'].'?artist='.$targetArtist->getId(), 'Ajouter');
+							}
+						}
+						else{
+							$newArtist = new Artist();
+							$newArtist->formText('','Ajouter');
+						}
+
+					?>
 					</div>
-					<div class="artistPicture">
-						<img src="<?= !empty($targetArtist->getPhotographicPortrait())?$targetArtist->getPhotographicPortrait():''; ?>" alt="">
+						<h3> Photos</h3>
+					<div id="formPhotoArea">
+						<?php
+						if (isset($targetArtist)){	
+							if (!empty($targetArtist->getTextualContent())) {
+							$targetArtist->formPhoto($_SERVER['PHP_SELF'].'?artist='.$targetArtist->getId(), 'Modifier');	
+							}
+							else{
+							$targetArtist->formPhoto($_SERVER['PHP_SELF'].'?artist='.$targetArtist->getId(), 'Ajouter');
+							}
+						}
+						else{
+							$newArtist = new Artist();
+							$newArtist->formPhoto('','Ajouter');
+						}
+
+					?>
 					</div>
+					<div id="loading-svg"><img src="<?= URL_IMAGES ?>ripple.svg"></div>
+				
 				<?php 
-					
-				 ?>
-			</section>
-			
+					if (isset($targetArtist)) {
+				?>
+
+					<div class="artistPicture">
+						<img src="<?= !empty($targetArtist->getPhotographicPortrait())?$targetArtist->getPhotographicPortrait():''; ?>" alt="" />
+					</div>
+
+				<?php 
+				}
+				?>	
+
+			</div>
 		</div>
-		
-	</div>
+	</section>
 	
 </div>
 

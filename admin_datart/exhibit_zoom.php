@@ -406,7 +406,7 @@ if (isset($_POST['name']) && isset($_POST['date'])) {
 $locationTitle = isset($targetExhibit)?$targetExhibit->getTitle():'Ajouter une exposition';
 
 include('header.php');
-var_dump($targetExhibit->listAvailableArtwork());
+
 
 ?>
 

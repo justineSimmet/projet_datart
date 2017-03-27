@@ -71,32 +71,31 @@ if(isset($_POST['targetId']) && isset($_POST['action']) ){
 
 
 include('header.php');
- ?>
+
+?>
 
 
 <div class="row" id="alert-area">
-	<div class="col-sm-12 text-center">
-		<?= !empty($actionResultat)?$actionResultat:''; ?>
-	</div>
+	<?= !empty($actionResultat)?$actionResultat:''; ?>
 </div>
 
 <!-- Modal pour mettre un artiste en false dc disparait pour les users -->
-<div id="hideartist" class="modal fade" role="dialog">
+<div id="hideartist" class="modal fade">
     <div class="modal-dialog">
-        	<div class="modal-content">
+        <div class="modal-content">
 	        <div class="modal-header">
-	                <button type="button" class="close" data-dismiss="modal">&times;</button>
-	                <h4 class="modal-title">Attention !</h4>
+	            <button type="button" class="close" data-dismiss="modal">&times;</button>
+	            <h4 class="modal-title">Attention !</h4>
 	        </div>
 	        <div class="modal-body">
 	           		<p> Vous êtes sur le point de supprimer l'artiste <?= isset($targetArtist)?$targetArtist->getIdentity():''; ?> </p>
 	           		<p>Voulez-vous confirmer cette action ?</p>
-	           			<form action="<?= URL_ADMIN; ?>artist_management.php" method="POST">
-	           				<button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
-							<input type="hidden" value="<?= isset($targetArtist)?$targetArtist->getId():'' ; ?>" name="targetId"/>
-							<input type="hidden" name="action" value="hide">
-			               	<input type="submit" value="Supprimer" class="btn btn-danger pull-right" />
-			            </form>
+	           		<form action="<?= URL_ADMIN; ?>artist_management.php" method="POST">
+	           			<button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+						<input type="hidden" name="targetId" value="<?= isset($targetArtist)?$targetArtist->getId():'' ; ?>" />
+						<input type="hidden" name="action" value="hide">
+			            <input type="submit" class="btn btn-default" value="Supprimer"  />
+			        </form>
 	            </div> 
 	            <div class="modal-footer">
 	            	<button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
@@ -115,15 +114,14 @@ include('header.php');
         		<h4 class="modal-title">Attention !</h4>
         	</div>
         	<div class="modal-body">
-        		<p> Vous êtes sur le point de supprimer <strong>définitivement</strong> l'artiste <?= isset($targetArtist)?$targetArtist->getIdentity():''; ?> </p>
+        		<p> Vous êtes sur le point de supprimer <strong>définitivement</strong> l'artiste <?= isset($targetArtist)?$targetArtist->getIdentity():''; ?>. </p>
                 <p> Pour confirmer cette action, merci de saisir votre mot de passe</p>
-                <form action="<?= URL_ADMIN; ?>artist_management.php" method="POST" class="form-inline clearfix">
-                	<div class="form-group">
-	                	<label for="password">Mot de passe :</label>
-	                	<input type="password" name="password" placeholder="Votre mot de passe" class="form-control" required />
-	                </div>
+                <form action="<?= URL_ADMIN; ?>artist_management.php" method="POST">
+	                <label for="password">Mot de passe :</label>
+	                <input type="password" name="password" placeholder="Votre mot de passe" required />
+	                <input type="hidden" name="action" value="delete">
                 	<input type="hidden" value="<?= isset($targetArtist)?$targetArtist->getId():';' ?>" name="targetId">
-                	<input type="submit" value="Supprimer" class="btn btn-danger pull-right" />
+                	<input type="submit" value="Supprimer" />
 				</form>
         	</div>
         	<div class="modal-footer">
@@ -133,40 +131,38 @@ include('header.php');
 	</div>
 </div>
 
+<div class="row">
 
-<div class="row" id="artistManagementList">
+	<div class="col-lg-9" id="artistManagementList">
 
-	<div class="col-sm-9 col-xs-12">
-		 <h2>Artistes enregistrés</h2>
-
-		 <section class="listing">
-		 	<?php 
-				// creation de la liste avec un foreach et chaque l = un artiste
-				$artistes = Artist::listArtist();
-				foreach ($artistes as $a) {
-			?>
-			<div class="row col-equal-height">
-				<div class="col-sm-6">
-					<h3><?= $a->getIdentity(); ?></h3>
-				</div>
-				<div class="col-sm-6">
-					<form class="form-horizontal">
-						<div class="form-group">
-							<label for="actions-artist" class="control-label col-sm-4">Actions :</label>
-							<div class="col-sm-8">
-								<select name="actions-artist" class="form-control actionArtist">
-									<option> --- </option>
-									<option value="update" data-id="<?= $a->getId(); ?>">Voir / Modifier</option>
-									<option value="hide" data-id="<?= $a->getId(); ?>" >Supprimer</option>
-								</select>
-							</div>
-						</div>
-					</form>
-				</div>
+	<h2>Artistes enregistrés</h2>
+	<section class="listing">
+		<?php 
+		$artistes = Artist::listArtist();
+		foreach ($artistes as $a) {
+		?>
+		<div class="row col-equal-height">
+			<div class="col-sm-6">
+				<h3><?= $a->getIdentity(); ?></h3>
 			</div>
-			<div class="row">
-                <div class="col-sm-12">
-                    <div class="table-responsive">
+			<div class="col-sm-6">
+				<form class="form-horizontal">
+					<div class="form-group">
+						<label for="actions-artist" class="control-label col-sm-4">Actions :</label>
+						<div class="col-sm-8">
+							<select name="actions-artist" class="form-control actionArtist">
+								<option> --- </option>
+								<option value="update" data-id="<?= $a->getId(); ?>">Voir / Modifier</option>
+								<option value="hide" data-id="<?= $a->getId(); ?>" >Supprimer</option>
+							</select>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="row">
+            <div class="col-sm-12">
+                <div class="table-responsive">
                     <table class="table text-center">
                         <thead>
                             <tr>
@@ -174,10 +170,7 @@ include('header.php');
                                     Oeuvres associées
                                 </th>
                                 <th>
-                                    Biographie
-                                </th>
-                                <th>
-                                    Note
+                                    Biographie + Note
                                 </th>
                                 <th>
                                     Anglais
@@ -196,25 +189,22 @@ include('header.php');
                         <tbody>
                             <tr>
                                 <td>
-                                    <!-- NOMBRE D'OEUVRES -->
+                                    <?= $a->totalArtistArtwork(); ?>
                                 </td>
                                 <td>
-                                     <!-- BIOGRAPHIE -->
+                                     <?= $a->checkBioNote() == TRUE?'<span class="fa fa-check red"></span>':'<span class="fa fa-circle-o red"></span>' ?>
                                 </td>
                                 <td>
-                                     <!-- NOTE -->
+                                    <?= $a->checkTradArtist('english') == TRUE?'<span class="fa fa-check red"></span>':'<span class="fa fa-circle-o red"></span>' ?>
                                 </td>
                                 <td>
-                                    <!-- TRAD FRENCH -->
+                                    <?= $a->checkTradArtist('german') == TRUE?'<span class="fa fa-check red"></span>':'<span class="fa fa-circle-o red"></span>' ?>
                                 </td>
                                 <td>
-                                    <!-- TRAD GERMAN -->
+                                    <?= $a->checkTradArtist('russian') == TRUE?'<span class="fa fa-check red"></span>':'<span class="fa fa-circle-o red"></span>' ?>
                                 </td>
                                 <td>
-                                    <!-- TRAD RUSSIAN -->
-                                </td>
-                                <td>
-                                    <!-- TRAD CHINESE -->
+                                    <?= $a->checkTradArtist('chinese') == TRUE?'<span class="fa fa-check red"></span>':'<span class="fa fa-circle-o red"></span>' ?>
                                 </td>
                             </tr>
                         </tbody>
@@ -223,61 +213,62 @@ include('header.php');
                 </div>
 			</div>
 			<?php
-				}
+			};
 			?>
 		 </section>
 
-	</div>
-	<div class="col-sm-3 col-xs-12">
-		<div>
-			<a href="<?= URL_ADMIN ?>artist_zoom.php" class="btn btn-default btn-block btn-custom"><span class="fa fa-plus-circle"></span> Créer un nouvel artiste</a>
-		</div>
-	</div>
-</div>
+
+
+<!--
+************************************************************************************************
+	ZONE LISTE ARTISTES EN COURS DE SUPPRESSION
+************************************************************************************************
+-->
 
 <?php
 if($currentUser->getStatus() == FALSE ){
-?>
-
-<div class="row">
-	<div class="col-sm-12">
-		<h2>Artistes en cours de suppression</h2>
-		<section>
-			<?php 
-				$artistHide = Artist::listHidenArtist();
-				foreach ($artistHide as $ah){ 
-			?>
-				<div class="row col-equal-height">
-					<div class="col-sm-4">
-						<h3><?= $ah->getIdentity(); ?></h3>
-						<p class="date">Créé le : <?= dateFormat($ah->getCreationDate()); ?></p>
+	?>
+	<h2>Artistes en cours de suppression</h2>
+	<section>
+		<?php 
+		$artistHide = Artist::listHidenArtist();
+		foreach ($artistHide as $ah){ 
+		?>
+		<div class="row col-equal-height">
+			<div class="col-sm-4">
+				<h3><?= $ah->getIdentity(); ?></h3>
+				<p class="date">Créé le : <?= dateFormat($ah->getCreationDate()); ?></p>
+			</div>
+		<div class="col-sm-4">
+			<form class="form-horizontal">
+				<div class="form-group">
+					<label for="actions-artist" class="control-label col-sm-5">Actions :</label>
+						<div class="col-sm-7">
+							<select name="actions-artist" class="form-control actionArtist">
+								<option> --- </option>
+								<option value="show" data-id="<?= $ah->getId(); ?>">Visionner</option>
+								<option value="publish" data-id="<?= $ah->getId(); ?>" >Publier</option>
+							</select>
+						</div>
 					</div>
-					<div class="col-sm-4">
-						<form class="form-horizontal">
-							<div class="form-group">
-								<label for="actions-artist" class="control-label col-sm-5">Actions :</label>
-								<div class="col-sm-7">
-									<select name="actions-artist" class="form-control actionArtist">
-										<option> --- </option>
-										<option value="show" data-id="<?= $ah->getId(); ?>">Visionner</option>
-										<option value="publish" data-id="<?= $ah->getId(); ?>" >Publier</option>
-									</select>
-								</div>
-							</div>
-						</form>
-					</div>
-					<div class="col-sm-4">
-						<button type="button" class="btn btn-danger btn-block delete-artist" data-id="<?= $ah->getId(); ?>" >Supprimer définitivement</button>
-					</div>
-				</div>
-			<?php 
-				}
-			?>
-		</section>
+				</form>
+			</div>
+			<div class="col-sm-4">
+				<button type="button" class="btn btn-danger btn-block delete-artist" data-id="<?= $ah->getId(); ?>" >Supprimer définitivement</button>
+			</div>
+		</div>
+		<?php 
+		}
+		?>
+	</section>
 	</div>
-</div>
-	
-
-<?php
+	<div class="col-lg-3">
+		<a href="<?= URL_ADMIN ?>artist_zoom.php" class="btn btn-default btn-block btn-lg btn-custom"><span class="fa fa-plus-circle"></span> Créer un nouvel artiste</a>
+	</div>
+		<?php
 }
+?>
+</div>
+<?php
+
 include('footer.php');

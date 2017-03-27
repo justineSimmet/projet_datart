@@ -315,27 +315,34 @@ soit à faire un update des données de l'id reçue
 
 	function formInfos($target, $action=''){
 	?>
-		<form action=<?= $target ?> method="POST">
+		<form class="form-horizontal clearfix" action=<?= $target ?> method="POST">
 			<fieldset <?= !empty($this->getId()) && $this->getVisible() == FALSE?'disabled':''; ?> >
 			
-				<div class="form-group">
-					<label for="surname">Nom :</label>
-					<input type="text" name="surname" id="surname" value="<?= $this->surname; ?>" />
+				<div class="form-group form-group-lg">
+					<label class="control-label col-sm-3" for="surname">Nom :</label>
+					<div class="col-sm-9">
+					<input class="form-control" type="text" name="surname" id="surname" value="<?= $this->surname; ?>" />
+					</div>
 				</div>
 
-				<div class="form-group">
-					<label for="name">Prénom :</label>
-					<input type="text" name="name" id="name" value="<?= $this->name; ?>" />
+				<div class="form-group form-group-lg">
+					<label class="control-label col-sm-3" for="name">Prénom :</label>
+					<div class="col-sm-9">				
+					<input class="form-control" type="text" name="name" id="name" value="<?= $this->name; ?>" />
+					</div>
 				</div>
 
-				<div class="form-group">
-					<label for="alias">Pseudonyme :</label>
-					<input type="text" name="alias" id="alias" value="<?= $this->alias; ?>" />
+				<div class="form-group form-group-lg">
+					<label class="control-label col-sm-3" for="alias">Pseudonyme :</label>
+					<div class="col-sm-9">
+					<input class="form-control" type="text" name="alias" id="alias" value="<?= $this->alias; ?>" />
+					</div>
 				</div>
+
 			</fieldset>	
 
 					<input type="hidden" name="id" value="<?= $this->id; ?>" />
-					<input type="submit" value="<?= $action; ?>" <?= !empty($this->getId()) && $this->getVisible() == FALSE?'disabled':''; ?> />
+					<input class="btn btn-default pull-right" type="submit" value="<?= $action; ?>" <?= !empty($this->getId()) && $this->getVisible() == FALSE?'disabled':''; ?> />
 		</form>
 		<?php 
 
@@ -450,10 +457,10 @@ soit à faire un update des données de l'id reçue
 				<label for="file">Fichier (JPG | max. 2 Mo) :</label><br>
 				<input type="hidden" name="taille Maxi" value="2097152" />
 				<input type="file" name="fichier" <?= empty($this->getId()) || $this->getVisible() == FALSE?'disabled':''; ?> />
-			</fieldset>
 			<input type="hidden" name="action" value="addArtistPicture">
 			<input type="hidden" name="artistId" value="<?= isset($this)?$this->getId():'' ?>">
-			<input type="submit" value="<?= $action; ?>" class="btn btn-default pull-right" <?= empty($this->getId()) && $this->getVisible() == FALSE?'disabled':''; ?>/>
+			<input type="submit" value="<?= $action; ?>" class="btn btn-default pull-right" <?= empty($this->getId()) && $this->getVisible() == FALSE?'disabled':''; ?> />
+			</fieldset>
 		</form>	
 	<?php
 
@@ -642,25 +649,123 @@ soit à faire un update des données de l'id reçue
 		}
 	}
 
-/******************************
+/******************************************
+
 	 Comparaison de liste
-*******************************/
 
-static function compareList($listA, $listB)
-{
-  $clone = array();
-  $count = count($listB);
-  foreach ($listA as $list) {
-    for ($i=0; $i < $count ; $i++) { 
-      if ($list->getId() == $listB[$i]->getId()) {
-        array_push($clone, $list->getId());
-      }
-    }
-  }
+*******************************************/
 
-  return $clone;
-}
- 
+	static function compareList($listA, $listB)
+	{
+	  $clone = array();
+	  $count = count($listB);
+	  foreach ($listA as $list) {
+	    for ($i=0; $i < $count ; $i++) { 
+	      if ($list->getId() == $listB[$i]->getId()) {
+	        array_push($clone, $list->getId());
+	      }
+	    }
+	  }
+
+  	return $clone;
+	}
+
+
+/**************************************************
+	
+	liste totale des oeuvres d'un artiste
+
+
+***************************************************/ 
+
+
+	function totalArtistArtwork(){
+		$count = count($this->getArtwork());
+		return $count;
+	}
+
+
+/**************************************************
+	
+	verif' presence bio+note d'un artiste
+
+
+***************************************************/ 
+
+	function checkBioNote(){
+		if (!empty($this->getTextualContent())) {
+			if (!empty($this->getFrenchBiography()->getContent()) && !empty($this->getFrenchNote()->getContent())) {
+			
+				return TRUE;
+			}
+			else{
+				return FALSE;
+			}
+		}
+		else{
+			return FALSE;
+		}
+	}
+
+
+
+/**************************************************
+	
+	verif' trad de la bio+note d'un artiste
+
+
+***************************************************/ 
+
+
+	function checkTradArtist($language){
+
+		if (!empty($this->getTextualContent())) {
+			switch ($language) {
+				case 'english':
+					if (!empty($this->getEnglishBiography()->getContent()) && !empty($this->getEnglishNote()->getContent())) {
+					return TRUE;
+					}
+					else{
+						return FALSE;
+					}
+					break;
+				
+				case 'german':
+					if (!empty($this->getGermanBiography()->getContent()) && !empty($this->getGermanNote()->getContent())) {
+					return TRUE;
+					}
+					else{
+						return FALSE;
+					}
+					break;
+				
+				case 'russian':
+					if (!empty($this->getRussianBiography()->getContent()) && !empty($this->getRussianNote()->getContent())) {
+					return TRUE;
+					}
+					else{
+						return FALSE;
+					}
+					break;
+				
+				case 'chinese':
+					if (!empty($this->getChineseBiography()->getContent()) && !empty($this->getChineseNote()->getContent())) {
+					return TRUE;
+					}
+					else{
+						return FALSE;
+					}
+					break;
+				
+				default:
+					return FALSE;
+					break;
+			}
+		}
+		else{
+			return FALSE;
+		}		
+	}
 
 
 }

@@ -96,7 +96,7 @@ include('header.php');
         	<div class="modal-body">
         		<p> Vous êtes sur le point de supprimer l'exposition <?= isset($targetExhibit)?$targetExhibit->getTitle():''; ?>. </p>
                 <p> Voulez-vous confirmer cette action ?</p>
-                <form action="exhibit_management.php" method="POST">
+                <form action="<?= URL_ADMIN; ?>exhibit_management.php" method="POST">
 	                <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
 	                <input type="hidden" name="targetId" value="<?= isset($targetExhibit)?$targetExhibit->getId():'' ; ?>" />
 	                <input type="hidden" name="action" value="hide" />
@@ -122,7 +122,7 @@ include('header.php');
         	<div class="modal-body">
         		<p> Vous êtes sur le point de supprimer <strong>définitivement</strong> l'exposition <?= isset($targetExhibit)?$targetExhibit->getTitle():''; ?>. </p>
                 <p> Pour confirmer cette action, merci de saisir votre mot de passe</p>
-                <form action="exhibit_management.php" method="POST">
+                <form action="<?= URL_ADMIN; ?>exhibit_management.php" method="POST">
 	                <label for="password">Mot de passe :</label>
 	                <input type="password" name="password" placeholder="Votre mot de passe"  required />
 	                <input type="hidden" name="action" value="delete" />
