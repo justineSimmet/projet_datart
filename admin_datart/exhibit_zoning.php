@@ -105,9 +105,8 @@ if (isset($_GET['id'])) {
 												<h3><?= $artwork->getTitle(); ?></h3>
 												<p><?= !empty($artwork->getFrenchCharacteristic())?$artwork->getFrenchCharacteristic()->getContent():'---';?> | Réf. : <?= $artwork->getReferenceNumber(); ?></p>
 											</div>
-											<div class="drag-area">
+											<div class="drag-area" data-reference="<?= $artwork->getReferenceNumber(); ?>">
 												<span class="fa fa-arrows"></span>
-												<p class="artwork-ref"><?= $artwork->getReferenceNumber(); ?></p>
 											</div>
 										</div>
 										<?php
@@ -122,7 +121,8 @@ if (isset($_GET['id'])) {
 			</div>
 			<div class="col-sm-9">
 				<div id="drop-area">
-					<img src="<?= URL_IMAGES ?>galerie-ga.svg">
+						<script src="<?= URL_ASSETS ?>js/d3.min.js"></script>
+						<?php echo file_get_contents(URL_IMAGES."galerie-ga.svg"); ?>
 					<div id="drop-target"></div>
 				</div>
 			</div>

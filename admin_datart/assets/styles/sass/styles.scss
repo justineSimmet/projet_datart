@@ -579,13 +579,13 @@ input.input-file{
 
 #drop-area{
 	position: relative;
+	overflow: auto;
 	@include shadow(0, 0, 10px, rgba(100,100,100,0.15), true);
 	padding:25px;
 	background: url("../../images/tiny_grid.png") repeat;
 
-	img{
-		position: relative;
-		z-index: 0;
+	svg{
+		max-width: 100%;
 	}
 }
 

@@ -2,24 +2,24 @@ $(function(){
 /**********************************************
 ** DIV DRAGGABLE
 ************************************************/
-	var position = '';
 	var xPos = '';
 	var yPos = '';
 
 	$('.drag-area').draggable(
 		{ 
-			appendTo: '#drop-target',
-			helper: 'clone',
-			revert: 'invalid',
-			start: function(e, ui) {
-				$(ui.helper).find("span").remove();
-				$(ui.helper).addClass("ui-draggable-helper");
+			appendTo: '#drop-area',
+			cursorAt: { right: 0, bottom: 0 },
+			refreshPositions: true,
+			helper: function(){
+				var ref = $(this).attr('data-reference');
+				return '<div class="ui-draggable-helper" data-ref="'+ref+'"></div>';
 			},
-			drag: function(){
-	            position = $(this).offset();
-	            xPos = position.left;
-	            yPos = position.top;
-	            console.log(xPos+' '+yPos);
+			revert: 'invalid',
+
+			drag: function(event, ui){
+	            xPos = ui.position.left;
+	            yPos = ui.position.top;
+	            console.log('x :'+xPos+' - y :'+yPos);
         	}
 		}
 	);
@@ -28,13 +28,9 @@ $(function(){
 	
 	$('#drop-area').droppable(
 		{
-			drop : function (e, ui) {
-				var area = $(this);
-				var clone = $(ui.draggable).clone();
-				clone.find("span").remove();
-				clone.find(".artwork-ref").css("display", "inline-block");
-       			clone.removeClass("ui-draggable-helper").addClass("ui-draggable-dropped");
-       			area.append(clone.offset({top: yPos, left: xPos }));
+			drop : function (event, ui) {
+				var svgArea = d3.select('#originalPlan');
+				var rectangle = svgArea.append("rect").attr("x", xPos-26.2).attr("y", yPos-157.45).attr("width", 25).attr("height", 25).attr("fill", "#ffffff").attr("stroke-width", 2).attr("stroke" , "rgb(213,49,58)");
     		}
 		}
 	);
