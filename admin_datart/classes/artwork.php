@@ -320,7 +320,7 @@ class Artwork{
 					'".addslashes($this->artist_id)."',
 					'".addslashes($this->artwork_title)."',
 					'".addslashes($this->dimensions)."',
-					'".addslashes($this->disponibility)."',
+					".$this->disponibility.",
 					NULL,
 					'".addslashes($this->artist_request)."',
 					'".addslashes($this->qrcode)."',
@@ -351,7 +351,7 @@ class Artwork{
 				UPDATE artwork SET
 				artwork_title = '".addslashes($this->artwork_title)."',
 				dimensions =  '".addslashes($this->dimensions)."',
-				disponibility = '".addslashes($this->disponibility)."',
+				disponibility = ".$this->disponibility.",
 				artist_request = '".addslashes($this->artist_request)."',
 				qrcode = '".addslashes($this->qrcode)."'
 				WHERE id = '".$this->id."'
@@ -483,14 +483,14 @@ class Artwork{
 				<div class="form-group form-group-lg">
 					<label for="artistRequest" class="control-label col-sm-3">Requêtes de l'artiste :</label>
 					<div class="col-sm-9">
-					<textarea class="form-control" name="artistRequest"> <?= isset($this->artist_request)?$this->getArtistRequest():''; ?> </textarea>
+					<textarea class="form-control" name="artistRequest"><?= isset($this->artist_request)?$this->getArtistRequest():''; ?></textarea>
 					</div>
 				</div>
 				<div class="form-group form-group-lg">
 					<label for="disponibility" class="control-label col-sm-3 ">Oeuvre disponible : </label>
 					<div class="col-sm-9">
-					<label class="radio-inline"><input type="radio" value="<?= TRUE ?>"  type="radio" name="disponibility" <?= $this->getDisponibility()==TRUE?'checked':''; ?>/>Oui</label>
-					<label class="radio-inline"><input type="radio" value="<?= FALSE ?>"  type="radio" name="disponibility"  <?= $this->getDisponibility()==FALSE?'checked':''; ?>  <?= empty($this->getId())?'checked':''; ?> />Non</label>
+					<label class="radio-inline"><input type="radio" value="<?= 'TRUE' ?>"  type="radio" name="disponibility" <?= $this->getDisponibility()==TRUE?'checked':''; ?>/>Oui</label>
+					<label class="radio-inline"><input type="radio" value="<?= 'FALSE' ?>"  type="radio" name="disponibility"  <?= $this->getDisponibility()==FALSE?'checked':''; ?>  <?= empty($this->getId())?'checked':''; ?> />Non</label>
 				</div>
 			</fieldset>
 				<input type="hidden" name="id" value="<?= !empty($this->id)?$this->getId():''; ?>" >

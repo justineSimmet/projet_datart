@@ -73,9 +73,9 @@ if (isset($_GET['id'])) {
     		<div class="navbar-header">
 	    	</div>
 		    <ul class="nav navbar-nav">
-		      <li><a href="#">Enregistrer</a></li>
-		      <li><a href="#">Annuler</a></li>
-		      <li><a href="#">Réinitialiser</a></li>
+		      <li><a id="saveZoning">Enregistrer</a></li>
+		      <li><a id="cancelZoning">Annuler les changements</a></li>
+		      <li><a id="resetZoning">Réinitialiser</a></li>
 		    </ul>
 		</div>
 	</nav>

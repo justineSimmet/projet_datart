@@ -705,7 +705,7 @@ input.input-file {
     position: absolute;
     display: inline-block;
     font-size: 0.75em;
-    bottom: -15px;
+    bottom: -20px;
     left: 50%;
     -webkit-transform: translateX(-50%);
     transform: translateX(-50%); }
@@ -723,7 +723,7 @@ input.input-file {
     position: absolute;
     display: inline-block;
     font-size: 0.75em;
-    bottom: -17px;
+    bottom: -22px;
     left: 50%;
     -webkit-transform: translateX(-50%);
     transform: translateX(-50%); }

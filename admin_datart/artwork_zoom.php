@@ -181,7 +181,6 @@ if(isset($_POST['characteristicFrench']) && isset($_POST['mainFrench']) ) {
 
 $locationTitle = isset($targetArtwork)?$targetArtwork->getTitle():'Ajouter une oeuvre';
 include('header.php');
-
 ?>
 <!--
 ************************************************************************************************

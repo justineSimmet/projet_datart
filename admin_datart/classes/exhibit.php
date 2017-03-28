@@ -816,6 +816,7 @@ class Exhibit{
 			LEFT JOIN artist ON artwork.artist_id = artist.id 
 			WHERE artwork_displayed.exhibit_id = '".$this->id."' 
 			AND artist.visible = TRUE
+			AND artwork.visible = TRUE
 			GROUP BY artist_id
 			ORDER BY artist.name, artist.alias ASC
 			");

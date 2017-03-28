@@ -1,12 +1,30 @@
+function cleanArray(array, target){
+	for(var i in array){
+		    if(array[i][0]==target){
+		        array.splice(i,1);
+		        break;
+		    }
+		}
+}
+
 
 $(function(){
+
+	var arrayData = [];
+
+/**********************************************
+** ACTIONS SUR LE MENU
+************************************************/
+
+$('#saveZoning').on('click', function(){
+	
+	var dataJson = JSON.stringify(arrayData);
+	/*console.log(dataJson);*/
+});
+
 /**********************************************
 ** DRAG AND DROP AVEC JQUERY UI
 ************************************************/
-	var xPos = '';
-	var yPos = '';
-
-	var arrayData = [];
 
 	$('.dragItem').draggable(
 		{ 
@@ -21,20 +39,28 @@ $(function(){
 
 		}
 	);
-
 	
 	$('#drop-area').droppable(
 		{
 			drop : function (event, ui) {
 				var ref = ui.helper.attr('id');
 				$(this).prepend(ui.helper.clone().addClass('ui-draggable-dropped').removeClass('ui-draggable-helper').addClass('dropItem').attr('id',ref));
-				$('#availble-artwork').find("[data-reference='" + ref + "']").removeClass('dragItem').remove('span').html('<span class="fa fa-refresh"></span>').addClass('ui-draggable ui-draggable-handle refreshItem');
+				$('.temp-item').remove();
+				var divContainer = $('#availble-artwork').find("[data-reference='" + ref + "']").parents('.list-element');
+				divContainer.find('.action-item-area').remove();
+				divContainer.append('<div class="action-item-area refreshItem" data-reference="'+ ref +'"><span class="fa fa-refresh"></span></div>');
+				cleanArray(arrayData, ref);
 				refArray = [ref, $('#'+ref).position()];
 				arrayData.push(refArray);
-
 				$('.dropItem').draggable(
 					{
-						containment: "parent"
+						containment: "parent",
+						helper: function(){
+							var ref = $(this).attr('id');
+							$(this).addClass("temp-item");
+							$(this).css('opacity', 0);
+							return '<div class="ui-draggable-helper" id="'+ref+'"><span>'+ref+'</span></div>';
+						},
 					}
 				);
     		}
@@ -44,19 +70,28 @@ $(function(){
 
 	$('#availble-artwork').on('click', '.refreshItem', function(){
 		var ref = $(this).attr('data-reference');
-		$('#drop-area').find('#'+ref).remove();
-		$(this).removeClass('refreshItem').remove('span').html('<span class="fa fa-arrows"></span>').addClass('dragItem');
+		$('#'+ref).remove();
+		$(this).removeClass('refreshItem').remove('span').html('<span class="fa fa-arrows"></span>').addClass('dragItem ui-draggable ui-draggable-handle');
 
-		for(var i in arrayData){
-		    if(arrayData[i][0]==ref){
-		        arrayData.splice(i,1);
-		        break;
-		    }
-		}
+		cleanArray(arrayData, ref);
+
+		$('.dragItem').draggable(
+			{ 
+				appendTo: '#drop-area',
+				cursor: 'move',
+				cursorAt: { left: 5, top: 5 },
+				helper: function(){
+					var ref = $(this).attr('data-reference');
+					return '<div class="ui-draggable-helper" id="'+ref+'"><span>'+ref+'</span></div>';
+				},
+				revert: 'invalid',
+
+			}
+		);
+
 	})
 
 });
-		// var dataJson = JSON.stringify(arrayData);
 
 
 
