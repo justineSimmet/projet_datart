@@ -523,11 +523,12 @@ input.input-file{
 	}
 }
 
-.drag-area{
+.action-item-area{
 	position: relative;
 	float: right;
+	width:64px;
 	height: 63.4px;
-	padding: 10px 15px;
+	padding: 10px 0;
 	font-size: 1.8em;
 	text-align: center;
 	background-color: #c8c8c8;
@@ -539,7 +540,6 @@ input.input-file{
 		border-left: 1px solid $datart-gray;
 		border-right: 1px solid $datart-gray;
 		color: $datart-gray;
-		cursor: move;
 	}
 	
 	.artwork-ref{
@@ -559,11 +559,22 @@ input.input-file{
 }
 
 .ui-draggable-helper{
+	position:relative;
 	width:20px;
 	height:20px;
 	border-radius:20px;
 	background-color: $datart-red;
-	color: $datart-red;
+	color: #000;
+
+	span{
+		position:absolute;
+		display: inline-block;
+		font-size: 0.75em;
+		bottom:-15px;
+		left: 50%;
+		-webkit-transform: translateX(-50%);
+		transform: translateX(-50%);
+	}
 }
 
 .ui-draggable-dropped{
@@ -572,9 +583,19 @@ input.input-file{
 	width:20px;
 	height:20px;
 	border-radius:20px;
-	border:1px solid $datart-red;
+	border:2px solid $datart-red;
 	background-color: #fff;
-	color: #fff;
+	color: #000;
+
+	span{
+		position:absolute;
+		display: inline-block;
+		font-size: 0.75em;
+		bottom:-17px;
+		left: 50%;
+		-webkit-transform: translateX(-50%);
+		transform: translateX(-50%);
+	}
 }
 
 #drop-area{
@@ -588,6 +609,8 @@ input.input-file{
 		max-width: 100%;
 	}
 }
+
+
 
 //IMPORT DROPZONE
 @import '_dropzone.scss';

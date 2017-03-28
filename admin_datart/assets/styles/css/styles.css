@@ -664,23 +664,23 @@ input.input-file {
       #availble-artwork .list-element .text-area p {
         margin-bottom: 0; }
 
-.drag-area {
+.action-item-area {
   position: relative;
   float: right;
+  width: 64px;
   height: 63.4px;
-  padding: 10px 15px;
+  padding: 10px 0;
   font-size: 1.8em;
   text-align: center;
   background-color: #c8c8c8;
   color: #fff;
   border-left: 1px solid #c8c8c8;
   border-right: 1px solid #c8c8c8; }
-  .drag-area:hover {
+  .action-item-area:hover {
     border-left: 1px solid #778085;
     border-right: 1px solid #778085;
-    color: #778085;
-    cursor: move; }
-  .drag-area .artwork-ref {
+    color: #778085; }
+  .action-item-area .artwork-ref {
     position: absolute;
     display: none;
     z-index: 1000;
@@ -695,11 +695,20 @@ input.input-file {
     transform: translateX(-50%); }
 
 .ui-draggable-helper {
+  position: relative;
   width: 20px;
   height: 20px;
   border-radius: 20px;
   background-color: #d5313a;
-  color: #d5313a; }
+  color: #000; }
+  .ui-draggable-helper span {
+    position: absolute;
+    display: inline-block;
+    font-size: 0.75em;
+    bottom: -15px;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%); }
 
 .ui-draggable-dropped {
   position: absolute;
@@ -707,9 +716,17 @@ input.input-file {
   width: 20px;
   height: 20px;
   border-radius: 20px;
-  border: 1px solid #d5313a;
+  border: 2px solid #d5313a;
   background-color: #fff;
-  color: #fff; }
+  color: #000; }
+  .ui-draggable-dropped span {
+    position: absolute;
+    display: inline-block;
+    font-size: 0.75em;
+    bottom: -17px;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%); }
 
 #drop-area {
   position: relative;

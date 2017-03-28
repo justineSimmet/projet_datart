@@ -84,7 +84,7 @@ if (isset($_GET['id'])) {
 		<div class="row">
 <!-- ////////////////////////////////////////////////////////////////
 
-	LISTING DES OEUVRES
+	LISTING DES OEUVRES ET PLAN SVG
 
 //////////////////////////////////////////////////////////////// -->
 			<div class="col-sm-3">
@@ -105,7 +105,7 @@ if (isset($_GET['id'])) {
 												<h3><?= $artwork->getTitle(); ?></h3>
 												<p><?= !empty($artwork->getFrenchCharacteristic())?$artwork->getFrenchCharacteristic()->getContent():'---';?> | Réf. : <?= $artwork->getReferenceNumber(); ?></p>
 											</div>
-											<div class="drag-area" data-reference="<?= $artwork->getReferenceNumber(); ?>">
+											<div class="action-item-area dragItem" data-reference="<?= $artwork->getReferenceNumber(); ?>">
 												<span class="fa fa-arrows"></span>
 											</div>
 										</div>
@@ -123,15 +123,8 @@ if (isset($_GET['id'])) {
 				<div id="drop-area">
 						<script src="<?= URL_ASSETS ?>js/d3.min.js"></script>
 						<?php echo file_get_contents(URL_IMAGES."galerie-ga.svg"); ?>
-					<div id="drop-target"></div>
 				</div>
 			</div>
-
-<!-- ////////////////////////////////////////////////////////////////
-
-	PLAN DE POSITIONNEMENT
-
-//////////////////////////////////////////////////////////////// -->
 		</div>
 	</div>	
 	</div>
