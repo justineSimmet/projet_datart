@@ -455,9 +455,7 @@ MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
 			var obj = JSON.parse(response);
 			if (obj.response == 'success') {
 				container.remove();
-			}/*else{
-
-			}*/
+			}
 		})
 	})
 

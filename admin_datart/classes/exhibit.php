@@ -12,6 +12,7 @@ class Exhibit{
 	private $begin_date;
 	private $end_date;
 	private $public_opening;
+	private $art_zoning;
 	private $visible;
 	private $creation_date;
 	private $textual_content;
@@ -30,6 +31,7 @@ class Exhibit{
 			$this->begin_date = $exhibit['begin_date'];	
 			$this->end_date = $exhibit['end_date'];	
 			$this->public_opening = $exhibit['public_opening'];	
+			$this->art_zoning = $exhibit['art_zoning'];	
 			$this->visible = $exhibit['visible'];	
 			$this->creation_date = $exhibit['creation_date'];
 			$this->textual_content = array();
@@ -158,6 +160,15 @@ class Exhibit{
 
 	function getVisible(){
 		return $this->visible;
+	}
+
+	function setZoning($art_zoning){
+		$this->art_zoning = $art_zoning;
+		return TRUE;
+	}
+
+	function getZoning(){
+		return $this->art_zoning;
 	}
 
 	function setCreationDate($creationDate){
@@ -345,6 +356,33 @@ class Exhibit{
 			}
 		}
 	}
+
+/******************************************************
+**
+** Traitement des DATA zoning en BD
+**
+******************************************************/
+	function zoningManagement($action=''){
+		if ($action == 'insert') {
+			$insert = requete_sql("UPDATE exhibit SET art_zoning = '".$this->art_zoning."' WHERE id = '".$this->id."'");
+			if ($insert) {
+				return TRUE;
+			}
+			else{
+				return FALSE;
+			}
+		}
+		elseif ($action == 'delete') {
+			$delete = requete_sql("UPDATE exhibit SET art_zoning = NULL WHERE id = '".$this->id."'");
+			if ($delete) {
+				return TRUE;
+			}
+			else{
+				return FALSE;
+			}
+		}
+	}
+
 
 /******************************************************
 **
