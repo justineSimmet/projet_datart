@@ -7,10 +7,30 @@ function cleanArray(array, target){
 		}
 }
 
+function getPosition(argument) {
+	var yPos = target.position().top - refY;
+	var xPos = target.position().left - refY;
+}
+
 
 $(function(){
 
+	/*var cloneArea = $("#dropTarget").find("img");
+	var cloneStyle = {  'position': 'absolute',
+						'width': cloneArea.css('width'),
+						'height': cloneArea.css('height'),
+						'top': cloneArea.position().top,
+						'left': cloneArea.position().left
+					};
+	$('#dropTarget').css(cloneStyle);*/
+
 	var arrayData = [];
+
+	// var refArea = $("#drop-area").find("img");
+	// var diffY = $(refArea).offset().top - $('#drop-area').offset().top;
+	// var diffX = $(refArea).offset().left - $('#drop-area').offset().left;
+
+	// var diffX = ;
 
 	$('#drop-area').find('.dropItem').each(function(){
 		var ref = $(this).attr('id');
@@ -26,7 +46,17 @@ $(function(){
 	$('#saveZoning').on('click', function(){
 		var exhibit = $(this).attr('data-exhibit');
 		var dataJson = JSON.stringify(arrayData);
-		$.post('save_zoning.php',{action:'save', data: dataJson, target: exhibit} , function(response){
+
+		var element = $("#drop-area");
+		var getImage = '';
+		html2canvas(element).then(function(canvas) {
+    		var url = canvas.toDataURL("image/png");
+			window.open(url, '_blank');
+		});
+		
+		console.log(getImage);
+
+		$.post('save_zoning.php',{action:'save', data: dataJson, target: exhibit, image: getImage} , function(response){
 				var obj = JSON.parse(response);
 				if (obj.response == 'success') {
 					var alertSuccess = '<div class="alert alert-success alert-dismissable text-center">'
@@ -34,20 +64,6 @@ $(function(){
 						+'<strong>Les données ont bien été enregistrées.</strong>'
 						+'</div>';
 					$('#alert-area').html(alertSuccess);
-
-					var element = $("#drop-area");
-					var getCanvas = '';
-					html2canvas(element, {
-				        onrendered: function (canvas) {
-				            $('#targetCanvas').append(canvas);
-				            getCanvas = canvas;
-				        }
-				    });
-				    var canvas = document.getElementsByTagName('canvas');
-					var dataURL = canvas[0].toDataURL('image/jpeg', 1.0);
-				    console.log(dataURL);
-
-					
 				}
 				else{
 					var alertDanger = '<div class="alert alert-danger alert-dismissable text-center">'
@@ -94,7 +110,7 @@ $(function(){
 
 	$('.dragItem').draggable(
 		{ 
-			appendTo: '#drop-area',
+			appendTo: '#dropTarget',
 			cursor: 'move',
 			cursorAt: { left: 5, top: 5 },
 			helper: function(){
@@ -118,7 +134,7 @@ $(function(){
 		}
 	);
 	
-	$('#drop-area').droppable(
+	$('#dropTarget').droppable(
 		{
 			drop : function (event, ui) {
 				var ref = ui.helper.attr('id');
@@ -155,7 +171,7 @@ $(function(){
 
 		$('.dragItem').draggable(
 			{ 
-				appendTo: '#drop-area',
+				appendTo: '#dropTarget',
 				cursor: 'move',
 				cursorAt: { left: 5, top: 5 },
 				helper: function(){

@@ -655,10 +655,10 @@ input.input-file {
     clear: both;
     border-top: 1px solid #778085;
     border-bottom: 1px solid #778085;
-    height: 65px;
     margin-bottom: 5px; }
     #availble-artwork .list-element .text-area {
-      display: inline-block; }
+      display: inline-block;
+      width: 70%; }
       #availble-artwork .list-element .text-area h3 {
         margin-bottom: 5px; }
       #availble-artwork .list-element .text-area p {
@@ -667,8 +667,9 @@ input.input-file {
 .action-item-area {
   position: relative;
   float: right;
-  width: 64px;
-  height: 63.4px;
+  width: 30%;
+  max-height: 82px;
+  max-height: 58px;
   padding: 10px 0;
   font-size: 1.8em;
   text-align: center;
@@ -680,19 +681,6 @@ input.input-file {
     border-left: 1px solid #778085;
     border-right: 1px solid #778085;
     color: #778085; }
-  .action-item-area .artwork-ref {
-    position: absolute;
-    display: none;
-    z-index: 1000;
-    text-align: center;
-    padding: 5px;
-    background-color: #fff;
-    color: #000;
-    font-size: 0.4em;
-    bottom: -40px;
-    left: 50%;
-    -webkit-transform: translateX(-50%);
-    transform: translateX(-50%); }
 
 .ui-draggable-helper {
   position: relative;
@@ -712,7 +700,7 @@ input.input-file {
 
 .ui-draggable-dropped {
   position: absolute;
-  z-index: 2000;
+  z-index: 1000;
   width: 20px;
   height: 20px;
   border-radius: 20px;
@@ -735,10 +723,23 @@ input.input-file {
   -moz-box-shadow: inset 0 0 10px rgba(100, 100, 100, 0.15);
   box-shadow: inset 0 0 10px rgba(100, 100, 100, 0.15);
   padding: 25px;
-  background: url("../../images/tiny_grid.png") repeat;
-  /* img{
-  	max-width: 100%;
-  } */ }
+  background: url("../../images/tiny_grid.png") repeat; }
+  #drop-area #dropTarget {
+    position: relative;
+    max-width: 1000px;
+    min-width: 1000px;
+    margin: auto; }
+    #drop-area #dropTarget img {
+      max-width: 1000px;
+      min-width: 1000px;
+      display: block;
+      margin: auto;
+      user-drag: none;
+      user-select: none;
+      -moz-user-select: none;
+      -webkit-user-drag: none;
+      -webkit-user-select: none;
+      -ms-user-select: none; }
 
 /*
  * The MIT License

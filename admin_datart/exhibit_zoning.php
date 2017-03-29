@@ -145,7 +145,7 @@ if (isset($_GET['id'])) {
 		<div class="container-fluid">
     		<div class="navbar-header">
 	    	</div>
-		    <ul class="nav navbar-nav">
+		    <ul class="nav navbar-nav text-center">
 		      <li><a href="#" id="saveZoning" data-exhibit="<?= $targetExhibit->getId(); ?>">Enregistrer</a></li>
 		      <li><a href="#" id="cancelZoning" >Annuler les changements</a></li>
 		      <li><a href="#" id="resetZoning" data-exhibit="<?= $targetExhibit->getId(); ?>">Réinitialiser le plan</a></li>
@@ -165,7 +165,7 @@ if (isset($_GET['id'])) {
 	LISTING DES OEUVRES ET PLAN SVG
 
 //////////////////////////////////////////////////////////////// -->
-			<div class="col-sm-3">
+			<div class="col-md-3 col-sm-4">
 				<section id="availble-artwork">
 					<h2>Oeuvres enregistrées : </h2>
 					<ul>
@@ -219,16 +219,18 @@ if (isset($_GET['id'])) {
 					</ul>
 				</section>
 			</div>
-			<div class="col-sm-9">
+			<div class="col-md-9 col-sm-8">
 				<div id="drop-area">
-						<?php
-						if (isset($artworkItem)) {
-							foreach ($artworkItem as $array => $item) {
-								echo'<div class="ui-draggable-dropped dropItem" id="'.$item[0].'" style="position: absolute; left: '.$item[1]->left.'px; top: '.$item[1]->top.'px;"><span>'.$item[0].'</span></div>';
+						<div id="dropTarget">
+							<?php
+							if (isset($artworkItem)) {
+								foreach ($artworkItem as $array => $item) {
+									echo'<div class="ui-draggable-dropped dropItem" id="'.$item[0].'" style="position: absolute; left: '.$item[1]->left.'px; top: '.$item[1]->top.'px;"><span>'.$item[0].'</span></div>';
+								}
 							}
-						}
-						?>
-						<img src="<?= URL_IMAGES ?>/galerie-ga.png" alt="Plan de la galerie Grand Angle"/>
+							?>
+							<img src="<?= URL_IMAGES ?>/galerie-ga.png" alt="Plan de la galerie Grand Angle"/>
+						</div>
 				</div>
 			</div>
 		</div>
