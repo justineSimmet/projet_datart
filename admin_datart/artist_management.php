@@ -1,4 +1,4 @@
-<?php 
+ <?php 
 
 require_once('classes/user.php');
 require_once('classes/artwork.php');

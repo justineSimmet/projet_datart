@@ -1,6 +1,108 @@
-body{
-	font:{
-		family:'kelson', 'arial', 'helvetica', sans-serif;
-		size: 14px;
-	}
-}
+@charset "UTF-8";
+/**************************************************************
+		G├®n├®ral
+****************************************************************/
+body {
+  position: relative;
+  background-color: #151515;
+  font-family: 'kelson', 'arial', 'helvetica', sans-serif; }
+
+img, object, embed, video {
+  max-width: 100%; }
+
+h4, h5 {
+  color: #D5313A; }
+
+section {
+  margin: 0 auto;
+  width: 90%; }
+
+/**************************************************************
+
+
+		le nav lang
+
+
+****************************************************************/
+.container {
+  position: fixed;
+  top: 0;
+  right: 10px;
+  border-radius: 0px 0px 10px 10px;
+  padding: 0;
+  float: right; }
+  .container li > a {
+    display: block;
+    padding: 15px; }
+  .container .dropdown img {
+    width: 25px;
+    height: auto; }
+  .container .dropdown button {
+    box-shadow: 5px 0 5px rgba(60, 60, 60, 0.5);
+    padding: 10px; }
+
+/**************************************************************
+
+
+		le nav	
+
+
+****************************************************************/
+nav .navbar_container {
+  background-color: #151515;
+  display: inline-block;
+  text-align: center; }
+  nav .navbar_container .nav {
+    margin: 7.5px 0px;
+    padding-left: none; }
+    nav .navbar_container .nav li > a {
+      padding: 15px 15px 15px 15px;
+      color: #FFF; }
+      nav .navbar_container .nav li > a:hover {
+        color: #D5313A; }
+nav .fa {
+  font-size: 1.563em; }
+
+/**************************************************************
+
+
+		index (page o├╣ arrive le visiteur apres scan QR)	
+
+
+****************************************************************/
+/**************************************************************
+
+
+		about 	
+
+
+****************************************************************/
+.container {
+  width: 47px; }
+
+.container_logo {
+  padding: 10px;
+  width: 50%; }
+
+.presentation, .mentions_legales {
+  padding: 20px;
+  color: #FFFFFF;
+  line-height: 20px; }
+
+/**************************************************************
+
+
+		artist 	
+
+
+****************************************************************/
+.artist {
+  padding: 10px; }
+  .artist p {
+    color: #FFFFFF;
+    line-height: 20px; }
+
+.listArtwork {
+  padding: 10px; }
+
+/*# sourceMappingURL=stylefront.css.map */

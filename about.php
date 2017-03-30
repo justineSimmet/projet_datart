@@ -1,16 +1,15 @@
 <?php
 
-require_once('admin_datart/classes/user.php');
+require_once('lang.php');
+require_once('admin_datart/includes/include.php');
 require_once('admin_datart/classes/artist.php');
 require_once('admin_datart/classes/artist_textual_content.php');
 require_once('admin_datart/classes/artwork.php');
 require_once('admin_datart/classes/exhibit.php');
 require_once('admin_datart/classes/exhibit_textual_content.php');
 require_once('admin_datart/classes/event.php');
-require_once('admin_datart/includes/include.php');
+
 include('header.php');
-
-
 
 ?>
 
@@ -23,16 +22,93 @@ include('header.php');
 
 <section id="GA_presentation">
 	<div class="presentation">
-		<h4>Présentation de l'association </h4>
-		<p>Suspendisse fringilla tincidunt odio ac volutpat. Aliquam iaculis nibh id mauris ornare sodales. Donec ut arcu at elit consequat sodales id quis metus. Morbi dapibus egestas lorem, sit amet tempus lacus dictum sed. Pellentesque maximus, arcu eget aliquet euismod, erat nisl tempor diam, euismod lacinia velit orci eu enim. Vestibulum vulputate congue aliquam.</p>
+		<h4><?= $lang[$_SESSION['lang_user']]['about.titre.presentation'] ?></h4>
+		<p><?= $lang[$_SESSION['lang_user']]['about.presentation'] ?></p>
 	</div>
 </section>
 
 
 <section id="mention">
 	<div class="mentions_legales">
-		<h4>Mentions légales </h4>
-		<p>Suspendisse fringilla tincidunt odio ac volutpat. Aliquam iaculis nibh id mauris ornare sodales. Donec ut arcu at elit consequat sodales id quis metus. Morbi dapibus egestas lorem, sit amet tempus lacus dictum sed. Pellentesque maximus, arcu eget aliquet euismod, erat nisl tempor diam, euismod lacinia velit orci eu enim. Vestibulum vulputate congue aliquam.</p>
+		<h4><?= $lang[$_SESSION['lang_user']]['about.titre.mentions'] ?></h4>
+		<p><?= $lang[$_SESSION['lang_user']]['about.mentions'] ?></p>
+	</div>
+</section>
+
+
+<section id="mention">
+	<div class="mentions_legales">
+		<h4><?= $lang[$_SESSION['lang_user']]['about.titre.mentions'] ?></h4>
+		<p><?= $lang[$_SESSION['lang_user']]['about.mentions'] ?></p>
+	</div>
+</section>
+
+
+<section id="mention">
+	<div class="mentions_legales">
+		<h4><?= $lang[$_SESSION['lang_user']]['about.titre.mentions'] ?></h4>
+		<p><?= $lang[$_SESSION['lang_user']]['about.mentions'] ?></p>
+	</div>
+</section>
+
+
+<section id="mention">
+	<div class="mentions_legales">
+		<h4><?= $lang[$_SESSION['lang_user']]['about.titre.mentions'] ?></h4>
+		<p><?= $lang[$_SESSION['lang_user']]['about.mentions'] ?></p>
+	</div>
+</section>
+
+
+<section id="mention">
+	<div class="mentions_legales">
+		<h4><?= $lang[$_SESSION['lang_user']]['about.titre.mentions'] ?></h4>
+		<p><?= $lang[$_SESSION['lang_user']]['about.mentions'] ?></p>
+	</div>
+</section>
+
+
+<section id="mention">
+	<div class="mentions_legales">
+		<h4><?= $lang[$_SESSION['lang_user']]['about.titre.mentions'] ?></h4>
+		<p><?= $lang[$_SESSION['lang_user']]['about.mentions'] ?></p>
+	</div>
+</section>
+
+
+<section id="mention">
+	<div class="mentions_legales">
+		<h4><?= $lang[$_SESSION['lang_user']]['about.titre.mentions'] ?></h4>
+		<p><?= $lang[$_SESSION['lang_user']]['about.mentions'] ?></p>
+	</div>
+</section>
+
+
+<section id="mention">
+	<div class="mentions_legales">
+		<h4><?= $lang[$_SESSION['lang_user']]['about.titre.mentions'] ?></h4>
+		<p><?= $lang[$_SESSION['lang_user']]['about.mentions'] ?></p>
+	</div>
+</section>
+
+
+<section id="mention">
+	<div class="mentions_legales">
+		<h4><?= $lang[$_SESSION['lang_user']]['about.titre.mentions'] ?></h4>
+		<p><?= $lang[$_SESSION['lang_user']]['about.mentions'] ?></p>
+	</div>
+</section>
+
+
+<section id="mention">
+	<div class="mentions_legales">
+		<h4><?= $lang[$_SESSION['lang_user']]['about.titre.mentions'] ?></h4>
+		<p><?= $lang[$_SESSION['lang_user']]['about.mentions'] ?></p>
+	</div>
+</section>
+<section id="mention">
+	<div class="mentions_legales">
+	Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a>
 	</div>
 </section>
 

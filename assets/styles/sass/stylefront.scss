@@ -1,14 +1,19 @@
 
+
+
+/**************************************************************
+		Général
+****************************************************************/
+
 body{
 	position: relative;
 	background-color: #151515;
 	font:{
 		family:'kelson', 'arial', 'helvetica', sans-serif;
-		size: 14px;
 	}
 }
 
-img, video{
+img, object, embed, video{
 	max-width: 100%;
 }
 
@@ -16,53 +21,77 @@ h4, h5{
 	color: #D5313A;
 }
 
+section{
+	margin: 0 auto;
+	width: 90%;
+}
+
+
+/**************************************************************
+
+
+		le nav lang
+
+
+****************************************************************/
+
 .container{
 	position: fixed;
 	top: 0;
 	right: 10px;
 	border-radius: 0px 0px 10px 10px; 
-	box-shadow: 5px 0 5px rgba(60,60,60,0.5);
 	padding: 0;
 	float: right;
 
-	button{
-		padding: 10px;
-	}
 	li>a{
 		display: block;
 		padding: 15px;
 	}
-}
-
-.dropdown img{
-	width: 25px;
-	height: auto;
-}
-
-// .navbar_container .row{
-// 	padding: 10px;
-// }
-
-
-.nav > li > a{
-	display: inline-block;
-	padding: 15px 15px 15px 15px;
-	text-align: center;
-}
-
-.navbar-default .navbar-nav > li > a{
-	color: #FFF;
-}
-
-.navbar-default .navbar-nav > li > a:hover{
-	color: #D5313A;
+	.dropdown{ 
+		img{
+		width: 25px;
+		height: auto;
+		}
+		button{
+		box-shadow: 5px 0 5px rgba(60,60,60,0.5);
+		padding: 10px;
+		}
+	}
 }
 
 
-.navbar_container{
-	background-color: #151515;
 
+/**************************************************************
+
+
+		le nav	
+
+
+****************************************************************/
+
+nav{
+	.navbar_container{
+		background-color: #151515;
+		display: inline-block;
+		text-align: center;
+		.nav{
+			margin: 7.5px 0px;
+			padding-left: none;
+		li > a{
+			padding: 15px 15px 15px 15px;
+			color: #FFF;
+			&:hover{
+			color: #D5313A;
+			}
+		}
+		}
+	}
+	.fa{
+	font-size: 1.563em;
+	}
 }
+
+
 
 /**************************************************************
 
@@ -73,11 +102,6 @@ h4, h5{
 ****************************************************************/
 
 
-.container_pic{
-	margin: 0 auto;
-	width: 90%;
-}
-
 
 /**************************************************************
 
@@ -86,6 +110,9 @@ h4, h5{
 
 
 ****************************************************************/
+.container {
+	width: 47px;
+}
 
 .container_logo{
 	padding: 10px;
@@ -94,8 +121,6 @@ h4, h5{
 
 .presentation, .mentions_legales{
 	padding: 20px;
-	margin: 0 auto;
-	width: 90%;
 	color: #FFFFFF;
 	line-height: 20px;
 }
@@ -111,8 +136,7 @@ h4, h5{
 
 .artist{
 	padding: 10px;
-	margin: 0 auto;
-	width: 90%;
+
 	p{
 	color: #FFFFFF;
 	line-height: 20px;
@@ -122,6 +146,5 @@ h4, h5{
 
 .listArtwork{
 	padding: 10px;
-	margin: 0 auto;
-	width: 90%;
+
 }
