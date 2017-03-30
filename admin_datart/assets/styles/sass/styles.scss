@@ -269,11 +269,9 @@ ul{
 	}
 }
 
-
-
 /****************************************************
 **
-** CSS ARTWORK MANAGEMENT
+** CSS ARTWORK 
 **
 *****************************************************/
 #managementArtworkList{
@@ -293,6 +291,7 @@ ul{
 	display: flex;
 	flex-direction: row;
 	justify-content: space-around;
+	flex-wrap: wrap;
 
 	div{
 		min-width: 30%;
@@ -307,9 +306,9 @@ ul{
 			position: relative;
 			border: 2px dashed $datart-gray;
 			border-radius : 15px;
-			/* min-height: 100px; */
+			min-height: 100px;
 			height: 200px;
-			/* min-width: 100px; */
+			min-width: 100px;
 			width: 200px;
 			background-color: transparent;
 			margin-bottom: 10px;
@@ -448,6 +447,172 @@ input.input-file{
 		}
 	}
 }
+
+
+/****************************************************
+**
+** CSS EXHIBIT ZONING
+**
+*****************************************************/
+#zoning-header{
+	padding: 0;
+	height: 120px;
+	z-index:10;
+	@include shadow(0, 0, 10px, rgba(100,100,100,0.25), false);
+	.nav-logo{
+		background-color: $datart-red;
+		height: 120px;
+		line-height: 120px;
+		img{
+			display: inline-block;
+			vertical-align: middle;
+		}
+	}	
+	.nav-btn{
+		padding:25px;
+
+		a{
+			color: #000;
+			font-size: 1.3em;
+			text-decoration: none;
+			vertical-align: middle;
+
+			span{
+				font-size: 1.5em;
+			}
+		}
+	}
+}
+#action-header{
+	width:100%;
+	border-radius:0;
+	background-color: #ede8e8;
+	a:hover{
+		background-color: $datart-gray;
+		color: #fff;
+	}
+}
+#availble-artwork{
+	max-height:700px;
+	overflow: auto;
+
+	h4{
+		margin-top: 20px;
+		margin-bottom: 5px;
+	}
+
+	.list-element{
+		clear: both;
+		border-top:1px solid $datart-gray;
+		border-bottom:1px solid $datart-gray;
+		// height: 65px; 
+		margin-bottom: 5px;
+
+		.text-area{
+			display: inline-block; 
+			width: 70%;
+
+			h3{
+				margin-bottom: 5px;
+			}
+
+			p{
+				margin-bottom: 0;
+			}
+		}
+
+	}
+}
+
+.action-item-area{
+	position: relative;
+	float: right;
+	width:30%;
+	max-height: 82px;
+	max-height: 58px;
+	padding: 10px 0;
+	font-size: 1.8em;
+	text-align: center;
+	background-color: #c8c8c8;
+	color: #fff;
+	border-left: 1px solid #c8c8c8;
+	border-right: 1px solid #c8c8c8;
+
+	&:hover{
+		border-left: 1px solid $datart-gray;
+		border-right: 1px solid $datart-gray;
+		color: $datart-gray;
+	}
+}
+
+.ui-draggable-helper{
+	position:relative;
+	width:20px;
+	height:20px;
+	border-radius:20px;
+	background-color: $datart-red;
+	color: #000;
+
+	span{
+		position:absolute;
+		display: inline-block;
+		font-size: 0.75em;
+		bottom:-20px;
+		left: 50%;
+		-webkit-transform: translateX(-50%);
+		transform: translateX(-50%);
+	}
+}
+
+.ui-draggable-dropped{
+	position:absolute;
+	z-index: 1000;
+	width:20px;
+	height:20px;
+	border-radius:0;
+	border:2px solid $datart-red;
+	background-color: #fff;
+	color: #000;
+
+	span{
+		position:absolute;
+		display: inline-block;
+		font-size: 0.75em;
+		bottom:-22px;
+		left: 50%;
+		-webkit-transform: translateX(-50%);
+		transform: translateX(-50%);
+	}
+}
+
+#drop-area{
+	position: relative;
+	overflow: auto;
+	@include shadow(0, 0, 10px, rgba(100,100,100,0.15), true);
+	padding:25px;
+	background: url("../../images/tiny_grid.png") repeat;
+
+	#dropTarget{
+		position: relative;
+		max-width: 1000px;
+	    min-width: 1000px;
+		margin: auto;
+
+		img{
+			max-width: 1000px;
+	    	min-width: 1000px;
+	    	display: block;
+			margin: auto;
+			user-drag: none; 
+			user-select: none;
+			-moz-user-select: none;
+			-webkit-user-drag: none;
+			-webkit-user-select: none;
+			-ms-user-select: none;
+		}
+	}
+}
+
 
 
 //IMPORT DROPZONE

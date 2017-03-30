@@ -24,7 +24,7 @@ if (isset($_POST['targetId']) && isset($_POST['action']) ) {
 		$targetExhibit = new Exhibit($_POST['targetId']);
 		$hide = $targetExhibit->hideExhibit();
 		if ($hide) {
-			$actionResultat = '<div class="alert alert-success alert-dismissable"s>
+			$actionResultat = '<div class="alert alert-success alert-dismissable">
 				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 				<strong>Vous venez de supprimer l\'exposition '.$targetExhibit->getTitle().' . </strong>
 				</div>';
@@ -40,7 +40,7 @@ if (isset($_POST['targetId']) && isset($_POST['action']) ) {
 		$targetExhibit = new Exhibit($_POST['targetId']);
 		$publish = $targetExhibit->publishExhibit();
 		if ($publish) {
-			$actionResultat = '<div class="alert alert-success alert-dismissable"s>
+			$actionResultat = '<div class="alert alert-success alert-dismissable">
 				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 				<strong>Vous venez de re-publier l\'exposition '.$targetExhibit->getTitle().' . </strong>
 				</div>';

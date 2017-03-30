@@ -60,6 +60,7 @@ function dateFormat($str){
 };
 
 
+// Fonction de formatage des heures
 function timeFormat($str){
 	$dbToNormalize = '#[0-2][0-9]:[0-5][0-9]:[0-5][0-9]#';
 	$normalizeToDb = '#[0-2][0-9]h[0-5][0-9]#';
@@ -82,6 +83,7 @@ function timeFormat($str){
 	}
 };
 
+// Retourne les derniers éléments enregistrée en base de donnée
 function lastCreateElement(){
 	$res = requete_sql("SELECT id,creation_date,visible, 'artist' AS source FROM artist
 		UNION
@@ -109,4 +111,15 @@ function lastCreateElement(){
 		}
 	}
 	return $last;
+}
+
+// Permet d'effectuer une recherche de concordance dans un tableau multidimensionnel
+function searchArray($needle, $haystack, $strict = false) {
+    foreach ($haystack as $item) {
+        if (($strict ? $item === $needle : $item == $needle) || (is_array($item) && searchArray($needle, $item, $strict))) {
+            return true;
+        }
+    }
+
+    return false;
 }

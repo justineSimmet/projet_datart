@@ -158,7 +158,7 @@ if(isset($_POST['characteristicFrench']) && isset($_POST['mainFrench']) ) {
 			};
 		}
 		if($valideInsert == 10){
-			$actionResultat = '<div class="alert alert-success alert-dismissable" id="insert-exhibit-text">>
+			$actionResultat = '<div class="alert alert-success alert-dismissable" id="insert-exhibit-text">
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 			<strong>Les textes d\'accompagnement ont bien été enregistré.</strong>
 			</div>';
@@ -181,7 +181,6 @@ if(isset($_POST['characteristicFrench']) && isset($_POST['mainFrench']) ) {
 
 $locationTitle = isset($targetArtwork)?$targetArtwork->getTitle():'Ajouter une oeuvre';
 include('header.php');
-
 ?>
 <!--
 ************************************************************************************************
@@ -483,13 +482,32 @@ include('header.php');
 <div class="col-lg-3 col-md-12 col-sm-3 col-xs-12">
 	<div class="row">
 		<div class="col-xs-12">
-			<a href="#" class="btn btn-default btn-custom btn-md btn-block" role="button"><span class="fa fa-desktop"></span> Voir la page visiteur</a>
+		<?php
+			if (isset($targetArtwork)){
+				if ($targetArtwork->getVisible() == TRUE) {
+		?>
+			<div class="hidden-md hidden-xs btn-area-col">
+				<a href="#" class="btn btn-default btn-custom" role="button"><span class="fa fa-desktop"></span> Voir la page visiteur</a>
+			</div>
+		<?php
+			}
+			else{
+		?>
+			<div class="hidden-lg hidden-sm btn-area-row">
+				<button class="btn btn-default btn-custom publish-artwork" role="button" data-id="<?= $targetArtwork->getId(); ?>" ><span class="fa fa-eye"></span> Publier l'oeuvre</button>
+				<button class="btn btn-default btn-custom delete-arwork" role="button" data-id="<?= $targetArtwork->getId(); ?>" ><span class="fa fa-trash"></span> Supprimer définitivement l'oeuvre</button>
+			</div>	
+		<?php
+			}
+		}
+		?>
 		</div>
 		<div class="col-xs-12">
 			<section id="artwork-display">
-				<h2>Exposée dans :</h2>
+				<h2>Exposée dans:</h2>
 				<ul>
 					<?php
+					if(isset($targetArtwork)){
 						$exhibit = $targetArtwork->getExhibit();
 						foreach ($exhibit as $ex) {
 							?>
@@ -500,17 +518,17 @@ include('header.php');
 									if ($ex->getEndDate() > date('Y-m-d')) {
 										if (empty($targetArtwork->getQrCode())) {
 											?>
-											<div class="qrcode-area">
+											<div class="qrcode-area text-center">
 												<div id="qrcode"><img src="" /></div>
-												<button type="button" class="btn btn-custom btn-block generateCode" data-artwork="<?= $targetArtwork->getId() ?>" data-picture="<?= !empty($targetArtwork->getPictureOne())?$targetArtwork->getPictureOne()->getTarget():'' ?>" data-exhibit="<?= $ex->getId() ?>"><span class="fa fa-qrcode"></span>Générer QR Code</button>
+												<button type="button" class="btn btn-custom generateCode" data-artwork="<?= $targetArtwork->getId() ?>" data-picture="<?= !empty($targetArtwork->getPictureOne())?$targetArtwork->getPictureOne()->getTarget():'' ?>" data-exhibit="<?= $ex->getId() ?>"><span class="fa fa-qrcode"></span>Générer QR Code</button>
 											</div>
 											<?php
 										}
 										else{
 											?>
-											<div class="qrcode-area">
+											<div class="qrcode-area text-center">
 												<div id="qrcode"><img src="<?= URL_IMAGES ?>artwork/<?= $targetArtwork->getId() ?>/<?= $targetArtwork->getQrCode() ?>" /></div>
-												<a type="button" class="btn btn-custom btn-block saveCode" href="<?= URL_IMAGES ?>artwork/<?= $targetArtwork->getId() ?>/<?= $targetArtwork->getQrCode() ?>" download><span class="fa fa-qrcode"></span>Télécharger le QR Code</a>
+												<a type="button" class="btn btn-custom saveCode" href="<?= URL_IMAGES ?>artwork/<?= $targetArtwork->getId() ?>/<?= $targetArtwork->getQrCode() ?>" download><span class="fa fa-qrcode"></span>Télécharger le QR Code</a>
 											</div>
 											<?php
 										}
@@ -519,6 +537,7 @@ include('header.php');
 							</li>
 							<?php
 						}
+					}
 					?>
 				</ul>
 			</section>

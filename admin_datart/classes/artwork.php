@@ -203,43 +203,63 @@ class Artwork{
 	}
 
 	function getFrenchCharacteristic(){
-		return $this->textual_content[0];
+		if (!empty($this->getTextualContent())){
+			return $this->textual_content[0];
+		}
 	}
 
 	function getFrenchMain(){
-		return $this->textual_content[1];
+		if (!empty($this->getTextualContent())){
+			return $this->textual_content[1];
+		}
 	}
 
 	function getEnglishCharacteristic(){
-		return $this->textual_content[2];
+		if (!empty($this->getTextualContent())){
+			return $this->textual_content[2];
+		}
 	}
 
 	function getEnglishMain(){
-		return $this->textual_content[3];
+		if (!empty($this->getTextualContent())){
+			return $this->textual_content[3];
+		}
 	}
 
 	function getGermanCharacteristic(){
-		return $this->textual_content[4];
+		if (!empty($this->getTextualContent())){
+			return $this->textual_content[4];
+		}
 	}
 
 	function getGermanMain(){
-		return $this->textual_content[5];
+		if (!empty($this->getTextualContent())){
+			return $this->textual_content[5];
+		}
 	}
 
 	function getRussianCharacteristic(){
-		return $this->textual_content[6];
+		if (!empty($this->getTextualContent())){
+			return $this->textual_content[6];
+		}
 	}
 
 	function getRussianMain(){
-		return $this->textual_content[7];
+		if (!empty($this->getTextualContent())){
+			return $this->textual_content[7];
+		}
 	}
 
 	function getChineseCharacteristic(){
-		return $this->textual_content[8];
+		if (!empty($this->getTextualContent())){
+			return $this->textual_content[8];
+		}
 	}
 
 	function getChineseMain(){
-		return $this->textual_content[9];
+		if (!empty($this->getTextualContent())){
+			return $this->textual_content[9];
+		}
 	}
 
 	function getVisual(){
@@ -300,7 +320,7 @@ class Artwork{
 					'".addslashes($this->artist_id)."',
 					'".addslashes($this->artwork_title)."',
 					'".addslashes($this->dimensions)."',
-					'".addslashes($this->disponibility)."',
+					".$this->disponibility.",
 					NULL,
 					'".addslashes($this->artist_request)."',
 					'".addslashes($this->qrcode)."',
@@ -331,7 +351,7 @@ class Artwork{
 				UPDATE artwork SET
 				artwork_title = '".addslashes($this->artwork_title)."',
 				dimensions =  '".addslashes($this->dimensions)."',
-				disponibility = '".addslashes($this->disponibility)."',
+				disponibility = ".$this->disponibility.",
 				artist_request = '".addslashes($this->artist_request)."',
 				qrcode = '".addslashes($this->qrcode)."'
 				WHERE id = '".$this->id."'
@@ -463,14 +483,14 @@ class Artwork{
 				<div class="form-group form-group-lg">
 					<label for="artistRequest" class="control-label col-sm-3">Requêtes de l'artiste :</label>
 					<div class="col-sm-9">
-					<textarea class="form-control" name="artistRequest"> <?= isset($this->artist_request)?$this->getArtistRequest():''; ?> </textarea>
+					<textarea class="form-control" name="artistRequest"><?= isset($this->artist_request)?$this->getArtistRequest():''; ?></textarea>
 					</div>
 				</div>
 				<div class="form-group form-group-lg">
 					<label for="disponibility" class="control-label col-sm-3 ">Oeuvre disponible : </label>
 					<div class="col-sm-9">
-					<label class="radio-inline"><input type="radio" value="<?= TRUE ?>"  type="radio" name="disponibility" <?= $this->getDisponibility()==TRUE?'checked':''; ?>/>Oui</label>
-					<label class="radio-inline"><input type="radio" value="<?= FALSE ?>"  type="radio" name="disponibility"  <?= $this->getDisponibility()==FALSE?'checked':''; ?>  <?= empty($this->getId())?'checked':''; ?> />Non</label>
+					<label class="radio-inline"><input type="radio" value="<?= 'TRUE' ?>"  type="radio" name="disponibility" <?= $this->getDisponibility()==TRUE?'checked':''; ?>/>Oui</label>
+					<label class="radio-inline"><input type="radio" value="<?= 'FALSE' ?>"  type="radio" name="disponibility"  <?= $this->getDisponibility()==FALSE?'checked':''; ?>  <?= empty($this->getId())?'checked':''; ?> />Non</label>
 				</div>
 			</fieldset>
 				<input type="hidden" name="id" value="<?= !empty($this->id)?$this->getId():''; ?>" >
@@ -680,4 +700,53 @@ class Artwork{
 		return $list;
 	}
 
+	function checkTrad($language){
+
+		if (!empty($this->getTextualContent())) {
+			switch ($language) {
+				case 'english':
+					if (!empty($this->getEnglishCharacteristic()->getContent()) && !empty($this->getEnglishMain()->getContent())) {
+					return TRUE;
+					}
+					else{
+						return FALSE;
+					}
+					break;
+				
+				case 'german':
+					if (!empty($this->getGermanCharacteristic()->getContent()) && !empty($this->getGermanMain()->getContent())) {
+					return TRUE;
+					}
+					else{
+						return FALSE;
+					}
+					break;
+				
+				case 'russian':
+					if (!empty($this->getRussianCharacteristic()->getContent()) && !empty($this->getRussianMain()->getContent())) {
+					return TRUE;
+					}
+					else{
+						return FALSE;
+					}
+					break;
+				
+				case 'chinese':
+					if (!empty($this->getChineseCharacteristic()->getContent()) && !empty($this->getChineseMain()->getContent())) {
+					return TRUE;
+					}
+					else{
+						return FALSE;
+					}
+					break;
+				
+				default:
+					return FALSE;
+					break;
+			}
+		}
+		else{
+			return FALSE;
+		}		
+	}
 }

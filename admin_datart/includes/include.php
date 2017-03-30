@@ -9,10 +9,10 @@ if (isset($_SESSION['id']) && strpos($_SERVER['PHP_SELF'], 'login.php')) {
     header('Location:index.php');
 }
 elseif (empty($_SESSION['id']) && !strpos($_SERVER['PHP_SELF'], 'admin_datart/') ) {
-    return TRUE;
+	return TRUE;
 }
 elseif (empty($_SESSION['id']) && !strpos($_SERVER['PHP_SELF'], 'login.php') ) {
-    header('Location:login.php');
+	header('Location:login.php');
 }
 
 if (isset($_SESSION['id']) && strpos($_SERVER['PHP_SELF'], 'admin_datart/') ) {

@@ -12,6 +12,7 @@ class Exhibit{
 	private $begin_date;
 	private $end_date;
 	private $public_opening;
+	private $art_zoning;
 	private $visible;
 	private $creation_date;
 	private $textual_content;
@@ -30,6 +31,7 @@ class Exhibit{
 			$this->begin_date = $exhibit['begin_date'];	
 			$this->end_date = $exhibit['end_date'];	
 			$this->public_opening = $exhibit['public_opening'];	
+			$this->art_zoning = $exhibit['art_zoning'];	
 			$this->visible = $exhibit['visible'];	
 			$this->creation_date = $exhibit['creation_date'];
 			$this->textual_content = array();
@@ -160,6 +162,15 @@ class Exhibit{
 		return $this->visible;
 	}
 
+	function setZoning($art_zoning){
+		$this->art_zoning = $art_zoning;
+		return TRUE;
+	}
+
+	function getZoning(){
+		return $this->art_zoning;
+	}
+
 	function setCreationDate($creationDate){
 		$this->creation_date = $creationDate;
 		return TRUE;
@@ -174,43 +185,63 @@ class Exhibit{
 	}
 
 	function getFrenchCategory(){
-		return $this->textual_content[0];
+		if(!empty($this->getTextualContent())){
+			return $this->textual_content[0];
+		}
 	}
 
 	function getFrenchSummary(){
-		return $this->textual_content[1];
+		if(!empty($this->getTextualContent())){
+			return $this->textual_content[1];
+		}
 	}
 
 	function getEnglishCategory(){
-		return $this->textual_content[2];
+		if(!empty($this->getTextualContent())){
+			return $this->textual_content[2];
+		}
 	}
 
 	function getEnglishSummary(){
-		return $this->textual_content[3];
+		if(!empty($this->getTextualContent())){
+			return $this->textual_content[3];
+		}
 	}
 
 	function getGermanCategory(){
-		return $this->textual_content[4];
+		if(!empty($this->getTextualContent())){
+			return $this->textual_content[4];
+		}
 	}
 
 	function getGermanSummary(){
-		return $this->textual_content[5];
+		if(!empty($this->getTextualContent())){
+			return $this->textual_content[5];
+		}
 	}
 
 	function getRussianCategory(){
-		return $this->textual_content[6];
+		if(!empty($this->getTextualContent())){
+			return $this->textual_content[6];
+		}
 	}
 
 	function getRussianSummary(){
-		return $this->textual_content[7];
+		if(!empty($this->getTextualContent())){
+			return $this->textual_content[7];
+		}
 	}
 
 	function getChineseCategory(){
-		return $this->textual_content[8];
+		if(!empty($this->getTextualContent())){
+			return $this->textual_content[8];
+		}
 	}
 
 	function getChineseSummary(){
-		return $this->textual_content[9];
+		if(!empty($this->getTextualContent())){
+			return $this->textual_content[9];
+		}
 	}
 
 	//Récupère l'ID de l'événement d'ouverture
@@ -325,6 +356,33 @@ class Exhibit{
 			}
 		}
 	}
+
+/******************************************************
+**
+** Traitement des DATA zoning en BD
+**
+******************************************************/
+	function zoningManagement($action=''){
+		if ($action == 'insert') {
+			$insert = requete_sql("UPDATE exhibit SET art_zoning = '".$this->art_zoning."' WHERE id = '".$this->id."'");
+			if ($insert) {
+				return TRUE;
+			}
+			else{
+				return FALSE;
+			}
+		}
+		elseif ($action == 'delete') {
+			$delete = requete_sql("UPDATE exhibit SET art_zoning = NULL WHERE id = '".$this->id."'");
+			if ($delete) {
+				return TRUE;
+			}
+			else{
+				return FALSE;
+			}
+		}
+	}
+
 
 /******************************************************
 **
@@ -796,6 +854,7 @@ class Exhibit{
 			LEFT JOIN artist ON artwork.artist_id = artist.id 
 			WHERE artwork_displayed.exhibit_id = '".$this->id."' 
 			AND artist.visible = TRUE
+			AND artwork.visible = TRUE
 			GROUP BY artist_id
 			ORDER BY artist.name, artist.alias ASC
 			");
