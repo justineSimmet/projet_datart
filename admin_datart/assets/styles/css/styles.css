@@ -703,7 +703,7 @@ input.input-file {
   z-index: 1000;
   width: 20px;
   height: 20px;
-  border-radius: 20px;
+  border-radius: 0;
   border: 2px solid #d5313a;
   background-color: #fff;
   color: #000; }

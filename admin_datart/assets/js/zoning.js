@@ -7,30 +7,11 @@ function cleanArray(array, target){
 		}
 }
 
-function getPosition(argument) {
-	var yPos = target.position().top - refY;
-	var xPos = target.position().left - refY;
-}
 
 
-$(function(){
-
-	/*var cloneArea = $("#dropTarget").find("img");
-	var cloneStyle = {  'position': 'absolute',
-						'width': cloneArea.css('width'),
-						'height': cloneArea.css('height'),
-						'top': cloneArea.position().top,
-						'left': cloneArea.position().left
-					};
-	$('#dropTarget').css(cloneStyle);*/
+$(document).ready(function() {
 
 	var arrayData = [];
-
-	// var refArea = $("#drop-area").find("img");
-	// var diffY = $(refArea).offset().top - $('#drop-area').offset().top;
-	// var diffX = $(refArea).offset().left - $('#drop-area').offset().left;
-
-	// var diffX = ;
 
 	$('#drop-area').find('.dropItem').each(function(){
 		var ref = $(this).attr('id');
@@ -47,16 +28,11 @@ $(function(){
 		var exhibit = $(this).attr('data-exhibit');
 		var dataJson = JSON.stringify(arrayData);
 
-		var element = $("#drop-area");
-		var getImage = '';
-		html2canvas(element).then(function(canvas) {
-    		var url = canvas.toDataURL("image/png");
-			window.open(url, '_blank');
-		});
-		
-		console.log(getImage);
+		// var element = $('#drop-area');
+		// var myImage = '';
 
-		$.post('save_zoning.php',{action:'save', data: dataJson, target: exhibit, image: getImage} , function(response){
+
+		$.post('save_zoning.php',{action:'save', data: dataJson, target: exhibit} , function(response){
 				var obj = JSON.parse(response);
 				if (obj.response == 'success') {
 					var alertSuccess = '<div class="alert alert-success alert-dismissable text-center">'
@@ -64,6 +40,12 @@ $(function(){
 						+'<strong>Les données ont bien été enregistrées.</strong>'
 						+'</div>';
 					$('#alert-area').html(alertSuccess);
+					html2canvas($("#drop-area"), {
+    					onrendered: function( canvas ) {
+    						var image = canvas.toDataURL('image/jpeg', 1.0);
+           					$.post('save_zoning.php', {action : 'imageCreate', data : image, target: exhibit});
+        				}
+					});
 				}
 				else{
 					var alertDanger = '<div class="alert alert-danger alert-dismissable text-center">'
@@ -103,6 +85,10 @@ $(function(){
 	$('#quit').on('click', function(){
 		$('#quitWindow').modal('show');
 	});
+
+	/*if($('#image-base64').length){
+		console.log('#image-base64');
+	}*/
 
 /**********************************************
 ** DRAG AND DROP AVEC JQUERY UI

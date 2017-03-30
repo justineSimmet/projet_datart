@@ -37,6 +37,15 @@ if (isset($_POST)) {
             echo json_encode($res); 
 		}
 	}
+	elseif (isset($_POST['action']) && $_POST['action'] == 'imageCreate') {
+		$name = 'exhibit'.$_POST['target'];
+		$data = $_POST['data'];
+		$path = __DIR__."\assets\images\\exhibit\\";
+    	if(!file_exists($path)){
+        	$newFolder = mkdir($path, 0755, TRUE);
+    	}
+    	file_put_contents($path.$name.'.jpg', base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $data)));
+	}
 }
 
 

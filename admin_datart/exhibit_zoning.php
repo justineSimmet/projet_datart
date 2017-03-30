@@ -244,7 +244,7 @@ if (isset($_GET['id'])) {
 	<script src="<?= URL_ASSETS ?>js/jquery-3.1.1.js"></script>
 	<script src="<?= URL_ASSETS ?>js/jquery-ui.min.js"></script>
 	<script src="<?= URL_ASSETS ?>js/bootstrap.min.js"></script>
-	<script src="<?= URL_ASSETS ?>js/html2canvas.min.js"></script>
+	<script src="<?= URL_ASSETS ?>js/html2canvas.js"></script>
 	<script src="<?= URL_ASSETS ?>js/zoning.js"></script>
 </footer>
 </body>
