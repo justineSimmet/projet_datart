@@ -21,7 +21,13 @@ $summaryExhibit = $targetExhibit->getFrenchSummary()->getContent();
 $summary = strip_tags(html_entity_decode($summaryExhibit));
 
 $list = $targetExhibit->listAvailableArtwork();
-$imageZoning = 'http://localhost/projet_datart/admin_datart/assets/images/exhibit/exhibit'.$_GET['id'].'.jpg';
+if (!empty($targetExhibit->getZoning())) {
+	$imageZoning = 'http://localhost/projet_datart/admin_datart/assets/images/exhibit/exhibit'.$_GET['id'].'.jpg';
+
+}
+else{
+	$imageZoning = '';
+}
 
 
 
@@ -132,10 +138,12 @@ $header = array('Numéro de référence', 'Infos générales', 'Requêtes de l\'
 // $pdf->Text(8,38,$row['reference_number']);
 $pdf->TabHead($header, $list);
 
+if(!empty($imageZoning)){
 //Page d'affichage du plan de positionnement
-$pdf->AddPage("L");
-$pdf->Ln(0);
-$pdf->Image($imageZoning,1,40);
+	$pdf->AddPage("L");
+	$pdf->Ln(0);
+	$pdf->Image($imageZoning,0,40,297);
+}
 
 //fin de page+numerotation
 $pdf->AliasNbPages();

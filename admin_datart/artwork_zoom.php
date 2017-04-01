@@ -181,6 +181,7 @@ if(isset($_POST['characteristicFrench']) && isset($_POST['mainFrench']) ) {
 
 $locationTitle = isset($targetArtwork)?$targetArtwork->getTitle():'Ajouter une oeuvre';
 include('header.php');
+
 ?>
 <!--
 ************************************************************************************************
@@ -236,7 +237,7 @@ include('header.php');
 		if ($targetArtwork->getVisible() == TRUE) {
 ?>
 	<div class="hidden-lg hidden-sm btn-area-row">
-		<a href="#" class="btn btn-default btn-custom btn-lg" role="button"><span class="fa fa-desktop"></span> Voir la page visiteur</a>
+		<a href="<?= URL_ROOT ?>artwork.php?id=<?= $targetArtwork->getId();?>" class="btn btn-default btn-custom btn-lg" role="button"><span class="fa fa-desktop"></span> Voir la page visiteur</a>
 	</div>
 <?php
 	}
@@ -487,13 +488,13 @@ include('header.php');
 				if ($targetArtwork->getVisible() == TRUE) {
 		?>
 			<div class="hidden-md hidden-xs btn-area-col">
-				<a href="#" class="btn btn-default btn-custom" role="button"><span class="fa fa-desktop"></span> Voir la page visiteur</a>
+				<a href="<?= URL_ROOT ?>artwork.php?id=<?= $targetArtwork->getId();?>" class="btn btn-default btn-custom" role="button"><span class="fa fa-desktop"></span> Voir la page visiteur</a>
 			</div>
 		<?php
 			}
 			else{
 		?>
-			<div class="hidden-lg hidden-sm btn-area-row">
+			<div class="hidden-md hidden-xs btn-area-col">
 				<button class="btn btn-default btn-custom publish-artwork" role="button" data-id="<?= $targetArtwork->getId(); ?>" ><span class="fa fa-eye"></span> Publier l'oeuvre</button>
 				<button class="btn btn-default btn-custom delete-arwork" role="button" data-id="<?= $targetArtwork->getId(); ?>" ><span class="fa fa-trash"></span> Supprimer définitivement l'oeuvre</button>
 			</div>	

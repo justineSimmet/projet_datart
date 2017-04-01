@@ -291,7 +291,7 @@ soit à faire un update des données de l'id reçue
 
 
   static function listArtist(){
-    $listArtist = requete_sql("SELECT id, CONCAT_WS(' ',alias,surname) AS identity FROM artist WHERE visible = TRUE ORDER BY identity ASC");
+    $listArtist = requete_sql("SELECT id, CONCAT(alias,surname) AS identity FROM artist WHERE visible = TRUE ORDER BY identity ASC");
     $listArtist = $listArtist->fetchAll(PDO::FETCH_ASSOC);
     $tabList = array();
     foreach ($listArtist as $artist){
@@ -366,13 +366,13 @@ soit à faire un update des données de l'id reçue
 						<div class="form-group form-group-lg">
 							<label for="biographyFrench" class="control-label col-lg-2 col-md-2 col-sm-3">Biographie :</label>
 							<div class="col-lg-10 col-md-10 col-sm-12">
-								<textarea name="biographyFrench" class="form-control textarea-avaible"><?= !empty($this->getTextualContent())?$this->getFrenchBiography()->getContent():'';?></textarea>
+								<textarea name="biographyFrench" <?= empty($this->getId()) || $this->getVisible() == FALSE?'class="form-control" disabled':'class="form-control textarea-avaible"'; ?>><?= !empty($this->getTextualContent())?$this->getFrenchBiography()->getContent():'';?></textarea>
 							</div>
 						</div>
 						<div class="form-group form-group-lg">
 							<label for="noteFrench" class="control-label col-lg-2 col-md-2 col-sm-3">Mot de l'artiste :</label>
 							<div class="col-lg-10 col-md-10 col-sm-12">
-								<textarea name="noteFrench" class="form-control textarea-avaible"><?= !empty($this->getTextualContent())?$this->getFrenchNote()->getContent():'';?></textarea>
+								<textarea name="noteFrench" <?= empty($this->getId()) || $this->getVisible() == FALSE?'class="form-control" disabled':'class="form-control textarea-avaible"'; ?>><?= !empty($this->getTextualContent())?$this->getFrenchNote()->getContent():'';?></textarea>
 							</div>
 						</div>
 					</fieldset>
@@ -382,13 +382,13 @@ soit à faire un update des données de l'id reçue
 						<div class="form-group form-group-lg">
 							<label for="biographyEnglish" class="control-label col-lg-2 col-md-2 col-sm-3">Biographie :</label>
 							<div class="col-lg-10 col-md-10 col-sm-12">
-								<textarea name="biographyEnglish" class="form-control textarea-avaible"><?= !empty($this->getTextualContent())?$this->getEnglishBiography()->getContent():'';?></textarea>
+								<textarea name="biographyEnglish" <?= empty($this->getId()) || $this->getVisible() == FALSE?'class="form-control" disabled':'class="form-control textarea-avaible"'; ?>><?= !empty($this->getTextualContent())?$this->getEnglishBiography()->getContent():'';?></textarea>
 							</div>
 						</div>
 						<div class="form-group form-group-lg">
 							<label for="noteEnglish" class="control-label col-lg-2 col-md-2 col-sm-3">Mot de l'artiste :</label>
 							<div class="col-lg-10 col-md-10 col-sm-12">
-								<textarea name="noteEnglish" class="form-control textarea-avaible"><?= !empty($this->getTextualContent())?$this->getEnglishNote()->getContent():'';?></textarea>
+								<textarea name="noteEnglish" <?= empty($this->getId()) || $this->getVisible() == FALSE?'class="form-control" disabled':'class="form-control textarea-avaible"'; ?>><?= !empty($this->getTextualContent())?$this->getEnglishNote()->getContent():'';?></textarea>
 							</div>
 						</div>
 					</fieldset>
@@ -398,13 +398,13 @@ soit à faire un update des données de l'id reçue
 						<div class="form-group form-group-lg">
 							<label for="biographyGerman" class="control-label col-lg-2 col-md-2 col-sm-3">Biographie :</label>
 							<div class="col-lg-10 col-md-10 col-sm-12">
-								<textarea name="biographyGerman" class="form-control textarea-avaible"><?= !empty($this->getTextualContent())?$this->getGermanBiography()->getContent():'';?></textarea>
+								<textarea name="biographyGerman" <?= empty($this->getId()) || $this->getVisible() == FALSE?'class="form-control" disabled':'class="form-control textarea-avaible"'; ?>><?= !empty($this->getTextualContent())?$this->getGermanBiography()->getContent():'';?></textarea>
 							</div>
 						</div>
 						<div class="form-group form-group-lg">
 							<label for="noteGerman" class="control-label col-lg-2 col-md-2 col-sm-3">Mot de l'artiste :</label>
 							<div class="col-lg-10 col-md-10 col-sm-12">
-								<textarea name="noteGerman" class="form-control textarea-avaible"><?= !empty($this->getTextualContent())?$this->getGermanNote()->getContent():'';?></textarea>
+								<textarea name="noteGerman" <?= empty($this->getId()) || $this->getVisible() == FALSE?'class="form-control" disabled':'class="form-control textarea-avaible"'; ?>><?= !empty($this->getTextualContent())?$this->getGermanNote()->getContent():'';?></textarea>
 							</div>
 						</div>
 					</fieldset>
@@ -414,13 +414,13 @@ soit à faire un update des données de l'id reçue
 						<div class="form-group form-group-lg">
 							<label for="biographyRussian" class="control-label col-lg-2 col-md-2 col-sm-3">Biographie :</label>
 							<div class="col-lg-10 col-md-10 col-sm-12">
-								<textarea name="biographyRussian" class="form-control textarea-avaible"><?= !empty($this->getTextualContent())?$this->getRussianBiography()->getContent():'';?></textarea>
+								<textarea name="biographyRussian" <?= empty($this->getId()) || $this->getVisible() == FALSE?'class="form-control" disabled':'class="form-control textarea-avaible"'; ?>><?= !empty($this->getTextualContent())?$this->getRussianBiography()->getContent():'';?></textarea>
 							</div>
 						</div>
 						<div class="form-group form-group-lg">
 							<label for="noteRussian" class="control-label col-lg-2 col-md-2 col-sm-3">Mot de l'artiste :</label>
 							<div class="col-lg-10 col-md-10 col-sm-12">
-								<textarea name="noteRussian" class="form-control textarea-avaible"><?= !empty($this->getTextualContent())?$this->getRussianNote()->getContent():'';?></textarea>
+								<textarea name="noteRussian" <?= empty($this->getId()) || $this->getVisible() == FALSE?'class="form-control" disabled':'class="form-control textarea-avaible"'; ?>><?= !empty($this->getTextualContent())?$this->getRussianNote()->getContent():'';?></textarea>
 							</div>
 						</div>
 					</fieldset>
@@ -430,19 +430,19 @@ soit à faire un update des données de l'id reçue
 						<div class="form-group form-group-lg">
 							<label for="biographyChinese" class="control-label col-lg-2 col-md-2 col-sm-3">Biographie :</label>
 							<div class="col-lg-10 col-md-10 col-sm-12">
-								<textarea name="biographyChinese" class="form-control textarea-avaible"><?= !empty($this->getTextualContent())?$this->getChineseBiography()->getContent():'';?></textarea>
+								<textarea name="biographyChinese" <?= empty($this->getId()) || $this->getVisible() == FALSE?'class="form-control" disabled':'class="form-control textarea-avaible"'; ?>><?= !empty($this->getTextualContent())?$this->getChineseBiography()->getContent():'';?></textarea>
 							</div>
 						</div>
 						<div class="form-group form-group-lg">
 							<label for="noteChinese" class="control-label col-lg-2 col-md-2 col-sm-3">Mot de l'artiste :</label>
 							<div class="col-lg-10 col-md-10 col-sm-12">
-								<textarea name="noteChinese" class="form-control textarea-avaible"><?= !empty($this->getTextualContent())?$this->getChineseNote()->getContent():'';?></textarea>
+								<textarea name="noteChinese" <?= empty($this->getId()) || $this->getVisible() == FALSE?'class="form-control" disabled':'class="form-control textarea-avaible"'; ?>><?= !empty($this->getTextualContent())?$this->getChineseNote()->getContent():'';?></textarea>
 							</div>
 						</div>
 					</fieldset>
 				</div>
 				<input type="hidden" name="artistId" value="<?= isset($this)?$this->getId():'' ?>">
-				<input type="submit" value="<?= $action; ?>" class="btn btn-default pull-right" <?= empty($this->getId()) &&  $this->getVisible() == FALSE?'disabled':''; ?> />
+				<input type="submit" value="<?= $action; ?>" class="btn btn-default pull-right" <?= empty($this->getId()) || $this->getVisible() == FALSE?'disabled':''; ?> />
 			</div>
 		</form>	
 
@@ -456,9 +456,9 @@ soit à faire un update des données de l'id reçue
 			<fieldset <?= !empty($this->getId()) && $this->getVisible() == FALSE?'disabled':''; ?> >
 				<label for="file">Fichier (JPG | max. 2 Mo) :</label><br>
 				<input type="hidden" name="taille Maxi" value="2097152" />
-				<input type="file" name="fichier" <?= empty($this->getId()) || $this->getVisible() == FALSE?'disabled':''; ?> />
+				<input type="file" name="fichier" class="form-control"/>
 			<input type="hidden" name="action" value="addArtistPicture">
-			<input type="hidden" name="artistId" value="<?= isset($this)?$this->getId():'' ?>">
+			<input type="hidden" name="artistId" value="<?= isset($this)?$this->getId():'' ?>"><br>
 			<input type="submit" value="<?= $action; ?>" class="btn btn-default pull-right" <?= empty($this->getId()) && $this->getVisible() == FALSE?'disabled':''; ?> />
 			</fieldset>
 		</form>	
@@ -722,7 +722,7 @@ soit à faire un update des données de l'id reçue
 		if (!empty($this->getTextualContent())) {
 			switch ($language) {
 				case 'english':
-					if (!empty($this->getEnglishBiography()->getContent()) && !empty($this->getEnglishNote()->getContent())) {
+					if (!empty($this->getEnglishBiography()->getContent())) {
 					return TRUE;
 					}
 					else{
@@ -731,7 +731,7 @@ soit à faire un update des données de l'id reçue
 					break;
 				
 				case 'german':
-					if (!empty($this->getGermanBiography()->getContent()) && !empty($this->getGermanNote()->getContent())) {
+					if (!empty($this->getGermanBiography()->getContent())) {
 					return TRUE;
 					}
 					else{
@@ -740,7 +740,7 @@ soit à faire un update des données de l'id reçue
 					break;
 				
 				case 'russian':
-					if (!empty($this->getRussianBiography()->getContent()) && !empty($this->getRussianNote()->getContent())) {
+					if (!empty($this->getRussianBiography()->getContent())) {
 					return TRUE;
 					}
 					else{
@@ -749,7 +749,7 @@ soit à faire un update des données de l'id reçue
 					break;
 				
 				case 'chinese':
-					if (!empty($this->getChineseBiography()->getContent()) && !empty($this->getChineseNote()->getContent())) {
+					if (!empty($this->getChineseBiography()->getContent())) {
 					return TRUE;
 					}
 					else{

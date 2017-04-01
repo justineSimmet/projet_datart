@@ -329,8 +329,8 @@ class Artwork{
 				)");
 			if ($create) {
 				$artist = new Artist($this->artist_id);
-				$artist = substr(str_replace(' ', '', $artist->getIdentity()), 0, 3);
-				$title = substr(str_replace(' ', '', $this->artwork_title), 0, 4);
+				$artist = substr(preg_replace('/[^a-z]/i', '', $artist->getIdentity()), 0, 3);
+				$title = substr(preg_replace('/[^a-z]/i', '', $this->artwork_title), 0, 4);
 				$ref = $artist.''.$create.''.$title;
 				$this->setReferenceNumber(strtolower($ref));
 				$reference = requete_sql("UPDATE artwork SET reference_number = '".$this->reference_number."' WHERE id = '".$create."' ");
@@ -442,7 +442,7 @@ class Artwork{
 ******************************************************/
 	function formInfos($target, $action){
 		?>
-		<form method="POST" action="<?= $target ?>" class="form-horizontal clearfix">
+		<form method="POST" action="<?= $target ?>" class="form-horizontal clearfix" id="artworkMainForm">
 			<fieldset <?= !empty($this->getId()) && $this->getVisible() == FALSE?'disabled':''; ?> >
 				<div class="form-group form-group-lg">
 					<label for="artist" class="control-label col-sm-3">Artiste :</label>
@@ -486,15 +486,33 @@ class Artwork{
 					<textarea class="form-control" name="artistRequest"><?= isset($this->artist_request)?$this->getArtistRequest():''; ?></textarea>
 					</div>
 				</div>
+
 				<div class="form-group form-group-lg">
-					<label for="disponibility" class="control-label col-sm-3 ">Oeuvre disponible : </label>
-					<div class="col-sm-9">
-					<label class="radio-inline"><input type="radio" value="<?= 'TRUE' ?>"  type="radio" name="disponibility" <?= $this->getDisponibility()==TRUE?'checked':''; ?>/>Oui</label>
-					<label class="radio-inline"><input type="radio" value="<?= 'FALSE' ?>"  type="radio" name="disponibility"  <?= $this->getDisponibility()==FALSE?'checked':''; ?>  <?= empty($this->getId())?'checked':''; ?> />Non</label>
-				</div>
+					<div class="col-sm-9 col-sm-offset-3">
+					<div class="switch">
+	      				<input type="radio" class="switch-input" name="disponibility" value="<?= '1' ?>" id="disponible" <?= $this->getDisponibility()=='1'?'checked':''; ?> />
+	      				<label for="disponible" class="switch-label switch-label-off">Disponible</label>
+	      				<input type="radio" class="switch-input" name="disponibility" value="<?= '0' ?>" id="indisponible" <?= $this->getDisponibility()== '0'?'checked':''; ?> <?= empty($this->getId())?'checked':''; ?> />
+	      				<label for="indisponible" class="switch-label switch-label-on">Indisponible</label>
+	      				<span class="switch-selection"></span>
+	      			</div>
+      				</div>
+    			</div>
+
 			</fieldset>
 				<input type="hidden" name="id" value="<?= !empty($this->id)?$this->getId():''; ?>" >
-				<input type="submit" value="<?= $action; ?>" class="btn btn-default pull-right">
+				<?php
+					if (empty($this->id)) {
+						?>
+						<input type="submit" value="<?= $action; ?>" class="btn btn-default pull-right">
+						<?php
+					}
+					else{
+						?>
+							<button type="button" class="btn btn-default pull-right artworkEdit"><?= $action; ?></button>
+						<?php
+					}
+				?>
 		</form>
 		<?php
 	}
@@ -618,13 +636,13 @@ class Artwork{
 		elseif ($number == 'two') {
 			$picture = $this->getPictureTwo();
 		}
-		else{
+		elseif ($number == 'three') {
 			$picture = $this->getPictureThree();
 		}
 		?>
 		<form action="<?= URL_ADMIN ?>picture_process.php" method="POST" enctype="multipart/form-data" class="text-center form-vertical" id="main-<?= $number ?>">
 			<fieldset <?= empty($this->id)?'disabled':''; ?> class="clearfix">
-				<div id="visual-<?= $number ?>"><img src="<?= !empty($this->getId()) && !empty($picture)?$picture->getTarget():'' ?>" /></div>
+				<div id="visual-<?= $number ?>"><img src="<?= !empty($this->getId()) && !empty($picture)?$picture->getTarget():'' ?>" alt="<?= !empty($this->getId()) && !empty($picture)?$picture->getLegend():''; ?>" /></div>
 				<div id="caption-<?= $number ?>" class="hidden">
 					<p>
 						<button type="button" name="cancel" class="btn btn-danger">Annuler</button>

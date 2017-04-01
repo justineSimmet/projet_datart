@@ -154,7 +154,6 @@ function mainPictureAction(mainTarget, visualArea, captionArea){
                 	$(mainTarget).find('input[name="image"]').val('');
                 	$(mainTarget).find('.target-file').addClass('hidden');
                 	$(mainTarget).find('.alert-area-picture').html(success);
-                	$('.generateCode').attr('data-picture',response.text.pictureId );
                 }
                 else{
                 	var error ='<p class="text-danger"><strong>Erreur ! </strong>'+response.file.image.error+'<p>';
@@ -198,15 +197,15 @@ function mainPictureAction(mainTarget, visualArea, captionArea){
     $(mainTarget).on('click','.delete-main-picture', function(e){
     	e.preventDefault();
 		var $form = $(this);
-		var actiondDetail = $form.attr("data-action");
 		var picture = $form.attr("data-picture");
-		$.post('picture_process.php',{action : actiondDetail, pictureId : picture}, function(response){
+		$.post('picture_process.php',{action : 'deletePicture', pictureId : picture}, function(response){
 			var obj = JSON.parse(response);
 			if (obj.response == 'success') {
 				var success ='<p class="text-success">Le visuel a bien été supprimé.<p>';
 				$(mainTarget).find('input[name="image"]').val('');
 				$(mainTarget).find('input[name="legend"]').val('');
 				$(visualArea).find('img').attr('src', '');
+				$(visualArea).find('img').attr('alt', '');
 				$(mainTarget).find('.delete-main-picture').remove();
 				$(mainTarget).find('button[type="submit"]').html('Ajouter');
 				$(mainTarget).find('input[name="pictureId"]').val('');
@@ -749,7 +748,7 @@ MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
 ** ACTIONS SUR LA LISTE DEROULANTE DES ACTIONS SUR L'ARTISTE
 *************************************************************/
 
-	$('.actionArtist').on('change', function(){
+	$('#artistManagementList').on('change', '.actionArtist', function(){
 		if ($(this).val() == 'update' || $(this).val() == 'show' ){
 			var artistId = $(this).children('option:selected').attr("data-id");
 			window.location.replace('artist_zoom?artist='+artistId);
@@ -771,12 +770,19 @@ MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
 	});
 
 	$('.delete-artist').on('click', function(){
-			var artistId = $(this).attr("data-id");
-			$.post(window.location.href,{ targetId : artistId}, function(response){
-				$("#deleteArtist").html($(response).find("#deleteArtist").html());
-				$("#deleteArtist").modal('show');
-			});
-		});	
+		var artistId = $(this).attr("data-id");
+		$.post(window.location.href,{ targetId : artistId}, function(response){
+			$("#deleteArtist").html($(response).find("#deleteArtist").html());
+			$("#deleteArtist").modal('show');
+		});
+	});
+
+	$('.publish-artist').on('click', function(){
+		var artistId = $(this).attr("data-id");
+		$.post(window.location.href,{ action : 'publish', targetArtist : artistId}, function(response){
+			location.reload(true);
+		});
+	});
 
 
 /*************************************************************************
@@ -843,9 +849,7 @@ MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
 				action : 'publish'
 			},
 			success: function(data){
-				var newDoc = document.open("text/html", "replace");
-				newDoc.write(data);
-				newDoc.close()
+				location.reload(true);
 			}
 		});
 	});
@@ -883,13 +887,16 @@ MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
 ** REFRESH AJAX APRES INSERT OU UPDATE
 ** D'UN EVENEMENT D'EXPO 
 ************************************************/
-	if($('#insert-exhibit-event').length == 1 || $('#update-exhibit-event').length == 1){
-		
-		$.post(window.location.href, function(response){
-			$("#exhibitEvent").html($(response).find("#exhibitEvent").html());
-			$("#alert-area-event").html($(response).find("#update-exhibit-event").html())
-		});
-	};
+
+	$('#eventForm').on('submit', function(e){
+		e.preventDefault();
+		var $form = $(this);
+		var formData = $form.serialize();
+		$.post(window.location.href, formData, function(response){
+			$('#exhibitEvent form').find('input[type="text"]').val();
+			$('.event-list').html($(response).find('.event-list').html());
+		})
+	})
 	
 
 /**********************************************
@@ -974,10 +981,27 @@ MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
 		}		
 	});
 
+
+/*************************************************************************
+** ACTION ACTUALISER AU CLIC DE LA MODIF DES TEXTES OEUVRE
+**************************************************************************/
+	if($('#insert-artwork-text').length == 1 || $('#update-artwork-text').length == 1){
+		$('#loading-svg').show();
+		var loaded = 0;
+		$.post(window.location.href, function(response){
+			tinymce.remove();
+			$("#formTextArea").html($(response).find("#formTextArea").html());
+			tinymce.init(configTinyMce);
+			loaded++;
+            if(loaded == 1) {
+				$('#loading-svg').hide();
+			}
+		});
+	};
+
+
 /**********************************************************************
 ** OUVERTURE D'UNE MODAL SI CLIC SUR LE BOUTON SUPPRIMER DEFINITIVEMENT
-** Envoi le targetId de l'expo en Ajax et recharge la page avant
-** d'ouvrir la modal.
 ***********************************************************************/
 	$('.delete-artwork').on('click', function(){
 		var targetArtwork = $(this).attr("data-id");
@@ -1003,4 +1027,13 @@ MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
 		});
 	});
 
+	$('#artworkMainInfo').on('click', '.artworkEdit', function(){
+		var $form = $(this).parents('form');
+		var formData = $form.serialize();
+		$.post(window.location.href, formData, function(response){
+			$('#artworkMainForm').html($(response).find("#artworkMainForm").html());
+			$('#alert-area').html($(response).find("#alert-area").html())
+
+		});
+	})
 });

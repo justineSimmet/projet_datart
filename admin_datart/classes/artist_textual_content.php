@@ -83,7 +83,7 @@
 	class ArtistFrenchBiography extends ArtistText{
 		
 		function __construct($id = 0){
-			parent::__construct($id, 'french', 'category');
+			parent::__construct($id, 'french', 'biography');
 		}
 	}
 
@@ -91,7 +91,7 @@
 	class ArtistFrenchNote extends ArtistText{
 		
 		function __construct($id = 0){
-			parent::__construct($id, 'french', 'note');
+			parent::__construct($id, 'french', 'personal_note');
 		}
 	}
 
@@ -99,7 +99,7 @@
 	class ArtistEnglishBiography extends ArtistText{
 		
 		function __construct($id = 0){
-			parent::__construct($id, 'english', 'category');
+			parent::__construct($id, 'english', 'biography');
 		}
 	}
 
@@ -107,7 +107,7 @@
 	class ArtistEnglishNote extends ArtistText{
 		
 		function __construct($id = 0){
-			parent::__construct($id, 'english', 'note');
+			parent::__construct($id, 'english', 'personal_note');
 		}
 	}
 
@@ -115,7 +115,7 @@
 	class ArtistGermanBiography extends ArtistText{
 		
 		function __construct($id = 0){
-			parent::__construct($id, 'german', 'category');
+			parent::__construct($id, 'german', 'biography');
 		}
 	}
 
@@ -123,7 +123,7 @@
 	class ArtistGermanNote extends ArtistText{
 		
 		function __construct($id = 0){
-			parent::__construct($id, 'german', 'note');
+			parent::__construct($id, 'german', 'personal_note');
 		}
 	}
 
@@ -131,7 +131,7 @@
 	class ArtistRussianBiography extends ArtistText{
 		
 		function __construct($id = 0){
-			parent::__construct($id, 'russian', 'category');
+			parent::__construct($id, 'russian', 'biography');
 		}
 	}
 
@@ -139,7 +139,7 @@
 	class ArtistRussianNote extends ArtistText{
 		
 		function __construct($id = 0){
-			parent::__construct($id, 'russian', 'note');
+			parent::__construct($id, 'russian', 'personal_note');
 		}
 	}
 
@@ -147,7 +147,7 @@
 	class ArtistChineseBiography extends ArtistText{
 		
 		function __construct($id = 0){
-			parent::__construct($id, 'chinese', 'category');
+			parent::__construct($id, 'chinese', 'biography');
 		}
 	}
 
@@ -155,7 +155,7 @@
 	class ArtistChineseNote extends ArtistText{
 		
 		function __construct($id = 0){
-			parent::__construct($id, 'chinese', 'note');
+			parent::__construct($id, 'chinese', 'personal_note');
 		}
 	}
 

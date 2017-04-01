@@ -149,7 +149,7 @@ class Event{
 			$targetExhibit = new Exhibit();
 		}
 		?>
-			<form method="POST" action="<?= $target; ?>" class="form-vertical">
+			<form method="POST" action="<?= $target; ?>" class="form-vertical" id="eventForm">
 				
 				<fieldset <?= isset($targetExhibit) && ( empty($targetExhibit->getId()) || $targetExhibit->getEndDate() < date('Y-m-d') || $targetExhibit->getVisible() == FALSE)?'disabled':''; ?> >
 					<div class="form-group form-group-lg">

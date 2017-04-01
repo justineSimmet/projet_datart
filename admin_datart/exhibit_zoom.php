@@ -339,7 +339,7 @@ if(isset($_POST['categoryFrench']) && isset($_POST['summaryFrench']) ) {
 			};
 		}
 		if($valideInsert == 10){
-			$actionResultat = '<div class="alert alert-success alert-dismissable" id="insert-exhibit-text">>
+			$actionResultat = '<div class="alert alert-success alert-dismissable" id="insert-exhibit-text">
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 			<strong>Les textes d\'accompagnement ont bien été enregistré.</strong>
 			</div>';
@@ -363,7 +363,7 @@ if(isset($_POST['categoryFrench']) && isset($_POST['summaryFrench']) ) {
 if (isset($_POST['name']) && isset($_POST['date'])) {
 	if (empty($_POST['id'])) {
 		$newEvent = new Event();
-		$newEvent->setExhibitId($_POST['id-exhibit']);
+		$newEvent->setExhibitId($_POST['targetExhibit']);
 		$newEvent->setName($_POST['name']);
 		$newEvent->setDescription($_POST['description']);
 		$newEvent->setEventDate(dateFormat($_POST['date']));
@@ -554,7 +554,7 @@ include('header.php');
 
 <!-- *************************** FORMULAIRE Textes d'accompagnement *************************** -->
 				<div class="div-minus">
-					<h3>Textes d'accompagnement :</h3>
+					<h3>Etape 1 : Textes d'accompagnement</h3>
 					<div id="formTextArea">
 					<?php
 						if (isset($targetExhibit)) {
@@ -591,7 +591,7 @@ include('header.php');
 						<div class="col-sm-12" id="alert-area-artist"> <!-- ZONE DES MESSAGES DE SUCCES OU D'ERREUR -->
 							<?= !empty($actionResultatArtist)?$actionResultatArtist:''; ?>
 						</div>
-						<h2>Etape 2 : Artistes exposés</h2>
+						<h2>Etape 3 : Artistes exposés</h2>
 						<div class="row" id="exhibitLinkedArtist">
 							<div class="col-sm-6">
 								<h4>Artistes disponibles</h4>
@@ -655,7 +655,7 @@ include('header.php');
 						<div class="col-sm-12" id="alert-area-artwork"> <!-- ZONE DES MESSAGES DE SUCCES OU D'ERREUR -->
 							<?= !empty($actionResultatArtwork)?$actionResultatArtwork:''; ?>
 						</div>
-						<h2>Etape 3 : Les oeuvres</h2>
+						<h2>Etape 4 : Les oeuvres</h2>
 						<div class="row">
 							<div class="col-sm-12">
 							<div id="exhibitLinkedArtwork">
