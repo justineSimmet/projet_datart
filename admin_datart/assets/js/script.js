@@ -780,12 +780,19 @@ MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
 
 
 /*************************************************************************
-** ACTION ACTUALISER AU CLIC DE LA MODIF DES TEXTES
+** ACTION ACTUALISER AU CLIC DE LA MODIF DES TEXTES ARTISTES
 **************************************************************************/
-
 	if($('#insert-artist-text').length == 1 || $('#update-artist-text').length == 1){
+		$('#loading-svg').show();
+		var loaded = 0;
 		$.post(window.location.href, function(response){
-			$(".formText_formPhoto").html($(response).find(".formText_formPhoto").html());
+			tinymce.remove();
+			$("#formTextualContent").html($(response).find("#formTextualContent").html());
+			tinymce.init(configTinyMce);
+			loaded++;
+            if(loaded == 1) {
+				$('#loading-svg').hide();
+			}
 		});
 	};
 

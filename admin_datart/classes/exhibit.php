@@ -328,6 +328,7 @@ class Exhibit{
 					'".addslashes($this->begin_date)."',
 					'".addslashes($this->end_date)."',
 					'".addslashes($this->public_opening)."',
+					NULL,
 					TRUE,
 					now()
 				)");

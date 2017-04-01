@@ -351,7 +351,7 @@ soit à faire un update des données de l'id reçue
 
 	function formText($target, $action=''){
 	?>
-		<form method="POST" action="<?= $target ?>" class="form-horizontal clearfix">
+		<form method="POST" action="<?= $target ?>" class="form-horizontal clearfix" id="formTextualContent">
 				
 			<ul class="nav nav-tabs">
 				<li class="active"><a data-toggle="tab" href="#french">Français</a></li>
@@ -364,15 +364,15 @@ soit à faire un update des données de l'id reçue
 				<div id="french" class="tab-pane fade in active">
 					<fieldset <?= empty($this->getId()) || $this->getVisible() == FALSE?'disabled':''; ?>>
 						<div class="form-group form-group-lg">
-							<label for="biographyFrench" class="control-label col-lg-3 col-md-4 col-sm-4">Biographie :</label>
-							<div class="col-lg-9 col-md-7 col-sm-7">
-								<textarea name="biographyFrench" class="form-control"><?= !empty($this->getTextualContent())?$this->getFrenchBiography()->getContent():'';?></textarea>
+							<label for="biographyFrench" class="control-label col-lg-2 col-md-2 col-sm-3">Biographie :</label>
+							<div class="col-lg-10 col-md-10 col-sm-12">
+								<textarea name="biographyFrench" class="form-control textarea-avaible"><?= !empty($this->getTextualContent())?$this->getFrenchBiography()->getContent():'';?></textarea>
 							</div>
 						</div>
 						<div class="form-group form-group-lg">
-							<label for="noteFrench" class="control-label col-lg-3 col-md-4 col-sm-4">Mot de l'artiste :</label>
-							<div class="col-lg-9 col-md-7 col-sm-7">
-								<textarea name="noteFrench" class="form-control"><?= !empty($this->getTextualContent())?$this->getFrenchNote()->getContent():'';?></textarea>
+							<label for="noteFrench" class="control-label col-lg-2 col-md-2 col-sm-3">Mot de l'artiste :</label>
+							<div class="col-lg-10 col-md-10 col-sm-12">
+								<textarea name="noteFrench" class="form-control textarea-avaible"><?= !empty($this->getTextualContent())?$this->getFrenchNote()->getContent():'';?></textarea>
 							</div>
 						</div>
 					</fieldset>
@@ -380,15 +380,15 @@ soit à faire un update des données de l'id reçue
 				<div id="english" class="tab-pane fade">
 					<fieldset <?= empty($this->getId()) || $this->getVisible() == FALSE?'disabled':''; ?>>
 						<div class="form-group form-group-lg">
-							<label for="biographyEnglish" class="control-label col-lg-3 col-md-4 col-sm-4"erman>Biographie :</label>
-							<div class="col-lg-9 col-md-7 col-sm-7">
-								<textarea name="biographyEnglish" class="form-control"><?= !empty($this->getTextualContent())?$this->getEnglishBiography()->getContent():'';?></textarea>
+							<label for="biographyEnglish" class="control-label col-lg-2 col-md-2 col-sm-3">Biographie :</label>
+							<div class="col-lg-10 col-md-10 col-sm-12">
+								<textarea name="biographyEnglish" class="form-control textarea-avaible"><?= !empty($this->getTextualContent())?$this->getEnglishBiography()->getContent():'';?></textarea>
 							</div>
 						</div>
 						<div class="form-group form-group-lg">
-							<label for="noteEnglish" class="control-label col-lg-3 col-md-4 col-sm-4">Mot de l'artiste :</label>
-							<div class="col-lg-9 col-md-7 col-sm-7">
-								<textarea name="noteEnglish" class="form-control"><?= !empty($this->getTextualContent())?$this->getEnglishNote()->getContent():'';?></textarea>
+							<label for="noteEnglish" class="control-label col-lg-2 col-md-2 col-sm-3">Mot de l'artiste :</label>
+							<div class="col-lg-10 col-md-10 col-sm-12">
+								<textarea name="noteEnglish" class="form-control textarea-avaible"><?= !empty($this->getTextualContent())?$this->getEnglishNote()->getContent():'';?></textarea>
 							</div>
 						</div>
 					</fieldset>
@@ -396,15 +396,15 @@ soit à faire un update des données de l'id reçue
 				<div id="german" class="tab-pane fade">
 					<fieldset <?= empty($this->getId()) || $this->getVisible() == FALSE?'disabled':''; ?>>
 						<div class="form-group form-group-lg">
-							<label for="biographyGerman" class="control-label col-lg-3 col-md-4 col-sm-4">Biographie :</label>
-							<div class="col-lg-9 col-md-7 col-sm-7">
-								<textarea name="biographyGerman" class="form-control"><?= !empty($this->getTextualContent())?$this->getGermanBiography()->getContent():'';?></textarea>
+							<label for="biographyGerman" class="control-label col-lg-2 col-md-2 col-sm-3">Biographie :</label>
+							<div class="col-lg-10 col-md-10 col-sm-12">
+								<textarea name="biographyGerman" class="form-control textarea-avaible"><?= !empty($this->getTextualContent())?$this->getGermanBiography()->getContent():'';?></textarea>
 							</div>
 						</div>
 						<div class="form-group form-group-lg">
-							<label for="noteGerman" class="control-label col-lg-3 col-md-4 col-sm-4">Mot de l'artiste :</label>
-							<div class="col-lg-9 col-md-7 col-sm-7">
-								<textarea name="noteGerman" class="form-control"><?= !empty($this->getTextualContent())?$this->getGermanNote()->getContent():'';?></textarea>
+							<label for="noteGerman" class="control-label col-lg-2 col-md-2 col-sm-3">Mot de l'artiste :</label>
+							<div class="col-lg-10 col-md-10 col-sm-12">
+								<textarea name="noteGerman" class="form-control textarea-avaible"><?= !empty($this->getTextualContent())?$this->getGermanNote()->getContent():'';?></textarea>
 							</div>
 						</div>
 					</fieldset>
@@ -412,15 +412,15 @@ soit à faire un update des données de l'id reçue
 				<div id="russian" class="tab-pane fade">
 					<fieldset <?= empty($this->getId()) || $this->getVisible() == FALSE?'disabled':''; ?>>
 						<div class="form-group form-group-lg">
-							<label for="biographyRussian" class="control-label col-lg-3 col-md-4 col-sm-4">Biographie :</label>
-							<div class="col-lg-9 col-md-7 col-sm-7">
-								<textarea name="biographyRussian" class="form-control"><?= !empty($this->getTextualContent())?$this->getRussianBiography()->getContent():'';?></textarea>
+							<label for="biographyRussian" class="control-label col-lg-2 col-md-2 col-sm-3">Biographie :</label>
+							<div class="col-lg-10 col-md-10 col-sm-12">
+								<textarea name="biographyRussian" class="form-control textarea-avaible"><?= !empty($this->getTextualContent())?$this->getRussianBiography()->getContent():'';?></textarea>
 							</div>
 						</div>
 						<div class="form-group form-group-lg">
-							<label for="noteRussian" class="control-label col-lg-3 col-md-4 col-sm-4">Mot de l'artiste :</label>
-							<div class="col-lg-9 col-md-7 col-sm-7">
-								<textarea name="noteRussian" class="form-control"><?= !empty($this->getTextualContent())?$this->getRussianNote()->getContent():'';?></textarea>
+							<label for="noteRussian" class="control-label col-lg-2 col-md-2 col-sm-3">Mot de l'artiste :</label>
+							<div class="col-lg-10 col-md-10 col-sm-12">
+								<textarea name="noteRussian" class="form-control textarea-avaible"><?= !empty($this->getTextualContent())?$this->getRussianNote()->getContent():'';?></textarea>
 							</div>
 						</div>
 					</fieldset>
@@ -428,15 +428,15 @@ soit à faire un update des données de l'id reçue
 				<div id="chinese" class="tab-pane fade">
 					<fieldset <?= empty($this->getId()) || $this->getVisible() == FALSE?'disabled':''; ?> >
 						<div class="form-group form-group-lg">
-							<label for="biographyChinese" class="control-label col-lg-3 col-md-4 col-sm-4">Biographie :</label>
-							<div class="col-lg-9 col-md-7 col-sm-7">
-								<textarea name="biographyChinese" class="form-control"><?= !empty($this->getTextualContent())?$this->getChineseBiography()->getContent():'';?></textarea>
+							<label for="biographyChinese" class="control-label col-lg-2 col-md-2 col-sm-3">Biographie :</label>
+							<div class="col-lg-10 col-md-10 col-sm-12">
+								<textarea name="biographyChinese" class="form-control textarea-avaible"><?= !empty($this->getTextualContent())?$this->getChineseBiography()->getContent():'';?></textarea>
 							</div>
 						</div>
 						<div class="form-group form-group-lg">
-							<label for="noteChinese" class="control-label col-lg-3 col-md-4 col-sm-4">Mot de l'artiste :</label>
-							<div class="col-lg-9 col-md-7 col-sm-7">
-								<textarea name="noteChinese" class="form-control"><?= !empty($this->getTextualContent())?$this->getChineseNote()->getContent():'';?></textarea>
+							<label for="noteChinese" class="control-label col-lg-2 col-md-2 col-sm-3">Mot de l'artiste :</label>
+							<div class="col-lg-10 col-md-10 col-sm-12">
+								<textarea name="noteChinese" class="form-control textarea-avaible"><?= !empty($this->getTextualContent())?$this->getChineseNote()->getContent():'';?></textarea>
 							</div>
 						</div>
 					</fieldset>

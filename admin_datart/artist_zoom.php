@@ -210,7 +210,7 @@ if(isset($_POST['biographyFrench']) && isset($_POST['noteFrench']) ) {
 			};
 		}
 		if($valideInsert == 10){
-			$actionResultat = '<div class="alert alert-success alert-dismissable" id="insert-artist-text">>
+			$actionResultat = '<div class="alert alert-success alert-dismissable" id="insert-artist-text">
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 			<strong>Les textes d\'accompagnement ont bien été enregistré.</strong>
 			</div>';
@@ -337,6 +337,8 @@ include('header.php');
 						}
 
 					?>
+						<div id="loading-svg"><img src="<?= URL_IMAGES ?>ripple.svg"></div>
+					</div>
 					</div>
 						<h3> Photos</h3>
 					<div id="formPhotoArea">
@@ -356,7 +358,6 @@ include('header.php');
 
 					?>
 					</div>
-					<div id="loading-svg"><img src="<?= URL_IMAGES ?>ripple.svg"></div>
 				
 				<?php 
 					if (isset($targetArtist)) {
