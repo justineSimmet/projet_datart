@@ -806,7 +806,7 @@ MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
 /***************************************************
 ** ACTIONS SUR LA LISTE DEROULANTE DES ACTIONS EXHIBIT
 ****************************************************/
-	$('.actionExhibit').on('change', function(){
+	$('#managementExhibitList').on('change','.actionExhibit', function(){
 		if ($(this).val() == 'update' || $(this).val() == 'show'){
 			var exhibitId = $(this).children('option:selected').attr("data-id");
 			window.location.replace('exhibit_zoom.php?exhibit='+exhibitId);
@@ -893,12 +893,10 @@ MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
 		var $form = $(this);
 		var formData = $form.serialize();
 		$.post(window.location.href, formData, function(response){
-			$('#exhibitEvent form').find('input[type="text"]').val();
-			$('.event-list').html($(response).find('.event-list').html());
+			window.location.reload();
 		})
 	})
 	
-
 /**********************************************
 ** EXECUTION REQUETE AJAX POUR UPDATE OU DELETE
 ** UN EVENEMENT SUR LE ZOOM EXHIBIT
@@ -917,6 +915,7 @@ MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
 			$("#deleteEvent").modal('show');
 		});
 	});
+
 
 /**********************************************
 ** EXECUTION REQUETE AJAX POUR LIER

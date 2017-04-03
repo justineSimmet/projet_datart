@@ -376,13 +376,35 @@ ul {
 ** CSS INDEX
 **
 *********************************************************** */
-#current-exhibit h2 {
-  margin-bottom: 0; }
-#current-exhibit .date {
-  font-size: 1.250em;
-  color: #778085; }
-#current-exhibit .summary {
-  padding-left: 20px; }
+#current-exhibit {
+  position: relative;
+  padding-bottom: 20px;
+  margin-bottom: 15px; }
+  #current-exhibit h2 {
+    margin-bottom: 0; }
+  #current-exhibit .date {
+    font-size: 1.250em;
+    color: #778085; }
+  #current-exhibit .summary {
+    padding-left: 20px;
+    width: 50%; }
+  #current-exhibit .exhibit-picture {
+    position: absolute;
+    top: -20px;
+    right: -15px;
+    bottom: 0;
+    max-width: 50%;
+    min-width: 50%;
+    overflow: hidden; }
+    #current-exhibit .exhibit-picture img {
+      position: absolute;
+      top: -100%;
+      left: 0;
+      right: 0;
+      bottom: -100%;
+      margin: auto;
+      max-width: 100%;
+      min-width: 100%; }
 
 .exhibit-count {
   min-width: 100%;
@@ -438,15 +460,16 @@ ul {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
+  width: 100%;
   padding: 10px 0;
   margin: 0;
-  margin-bottom: -15px; }
+  margin-bottom: -10px; }
   #next-exhibit .icon {
     display: flex;
     width: 50px;
     background-color: #778085;
     color: #fff;
-    box-shadow: 5px 0 5px rgba(150, 150, 150, 0.2);
+    box-shadow: 5px 0 2px rgba(150, 150, 150, 0.2);
     margin-bottom: -10px;
     margin-left: -15px;
     margin-top: -10px;
@@ -457,6 +480,30 @@ ul {
       min-width: 100%;
       line-height: 100%;
       font-size: 3.5em; }
+  #next-exhibit .content {
+    width: 100%; }
+    #next-exhibit .content .next-date {
+      font-family: 'metropolis';
+      color: #778085; }
+      #next-exhibit .content .next-date span {
+        font-size: 1.2em; }
+
+.module-title {
+  background-color: #d5313a;
+  color: #fff;
+  text-align: center;
+  margin: -15px -15px 0 -15px;
+  padding: 10px; }
+
+#last-creation li {
+  margin: 0 -15px;
+  padding: 5px 15px; }
+  #last-creation li a, #last-creation #main-nav #main-nav-menu .nav-submenu li .active-nav-link, #main-nav #main-nav-menu .nav-submenu #last-creation li .active-nav-link {
+    color: #778085; }
+#last-creation li:nth-child(even) {
+  background-color: #778085; }
+  #last-creation li:nth-child(even) a, #last-creation #main-nav #main-nav-menu .nav-submenu li:nth-child(even) .active-nav-link, #main-nav #main-nav-menu .nav-submenu #last-creation li:nth-child(even) .active-nav-link {
+    color: #fff; }
 
 /* ***********************************************************
 **
@@ -1381,30 +1428,43 @@ table {
   .event-list .event-description {
     font-size: 0.95em; }
 
-#recordedArtists, #selectedArtists {
+#exhibitLinkedArtist ul {
   padding: 10px;
   background-color: #dadada;
   border: 1px solid #778085;
   max-height: 200px;
   height: 200px;
   overflow-y: scroll; }
-  #recordedArtists li, #selectedArtists li {
+  #exhibitLinkedArtist ul li {
     padding: 5px;
     background-color: #fff;
     border: 1px solid #778085;
     font-size: 0.95em; }
-    #recordedArtists li:not(:last-child), #selectedArtists li:not(:last-child) {
+    #exhibitLinkedArtist ul li:not(:last-child) {
       margin-bottom: 5px; }
-
-#selectedArtists {
+#exhibitLinkedArtist #recordedArtists, #exhibitLinkedArtist #selectedArtists {
+  padding: 10px;
+  background-color: #dadada;
+  border: 1px solid #778085;
+  max-height: 200px;
+  height: 200px;
+  overflow-y: scroll; }
+  #exhibitLinkedArtist #recordedArtists li, #exhibitLinkedArtist #selectedArtists li {
+    padding: 5px;
+    background-color: #fff;
+    border: 1px solid #778085;
+    font-size: 0.95em; }
+    #exhibitLinkedArtist #recordedArtists li:not(:last-child), #exhibitLinkedArtist #selectedArtists li:not(:last-child) {
+      margin-bottom: 5px; }
+#exhibitLinkedArtist #selectedArtists {
   background-color: #fafafa;
   border: 1px solid #d5313a; }
-  #selectedArtists li {
+  #exhibitLinkedArtist #selectedArtists li {
     padding: 5px;
     background-color: #fff;
     border: 1px solid #d5313a;
     font-size: 0.95em; }
-    #selectedArtists li:not(:last-child) {
+    #exhibitLinkedArtist #selectedArtists li:not(:last-child) {
       margin-bottom: 5px; }
 
 /*# sourceMappingURL=styles.css.map */

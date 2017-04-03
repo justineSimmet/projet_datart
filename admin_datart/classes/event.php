@@ -173,6 +173,7 @@ class Event{
 					<input type="hidden" name="targetExhibit" value="<?= !empty($this->getId())?$this->getExhibitId():$targetExhibit->getId(); ?>">
 					<input type="hidden" id="beginDate" value="<?= isset($targetExhibit)?$targetExhibit->getBeginDate():''; ?>">
 					<input type="hidden" id="endDate" value="<?= isset($targetExhibit)?$targetExhibit->getEndDate():''; ?>">
+					<button class="btn btn-default pull-left" onclick="window.location.reload()">Annuler</button>
 					<input type="submit" role="button" class="btn btn-default pull-right" value="<?= $action; ?>">
 				</fieldset>
 

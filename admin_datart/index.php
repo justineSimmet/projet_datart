@@ -39,6 +39,11 @@ include('header.php');
 				<?php
 					$currentExhibit = Exhibit::currentExhibit();
 					if (count($currentExhibit) == 1 ) {
+						$artworkArray = $currentExhibit[0]->getArtworkDisplayed();
+						$artworkCount = count($artworkArray);
+						$randNumber = rand(0, $artworkCount-1);
+						
+
 						?>
 						<div id="current-exhibit">
 						<div>
@@ -46,13 +51,22 @@ include('header.php');
 							<p class="date">
 								<?=  dateFormat($currentExhibit[0]->getBeginDate()); ?> > <?=  dateFormat($currentExhibit[0]->getEndDate()); ?>
 							</p>
-							<p class="summary">
-								<?= !empty($currentExhibit[0]->getTextualContent())?substr($currentExhibit[0]->getFrenchSummary()->getContent(), 0, 150):''; ?>
-							</p>
+							<div class="summary">
+								<?= !empty($currentExhibit[0]->getTextualContent())?substr($currentExhibit[0]->getFrenchSummary()->getContent(), 0, 400).'...':''; ?>
+								<p class="clearfix">
+									<a href="<?= URL_ADMIN ?>exhibit_zoom.php?exhibit=<?= $currentExhibit[0]->getId(); ?>" class="btn btn-default pull-right">Voir / Modifier l'exposition</a>
+								</p>
+								<p class="clearfix">
+									<a href="#" class="btn btn-default pull-right">Voir la page visiteur</a>
+								</p>
+							</div>
 
-						</div class="exhibit-picture">
-						<div><!-- Photo aléatoire tirée d'une oeuvre de l'expo -->
-							
+						</div>
+						<div class="exhibit-picture"><!-- Photo aléatoire tirée d'une oeuvre de l'expo -->
+							<?php
+								$randomImage = $artworkArray[$randNumber]->getPictureOne();
+							?>
+							<img src="<?= $randomImage->getTarget(); ?>" alt="<?= $randomImage->getLegend(); ?>"/>
 						</div>
 						</div>
 						<?php
@@ -112,13 +126,14 @@ include('header.php');
 								if (!empty($nextExhibit)) {
 
 							?>
-							<p>A suivre... <?= dateFormat($nextExhibit[0]->getBeginDate()) ; ?> > <?= dateFormat($nextExhibit[0]->getEndDate()) ; ?></p>
+							<p class="next-date"><span>A suivre...</span> <?= dateFormat($nextExhibit[0]->getBeginDate()) ; ?> > <?= dateFormat($nextExhibit[0]->getEndDate()) ; ?></p>
 							<h3><?= $nextExhibit[0]->getTitle(); ?></h3>
-							<p>
+							<div class="clearfix">
+								<div>
 								<?php
-									if (!empty($nextExhibit[0]->getTextualContent()) ) {
-										if (strlen($nextExhibit[0]->getFrenchSummary()->getContent()) > 50 ) {
-												echo substr($nextExhibit[0]->getFrenchSummary()->getContent(),0,44).' (...)';
+									if (!empty($nextExhibit[0]->getFrenchSummary()) ) {
+										if (strlen($nextExhibit[0]->getFrenchSummary()->getContent()) > 200) {
+												echo substr($nextExhibit[0]->getFrenchSummary()->getContent(),0,194).' (...)';
 											}
 											else{
 												echo $nextExhibit[0]->getFrenchSummary()->getContent();
@@ -127,9 +142,10 @@ include('header.php');
 									else{
 										echo '' ;
 									}
-								?>
-								<a href="<?= URL_ADMIN ?>exhibit_zoom.php?exhibit=<?= $nextExhibit[0]->getId(); ?>" class="btn btn-default">Voir / Modifier l'exposition</a>
-							</p>
+									?>
+									</div>
+									<a href="<?= URL_ADMIN ?>exhibit_zoom.php?exhibit=<?= $nextExhibit[0]->getId(); ?>" class="btn btn-default pull-right">Voir / Modifier l'exposition</a>								
+							</div>
 
 						<?php
 						 } 
@@ -145,18 +161,18 @@ include('header.php');
 				<section>
 
 					<h2 class="module-title">Derniers ajouts</h2>
-					<ul>
+					<ul id="last-creation">
 						<?php
 							$last = lastCreateElement();
 							foreach ($last as $l) {
 								if (is_a($l, 'Exhibit')) {
-									echo '<li><a href="<?= URL_ADMIN ?>exhibit_zoom?exhibit='.$l->getId().'">Expo : '.$l->getTitle().' - Enregistré le : '.dateFormat($l->getCreationDate()).'</a></li>';
+									echo '<li><a href="'.URL_ADMIN.'exhibit_zoom?exhibit='.$l->getId().'">Expo : '.$l->getTitle().' - Enregistré le : '.dateFormat($l->getCreationDate()).'</a></li>';
 								}
 								elseif (is_a($l, 'Artist')) {
-									echo '<li><a href="<?= URL_ADMIN ?>artist_zoom?artist='.$l->getId().'">Artiste : '.$l->getIdentity().' - Enregistré le : '.dateFormat($l->getCreationDate()).'</a></li>';
+									echo '<li><a href="'.URL_ADMIN.'artist_zoom?artist='.$l->getId().'">Artiste : '.$l->getIdentity().' - Enregistré le : '.dateFormat($l->getCreationDate()).'</a></li>';
 								}
 								else{
-									echo '<li><a href="<?= URL_ADMIN ?>artwork_zoom?artwork='.$l->getId().'">Oeuvre : '.$l->getTitle().' - Enregistré le : '.dateFormat($l->getCreationDate()).'</a></li>';
+									echo '<li><a href="'.URL_ADMIN.'artwork_zoom?artwork='.$l->getId().'">Oeuvre : '.$l->getTitle().' - Enregistré le : '.dateFormat($l->getCreationDate()).'</a></li>';
 								}
 							}
 						?>
