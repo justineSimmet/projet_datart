@@ -275,6 +275,9 @@ section {
 .red {
   color: #d5313a; }
 
+.bold {
+  font-family: 'kelson-bold'; }
+
 .div-minus {
   width: 90%;
   margin: auto;
@@ -395,7 +398,9 @@ ul {
     bottom: 0;
     max-width: 50%;
     min-width: 50%;
-    overflow: hidden; }
+    overflow: hidden;
+    border-bottom: 1px solid #d5313a;
+    border-left: 1px solid #d5313a; }
     #current-exhibit .exhibit-picture img {
       position: absolute;
       top: -100%;
@@ -403,8 +408,8 @@ ul {
       right: 0;
       bottom: -100%;
       margin: auto;
-      max-width: 100%;
-      min-width: 100%; }
+      max-width: 110%;
+      min-width: 110%; }
 
 .exhibit-count {
   min-width: 100%;
@@ -495,15 +500,18 @@ ul {
   margin: -15px -15px 0 -15px;
   padding: 10px; }
 
-#last-creation li {
+#last-creation li, #next-event li {
+  text-align: center;
   margin: 0 -15px;
-  padding: 5px 15px; }
-  #last-creation li a, #last-creation #main-nav #main-nav-menu .nav-submenu li .active-nav-link, #main-nav #main-nav-menu .nav-submenu #last-creation li .active-nav-link {
+  padding: 10px 15px; }
+  #last-creation li a, #next-event li a, #last-creation #main-nav #main-nav-menu .nav-submenu li .active-nav-link, #main-nav #main-nav-menu .nav-submenu #last-creation li .active-nav-link, #next-event #main-nav #main-nav-menu .nav-submenu li .active-nav-link, #main-nav #main-nav-menu .nav-submenu #next-event li .active-nav-link {
     color: #778085; }
-#last-creation li:nth-child(even) {
+#last-creation li:nth-child(even), #next-event li:nth-child(even) {
   background-color: #778085; }
-  #last-creation li:nth-child(even) a, #last-creation #main-nav #main-nav-menu .nav-submenu li:nth-child(even) .active-nav-link, #main-nav #main-nav-menu .nav-submenu #last-creation li:nth-child(even) .active-nav-link {
+  #last-creation li:nth-child(even) a, #next-event li:nth-child(even) a, #last-creation #main-nav #main-nav-menu .nav-submenu li:nth-child(even) .active-nav-link, #main-nav #main-nav-menu .nav-submenu #last-creation li:nth-child(even) .active-nav-link, #next-event #main-nav #main-nav-menu .nav-submenu li:nth-child(even) .active-nav-link, #main-nav #main-nav-menu .nav-submenu #next-event li:nth-child(even) .active-nav-link {
     color: #fff; }
+#last-creation li:last-child, #next-event li:last-child {
+  margin-bottom: -20px; }
 
 /* ***********************************************************
 **
@@ -725,7 +733,7 @@ input.input-file {
 .action-item-area {
   position: relative;
   float: right;
-  width: 30%;
+  width: 20%;
   max-height: 82px;
   max-height: 58px;
   padding: 10px 0;

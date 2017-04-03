@@ -137,6 +137,10 @@ section{
 	color: $datart-red;
 }
 
+.bold{
+	font-family: 'kelson-bold';
+}
+
 .div-minus{
 	width: 90%;
 	margin: auto;
@@ -541,7 +545,7 @@ input.input-file{
 .action-item-area{
 	position: relative;
 	float: right;
-	width:30%;
+	width:20%;
 	max-height: 82px;
 	max-height: 58px;
 	padding: 10px 0;

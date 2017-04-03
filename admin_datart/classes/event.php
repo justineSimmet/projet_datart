@@ -181,5 +181,22 @@ class Event{
 		<?php
 	}
 
+	static function nextEvent(){
+		$res = requete_sql("
+			SELECT event.id, event.exhibit_id FROM event
+			LEFT JOIN exhibit ON event.exhibit_id = exhibit.id
+			WHERE exhibit.visible = TRUE
+			AND event.event_date > now()
+			ORDER BY event.event_date ASC
+			LIMIT 0,10
+			");
+		$res = $res->fetchAll(PDO::FETCH_ASSOC);
+		$nextList = array();
+		foreach ($res as $event) {
+			array_push($nextList, new Event($event['id']));
+		}
+		return $nextList;
+	}
+
 
 }

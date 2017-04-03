@@ -16,24 +16,6 @@ include('header.php');
 
 <div class="row">
 
-
-<!--
-****************************** ZONE ALERTE AGENDA ******************************
--->
-	<div class="col-sm-12">
-		
-	</div>
-
-<!--
-****************************** ZONE MODULES ******************************
--->
-	<div class="col-sm-12">
-		<div class="row">
-
-<!--
-****************************** MODULE EXPO ******************************
--->
-
 			<div class="col-sm-12">
 				<section>
 				<?php
@@ -157,7 +139,7 @@ include('header.php');
 <!--
 ****************************** MODULE DERNIERS AJOUTS ******************************
 -->
-			<div class="col-lg-6">
+			<div class="col-lg-6 col-xs-12">
 				<section>
 
 					<h2 class="module-title">Derniers ajouts</h2>
@@ -166,13 +148,34 @@ include('header.php');
 							$last = lastCreateElement();
 							foreach ($last as $l) {
 								if (is_a($l, 'Exhibit')) {
-									echo '<li><a href="'.URL_ADMIN.'exhibit_zoom?exhibit='.$l->getId().'">Expo : '.$l->getTitle().' - Enregistré le : '.dateFormat($l->getCreationDate()).'</a></li>';
+									$title = '';
+									if (strlen($l->getTitle()) > 20) {
+										$title = substr($l->getTitle(),0,15).'(...)';
+									}
+									else{
+										$title = $l->getTitle();
+									}
+									echo '<li><a href="'.URL_ADMIN.'exhibit_zoom?exhibit='.$l->getId().'">Expo : '.$title.' - Enregistré le : '.dateFormat($l->getCreationDate()).'</a></li>';
 								}
 								elseif (is_a($l, 'Artist')) {
-									echo '<li><a href="'.URL_ADMIN.'artist_zoom?artist='.$l->getId().'">Artiste : '.$l->getIdentity().' - Enregistré le : '.dateFormat($l->getCreationDate()).'</a></li>';
+									$title = '';
+									if (strlen($l->getTitle()) > 20) {
+										$title = substr($l->getTitle(),0,15).'(...)';
+									}
+									else{
+										$title = $l->getTitle();
+									}
+									echo '<li><a href="'.URL_ADMIN.'artist_zoom?artist='.$l->getId().'">Artiste : '.$title.' - Enregistré le : '.dateFormat($l->getCreationDate()).'</a></li>';
 								}
 								else{
-									echo '<li><a href="'.URL_ADMIN.'artwork_zoom?artwork='.$l->getId().'">Oeuvre : '.$l->getTitle().' - Enregistré le : '.dateFormat($l->getCreationDate()).'</a></li>';
+									$title = '';
+									if (strlen($l->getTitle()) > 20) {
+										$title = substr($l->getTitle(),0,15).'(...)';
+									}
+									else{
+										$title = $l->getTitle();
+									}
+									echo '<li><a href="'.URL_ADMIN.'artwork_zoom?artwork='.$l->getId().'">Oeuvre : '.$title.' - Enregistré le : '.dateFormat($l->getCreationDate()).'</a></li>';
 								}
 							}
 						?>
@@ -183,19 +186,32 @@ include('header.php');
 <!--
 ****************************** MODULE STATISTIQUES ******************************
 -->
-			<div class="col-lg-6">
+			<div class="col-lg-6 col-xs-12">
 				<section>
-					
+					<h2 class="module-title">Prochains événements</h2>
+					<ul id="next-event">
+						<?php
+							$events = Event::nextEvent();
+							foreach ($events as $event) {
+								$parentExhibit = new Exhibit($event->getExhibitId());
+								?>
+								<li>
+									<a href="<?= URL_ADMIN ?>artwork_zoom?artwork=<?= $event->getExhibitId() ?>"><?= $parentExhibit->getTitle() ?> : <?= $event->getName()?> >> le <?= dateFormat($event->getEventDate()); ?> à <?= timeFormat($event->getEventStartTime()); ?></a>
+								</li>
+								<?php
+							}
+						?>
+					</ul>
 				</section>
 			</div>
 <!--
 ****************************** MODULE CALENDRIER ******************************
 -->
-			<div class="col-lg-12">
+			<!-- <div class="col-xs-12">
 				<section>
 					
 				</section>
-			</div>
+			</div> -->
 			
 		</div>
 	</div>	

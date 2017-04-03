@@ -22,13 +22,15 @@
 		max-width: 50%;
 		min-width: 50%;
 		overflow: hidden;
+		border-bottom: 1px solid $datart-red;
+		border-left: 1px solid $datart-red;
 
 		img{
 			position: absolute;
 			top:-100%; left:0; right: 0; bottom:-100%;
 			margin: auto;
-			max-width: 100%;
-			min-width: 100%;
+			max-width: 110%;
+			min-width: 110%;
 		}
 	}
 }
@@ -86,6 +88,7 @@
 		height: 200px;
 		min-height: 100px;
 		overflow: hidden;
+
 
 		img{
 			position: absolute;
@@ -154,8 +157,9 @@
 #last-creation{
 
 	li{
+		text-align: center;
 		margin: 0 -15px;
-		padding: 5px 15px;
+		padding: 10px 15px;
 		a{
 			color: $datart-gray;
 		}
@@ -167,4 +171,12 @@
 			color: #fff;
 		}
 	}
+
+	li:last-child{
+		margin-bottom: -20px;
+	}
+}
+
+#next-event{
+	@extend #last-creation;
 }

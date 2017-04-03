@@ -165,7 +165,7 @@ if (isset($_GET['id'])) {
 	LISTING DES OEUVRES ET PLAN SVG
 
 //////////////////////////////////////////////////////////////// -->
-			<div class="col-md-3 col-sm-4">
+			<div class="col-sm-5">
 				<section id="availble-artwork">
 					<h2>Oeuvres enregistrées : </h2>
 					<ul>
@@ -219,7 +219,7 @@ if (isset($_GET['id'])) {
 					</ul>
 				</section>
 			</div>
-			<div class="col-md-9 col-sm-8">
+			<div class="col-sm-7">
 				<div id="drop-area">
 						<div id="dropTarget">
 							<?php
