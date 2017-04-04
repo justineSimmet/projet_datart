@@ -7,7 +7,6 @@ require_once('classes/artwork.php');
 require_once('classes/artwork_textual_content.php');
 require_once('classes/artwork_visual.php');
 require_once('classes/artwork_additional.php');
-require_once('classes/artist.php');
 require_once('classes/exhibit.php');
 require_once('classes/exhibit_textual_content.php');
 require_once('classes/event.php');
@@ -15,7 +14,10 @@ require_once('includes/include.php');
 
 // INITIALISE UN OBJET EXHIBIT SI ID EN GET
 if (isset($_GET['artwork'])) {
-	$targetArtwork= new Artwork($_GET['artwork']);
+	$targetArtwork = new Artwork($_GET['artwork']);
+	if (!empty($targetArtwork->getId())) {
+		$parentArtist = new Artist($targetArtwork->getArtistId());
+	}
 }
 
 
@@ -238,6 +240,7 @@ include('header.php');
 ?>
 	<div class="hidden-lg hidden-sm btn-area-row">
 		<a href="<?= URL_ROOT ?>artwork.php?id=<?= $targetArtwork->getId();?>" class="btn btn-default btn-custom btn-lg" role="button"><span class="fa fa-desktop"></span> Voir la page visiteur</a>
+		<a href="<?= URL_ADMIN ?>artist_zoom.php?artist=<?= $parentArtist->getId();?>" class="btn btn-default btn-custom" role="button"><span class="fa fa-paint-brush"></span> Voir la fiche artiste</a>
 	</div>
 <?php
 	}
@@ -489,6 +492,7 @@ include('header.php');
 		?>
 			<div class="hidden-md hidden-xs btn-area-col">
 				<a href="<?= URL_ROOT ?>artwork.php?id=<?= $targetArtwork->getId();?>" class="btn btn-default btn-custom" role="button"><span class="fa fa-desktop"></span> Voir la page visiteur</a>
+				<a href="<?= URL_ADMIN ?>artist_zoom.php?artist=<?= $parentArtist->getId();?>" class="btn btn-default btn-custom" role="button"><span class="fa fa-paint-brush"></span> Voir la fiche artiste</a>
 			</div>
 		<?php
 			}
@@ -508,7 +512,7 @@ include('header.php');
 				<h2>Exposée dans:</h2>
 				<ul>
 					<?php
-					if(isset($targetArtwork)){
+					if(isset($targetArtwork) && !empty($targetArtwork->getId())){
 						$exhibit = $targetArtwork->getExhibit();
 						foreach ($exhibit as $ex) {
 							?>
@@ -541,6 +545,21 @@ include('header.php');
 					}
 					?>
 				</ul>
+			</section>
+			<section>
+				<h2>Du même artiste :</h2>
+					<ul>
+					<?php
+					if (isset($targetArtwork) && !empty($targetArtwork->getId())) {
+						$listArtwork = $parentArtist->getArtwork();
+						foreach ($listArtwork as $artwork) {
+							?>
+							<li><a href="<?= URL_ADMIN ?>artwork_zoom.php?artwork=<?= $artwork->getId() ?>"><h4><span class="fa fa-eye"></span> <?= $artwork->getTitle(); ?></h4></a></li>
+							<?php
+						}
+					}
+					?>
+					</ul>
 			</section>
 		</div>
 	</div>

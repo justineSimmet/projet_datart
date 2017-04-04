@@ -149,8 +149,8 @@ include('header.php');
 							foreach ($last as $l) {
 								if (is_a($l, 'Exhibit')) {
 									$title = '';
-									if (strlen($l->getTitle()) > 20) {
-										$title = substr($l->getTitle(),0,15).'(...)';
+									if (strlen($l->getTitle()) > 25) {
+										$title = substr($l->getTitle(),0,20).'(...)';
 									}
 									else{
 										$title = $l->getTitle();
@@ -159,8 +159,8 @@ include('header.php');
 								}
 								elseif (is_a($l, 'Artist')) {
 									$title = '';
-									if (strlen($l->getTitle()) > 20) {
-										$title = substr($l->getTitle(),0,15).'(...)';
+									if (strlen($l->getTitle()) > 25) {
+										$title = substr($l->getTitle(),0,20).'(...)';
 									}
 									else{
 										$title = $l->getTitle();
@@ -169,8 +169,8 @@ include('header.php');
 								}
 								else{
 									$title = '';
-									if (strlen($l->getTitle()) > 20) {
-										$title = substr($l->getTitle(),0,15).'(...)';
+									if (strlen($l->getTitle()) > 25) {
+										$title = substr($l->getTitle(),0,20).'(...)';
 									}
 									else{
 										$title = $l->getTitle();
@@ -196,7 +196,7 @@ include('header.php');
 								$parentExhibit = new Exhibit($event->getExhibitId());
 								?>
 								<li>
-									<a href="<?= URL_ADMIN ?>artwork_zoom?artwork=<?= $event->getExhibitId() ?>"><?= $parentExhibit->getTitle() ?> : <?= $event->getName()?> >> le <?= dateFormat($event->getEventDate()); ?> à <?= timeFormat($event->getEventStartTime()); ?></a>
+									<a href="<?= URL_ADMIN ?>artwork_zoom?artwork=<?= $event->getExhibitId() ?>"><?= $parentExhibit->getTitle() ?> >> <?= $event->getName()?> le <?= dateFormat($event->getEventDate()); ?> à <?= timeFormat($event->getEventStartTime()); ?></a>
 								</li>
 								<?php
 							}

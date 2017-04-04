@@ -141,7 +141,7 @@ function mainPictureAction(mainTarget, visualArea, captionArea){
             success: function (response) {
                 //Test si il n'y a pas d'erreur sur l'image envoyée
                 if(response.file.image.error == 0 ){
-                	var success ='<p class="text-success">Le visuel a bien été enregistré.<p>';
+                	var success ='<div class="alert alert-success alert-dismissable"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><p class="text-center">Le visuel a bien été enregistré.<p></div>';
 					var btnPicture = '<button type="button" class="btn btn-danger pull-left delete-main-picture"'
 					+' data-action="deletePicture" data-picture="'+response.text.pictureId+'">Supprimer</button>';
 
@@ -156,7 +156,7 @@ function mainPictureAction(mainTarget, visualArea, captionArea){
                 	$(mainTarget).find('.alert-area-picture').html(success);
                 }
                 else{
-                	var error ='<p class="text-danger"><strong>Erreur ! </strong>'+response.file.image.error+'<p>';
+                	var error ='<div class="alert alert-danger alert-dismissable"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><p class="text-center"><strong>Erreur ! </strong>'+response.file.image.error+'<p></div>';
                 	$(mainTarget).find('.alert-area-picture').html(error);
                 	$(mainTarget).find('input[name="file"]').val('');
                 }
@@ -164,12 +164,11 @@ function mainPictureAction(mainTarget, visualArea, captionArea){
         })
 	})
 
+	//Retourne le visuel chargé par l'utilisateur avant validation ou annulation
     $(mainTarget).find('input[name="image"]').on('change', function (e) {
         var files = $(this)[0].files;
  
         if (files.length > 0) {
-            // On part du principe qu'il n'y qu'un seul fichier
-            // étant donné que l'on a pas renseigné l'attribut "multiple"
             var file = files[0];
             var $image_preview = $(visualArea);
             var $caption = $(captionArea);
@@ -201,7 +200,7 @@ function mainPictureAction(mainTarget, visualArea, captionArea){
 		$.post('picture_process.php',{action : 'deletePicture', pictureId : picture}, function(response){
 			var obj = JSON.parse(response);
 			if (obj.response == 'success') {
-				var success ='<p class="text-success">Le visuel a bien été supprimé.<p>';
+				var success ='<div class="alert alert-success alert-dismissable"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><p class="text-center">Le visuel a bien été supprimé.<p></div>';
 				$(mainTarget).find('input[name="image"]').val('');
 				$(mainTarget).find('input[name="legend"]').val('');
 				$(visualArea).find('img').attr('src', '');
@@ -214,7 +213,7 @@ function mainPictureAction(mainTarget, visualArea, captionArea){
 
 			}
 			else{
-				var error ='<p class="text-danger"><strong>Erreur !</strong> L\'image n\'a pas pu être supprimée.<p>';
+				var error ='<div class="alert alert-danger alert-dismissable"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><p class="text-center"><strong>Erreur !</strong> L\'image n\'a pas pu être supprimée.<p></div>';
                 $(mainTarget).find('.alert-area-picture').html(error);
                 $(captionArea).addClass('hidden');
 			}

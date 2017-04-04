@@ -669,7 +669,9 @@ class Artwork{
 				<button type="submit" class="btn btn-default pull-right"><?= !empty($this->getId()) && !empty($picture)?'Modifier':'Ajouter' ?></button>
 			</fieldset>
 				<p class="target-file hidden"></p>
-				<div class="alert-area-picture"></div>
+				<div class="alert-area-picture">
+					
+				</div>
 
 		</form>
 		<?php

@@ -1,10 +1,15 @@
 <?php 
 
-
-require_once('classes/artist.php');
-require_once('classes/artist.php');
 require_once('classes/user.php');
+require_once('classes/artist.php');
 require_once('classes/artist_textual_content.php');
+require_once('classes/artwork.php');
+require_once('classes/artwork_textual_content.php');
+require_once('classes/artwork_visual.php');
+require_once('classes/artwork_additional.php');
+require_once('classes/exhibit.php');
+require_once('classes/exhibit_textual_content.php');
+require_once('classes/event.php');
 require_once('includes/include.php');
 
 
@@ -468,6 +473,35 @@ include('header.php');
 							<?php
 						}
 					?>
+					<section>
+						<h2>Exposé dans :</h2>
+						<ul>
+						<?php
+							$listExhibit = $targetArtist->listArtistExhibit();
+							foreach ($listExhibit as $exhibit) {
+								?>
+								<li><a href="<?= URL_ADMIN ?>exhibit_zoom.php?exhibit=<?= $exhibit->getId() ?>">
+									<h4><span class="fa fa-eye"></span><?= $exhibit->getTitle() ?></h4>
+									<p>du <?= dateFormat($exhibit->getBeginDate()); ?> au <?= dateFormat($exhibit->getEndDate()); ?></p>
+								</a></li>
+								<?php
+							}
+						?>
+						</ul>
+					</section>
+					<section>
+						<h2>Oeuvres enregistrées :</h2>
+						<ul>
+						<?php
+							$listArtwork = $targetArtist->getArtwork();
+							foreach ($listArtwork as $artwork) {
+								?>
+								<li><a href="<?= URL_ADMIN ?>artwork_zoom.php?artwork=<?= $artwork->getId() ?>"><h4><span class="fa fa-eye"></span> <?= $artwork->getTitle(); ?></h4></a></li>
+								<?php
+							}
+						?>
+						</ul>
+					</section>
 				</div>
 				<?php
 			}

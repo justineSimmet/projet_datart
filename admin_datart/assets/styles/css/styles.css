@@ -381,8 +381,11 @@ ul {
 *********************************************************** */
 #current-exhibit {
   position: relative;
-  padding-bottom: 20px;
-  margin-bottom: 15px; }
+  padding: 0 15px 20px 15px;
+  margin: 0 -15px 0 -15px;
+  -webkit-box-shadow: 0 5px 2px rgba(100, 100, 100, 0.15);
+  -moz-box-shadow: 0 5px 2px rgba(100, 100, 100, 0.15);
+  box-shadow: 0 5px 2px rgba(100, 100, 100, 0.15); }
   #current-exhibit h2 {
     margin-bottom: 0; }
   #current-exhibit .date {
@@ -394,13 +397,11 @@ ul {
   #current-exhibit .exhibit-picture {
     position: absolute;
     top: -20px;
-    right: -15px;
+    right: 0;
     bottom: 0;
-    max-width: 50%;
-    min-width: 50%;
-    overflow: hidden;
-    border-bottom: 1px solid #d5313a;
-    border-left: 1px solid #d5313a; }
+    max-width: 45%;
+    min-width: 45%;
+    overflow: hidden; }
     #current-exhibit .exhibit-picture img {
       position: absolute;
       top: -100%;
@@ -474,7 +475,6 @@ ul {
     width: 50px;
     background-color: #778085;
     color: #fff;
-    box-shadow: 5px 0 2px rgba(150, 150, 150, 0.2);
     margin-bottom: -10px;
     margin-left: -15px;
     margin-top: -10px;
@@ -494,7 +494,7 @@ ul {
         font-size: 1.2em; }
 
 .module-title {
-  background-color: #d5313a;
+  background-color: #778085;
   color: #fff;
   text-align: center;
   margin: -15px -15px 0 -15px;
@@ -503,13 +503,13 @@ ul {
 #last-creation li, #next-event li {
   text-align: center;
   margin: 0 -15px;
-  padding: 10px 15px; }
+  padding: 5px 10px; }
   #last-creation li a, #next-event li a, #last-creation #main-nav #main-nav-menu .nav-submenu li .active-nav-link, #main-nav #main-nav-menu .nav-submenu #last-creation li .active-nav-link, #next-event #main-nav #main-nav-menu .nav-submenu li .active-nav-link, #main-nav #main-nav-menu .nav-submenu #next-event li .active-nav-link {
-    color: #778085; }
+    color: #000; }
 #last-creation li:nth-child(even), #next-event li:nth-child(even) {
-  background-color: #778085; }
+  background-color: #c1c6c9; }
   #last-creation li:nth-child(even) a, #next-event li:nth-child(even) a, #last-creation #main-nav #main-nav-menu .nav-submenu li:nth-child(even) .active-nav-link, #main-nav #main-nav-menu .nav-submenu #last-creation li:nth-child(even) .active-nav-link, #next-event #main-nav #main-nav-menu .nav-submenu li:nth-child(even) .active-nav-link, #main-nav #main-nav-menu .nav-submenu #next-event li:nth-child(even) .active-nav-link {
-    color: #fff; }
+    color: #000; }
 #last-creation li:last-child, #next-event li:last-child {
   margin-bottom: -20px; }
 

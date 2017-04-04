@@ -1,7 +1,9 @@
 #current-exhibit{
 	position: relative;
-	padding-bottom : 20px;
-	margin-bottom:15px;
+	padding : 0 15px 20px 15px;
+	margin: 0 -15px 0 -15px;
+	@include shadow(0, 5px, 2px, rgba(100,100,100,0.15), false);
+
 	h2{
 		margin-bottom: 0;	
 	}
@@ -17,13 +19,11 @@
 	.exhibit-picture{
 		position: absolute;
 		top: -20px;
-		right: -15px;
+		right: 0;
 		bottom: 0;
-		max-width: 50%;
-		min-width: 50%;
+		max-width: 45%;
+		min-width: 45%;
 		overflow: hidden;
-		border-bottom: 1px solid $datart-red;
-		border-left: 1px solid $datart-red;
 
 		img{
 			position: absolute;
@@ -119,7 +119,6 @@
 		width: 50px;
 		background-color: #778085;
 		color: #fff;
-		box-shadow: 5px 0 2px rgba(150,150,150, 0.2);
 		margin-bottom: -10px;
 		margin-left: -15px;
 		margin-top: -10px;
@@ -147,7 +146,7 @@
 }
 
 .module-title{
-	background-color: $datart-red;
+	background-color: $datart-gray;
 	color: #fff;
 	text-align:center;
 	margin : -15px -15px 0 -15px;
@@ -159,16 +158,16 @@
 	li{
 		text-align: center;
 		margin: 0 -15px;
-		padding: 10px 15px;
+		padding: 5px 10px;
 		a{
-			color: $datart-gray;
+			color: #000;
 		}
 	}
 
 	li:nth-child(even){
-		background-color:$datart-gray;
+		background-color:#c1c6c9;
 		a{
-			color: #fff;
+			color: #000;
 		}
 	}
 

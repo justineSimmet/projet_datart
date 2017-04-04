@@ -225,6 +225,18 @@ class Artist{
     return $this->artwork;
   }
 
+  /*
+	Retourne la liste des expos ou l'artiste a été présenté
+  */
+	function listArtistExhibit(){
+		$res = requete_sql("SELECT exhibit_id FROM artist_exposed WHERE artist_id = '".$this->id."'");
+		$listExhibit = array();
+		while ($exhibit = $res->fetch(PDO::FETCH_ASSOC)){
+            array_push($listExhibit, new Exhibit($exhibit['exhibit_id']));
+        }
+        return $listExhibit;
+	}
+
 
 
 /***************************************************************************
@@ -472,69 +484,6 @@ soit à faire un update des données de l'id reçue
 /***************************************************************************
 
 
-            		Controle sur les traductions de textes
-
-
-****************************************************************************/
-
-	function checkTrad($language){
-
-		if (!empty($this->getTextualContent())) {
-			switch ($language) {
-				case 'english':
-					if (!empty($this->getEnglishBiography()->getContent()) && !empty($this->getEnglishNote()->getContent())) {
-					return TRUE;
-					}
-					else{
-						return FALSE;
-					}
-					break;
-				
-				case 'german':
-					if (!empty($this->getGermanBiography()->getContent()) && !empty($this->getGermanNote()->getContent())) {
-					return TRUE;
-					}
-					else{
-						return FALSE;
-					}
-					break;
-				
-				case 'russian':
-					if (!empty($this->getRussianBiography()->getContent()) && !empty($this->getRussianNote()->getContent())) {
-					return TRUE;
-					}
-					else{
-						return FALSE;
-					}
-					break;
-				
-				case 'chinese':
-					if (!empty($this->getChineseBiography()->getContent()) && !empty($this->getChineseNote()->getContent())) {
-					return TRUE;
-					}
-					else{
-						return FALSE;
-					}
-					break;
-				
-				default:
-					return FALSE;
-					break;
-			}
-		}
-		else{
-			return FALSE;
-		}		
-	}
-
-
-
-
-
-
-/***************************************************************************
-
-
 
 							Visibilité fiche artiste
 
@@ -711,7 +660,7 @@ soit à faire un update des données de l'id reçue
 
 /**************************************************
 	
-	verif' trad de la bio+note d'un artiste
+	verif' trad de la bio d'un artiste
 
 
 ***************************************************/ 

@@ -285,7 +285,6 @@ else{
                 ****************************************************/
                 elseif($_POST['action'] == 'add-picture-three'){
                     if (empty($_POST['pictureId'])) {
-                        print_r($size);
                         $namePicture = 'art'.$targetArtwork->getId().'_img3'.$extension;
                         $newVisual = new Visual();
                         $artworkId = $targetArtwork->getId();
