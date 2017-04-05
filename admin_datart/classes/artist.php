@@ -313,7 +313,28 @@ soit à faire un update des données de l'id reçue
     return $tabList;
   }
 
+/***************************************************************************
 
+
+							Liste oeuvres exposées // Artiste
+
+
+
+***************************************************************************/
+
+	function listDisplayedArtwork($targetExhibit){
+		$res = requete_sql("SELECT artwork_displayed.artwork_id AS artwork_id FROM artwork_displayed
+                LEFT JOIN artwork ON artwork_id = artwork.id
+                WHERE artwork.artist_id = '".$this->id."'
+                AND artwork_displayed.exhibit_id = '".$targetExhibit."'
+                ORDER BY artwork.artwork_title ASC
+                ");
+        $listArtworks = array();
+        while ($art = $res->fetch(PDO::FETCH_ASSOC)){
+            array_push($listArtworks, new Artwork($art['artwork_id']));
+        }
+        return $listArtworks;
+    }
 
 /***************************************************************************
 

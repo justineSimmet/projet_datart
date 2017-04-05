@@ -16,9 +16,6 @@ class Exhibit{
 	private $visible;
 	private $creation_date;
 	private $textual_content;
-	public $event;
-	private $artist_exposed;
-	private $artwork_displayed;
 
 	function __construct($id=''){
 
@@ -31,7 +28,7 @@ class Exhibit{
 			$this->begin_date = $exhibit['begin_date'];	
 			$this->end_date = $exhibit['end_date'];	
 			$this->public_opening = $exhibit['public_opening'];	
-			/*$this->art_zoning = $exhibit['art_zoning'];	*/
+			$this->art_zoning = $exhibit['art_zoning'];	
 			$this->visible = $exhibit['visible'];	
 			$this->creation_date = $exhibit['creation_date'];
 			$this->textual_content = array();
@@ -86,30 +83,10 @@ class Exhibit{
 			else{
 				$this->textual_content = array();
 			}
-			$this->event = array();
-			$event = requete_sql("SELECT id FROM event WHERE exhibit_id = '".$this->id."' ORDER BY event_date ASC, event_start_time ASC");
-			if (count($event) !== 0) {
-				while ($e = $event->fetch(PDO::FETCH_ASSOC)) {
-					array_push($this->event, new Event($e['id']));
-				}
-			}
-			$this->artist_exposed = array();
-			$artist = requete_sql("SELECT artist_exposed.artist_id, CONCAT(artist.surname, artist.alias) AS identity FROM artist_exposed LEFT JOIN artist ON artist_exposed.artist_id = artist.id WHERE exhibit_id = '".$this->id."' AND visible = TRUE ORDER BY identity ASC");
-			while ($a = $artist->fetch(PDO::FETCH_ASSOC) ) {
-				array_push($this->artist_exposed, new Artist($a['artist_id']));
-			}
-			$this->artwork_displayed = array();
-			$artwork = requete_sql("SELECT artwork_displayed.artwork_id FROM artwork_displayed LEFT JOIN artwork ON artwork_displayed.artwork_id = artwork.id  WHERE exhibit_id = '".$this->id."' AND visible = TRUE ");
-			while ($a = $artwork->fetch(PDO::FETCH_ASSOC) ) {
-				array_push($this->artwork_displayed, new Artwork($a['artwork_id']));
-			}
 			
 		}
 		else {
         	$this->textual_content = array();
-        	$this->event = array();
-        	$this->artist_exposed = array();
-        	$this->artwork_displayed = array();
         }
 	}
 
@@ -244,6 +221,16 @@ class Exhibit{
 		}
 	}
 
+	function getEvents(){
+		$res = requete_sql("SELECT id FROM event WHERE exhibit_id = '".$this->id."' ORDER BY event_date, event_start_time");
+		$events =  $res->fetchAll(PDO::FETCH_ASSOC);
+		$listEvent = array();
+		foreach ($events as $event) {
+			array_push($listEvent, new Event($event['id']));
+		}
+		return $listEvent;
+	}
+
 	//Récupère l'ID de l'événement d'ouverture
 	function getOpenEvent(){
 		$res = requete_sql("SELECT id FROM event WHERE exhibit_id = '".$this->id."' AND name = 'Début' ");
@@ -261,23 +248,37 @@ class Exhibit{
 	}
 
 	function setArtistExposed($id){
-		array_push($this->artist_exposed, new Artist($id));
+		array_push($this->artist_exposed, $id);
 		return TRUE;
 	}
 
 	function getArtistExposed(){
-		return $this->artist_exposed;
-	}
-
-	function resetArtistExposed(){
-		$this->artist_exposed = array();
-		return $this->artist_exposed;
+		$res = requete_sql("SELECT artist.id, artist.surname, artist.name, artist.alias FROM artist
+							LEFT JOIN artist_exposed ON artist.id = artist_exposed.artist_id
+							WHERE artist_exposed.exhibit_id = '".$this->id."' ORDER BY CONCAT(artist.alias, artist.surname) ASC ");
+		$res = $res->fetchAll(PDO::FETCH_ASSOC);
+		$listArtists = array();
+		foreach ($res as $artist) {
+			$identity = '';
+			if (!empty($artist['name']) && !empty($artist['surname'])) {
+	      		if (!empty($artist['alias'])) {
+	        	$identity = $artist['alias'].' ('.$artist['surname'].' '.$artist['name'].')';
+	      		}
+	      		else{
+	        		$identity = $artist['surname'].' '.$artist['name'];
+	      		}
+	    	}
+	    	else{
+	      		$identity = $artist['alias'];
+	    	}
+	    	$listArtists[$artist['id']] = $identity;
+		}
+		return $listArtists;
 	}
 
 	function cleanArtistExposed(){
 		$res = requete_sql("DELETE FROM artist_exposed WHERE exhibit_id = '".$this->id."' ");
 		if($res){
-			$this->artist_exposed = array();
 			return TRUE;
 		}
 		else{
@@ -291,12 +292,15 @@ class Exhibit{
 	}
 
 	function getArtworkDisplayed(){
-		return $this->artwork_displayed;
-	}
-
-	function resetArtworkDisplayed(){
-		$this->artwork_displayed = array();
-		return $this->artwork_displayed;
+		$res = requete_sql("SELECT artwork.id, artwork.artwork_title, artwork.artist_id FROM artwork
+							LEFT JOIN artwork_displayed ON artwork.id = artwork_displayed.artwork_id
+							WHERE artwork_displayed.exhibit_id = '".$this->id."' ORDER BY artwork.artwork_title ASC");
+		$res = $res->fetchAll(PDO::FETCH_ASSOC);
+		$listArtworks = array();
+		foreach ($res as $artwork) {
+			$listArtworks[$artwork['id']] = ['artist_id'=>$artwork['artist_id'],'title'=>$artwork['artwork_title']];
+		}
+		return $listArtworks;
 	}
 
 	function cleanArtworkdDisplayed(){

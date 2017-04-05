@@ -9,7 +9,6 @@ require_once('admin_datart/classes/artwork_additional.php');
 require_once('admin_datart/classes/artwork_textual_content.php');
 require_once('admin_datart/classes/artwork_visual.php');
 require_once('admin_datart/classes/exhibit_textual_content.php');
-require_once('admin_datart/classes/event.php');
 
 
 
@@ -39,6 +38,7 @@ if (isset($_SESSION['lang_user']) ) {
 }
 
 
+var_dump($targetExhibit);
 ?>
 
 <section id="exhibit_presentation">
@@ -68,32 +68,29 @@ if (isset($_SESSION['lang_user']) ) {
 		<div>
 			<ul>
 		<?php 
-			$list = $targetExhibit->getArtistExposed();
-			foreach ($list as $artist) {
-			
-		 ?>
-				<li>
-					<a href="<?= URL_ROOT?>artist.php?exhibit=<?= $targetExhibit->getId()?>&artist=<?= $artist->getId()?>" class="list"><span class="fa fa-paint-brush"></span> <?= $artist->getIdentity() ?></a>
-					<ul>
-						<?php 
-							$artworks = $artist->listDisplayedArtwork($targetExhibit->getId());
-
-							foreach ($artworks as $artwork) {
-						?>
-								<li>
-									<a href=""><span class="fa fa-eye"></span> <?= $artwork->getTitle() ?></a>
-								</li>
-						<?php 
-							}
-						 ?>
-					</ul>
-				</li>	
-		 	</ul>
-		 	<?php 
-		 	}
-		 	 ?>	
+			$listArtist = $targetExhibit->getArtistExposed();
+			$listArtwork = $targetExhibit->getArtworkDisplayed();
+			foreach ($listArtist as $artistId => $artistIdentity) {
+					?>
+					<li><a href="<?= URL_ROOT ?>artist.php?id=<?= $artistId ?>"><span class="fa fa-paint-brush"></span> <?= $artistIdentity ?></a>
+					<?php
+					foreach ($listArtwork as $artworkId => $artwork) {
+						if ($artwork['artist_id'] == $artistId) {
+							?>
+							<ul>
+								<li><a href=ref="<?= URL_ROOT ?>artwork.php?id=<?= $artworkId ?>"><span class="fa fa-eye"></span> <?= $artwork['title'] ?></a></li>
+							</ul>
+							<?php
+						}
+					}
+					echo'</li>';
+				}	
+		?>	
+			</ul>
 		</div>
 </section>
+
+
 
 <?php
 };

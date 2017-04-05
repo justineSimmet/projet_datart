@@ -731,7 +731,7 @@ include('header.php');
 							<ul>
 								<?php
 								if (isset($targetExhibit)) {
-								foreach ($targetExhibit->event as $event) {
+								foreach ($targetExhibit->getEvents() as $event) {
 								?>
 								<li>
 									<div class="event-text">
