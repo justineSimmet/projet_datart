@@ -724,8 +724,9 @@ input.input-file {
     margin-bottom: 5px; }
     #availble-artwork .list-element .text-area {
       display: inline-block;
-      width: 70%; }
+      width: 80%; }
       #availble-artwork .list-element .text-area h3 {
+        font-size: 1em;
         margin-bottom: 5px; }
       #availble-artwork .list-element .text-area p {
         margin-bottom: 0; }
@@ -734,8 +735,7 @@ input.input-file {
   position: relative;
   float: right;
   width: 20%;
-  max-height: 82px;
-  max-height: 58px;
+  max-height: 57px;
   padding: 10px 0;
   font-size: 1.8em;
   text-align: center;

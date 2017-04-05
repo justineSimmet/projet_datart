@@ -31,7 +31,7 @@ class Exhibit{
 			$this->begin_date = $exhibit['begin_date'];	
 			$this->end_date = $exhibit['end_date'];	
 			$this->public_opening = $exhibit['public_opening'];	
-			$this->art_zoning = $exhibit['art_zoning'];	
+			/*$this->art_zoning = $exhibit['art_zoning'];	*/
 			$this->visible = $exhibit['visible'];	
 			$this->creation_date = $exhibit['creation_date'];
 			$this->textual_content = array();
@@ -94,7 +94,7 @@ class Exhibit{
 				}
 			}
 			$this->artist_exposed = array();
-			$artist = requete_sql("SELECT artist_exposed.artist_id FROM artist_exposed LEFT JOIN artist ON artist_exposed.artist_id = artist.id WHERE exhibit_id = '".$this->id."' AND visible = TRUE ");
+			$artist = requete_sql("SELECT artist_exposed.artist_id, CONCAT(artist.surname, artist.alias) AS identity FROM artist_exposed LEFT JOIN artist ON artist_exposed.artist_id = artist.id WHERE exhibit_id = '".$this->id."' AND visible = TRUE ORDER BY identity ASC");
 			while ($a = $artist->fetch(PDO::FETCH_ASSOC) ) {
 				array_push($this->artist_exposed, new Artist($a['artist_id']));
 			}
@@ -508,8 +508,6 @@ class Exhibit{
 		$differentPlus = array_diff($array, $comparList);
 		$differentMinus = array_diff($comparList, $array);
 		$result = FALSE;
-		var_dump($differentPlus);
-		var_dump($differentMinus);
 		if( empty($differentPlus) && empty($differentMinus) ){
 			$result = TRUE;
 		}
@@ -868,10 +866,8 @@ class Exhibit{
                 $listArtwork = array();
                 foreach ($id as $key => $id) {
                     $artwork = new Artwork($id);
-                    // array_push($listArtwork, $artwork);
                     $list[$artist->getIdentity()][$key] = $artwork;
                 }
-                 // = $listArtwork;
             }
             else{
                 $artist = new Artist($value['artist_id']);

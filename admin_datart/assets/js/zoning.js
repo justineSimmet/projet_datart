@@ -28,10 +28,6 @@ $(document).ready(function() {
 		var exhibit = $(this).attr('data-exhibit');
 		var dataJson = JSON.stringify(arrayData);
 
-		// var element = $('#drop-area');
-		// var myImage = '';
-
-
 		$.post('save_zoning.php',{action:'save', data: dataJson, target: exhibit} , function(response){
 				var obj = JSON.parse(response);
 				if (obj.response == 'success') {

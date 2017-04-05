@@ -142,7 +142,7 @@ if(!empty($imageZoning)){
 //Page d'affichage du plan de positionnement
 	$pdf->AddPage("L");
 	$pdf->Ln(0);
-	$pdf->Image($imageZoning,0,40,297);
+	$pdf->Image($imageZoning,10,40,277);
 }
 
 //fin de page+numerotation

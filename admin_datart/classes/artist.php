@@ -291,6 +291,19 @@ soit à faire un update des données de l'id reçue
 		}
 	}
 
+	function listDisplayedArtwork($targetExhibit){
+		$res = ("SELECT artwork_displayed.artwork_id AS artwork_id FROM artwork_displayed
+				LEFT JOIN artwork ON artwork_id = artwork.id
+				WHERE artwork.artist_id = '".$this->id."'
+				AND artwork_displayed.exhibit_id = '".$targetExhibit."'
+				ORDER BY artwork.title ASC
+				");
+		$listArtworks = array();
+		while ($art = $res->fetch(PDO::FETCH_ASSOC)){
+            array_push($listArtworks, new Artwork($art['artwork_id']));
+        }
+		return $listArtworks;
+	}
 
 /***************************************************************************
 
@@ -465,7 +478,7 @@ soit à faire un update des données de l'id reçue
 	function formPhoto($target, $action=''){
 	?>
 		<form action=<?= $target ?> method="POST" enctype="multipart/form-data">
-			<fieldset <?= !empty($this->getId()) && $this->getVisible() == FALSE?'disabled':''; ?> >
+			<fieldset <?= (!empty($this->getId()) && $this->getVisible() == FALSE) || empty($this->getId()) ?'disabled':''; ?> >
 				<label for="file">Fichier (JPG | max. 2 Mo) :</label><br>
 				<input type="hidden" name="taille Maxi" value="2097152" />
 				<input type="file" name="fichier" class="form-control"/>

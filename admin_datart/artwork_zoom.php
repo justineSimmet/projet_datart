@@ -301,7 +301,9 @@ include('header.php');
 					</div>
 				</div>
 			</section>
-
+			<?php
+			if ( isset($targetArtwork) && !empty($targetArtwork->getId())) {
+			?>
 			<section>
 				<h2>Etape 3 : Visuels</h2>
 				<h4>Visuels principaux</h4>
@@ -479,6 +481,9 @@ include('header.php');
 
 				</div>
 			</section>
+			<?php
+			}
+			?>
 		</div>
 	</div>
 </div>

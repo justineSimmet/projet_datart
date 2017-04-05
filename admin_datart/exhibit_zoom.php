@@ -549,7 +549,7 @@ include('header.php');
 
 <!-- *************************** FORMULAIRE Textes d'accompagnement *************************** -->
 				<div class="div-minus">
-					<h3>Etape 1 : Textes d'accompagnement</h3>
+					<h3>Etape 2 : Textes d'accompagnement</h3>
 					<div id="formTextArea">
 					<?php
 						if (isset($targetExhibit)) {

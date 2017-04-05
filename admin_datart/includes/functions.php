@@ -43,7 +43,7 @@ function dateFormat($str){
 
 	if(preg_match($datetimeToNormalize, $str)){
 		$date = DateTime::createFromFormat('Y-m-d H:i:s', $str);
-		return $formatedDate =  $date->format('d/m/Y à H:s');	
+		return $formatedDate =  $date->format('d/m/Y à H:i');	
 	}
 	elseif (preg_match($dbToNormalize, $str)) {
 		$date = DateTime::createFromFormat('Y-m-d', $str);
