@@ -48,7 +48,7 @@ include('header.php');
 							<?php
 								$randomImage = $artworkArray[$randNumber]->getPictureOne();
 							?>
-							<img src="<?= $randomImage->getTarget(); ?>" alt="<?= $randomImage->getLegend(); ?>"/>
+							<img src="<?= URL_IMAGES.$randomImage->getTarget(); ?>" alt="<?= $randomImage->getLegend(); ?>"/>
 						</div>
 						</div>
 						<?php

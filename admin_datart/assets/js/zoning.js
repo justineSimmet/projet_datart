@@ -82,10 +82,6 @@ $(document).ready(function() {
 		$('#quitWindow').modal('show');
 	});
 
-	/*if($('#image-base64').length){
-		console.log('#image-base64');
-	}*/
-
 /**********************************************
 ** DRAG AND DROP AVEC JQUERY UI
 ************************************************/

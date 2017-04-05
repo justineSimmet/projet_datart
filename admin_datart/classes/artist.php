@@ -291,19 +291,6 @@ soit à faire un update des données de l'id reçue
 		}
 	}
 
-	function listDisplayedArtwork($targetExhibit){
-		$res = ("SELECT artwork_displayed.artwork_id AS artwork_id FROM artwork_displayed
-				LEFT JOIN artwork ON artwork_id = artwork.id
-				WHERE artwork.artist_id = '".$this->id."'
-				AND artwork_displayed.exhibit_id = '".$targetExhibit."'
-				ORDER BY artwork.title ASC
-				");
-		$listArtworks = array();
-		while ($art = $res->fetch(PDO::FETCH_ASSOC)){
-            array_push($listArtworks, new Artwork($art['artwork_id']));
-        }
-		return $listArtworks;
-	}
 
 /***************************************************************************
 

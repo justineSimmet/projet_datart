@@ -358,7 +358,7 @@ include('header.php');
 			    						<div class="col-sm-3">
 			    							<div class="thumbnail">
 				    							<div class="img-container">
-				    								<img src="<?= $v->getTarget(); ?>">
+				    								<img src="<?= URL_IMAGES.$v->getTarget(); ?>">
 				    							</div>
 				    							<div class="caption" data-artwork="<?= !empty($v->getArtworkId())?$v->getArtworkId():''; ?>" data-visual="<?= !empty($v->getId())?$v->getId():''; ?>">
 				    								<textarea name="legend" disabled placeholder="Légende"><?= !empty($v->getLegend())?$v->getLegend():''; ?></textarea>
@@ -406,7 +406,7 @@ include('header.php');
 				    					<li class="clearfix">
 				    						<input type="text" name="add-name" class="form-control" value="<?= $add->getName() ?>" readonly>
 				    						<div class="btn-group pull-right" data-addId="<?= $add->getId() ?>">
-				    							<a href="<?= $add->getTarget() ?>" target="_blank" class="btn btn-default"><span class="fa fa-eye"></span></a>
+				    							<a href="<?= URL_IMAGES.$add->getTarget() ?>" target="_blank" class="btn btn-default"><span class="fa fa-eye"></span></a>
 												<button type="button" class="btn btn-default edit-add"><span class="fa fa-pencil"></button>
 												<button type="button" class="btn btn-danger delete-add"><span class="fa fa-trash"></button>
 											</div>

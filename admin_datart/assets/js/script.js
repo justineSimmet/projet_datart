@@ -1,3 +1,9 @@
+//Déclaration des constantes
+var URL_ROOT = "http://localhost/";
+var URL_ADMIN = URL_ROOT+'admin_datart/';
+var URL_ASSETS = URL_ADMIN+'assets/';
+var URL_IMAGES = URL_ASSETS+'images/';
+
 /*-----------------------------------------------------------------------------
 INITIALISATION TINYMCE
 ------------------------------------------------------------------------------*/
@@ -234,7 +240,7 @@ Dropzone.options.picturesUpload = {
   		var thumbnail ='<div class="col-sm-3">'
 			    +'<div class="thumbnail">'
 				+'<div class="img-container">'
-				+'<img src="'+obj.text.target+'" class="responsive">'
+				+'<img src="'+URL_IMAGES+obj.text.target+'" class="responsive">'
 				+'</div>'
 				+'<div class="caption" data-artwork="'+obj.text.artworkId+'" data-visual="'+obj.text.pictureId+'" >'
 				+'<textarea name="legend" disabled placeholder="Légende">'
@@ -274,7 +280,7 @@ Dropzone.options.filesUpload = {
   		var listElement = '<li class="clearfix">'
   						+'<input type="text" name="add-name" class="form-control" value="'+obj.text.name+'" readonly>'
   						+'<div class="btn-group pull-right" data-addId="'+obj.text.addId+'">'
-  						+'<a href="'+obj.text.target+'" target="_blank" class="btn btn-default"><span class="fa fa-eye"></span></a>'
+  						+'<a href="'+URL_IMAGES+obj.text.target+'" target="_blank" class="btn btn-default"><span class="fa fa-eye"></span></a>'
   						+'<button type="button" class="btn btn-default edit-add"><span class="fa fa-pencil"></button>'
   						+'<button type="button" class="btn btn-default delete-add"><span class="fa fa-trash"></button>'
   						+'</div'
@@ -482,14 +488,14 @@ MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
 	$('.generateCode').on('click', function(){
 		var artworkId = $(this).attr('data-artwork');
 		var exhibitId = $(this).attr('data-exhibit');
-		var target = 'www.grand-angle.fr/exhibit.php?id='+exhibitId+'/artwork.php?id='+artworkId;
+		var target = '192.168.0.14/artwork.php?id='+artworkId;
 		var qrCodeArea = $(this).parents('.qrcode-area');
 		$.post('qrcode.php',{action:'generateCode', artworkId: artworkId, target: target} , function(response){
 			var obj = JSON.parse(response);
 			if (obj.response == 'success') {
-				qrCodeArea.find('img').attr('src','http://localhost/projet_datart/admin_datart/assets/images/artwork/'+artworkId+'/'+obj.target);
+				qrCodeArea.find('img').attr('src',URL_IMAGES+'/artwork/'+artworkId+'/'+obj.target);
 				qrCodeArea.find('.generateCode').remove();
-				qrCodeArea.append('<a type="button" class="btn btn-custom btn-block" href="http://localhost/projet_datart/admin_datart/assets/images/artwork/'+artworkId+'/'+obj.target+'" download>Télécharger le QR Code</a>');
+				qrCodeArea.append('<a type="button" class="btn btn-custom btn-block" href="'+URL_IMAGES+'/artwork/'+artworkId+'/'+obj.target+'" download>Télécharger le QR Code</a>');
 				qrCodeArea.find('p').remove();
 			}else{
 				qrCodeArea.find('#qrcode').html('<p class="red">Une erreur est survenue, le QR Code n\'a pas été généré correctement.</p>');
@@ -500,6 +506,7 @@ MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
 
 /*******************************************************
 ** GESTION DES FICHIERS ANNEXES DES OEUVRES
+	Rangement par type de fichier
 *********************************************************/	
 	$('.preview-list').on('click', 'button', function(){
 		var addElement = $(this).parents('div').attr('data-addId');

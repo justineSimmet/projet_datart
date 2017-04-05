@@ -642,7 +642,7 @@ class Artwork{
 		?>
 		<form action="<?= URL_ADMIN ?>picture_process.php" method="POST" enctype="multipart/form-data" class="text-center form-vertical" id="main-<?= $number ?>">
 			<fieldset <?= empty($this->id)?'disabled':''; ?> class="clearfix">
-				<div id="visual-<?= $number ?>"><img src="<?= !empty($this->getId()) && !empty($picture)?$picture->getTarget():'' ?>" alt="<?= !empty($this->getId()) && !empty($picture)?$picture->getLegend():''; ?>" /></div>
+				<div id="visual-<?= $number ?>"><img src="<?= !empty($this->getId()) && !empty($picture)?URL_IMAGES.$picture->getTarget():'' ?>" alt="<?= !empty($this->getId()) && !empty($picture)?$picture->getLegend():''; ?>" /></div>
 				<div id="caption-<?= $number ?>" class="hidden">
 					<p>
 						<button type="button" name="cancel" class="btn btn-danger">Annuler</button>
@@ -650,7 +650,7 @@ class Artwork{
 				</div>
 				<div class="form-group input-image">
 					<label for="image-<?= $number ?>" class="control-label btn btn-default">Choisir un visuel</label>
-					<input id ="image-<?= $number ?>" class="input-file" type="file" name="image" accept="image/jpeg" value="<?= !empty($this->getId()) && !empty($picture)?$picture->getTarget():'' ?>">
+					<input id ="image-<?= $number ?>" class="input-file" type="file" name="image" accept="image/jpeg" value="<?= !empty($this->getId()) && !empty($picture)?URL_IMAGES.$picture->getTarget():'' ?>">
 				</div>
 				<div class="form-group">
 					<label for="legend" class="control-label">Légende du visuel :</label>
