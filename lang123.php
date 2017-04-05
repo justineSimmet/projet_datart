@@ -1,0 +1,198 @@
+<?php 
+$lang = [
+	'fr' =>[
+		"nav.lien.oeuvres" => "Oeuvres",
+		"nav.lien.artistes" => "Artistes",
+		"nav.lien.expo" => "Expos",
+		"nav.lien.infos" => "Infos",
+		"nav.lang.fr" => "Francais",
+		"nav.lang.en" => "English",
+		"nav.lang.ge" => "Deutsche",
+		"nav.lang.ru" => "Pусский",
+		"nav.lang.cn" => "中文",
+		
+		"artist.biography"=> !isset($targetArtist)?'':$targetArtist->getFrenchBiography()->getContent(),
+		"artist.name"=>!isset($targetArtist)?'':$targetArtist->getIdentity(),
+		"artist.oeuvres.exposees"=> !isset($targetArtist)?'':$targetArtist->getArtworkDisplayed(),
+		"artist.pic"=> !isset($targetArtist)?'':$targetArtist->getPhotographicPortrait(),
+		"artist.liste.oeuvres" => "Liste des oeuvres exposées",
+
+		"expo.duree" => !isset($targetExhibit)?'':dateFormat($targetExhibit->getBeginDate()).' - '.dateFormat($targetExhibit->getEndDate()),
+		"expo.titre"=> !isset($targetExhibit)?'':$targetExhibit->getTitle(),
+		"expo.resume"=> !isset($targetExhibit)?'':$targetExhibit->getFrenchSummary()->getContent(),
+		"expo.tableau.oeuvres" => !isset($targetExhibit)?'':$targetExhibit->listAvailableArtwork(),
+		// "expo.horaires.titre" => "Horaires et jours d'ouverture",
+		"expo.horaires" => !isset($targetExhibit)?'':$targetExhibit->getPublicOpening(),
+
+		"artwork.titre.galerie" => "Galerie",
+		"artwork.name" => !isset($targetArtwork)?'':$targetArtwork->getTitle(),
+		"artwork.titre.oeuvre" => "Au delà de l'oeuvre",
+		"artwork.pic"=> !isset($targetArtwork)?'':$targetArtwork->getPictureOne()->getTarget(),
+		"artwork.pic.two"=> isset($targetArtwork) && !empty($targetArtwork->getPictureTwo())?$targetArtwork->getPictureTwo()->getTarget():'',
+
+		"artwork.nature"=> !isset($targetArtwork)?'':$targetArtwork->getFrenchCharacteristic()->getContent(),
+		"artwork.artist.name"=> !isset($targetArtwork)?'':$targetArtwork->getArtistId(),
+		"artwork.main"=> !isset($targetArtwork)?'':$targetArtwork->getFrenchMain()->getContent(),
+
+		"about.titre.presentation" => "Présentation de l'association ",
+		"about.presentation" => "L’association Grand Angle gère depuis 1996 un espace d’exposition dédié à la culture sur la ville de Tours. Elle est très active sur le plan du développement culturel de la région. Grand Angle propose régulièrement à des artistes l’utilisation de ses locaux.",
+		"about.titre.mentions" => "Mentions légales ",
+		"about.mentions" => " Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloribus ipsam earum ipsum eum excepturi iure et sequi commodi sunt facere sed adipisci asperiores quas, quia ullam, animi repellat minus ea!"
+	],
+	'en' =>[
+		"nav.lien.oeuvres" => "Artwork",
+		"nav.lien.artistes" => "Artist",
+		"nav.lien.expo" => "Exhibit",
+		"nav.lien.infos" => "About",
+		"nav.lang.fr" => "Francais",
+		"nav.lang.en" => "English",
+		"nav.lang.ge" => "Deutsche",
+		"nav.lang.ru" => "Pусский",
+		"nav.lang.cn" => "中文",
+
+		"artist.biography"=> !isset($targetArtist)?'':$targetArtist->getEnglishBiography()->getContent(),
+		"artist.name"=>!isset($targetArtist)?'':$targetArtist->getIdentity(),
+		"artist.oeuvres.exposees"=> !isset($targetExhibit)?'':$targetExhibit->listAvailableArtwork(),
+		"artist.pic"=> !isset($targetArtist)?'':$targetArtist->getPhotographicPortrait(),
+		"artist.liste.oeuvres" => "Exposed artwork's list",
+
+		"expo.duree" => !isset($targetExhibit)?'':dateFormat($targetExhibit->getBeginDate()).' - '.dateFormat($targetExhibit->getEndDate()),
+		"expo.titre"=> !isset($targetExhibit)?'':$targetExhibit->getTitle(),
+		"expo.resume"=> !isset($targetExhibit)?'Nothing':$targetExhibit->getEnglishSummary()->getContent(),
+		"expo.tableau.oeuvres" => !isset($targetExhibit)?'':$targetExhibit->listAvailableArtwork(),
+		// "expo.horaires.titre" => "Horaires et jours d'ouverture",
+		"expo.horaires" => !isset($targetExhibit)?'':$targetExhibit->getPublicOpening(),
+
+		"artwork.titre.galerie" => "Gallery",
+		"artwork.titre.oeuvre" => "Beyond artwork",
+		"artwork.name" => !isset($targetArtwork)?'':$targetArtwork->getTitle(),
+		"artwork.pic"=> !isset($targetArtwork)?'':$targetArtwork->getPictureOne()->getTarget(),
+		"artwork.pic.two"=> isset($targetArtwork) && !empty($targetArtwork->getPictureTwo())?$targetArtwork->getPictureTwo()->getTarget():'',
+		"artwork.nature"=> !isset($targetArtwork)?'':$targetArtwork->getEnglishCharacteristic()->getContent(),
+		"artwork.artist.name"=> !isset($targetArtwork)?'':$targetArtwork->getArtistId(),
+		"artwork.main"=> !isset($targetArtwork)?'':$targetArtwork->getEnglishMain()->getContent(),
+		
+		"about.titre.presentation" => "Presentation of the association",
+		"about.presentation" => "Since 1996, the association Grand Angle has been managing an exhibition space dedicated to culture in the city of Tours. It is very active in the cultural development of the region. Grand Angle regularly offers artists the use of its premises.",
+		"about.titre.mentions" => "Legal Notice",
+		"about.mentions" => " Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloribus ipsam earum ipsum eum excepturi iure et sequi commodi sunt facere sed adipisci asperiores quas, quia ullam, animi repellat minus ea!"
+	],
+	'ge' =>[
+		"nav.lien.oeuvres" => "Kunstwerk",
+		"nav.lien.artistes" => "Künstler",
+		"nav.lien.expo" => "Ausstellungsstück",
+		"nav.lien.infos" => "Über",
+		"nav.lang.fr" => "Francais",
+		"nav.lang.en" => "English",
+		"nav.lang.ge" => "Deutsche",
+		"nav.lang.ru" => "Pусский",
+		"nav.lang.cn" => "中文",
+
+		"artist.biography"=> !isset($targetArtist)?'':$targetArtist->getGermanBiography()->getContent(),
+		"artist.name"=>!isset($targetArtist)?'':$targetArtist->getIdentity(),
+		"artist.oeuvres.exposees"=> !isset($targetExhibit)?'':$targetExhibit->listAvailableArtwork(),
+		"artist.pic"=> !isset($targetArtist)?'':$targetArtist->getPhotographicPortrait(),
+		"artist.liste.oeuvres" => "Liste der vorhandenen Kunstwerke",
+
+		"expo.titre"=> !isset($targetExhibit)?'':$targetExhibit->getTitle(),
+		"expo.resume"=> !isset($targetExhibit)?'':$targetExhibit->getGermanSummary()->getContent(),
+		"expo.duree" => !isset($targetExhibit)?'':dateFormat($targetExhibit->getBeginDate()).' - '.dateFormat($targetExhibit->getEndDate()),
+		"expo.tableau.oeuvres" => !isset($targetExhibit)?'':$targetExhibit->listAvailableArtwork(),
+		// "expo.horaires.titre" => "Horaires et jours d'ouverture",
+		"expo.horaires" => !isset($targetExhibit)?'':$targetExhibit->getPublicOpening(),
+
+		"artwork.titre.galerie" => "Galerie",
+		"artwork.titre.oeuvre" => "Jenseits von Kunstwerken",
+		"artwork.name" => !isset($targetArtwork)?'':$targetArtwork->getTitle(),
+		"artwork.pic"=> !isset($targetArtwork)?'':$targetArtwork->getPictureOne()->getTarget(),
+		"artwork.pic.two"=> isset($targetArtwork) && !empty($targetArtwork->getPictureTwo())?$targetArtwork->getPictureTwo()->getTarget():'',
+		"artwork.nature"=> !isset($targetArtwork)?'':$targetArtwork->getGermanCharacteristic()->getContent(),
+		"artwork.artist.name"=> !isset($targetArtwork)?'':$targetArtwork->getArtistId(),
+		"artwork.main"=> !isset($targetArtwork)?'':$targetArtwork->getGermanMain()->getContent(),
+
+		"about.titre.presentation" => "Präsentation des Vereins",
+		"about.presentation" => "Seit 1996 leitet der Verein Grand Angle einen Ausstellungsraum für Kultur in der Stadt Tours. Es ist sehr aktiv in der kulturellen Entwicklung der Region. Grand Angle bietet den Künstlern regelmäßig die Verwendung ihrer Räumlichkeiten an.",
+		"about.titre.mentions" => "Impressum",
+		"about.mentions" => " Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloribus ipsam earum ipsum eum excepturi iure et sequi commodi sunt facere sed adipisci asperiores quas, quia ullam, animi repellat minus ea!"
+	],	
+	'ru' =>[
+		"nav.lien.oeuvres" => "Художественные работы",
+		"nav.lien.artistes" => "Исполнитель",
+		"nav.lien.expo" => "Экспозиция",
+		"nav.lien.infos" => "Около",
+		"nav.lang.fr" => "Francais",
+		"nav.lang.en" => "English",
+		"nav.lang.ge" => "Deutsche",
+		"nav.lang.ru" => "Pусский",
+		"nav.lang.cn" => "中文",
+
+		"artist.biography"=> !isset($targetArtist)?'':$targetArtist->getRussianBiography()->getContent(),
+		"artist.name"=>!isset($targetArtist)?'':$targetArtist->getIdentity(),
+		"artist.oeuvres.exposees"=> !isset($targetExhibit)?'':$targetExhibit->listAvailableArtwork(),
+		"artist.pic"=> !isset($targetArtist)?'':$targetArtist->getPhotographicPortrait(),
+		"artist.liste.oeuvres" => "Список выставленных художественных работ",
+
+		"expo.titre"=> !isset($targetExhibit)?'':$targetExhibit->getTitle(),
+		"expo.resume"=> !isset($targetExhibit)?'':$targetExhibit->getRussianSummary()->getContent(),
+		"expo.duree" => !isset($targetExhibit)?'':dateFormat($targetExhibit->getBeginDate()).' - '.dateFormat($targetExhibit->getEndDate()),
+		"expo.tableau.oeuvres" => !isset($targetExhibit)?'':$targetExhibit->listAvailableArtwork(),
+		// "expo.horaires.titre" => "Horaires et jours d'ouverture",
+		"expo.horaires" => !isset($targetExhibit)?'':$targetExhibit->getPublicOpening(),
+
+		"artwork.titre.galerie" => "Галерея",
+		"artwork.titre.oeuvre" => "Помимо художественных работ",
+		"artwork.name" => !isset($targetArtwork)?'':$targetArtwork->getTitle(),
+		"artwork.pic"=> !isset($targetArtwork)?'':$targetArtwork->getPictureOne()->getTarget(),
+		"artwork.pic.two"=> isset($targetArtwork) && !empty($targetArtwork->getPictureTwo())?$targetArtwork->getPictureTwo()->getTarget():'',
+		"artwork.nature"=> !isset($targetArtwork)?'':$targetArtwork->getRussianCharacteristic()->getContent(),
+		"artwork.artist.name"=> !isset($targetArtwork)?'':$targetArtwork->getArtistId(),
+		"artwork.main"=> !isset($targetArtwork)?'':$targetArtwork->getRussianMain()->getContent(),
+
+		"about.titre.presentation" => "Представление ассоциации",
+		"about.presentation" => "С 1996 года ассоциация Grand Angle управляет выставочным пространством, посвященным культуре в городе Тур. Он очень активен в культурном развитии региона. Grand Angle регулярно предлагает художникам использовать свои помещения.",
+		"about.titre.mentions" => "выходные данные",
+		"about.mentions" => " Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloribus ipsam earum ipsum eum excepturi iure et sequi commodi sunt facere sed adipisci asperiores quas, quia ullam, animi repellat minus ea!"
+	],	
+	'cn' =>[
+		"nav.lien.oeuvres" => "艺术品",
+		"nav.lien.artistes" => "艺术家",
+		"nav.lien.expo" => "展示",
+		"nav.lien.infos" => "关于",
+		"nav.lang.fr" => "Francais",
+		"nav.lang.en" => "English",
+		"nav.lang.ge" => "Deutsche",
+		"nav.lang.ru" => "Pусский",
+		"nav.lang.cn" => "中文",
+
+		"artist.biography"=> !isset($targetArtist)?'':$targetArtist->getChineseBiography()->getContent(),
+		"artist.name"=>!isset($targetArtist)?'':$targetArtist->getIdentity(),
+		"artist.oeuvres.exposees"=> !isset($targetExhibit)?'':$targetExhibit->listAvailableArtwork(),
+		"artist.liste.oeuvres" => "暴露的艺术品列表",
+		"artist.pic"=> !isset($targetArtist)?'':$targetArtist->getPhotographicPortrait(),
+		
+		"expo.titre"=> !isset($targetExhibit)?'':$targetExhibit->getTitle(),
+		"expo.resume"=> !isset($targetExhibit)?'':$targetExhibit->getChineseSummary()->getContent(),
+		"expo.duree" => !isset($targetExhibit)?'':dateFormat($targetExhibit->getBeginDate()).' - '.dateFormat($targetExhibit->getEndDate()),
+		"expo.tableau.oeuvres" => !isset($targetExhibit)?'':$targetExhibit->listAvailableArtwork(),
+		// "expo.horaires.titre" => "Horaires et jours d'ouverture",
+		"expo.horaires" => !isset($targetExhibit)?'':$targetExhibit->getPublicOpening(),
+
+		"artwork.titre.galerie" => "画廊",
+		"artwork.titre.oeuvre" => "超越艺术品",
+		"artwork.name" => !isset($targetArtwork)?'':$targetArtwork->getTitle(),
+		"artwork.pic"=> !isset($targetArtwork)?'':$targetArtwork->getPictureOne()->getTarget(),
+		"artwork.pic.two"=> isset($targetArtwork) && !empty($targetArtwork->getPictureTwo())?$targetArtwork->getPictureTwo()->getTarget():'',
+		"artwork.nature"=> !isset($targetArtwork)?'':$targetArtwork->getChineseCharacteristic()->getContent(),
+		"artwork.artist.name"=> !isset($targetArtwork)?'':$targetArtwork->getArtistId(),
+		"artwork.main"=> !isset($targetArtwork)?'':$targetArtwork->getChineseMain()->getContent(),
+
+		"about.titre.presentation" => "协会介绍",
+		"about.presentation" => "自1996年以来，“大角度”协会一直在图书馆管理一个致力于文化的展览空间。 对该地区的文化发展非常活跃。 大角度定期为艺术家提供其使用场所。",
+		"about.titre.mentions" => "版本说明",
+		"about.mentions" => " Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloribus ipsam earum ipsum eum excepturi iure et sequi commodi sunt facere sed adipisci asperiores quas, quia ullam, animi repellat minus ea!"
+	],
+];
+
+
+?>
+

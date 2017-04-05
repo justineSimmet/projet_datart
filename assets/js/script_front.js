@@ -62,4 +62,16 @@ Quand scrolldown nav disparait et qd scrollup reapparait
 }()); 
 
 
+/*------------------------------------------------------------
 
+---------------------------------------------------------------*/
+
+
+$(document).ready(function(){
+
+  $("body").on("click", function(){
+      $("nav").fadeToggle();
+  });
+
+
+});

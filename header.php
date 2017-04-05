@@ -18,7 +18,7 @@
 
 	<div class="row">
 <?php
+
 	include('nav.php');
 
-	
 ?>

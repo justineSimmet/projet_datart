@@ -283,6 +283,29 @@ soit à faire un update des données de l'id reçue
 /***************************************************************************
 
 
+							Liste oeuvres exposées // Artiste
+
+
+
+***************************************************************************/
+
+	function listDisplayedArtwork($targetExhibit){
+		$res = requete_sql("SELECT artwork_displayed.artwork_id AS artwork_id FROM artwork_displayed
+                LEFT JOIN artwork ON artwork_id = artwork.id
+                WHERE artwork.artist_id = '".$this->id."'
+                AND artwork_displayed.exhibit_id = '".$targetExhibit."'
+                ORDER BY artwork.artwork_title ASC
+                ");
+        $listArtworks = array();
+        while ($art = $res->fetch(PDO::FETCH_ASSOC)){
+            array_push($listArtworks, new Artwork($art['artwork_id']));
+        }
+        return $listArtworks;
+    }
+
+/***************************************************************************
+
+
 							Liste Artiste
 
 
@@ -765,6 +788,30 @@ soit à faire un update des données de l'id reçue
 		else{
 			return FALSE;
 		}		
+	}
+
+
+/**************************************************
+	
+	liste des oeuvres exposées d'un artiste exposé
+
+
+***************************************************/ 
+
+	function getArtworkDisplayed($currentExhibit){
+		$res = requete_sql("
+			SELECT artwork.id AS artwork_id
+			FROM artwork
+			LEFT JOIN artwork_displayed
+			ON artwork_displayed.artwork_id = artwork.id
+			WHERE artwork.artist_id = '".$this->id."'
+			AND artwork_displayed.exhibit_id = '".$currentExhibit."'
+			");
+		$listArtwork = array();
+		while($artwork = $res->fetch(PDO::FETCH_ASSOC)){
+			array_push($listArtwork, new Artwork($artwork['artwork_id']));
+		};
+		return $listArtwork;
 	}
 
 
