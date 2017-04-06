@@ -70,7 +70,7 @@ if (isset($_GET['id'])){
 		?>
 	</p>
 		<?php
-			if(!empty($targetArtwork->getPictureThree()->getTarget())){
+			if(!empty($targetArtwork->getPictureThree())){
 		?>
 			<div class="container_pic">
 				<img src="<?= URL_IMAGES.$targetArtwork->getPictureThree()->getTarget() ?>" alt="<?= $targetArtwork->getPictureThree()->getLegend() ?>">

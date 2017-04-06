@@ -34,6 +34,7 @@ if (isset($_SESSION['lang_user']) ) {
 
 include_once('header.php');
 
+var_dump($_SESSION);
 ?>
 
 <section id="exhibit_presentation">
