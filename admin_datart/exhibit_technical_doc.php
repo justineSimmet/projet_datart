@@ -21,7 +21,13 @@ $summaryExhibit = $targetExhibit->getFrenchSummary()->getContent();
 $summary = strip_tags(html_entity_decode($summaryExhibit));
 
 $list = $targetExhibit->listAvailableArtwork();
-$imageZoning = 'http://localhost/projet_datart/admin_datart/assets/images/exhibit/exhibit'.$_GET['id'].'.jpg';
+if (!empty($targetExhibit->getZoning())) {
+	$imageZoning = 'http://localhost/projet_datart/admin_datart/assets/images/exhibit/exhibit'.$_GET['id'].'.jpg';
+
+}
+else{
+	$imageZoning = '';
+}
 
 
 
@@ -60,9 +66,9 @@ class PDF extends FPDF{
 		    $this->SetX(8); // position de la première colonne
 		    $this->Cell(40,8,'N° de référence',1,0,'C',1);
 		    $this->SetX(48); 
-		    $this->Cell(70,8,'Infos générales',1,0,'C',1);
-		    $this->SetX(118); 
-		    $this->Cell(85,8,'Requêtes de l\'artiste',1,0,'C',1);
+		    $this->Cell(80,8,'Infos générales',1,0,'C',1);
+		    $this->SetX(128); 
+		    $this->Cell(75,8,'Requêtes de l\'artiste',1,0,'C',1);
 		    $this->Ln(); // Retour à la ligne
 			$actualY = $this->GetY();
 			// $this->Text(10,$artistExhibit);
@@ -73,10 +79,10 @@ class PDF extends FPDF{
 				    $this->SetX(8);
 				    $this->Cell(40,8,$oeuvre->getReferenceNumber(),1,'C');
 				    $this->SetX(48);
-				    $this->Cell(70,8,strip_tags(html_entity_decode($oeuvre->getTitle().' --- '.$oeuvre->getDimensions().'cm')),1,'C');
+				    $this->Cell(80,8,strip_tags(html_entity_decode(substr($oeuvre->getTitle(),0,25).' -- '.$oeuvre->getDimensions().'cm')),1,'C');
 				    //a rajouter le type de l'oeuvre
-				    $this->SetX(118);
-				    $this->MultiCell(85,8,strip_tags(html_entity_decode($oeuvre->getArtistRequest())),1,'J');
+				    $this->SetX(128);
+				    $this->MultiCell(75,8,strip_tags(html_entity_decode($oeuvre->getArtistRequest())),1,'J');
 					$actualY = $this->GetY();
 				// }
 			}	
@@ -132,10 +138,12 @@ $header = array('Numéro de référence', 'Infos générales', 'Requêtes de l\'
 // $pdf->Text(8,38,$row['reference_number']);
 $pdf->TabHead($header, $list);
 
+if(!empty($imageZoning)){
 //Page d'affichage du plan de positionnement
-$pdf->AddPage("L");
-$pdf->Ln(0);
-$pdf->Image($imageZoning,1,40);
+	$pdf->AddPage("L");
+	$pdf->Ln(0);
+	$pdf->Image($imageZoning,10,40,277);
+}
 
 //fin de page+numerotation
 $pdf->AliasNbPages();

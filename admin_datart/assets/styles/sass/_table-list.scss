@@ -159,40 +159,62 @@ table{
 	}
 }
 
-
-#recordedArtists{
-	padding: 10px;
-	background-color: #dadada;
-	border: 1px solid $datart-gray;
-	max-height: 200px;
-	height: 200px;
-	overflow-y: scroll;
-
-	li{
-		padding: 5px;
-		background-color: #fff;
+#exhibitLinkedArtist{
+	ul{
+		padding: 10px;
+		background-color: #dadada;
 		border: 1px solid $datart-gray;
-		font-size: 0.95em;
+		max-height: 200px;
+		height: 200px;
+		overflow-y: scroll;
 
-		&:not(:last-child){
-			margin-bottom: 5px;
+		li{
+			padding: 5px;
+			background-color: #fff;
+			border: 1px solid $datart-gray;
+			font-size: 0.95em;
+
+			&:not(:last-child){
+				margin-bottom: 5px;
+			}
 		}
 	}
-}
+	
+	#recordedArtists{
+		padding: 10px;
+		background-color: #dadada;
+		border: 1px solid $datart-gray;
+		max-height: 200px;
+		height: 200px;
+		overflow-y: scroll;
 
-#selectedArtists{
-	@extend #recordedArtists;
-	background-color: #fafafa;
-	border: 1px solid $datart-red;
+		li{
+			padding: 5px;
+			background-color: #fff;
+			border: 1px solid $datart-gray;
+			font-size: 0.95em;
 
-	li{
-		padding: 5px;
-		background-color: #fff;
+			&:not(:last-child){
+				margin-bottom: 5px;
+			}
+		}
+	}
+
+	#selectedArtists{
+		@extend #recordedArtists;
+		background-color: #fafafa;
 		border: 1px solid $datart-red;
-		font-size: 0.95em;
 
-		&:not(:last-child){
-			margin-bottom: 5px;
+		li{
+			padding: 5px;
+			background-color: #fff;
+			border: 1px solid $datart-red;
+			font-size: 0.95em;
+
+			&:not(:last-child){
+				margin-bottom: 5px;
+			}
 		}
 	}
 }
+

@@ -165,7 +165,7 @@ if (isset($_GET['id'])) {
 	LISTING DES OEUVRES ET PLAN SVG
 
 //////////////////////////////////////////////////////////////// -->
-			<div class="col-md-3 col-sm-4">
+			<div class="col-sm-3">
 				<section id="availble-artwork">
 					<h2>Oeuvres enregistrées : </h2>
 					<ul>
@@ -180,14 +180,14 @@ if (isset($_GET['id'])) {
 										?>
 										<div class="list-element">
 											<div class="text-area">
-												<h3><?= $artwork->getTitle(); ?></h3>
-												<p><?= !empty($artwork->getFrenchCharacteristic())?$artwork->getFrenchCharacteristic()->getContent():'---';?> | Réf. : <?= $artwork->getReferenceNumber(); ?></p>
+												<h3><?= strlen($artwork->getTitle()) < 25 ?$artwork->getTitle():substr($artwork->getTitle(),0,23).'...' ; ?></h3>
+												<p>Réf. : <?= $artwork->getReferenceNumber(); ?></p>
 											</div>
 											<?php
 											if (isset($artworkItem)) {
 												if (searchArray($artwork->getReferenceNumber(), $artworkItem, false)) {
 													?>
-														<div class="action-item-area refreshItem"  data-reference="<?= $artwork->getReferenceNumber(); ?>">
+														<div class="action-item-area refreshItem" data-reference="<?= $artwork->getReferenceNumber(); ?>">
 															<span class="fa fa-refresh"></span>
 														</div>
 													<?php
@@ -219,7 +219,7 @@ if (isset($_GET['id'])) {
 					</ul>
 				</section>
 			</div>
-			<div class="col-md-9 col-sm-8">
+			<div class="col-sm-9">
 				<div id="drop-area">
 						<div id="dropTarget">
 							<?php

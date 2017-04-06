@@ -4,6 +4,7 @@
     require_once('classes/user.php');
     require_once('classes/artwork_visual.php');
     require_once('classes/artwork_textual_content.php');
+    require_once('classes/artwork_additional.php');
     require_once('includes/include.php');
 
 
@@ -20,12 +21,13 @@ if (isset($_POST['action']) && $_POST['action'] == 'generateCode') {
     }
 
     $dataText   = $_POST['target']; 
-    $svgTagId   = 'qr-artwork-'.$_POST['artworkId']; 
 
     $targetArtwork = new Artwork($_POST['artworkId']);
-    $svgName = $targetArtwork->getTitle();
+    $svgName = strtolower($targetArtwork->getTitle());
 
-    $svgName = preg_filter("/[^a-z][^0-9]/", "" , strtolower($svgName));
+
+    $svgName = preg_replace("/[^a-z][^0-9]/", "" ,$svgName);
+
     $svgCode = QRcode::svg($dataText, $dir.$svgName.'-qrcode.svg', "H", 4, 4, false);
      
     if ($svgCode != NULL) {

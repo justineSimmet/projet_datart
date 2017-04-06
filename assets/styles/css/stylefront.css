@@ -1,4 +1,5 @@
 @charset "UTF-8";
+<<<<<<< HEAD
 /**************************************************************
 		G├®n├®ral
 ****************************************************************/
@@ -8,11 +9,21 @@ body {
   font-family: 'kelson', 'arial', 'helvetica', sans-serif; }
 
 img, object, embed, video {
+=======
+body {
+  position: relative;
+  background-color: #151515;
+  font-family: 'kelson', 'arial', 'helvetica', sans-serif;
+  font-size: 14px; }
+
+img, video {
+>>>>>>> finalFix
   max-width: 100%; }
 
 h4, h5 {
   color: #D5313A; }
 
+<<<<<<< HEAD
 section {
   margin: 0 auto;
   width: 90%; }
@@ -24,11 +35,14 @@ section {
 
 
 ****************************************************************/
+=======
+>>>>>>> finalFix
 .container {
   position: fixed;
   top: 0;
   right: 10px;
   border-radius: 0px 0px 10px 10px;
+<<<<<<< HEAD
   padding: 0;
   float: right; }
   .container li > a {
@@ -62,6 +76,34 @@ nav .navbar_container {
         color: #D5313A; }
 nav .fa {
   font-size: 1.563em; }
+=======
+  box-shadow: 5px 0 5px rgba(60, 60, 60, 0.5);
+  padding: 0;
+  float: right; }
+  .container button {
+    padding: 10px; }
+  .container li > a {
+    display: block;
+    padding: 15px; }
+
+.dropdown img {
+  width: 25px;
+  height: auto; }
+
+.nav > li > a {
+  display: inline-block;
+  padding: 15px 15px 15px 15px;
+  text-align: center; }
+
+.navbar-default .navbar-nav > li > a {
+  color: #FFF; }
+
+.navbar-default .navbar-nav > li > a:hover {
+  color: #D5313A; }
+
+.navbar_container {
+  background-color: #151515; }
+>>>>>>> finalFix
 
 /**************************************************************
 
@@ -70,6 +112,13 @@ nav .fa {
 
 
 ****************************************************************/
+<<<<<<< HEAD
+=======
+.container_pic {
+  margin: 0 auto;
+  width: 90%; }
+
+>>>>>>> finalFix
 /**************************************************************
 
 
@@ -77,15 +126,23 @@ nav .fa {
 
 
 ****************************************************************/
+<<<<<<< HEAD
 .container {
   width: 47px; }
 
+=======
+>>>>>>> finalFix
 .container_logo {
   padding: 10px;
   width: 50%; }
 
 .presentation, .mentions_legales {
   padding: 20px;
+<<<<<<< HEAD
+=======
+  margin: 0 auto;
+  width: 90%;
+>>>>>>> finalFix
   color: #FFFFFF;
   line-height: 20px; }
 
@@ -97,12 +154,24 @@ nav .fa {
 
 ****************************************************************/
 .artist {
+<<<<<<< HEAD
   padding: 10px; }
+=======
+  padding: 10px;
+  margin: 0 auto;
+  width: 90%; }
+>>>>>>> finalFix
   .artist p {
     color: #FFFFFF;
     line-height: 20px; }
 
 .listArtwork {
+<<<<<<< HEAD
   padding: 10px; }
+=======
+  padding: 10px;
+  margin: 0 auto;
+  width: 90%; }
+>>>>>>> finalFix
 
 /*# sourceMappingURL=stylefront.css.map */

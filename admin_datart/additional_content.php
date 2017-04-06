@@ -1,6 +1,7 @@
 <?php
 	require_once('classes/user.php');
 	require_once('classes/artwork.php');
+    require_once('classes/artwork_textual_content.php');
     require_once('classes/artwork_visual.php');
     require_once('classes/artwork_additional.php');
 	require_once('includes/include.php');
@@ -21,7 +22,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'uploadFiles') {
         $newFolder = mkdir($path, 0755, TRUE);
     }
     if (!empty($_FILES['file'])){
-        $uploadTarget = URL_IMAGES."artwork/".$targetArtwork->getId();
+        $uploadTarget = "artwork/".$targetArtwork->getId();
         $uploadFile = __DIR__."\assets\images\artwork\\".$targetArtwork->getId().'\\';
 
         if(!in_array($extension, $uploadFormat)){

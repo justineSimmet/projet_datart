@@ -18,7 +18,6 @@ qd clique sur la langue change la langue
 
 // var langDispo = []
 // $(window).onclick(function(){
-
 // });
 
 $("#changeLang li").on("click", function(){
@@ -43,7 +42,7 @@ $("#changeLang li").on("click", function(){
 Quand scrolldown nav disparait et qd scrollup reapparait 
 ------------------------------------------------------------------------------*/
 
-;(function(){
+(function(){
     var previousScroll = 0;
     var nav = document.getElementsByTagName("nav");
 
@@ -61,5 +60,16 @@ Quand scrolldown nav disparait et qd scrollup reapparait
     });
 }()); 
 
+/*------------------------------------------------------------
 
+---------------------------------------------------------------*/
+
+
+$(document).ready(function(){
+
+  $("body").on("click", function(){
+      $("nav").fadeToggle();
+  });
+
+});
 

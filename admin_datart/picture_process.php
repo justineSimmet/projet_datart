@@ -97,7 +97,7 @@ elseif(isset($_POST['action']) && $_POST['action'] == 'uploadPictures'){
         $newFolder = mkdir($path, 0755, TRUE);
     }
     if (!empty($_FILES['image'])){
-        $uploadTarget = URL_IMAGES."artwork/".$targetArtwork->getId();
+        $uploadTarget = "artwork/".$targetArtwork->getId();
         $uploadFile = __DIR__."\assets\images\artwork\\".$targetArtwork->getId().'\\';
 
         if(!in_array($extension, $uploadFormat)){
@@ -166,7 +166,7 @@ else{
     		$newFolder = mkdir($path, 0755, TRUE);
     	}
     	if (!empty($_FILES['image']['tmp_name'])){
-    		$uploadTarget = URL_IMAGES."artwork/".$targetArtwork->getId();
+    		$uploadTarget = "artwork/".$targetArtwork->getId();
             $uploadFile = __DIR__."\assets\images\artwork\\".$targetArtwork->getId().'\\';
 
     		if(!in_array($extension, $uploadFormat)){
@@ -285,7 +285,6 @@ else{
                 ****************************************************/
                 elseif($_POST['action'] == 'add-picture-three'){
                     if (empty($_POST['pictureId'])) {
-                        print_r($size);
                         $namePicture = 'art'.$targetArtwork->getId().'_img3'.$extension;
                         $newVisual = new Visual();
                         $artworkId = $targetArtwork->getId();

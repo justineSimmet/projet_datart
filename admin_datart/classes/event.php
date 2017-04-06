@@ -149,7 +149,7 @@ class Event{
 			$targetExhibit = new Exhibit();
 		}
 		?>
-			<form method="POST" action="<?= $target; ?>" class="form-vertical">
+			<form method="POST" action="<?= $target; ?>" class="form-vertical" id="eventForm">
 				
 				<fieldset <?= isset($targetExhibit) && ( empty($targetExhibit->getId()) || $targetExhibit->getEndDate() < date('Y-m-d') || $targetExhibit->getVisible() == FALSE)?'disabled':''; ?> >
 					<div class="form-group form-group-lg">
@@ -173,11 +173,29 @@ class Event{
 					<input type="hidden" name="targetExhibit" value="<?= !empty($this->getId())?$this->getExhibitId():$targetExhibit->getId(); ?>">
 					<input type="hidden" id="beginDate" value="<?= isset($targetExhibit)?$targetExhibit->getBeginDate():''; ?>">
 					<input type="hidden" id="endDate" value="<?= isset($targetExhibit)?$targetExhibit->getEndDate():''; ?>">
+					<button class="btn btn-default pull-left" onclick="window.location.reload()">Annuler</button>
 					<input type="submit" role="button" class="btn btn-default pull-right" value="<?= $action; ?>">
 				</fieldset>
 
 			</form>
 		<?php
+	}
+
+	static function nextEvent(){
+		$res = requete_sql("
+			SELECT event.id, event.exhibit_id FROM event
+			LEFT JOIN exhibit ON event.exhibit_id = exhibit.id
+			WHERE exhibit.visible = TRUE
+			AND event.event_date > now()
+			ORDER BY event.event_date ASC
+			LIMIT 0,10
+			");
+		$res = $res->fetchAll(PDO::FETCH_ASSOC);
+		$nextList = array();
+		foreach ($res as $event) {
+			array_push($nextList, new Event($event['id']));
+		}
+		return $nextList;
 	}
 
 

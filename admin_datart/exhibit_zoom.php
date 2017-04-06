@@ -23,8 +23,6 @@ if (isset($_POST['targetEvent'])) {
 }
 
 
-
-
 /************************************************************************************************
 **
 ** Insertion ou update en base de donnée après un submit du formulaire 1 (Infos générale)
@@ -144,10 +142,7 @@ if (isset($_POST['targetExhibit']) && isset($_POST['action']) ) {
 		if ($check) {
 			$delete = $targetEvent->deleteEvent();
 			if ($delete) {
-				$actionResultatEvent = '<div class="alert alert-success alert-dismissable" id="update-event">
-				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-				<strong>Vous venez de supprimer un événement.</strong>
-				</div>';
+				 header('Location: '.$_SERVER['REQUEST_URI']);
 			}
 			else{
 				$actionResultatEvent = '<div class="alert alert-danger alert-dismissable">
@@ -339,7 +334,7 @@ if(isset($_POST['categoryFrench']) && isset($_POST['summaryFrench']) ) {
 			};
 		}
 		if($valideInsert == 10){
-			$actionResultat = '<div class="alert alert-success alert-dismissable" id="insert-exhibit-text">>
+			$actionResultat = '<div class="alert alert-success alert-dismissable" id="insert-exhibit-text">
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 			<strong>Les textes d\'accompagnement ont bien été enregistré.</strong>
 			</div>';
@@ -363,7 +358,7 @@ if(isset($_POST['categoryFrench']) && isset($_POST['summaryFrench']) ) {
 if (isset($_POST['name']) && isset($_POST['date'])) {
 	if (empty($_POST['id'])) {
 		$newEvent = new Event();
-		$newEvent->setExhibitId($_POST['id-exhibit']);
+		$newEvent->setExhibitId($_POST['targetExhibit']);
 		$newEvent->setName($_POST['name']);
 		$newEvent->setDescription($_POST['description']);
 		$newEvent->setEventDate(dateFormat($_POST['date']));
@@ -427,12 +422,12 @@ include('header.php');
 	        	<div class="modal-body">
 	        		<p> Vous êtes sur le point de supprimer <strong>définitivement</strong> l'exposition <?= isset($targetExhibit)?$targetExhibit->getTitle():''; ?>. </p>
 	                <p> Pour confirmer cette action, merci de saisir votre mot de passe</p>
-	                <form action="<?= isset($targetExhibit)?$_SERVER['PHP_SELF'].'?exhibit='.$targetExhibit->getId():''; ?>" method="POST">
+	                <form action="<?= isset($targetExhibit)?$_SERVER['PHP_SELF'].'?exhibit='.$targetExhibit->getId():''; ?>" method="POST" class="clearfix">
 		                <label for="password">Mot de passe :</label>
 		                <input type="password" name="password" placeholder="Votre mot de passe"  required />
 		                <input type="hidden" name="action" value="delete-exhibit" />
 		                <input type="hidden" value="<?= isset($targetExhibit)?$targetExhibit->getId():';' ?>" name="targetId">
-		                <input type="submit" value="Supprimer" />
+		                <input type="submit" class="btn btn-danger pull-right" value="Supprimer" />
 	                </form>
 	        	</div>
 	        	<div class="modal-footer">
@@ -454,16 +449,16 @@ include('header.php');
 	        		<button type="button" class="close" data-dismiss="modal">&times;</button>
 	        		<h4 class="modal-title">Attention !</h4>
 	        	</div>
-	        	<div class="modal-body_test">
+	        	<div class="modal-body">
 	        		<p> Vous êtes sur le point de supprimer <strong>définitivement</strong> l'événement <?= isset($targetEvent)?$targetEvent->getName():''; ?>. </p>
 	                <p> Pour confirmer cette action, merci de saisir votre mot de passe</p>
-	                <form action="<?= isset($targetExhibit)?$_SERVER['PHP_SELF'].'?exhibit='.$targetExhibit->getId():''; ?>" method="POST">
+	                <form action="<?= isset($targetExhibit)?$_SERVER['PHP_SELF'].'?exhibit='.$targetExhibit->getId():''; ?>" method="POST" class="clearfix">
 		                <label for="password">Mot de passe :</label>
 		                <input type="password" name="password" placeholder="Votre mot de passe" required />
 		                <input type="hidden" name="action" value="delete-event" />
 		                <input type="hidden" value="<?= isset($targetEvent)?$targetEvent->getId():''; ?>" name="targetEvent">
 		                <input type="hidden" value="<?= isset($targetExhibit)?$targetExhibit->getId():''; ?>" name="targetExhibit">
-		                <input type="submit" value="Supprimer" />
+		                <input type="submit" class="btn btn-danger pull-right" value="Supprimer" />
 	                </form>
 	        	</div>
 	        	<div class="modal-footer">
@@ -554,7 +549,7 @@ include('header.php');
 
 <!-- *************************** FORMULAIRE Textes d'accompagnement *************************** -->
 				<div class="div-minus">
-					<h3>Textes d'accompagnement :</h3>
+					<h3>Etape 2 : Textes d'accompagnement</h3>
 					<div id="formTextArea">
 					<?php
 						if (isset($targetExhibit)) {
@@ -591,11 +586,11 @@ include('header.php');
 						<div class="col-sm-12" id="alert-area-artist"> <!-- ZONE DES MESSAGES DE SUCCES OU D'ERREUR -->
 							<?= !empty($actionResultatArtist)?$actionResultatArtist:''; ?>
 						</div>
-						<h2>Etape 2 : Artistes exposés</h2>
+						<h2>Etape 3 : Artistes exposés</h2>
 						<div class="row" id="exhibitLinkedArtist">
 							<div class="col-sm-6">
 								<h4>Artistes disponibles</h4>
-								<ul id="recordedArtists">
+								<ul <?= (!empty($targetExhibit->getId()) && $targetExhibit->getVisible() == 0) || (!empty($targetExhibit->getId()) && $targetExhibit->getEndDate() < date('Y-m-d'))?'':'id="recordedArtists"'; ?> >
 									<?php
 									if(isset($targetExhibit) && !empty($targetExhibit->getId())){
 										$clone = Artist::compareList($recordedArtists, $selectedArtists);
@@ -621,7 +616,7 @@ include('header.php');
 							</div>
 							<div class="col-sm-6">
 								<h4>Artistes associés</h4>
-								<ul id="selectedArtists">
+								<ul <?= (!empty($targetExhibit->getId()) && $targetExhibit->getVisible() == 0) || (!empty($targetExhibit->getId()) && $targetExhibit->getEndDate() < date('Y-m-d'))?'':'id="selectedArtists"'; ?> >
 								<?php
 									if(isset($targetExhibit) && !empty($targetExhibit->getId())){
 										foreach ($selectedArtists as $ra) {
@@ -641,7 +636,7 @@ include('header.php');
 									<strong>Attention !</strong> Retirer un artiste ayant des oeuvres prévues à l'exposition entraînera également le retrait de ses oeuvres.
 								</p>
 								<div class="form-group clearfix" >
-									<button class="btn btn-default pull-right" id="btn-selectedArtist" data-exhibitId="<?= $targetExhibit->getId(); ?>" id>Enregistrer</button>
+									<button class="btn btn-default pull-right <?= !empty($targetExhibit->getId()) && $targetExhibit->getVisible() == 0?'disabled':''; ?><?= !empty($targetExhibit->getId()) && $targetExhibit->getEndDate() < date('Y-m-d')?'disabled':''; ?>" id="btn-selectedArtist" data-exhibitId="<?= $targetExhibit->getId(); ?>" id>Enregistrer</button>
 								</div>
 							</div>
 							<?php 
@@ -655,7 +650,7 @@ include('header.php');
 						<div class="col-sm-12" id="alert-area-artwork"> <!-- ZONE DES MESSAGES DE SUCCES OU D'ERREUR -->
 							<?= !empty($actionResultatArtwork)?$actionResultatArtwork:''; ?>
 						</div>
-						<h2>Etape 3 : Les oeuvres</h2>
+						<h2>Etape 4 : Les oeuvres</h2>
 						<div class="row">
 							<div class="col-sm-12">
 							<div id="exhibitLinkedArtwork">
@@ -667,7 +662,7 @@ include('header.php');
 									if ( !empty($artist->getArtwork()) ) {
 										foreach ($artist->getArtwork() as $artwork) {
 											?>
-											<label class="checkbox-inline"><input type="checkbox" value="<?= $artwork->getId() ?>" <?= in_array($artwork, $targetExhibit->getArtworkDisplayed())?'checked':''; ?> ><?= $artwork->getTitle(); ?></label>
+											<label class="checkbox-inline"><input type="checkbox" value="<?= $artwork->getId() ?>" <?= in_array($artwork, $targetExhibit->getArtworkDisplayed())?'checked':''; ?> ><a href="<?= URL_ADMIN ?>artwork_zoom.php?artwork=<?= $artwork->getId()?>"><?= $artwork->getTitle(); ?></a></label>
 											<?php
 										}
 									}
@@ -678,10 +673,12 @@ include('header.php');
 							?>
 							</div>
 							<?php
+							 
+
 								if(isset($targetExhibit)){
 							?>
 								<div class="form-group clearfix" >
-									<button class="btn btn-default pull-right" id="btn-selectedArtwork" data-exhibitId="<?= $targetExhibit->getId(); ?>" id>Enregistrer</button>
+									<button class="btn btn-default pull-right <?= !empty($targetExhibit->getId()) && $targetExhibit->getVisible() == 0?'disabled':''; ?><?= !empty($targetExhibit->getId()) && $targetExhibit->getEndDate() < date('Y-m-d')?'disabled':''; ?>" id="btn-selectedArtwork" data-exhibitId="<?= $targetExhibit->getId(); ?>">Enregistrer</button>
 								</div>
 							<?php
 								}
@@ -734,7 +731,7 @@ include('header.php');
 							<ul>
 								<?php
 								if (isset($targetExhibit)) {
-								foreach ($targetExhibit->event as $event) {
+								foreach ($targetExhibit->getEvents() as $event) {
 								?>
 								<li>
 									<div class="event-text">

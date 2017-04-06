@@ -275,6 +275,9 @@ section {
 .red {
   color: #d5313a; }
 
+.bold {
+  font-family: 'kelson-bold'; }
+
 .div-minus {
   width: 90%;
   margin: auto;
@@ -376,13 +379,38 @@ ul {
 ** CSS INDEX
 **
 *********************************************************** */
-#current-exhibit h2 {
-  margin-bottom: 0; }
-#current-exhibit .date {
-  font-size: 1.250em;
-  color: #778085; }
-#current-exhibit .summary {
-  padding-left: 20px; }
+#current-exhibit {
+  position: relative;
+  padding: 0 15px 20px 15px;
+  margin: 0 -15px 0 -15px;
+  -webkit-box-shadow: 0 5px 2px rgba(100, 100, 100, 0.15);
+  -moz-box-shadow: 0 5px 2px rgba(100, 100, 100, 0.15);
+  box-shadow: 0 5px 2px rgba(100, 100, 100, 0.15); }
+  #current-exhibit h2 {
+    margin-bottom: 0; }
+  #current-exhibit .date {
+    font-size: 1.250em;
+    color: #778085; }
+  #current-exhibit .summary {
+    padding-left: 20px;
+    width: 50%; }
+  #current-exhibit .exhibit-picture {
+    position: absolute;
+    top: -20px;
+    right: 0;
+    bottom: 0;
+    max-width: 45%;
+    min-width: 45%;
+    overflow: hidden; }
+    #current-exhibit .exhibit-picture img {
+      position: absolute;
+      top: -100%;
+      left: 0;
+      right: 0;
+      bottom: -100%;
+      margin: auto;
+      max-width: 110%;
+      min-width: 110%; }
 
 .exhibit-count {
   min-width: 100%;
@@ -438,15 +466,15 @@ ul {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
+  width: 100%;
   padding: 10px 0;
   margin: 0;
-  margin-bottom: -15px; }
+  margin-bottom: -10px; }
   #next-exhibit .icon {
     display: flex;
     width: 50px;
     background-color: #778085;
     color: #fff;
-    box-shadow: 5px 0 5px rgba(150, 150, 150, 0.2);
     margin-bottom: -10px;
     margin-left: -15px;
     margin-top: -10px;
@@ -457,6 +485,33 @@ ul {
       min-width: 100%;
       line-height: 100%;
       font-size: 3.5em; }
+  #next-exhibit .content {
+    width: 100%; }
+    #next-exhibit .content .next-date {
+      font-family: 'metropolis';
+      color: #778085; }
+      #next-exhibit .content .next-date span {
+        font-size: 1.2em; }
+
+.module-title {
+  background-color: #778085;
+  color: #fff;
+  text-align: center;
+  margin: -15px -15px 0 -15px;
+  padding: 10px; }
+
+#last-creation li, #next-event li {
+  text-align: center;
+  margin: 0 -15px;
+  padding: 5px 10px; }
+  #last-creation li a, #next-event li a, #last-creation #main-nav #main-nav-menu .nav-submenu li .active-nav-link, #main-nav #main-nav-menu .nav-submenu #last-creation li .active-nav-link, #next-event #main-nav #main-nav-menu .nav-submenu li .active-nav-link, #main-nav #main-nav-menu .nav-submenu #next-event li .active-nav-link {
+    color: #000; }
+#last-creation li:nth-child(even), #next-event li:nth-child(even) {
+  background-color: #c1c6c9; }
+  #last-creation li:nth-child(even) a, #next-event li:nth-child(even) a, #last-creation #main-nav #main-nav-menu .nav-submenu li:nth-child(even) .active-nav-link, #main-nav #main-nav-menu .nav-submenu #last-creation li:nth-child(even) .active-nav-link, #next-event #main-nav #main-nav-menu .nav-submenu li:nth-child(even) .active-nav-link, #main-nav #main-nav-menu .nav-submenu #next-event li:nth-child(even) .active-nav-link {
+    color: #000; }
+#last-creation li:last-child, #next-event li:last-child {
+  margin-bottom: -20px; }
 
 /* ***********************************************************
 **
@@ -475,6 +530,17 @@ ul {
   #formUsers table td span {
     color: #d5313a;
     margin-right: 5px; }
+
+/***************************************************
+**
+** CSS ARTIST
+**
+***************************************************/
+.artistPicture {
+  border: 1px solid #d5313a;
+  overflow: hidden; }
+  .artistPicture img {
+    width: 100%; }
 
 /****************************************************
 **
@@ -658,8 +724,9 @@ input.input-file {
     margin-bottom: 5px; }
     #availble-artwork .list-element .text-area {
       display: inline-block;
-      width: 70%; }
+      width: 80%; }
       #availble-artwork .list-element .text-area h3 {
+        font-size: 1em;
         margin-bottom: 5px; }
       #availble-artwork .list-element .text-area p {
         margin-bottom: 0; }
@@ -667,9 +734,8 @@ input.input-file {
 .action-item-area {
   position: relative;
   float: right;
-  width: 30%;
-  max-height: 82px;
-  max-height: 58px;
+  width: 20%;
+  max-height: 57px;
   padding: 10px 0;
   font-size: 1.8em;
   text-align: center;
@@ -1186,6 +1252,78 @@ form option {
   margin-bottom: 20px;
   padding-bottom: 50px; }
 
+#formPhotoArea h3 {
+  margin-bottom: 10px; }
+
+.switch {
+  position: relative;
+  height: 46px;
+  width: 320px;
+  padding: 2px;
+  background: #fff;
+  border-radius: 3px;
+  -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5); }
+
+.switch-label {
+  position: relative;
+  z-index: 2;
+  float: left;
+  width: 158px;
+  line-height: 46px;
+  color: rgba(0, 0, 0, 0.35);
+  text-align: center;
+  cursor: pointer; }
+
+.switch-label:active {
+  font-weight: normal; }
+
+.switch-label-off {
+  padding-left: 2px; }
+
+.switch-label-on {
+  padding-right: 2px; }
+
+.switch-input {
+  display: none; }
+
+.switch-input:checked + .switch-label {
+  font-weight: normal;
+  color: rgba(255, 255, 255, 0.85);
+  -webkit-transition: 0.15s ease-out;
+  -moz-transition: 0.15s ease-out;
+  -ms-transition: 0.15s ease-out;
+  -o-transition: 0.15s ease-out;
+  transition: 0.15s ease-out;
+  -webkit-transition-property: color, text-shadow;
+  -moz-transition-property: color, text-shadow;
+  -ms-transition-property: color, text-shadow;
+  -o-transition-property: color, text-shadow;
+  transition-property: color, text-shadow; }
+
+.switch-input:checked + .switch-label-on ~ .switch-selection {
+  left: 160px; }
+
+.switch-selection {
+  position: absolute;
+  z-index: 1;
+  top: 2px;
+  left: 2px;
+  display: block;
+  width: 158px;
+  height: 42px;
+  border: 1px solid #5B050A;
+  border-radius: 3px;
+  background-color: #d5313a;
+  -webkit-box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 0 2px rgba(0, 0, 0, 0.2);
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 0 2px rgba(0, 0, 0, 0.2);
+  -webkit-transition: left 0.15s ease-out;
+  -moz-transition: left 0.15s ease-out;
+  -ms-transition: left 0.15s ease-out;
+  -o-transition: left 0.15s ease-out;
+  transition: left 0.15s ease-out; }
+
 .col-equal-height {
   overflow: hidden; }
   .col-equal-height [class*="col-"] {
@@ -1298,30 +1436,43 @@ table {
   .event-list .event-description {
     font-size: 0.95em; }
 
-#recordedArtists, #selectedArtists {
+#exhibitLinkedArtist ul {
   padding: 10px;
   background-color: #dadada;
   border: 1px solid #778085;
   max-height: 200px;
   height: 200px;
   overflow-y: scroll; }
-  #recordedArtists li, #selectedArtists li {
+  #exhibitLinkedArtist ul li {
     padding: 5px;
     background-color: #fff;
     border: 1px solid #778085;
     font-size: 0.95em; }
-    #recordedArtists li:not(:last-child), #selectedArtists li:not(:last-child) {
+    #exhibitLinkedArtist ul li:not(:last-child) {
       margin-bottom: 5px; }
-
-#selectedArtists {
+#exhibitLinkedArtist #recordedArtists, #exhibitLinkedArtist #selectedArtists {
+  padding: 10px;
+  background-color: #dadada;
+  border: 1px solid #778085;
+  max-height: 200px;
+  height: 200px;
+  overflow-y: scroll; }
+  #exhibitLinkedArtist #recordedArtists li, #exhibitLinkedArtist #selectedArtists li {
+    padding: 5px;
+    background-color: #fff;
+    border: 1px solid #778085;
+    font-size: 0.95em; }
+    #exhibitLinkedArtist #recordedArtists li:not(:last-child), #exhibitLinkedArtist #selectedArtists li:not(:last-child) {
+      margin-bottom: 5px; }
+#exhibitLinkedArtist #selectedArtists {
   background-color: #fafafa;
   border: 1px solid #d5313a; }
-  #selectedArtists li {
+  #exhibitLinkedArtist #selectedArtists li {
     padding: 5px;
     background-color: #fff;
     border: 1px solid #d5313a;
     font-size: 0.95em; }
-    #selectedArtists li:not(:last-child) {
+    #exhibitLinkedArtist #selectedArtists li:not(:last-child) {
       margin-bottom: 5px; }
 
 /*# sourceMappingURL=styles.css.map */

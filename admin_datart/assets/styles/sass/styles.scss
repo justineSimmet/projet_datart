@@ -137,6 +137,10 @@ section{
 	color: $datart-red;
 }
 
+.bold{
+	font-family: 'kelson-bold';
+}
+
 .div-minus{
 	width: 90%;
 	margin: auto;
@@ -266,6 +270,20 @@ ul{
 			color: $datart-red;
 			margin-right:5px;
 		}
+	}
+}
+
+/***************************************************
+**
+** CSS ARTIST
+**
+***************************************************/
+.artistPicture{
+	border: 1px solid $datart-red;
+	overflow: hidden;
+
+	img{
+		width: 100%;
 	}
 }
 
@@ -510,9 +528,10 @@ input.input-file{
 
 		.text-area{
 			display: inline-block; 
-			width: 70%;
+			width: 80%;
 
 			h3{
+				font-size: 1em;
 				margin-bottom: 5px;
 			}
 
@@ -527,9 +546,8 @@ input.input-file{
 .action-item-area{
 	position: relative;
 	float: right;
-	width:30%;
-	max-height: 82px;
-	max-height: 58px;
+	width:20%;
+	max-height: 57px;
 	padding: 10px 0;
 	font-size: 1.8em;
 	text-align: center;
