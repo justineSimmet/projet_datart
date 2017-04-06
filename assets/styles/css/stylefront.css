@@ -1,6 +1,95 @@
-body{
-	font:{
-		family:'kelson', 'arial', 'helvetica', sans-serif;
-		size: 14px;
-	}
-}
+@charset "UTF-8";
+body {
+  position: relative;
+  background-color: #151515;
+  font-family: 'kelson', 'arial', 'helvetica', sans-serif;
+  font-size: 14px; }
+
+img, video {
+  max-width: 100%; }
+
+h4, h5 {
+  color: #D5313A; }
+
+.container {
+  position: fixed;
+  top: 0;
+  right: 10px;
+  border-radius: 0px 0px 10px 10px;
+  box-shadow: 5px 0 5px rgba(60, 60, 60, 0.5);
+  padding: 0;
+  float: right; }
+  .container button {
+    padding: 10px; }
+  .container li > a {
+    display: block;
+    padding: 15px; }
+
+.dropdown img {
+  width: 25px;
+  height: auto; }
+
+.nav > li > a {
+  display: inline-block;
+  padding: 15px 15px 15px 15px;
+  text-align: center; }
+
+.navbar-default .navbar-nav > li > a {
+  color: #FFF; }
+
+.navbar-default .navbar-nav > li > a:hover {
+  color: #D5313A; }
+
+.navbar_container {
+  background-color: #151515; }
+
+/**************************************************************
+
+
+		index (page o├╣ arrive le visiteur apres scan QR)	
+
+
+****************************************************************/
+.container_pic {
+  margin: 0 auto;
+  width: 90%; }
+
+/**************************************************************
+
+
+		about 	
+
+
+****************************************************************/
+.container_logo {
+  padding: 10px;
+  width: 50%; }
+
+.presentation, .mentions_legales {
+  padding: 20px;
+  margin: 0 auto;
+  width: 90%;
+  color: #FFFFFF;
+  line-height: 20px; }
+
+/**************************************************************
+
+
+		artist 	
+
+
+****************************************************************/
+.artist {
+  padding: 10px;
+  margin: 0 auto;
+  width: 90%; }
+  .artist p {
+    color: #FFFFFF;
+    line-height: 20px; }
+
+.listArtwork {
+  padding: 10px;
+  margin: 0 auto;
+  width: 90%; }
+
+/*# sourceMappingURL=stylefront.css.map */

@@ -14,7 +14,6 @@ $lang = [
 
 		"artist.biography"=> !isset($targetArtist)?'':$targetArtist->getRussianBiography()->getContent(),
 		"artist.name"=>!isset($targetArtist)?'':$targetArtist->getIdentity(),
-		"artist.oeuvres.exposees"=> !isset($targetArtist)?'':$targetArtist->getArtworkDisplayed(),
 		"artist.pic"=> !isset($targetArtist)?'':$targetArtist->getPhotographicPortrait(),
 		"artist.liste.oeuvres" => "Список выставленных художественных работ",
 		"artist.list.artistes" => "экспонируются художников",

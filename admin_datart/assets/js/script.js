@@ -1,5 +1,5 @@
 //Déclaration des constantes
-var URL_ROOT = "http://localhost/";
+var URL_ROOT = "http://localhost/projet_datart/";
 var URL_ADMIN = URL_ROOT+'admin_datart/';
 var URL_ASSETS = URL_ADMIN+'assets/';
 var URL_IMAGES = URL_ASSETS+'images/';

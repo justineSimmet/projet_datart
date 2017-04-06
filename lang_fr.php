@@ -13,7 +13,6 @@ $lang = [
 		
 		"artist.biography"=> !isset($targetArtist)?'':$targetArtist->getFrenchBiography()->getContent(),
 		"artist.name"=>!isset($targetArtist)?'':$targetArtist->getIdentity(),
-		"artist.oeuvres.exposees"=> !isset($targetArtist)?'':$targetArtist->getArtworkDisplayed(),
 		"artist.pic"=> !isset($targetArtist)?'':$targetArtist->getPhotographicPortrait(),
 		"artist.liste.oeuvres" => "Liste des oeuvres exposées",
 		"artist.list.artistes" => "Artistes exposés",
@@ -21,7 +20,6 @@ $lang = [
 		"expo.duree" => isset($targetExhibit)?'du '.dateFormat($targetExhibit->getBeginDate()).' - '.dateFormat($targetExhibit->getEndDate()):'',
 		"expo.titre"=> isset($targetExhibit)?$targetExhibit->getTitle():'',
 		"expo.resume"=> !isset($targetExhibit)?'':$targetExhibit->getFrenchSummary()->getContent(),
-		"expo.tableau.oeuvres" => !isset($targetExhibit)?'':$targetExhibit->listAvailableArtwork(),
 		"expo.horaires" => !isset($targetExhibit)?'':$targetExhibit->getPublicOpening(),
 
 		//rajouter
@@ -29,13 +27,8 @@ $lang = [
 		//
 
 		"artwork.titre.galerie" => "Galerie",
-		"artwork.name" => !isset($targetArtwork)?'':$targetArtwork->getTitle(),
 		"artwork.titre.oeuvre" => "Au delà de l'oeuvre",
-		"artwork.pic"=> !isset($targetArtwork)?'':$targetArtwork->getPictureOne()->getTarget(),
-		"artwork.pic.two"=> isset($targetArtwork) && !empty($targetArtwork->getPictureTwo())?$targetArtwork->getPictureTwo()->getTarget():'',
-
 		"artwork.nature"=> !isset($targetArtwork)?'':$targetArtwork->getFrenchCharacteristic()->getContent(),
-		"artwork.artist.name"=> !isset($targetArtwork)?'':$targetArtwork->getArtistId(),
 		"artwork.main"=> !isset($targetArtwork)?'':$targetArtwork->getFrenchMain()->getContent(),
 
 		"about.titre.presentation" => "Présentation de l'association ",

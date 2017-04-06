@@ -11,34 +11,29 @@ require_once('admin_datart/classes/artwork_visual.php');
 require_once('admin_datart/classes/exhibit_textual_content.php');
 
 
-
-include('header.php');
-
 $currentExhibit = Exhibit::currentExhibit();
 foreach ($currentExhibit as $targetExhibit) {
 
-
 if (isset($_SESSION['lang_user']) ) {
-  if ($_SESSION['lang_user'] == 'fr') {
-    require_once('lang_fr.php');
-  }
-  elseif ($_SESSION['lang_user'] == 'en') {
-    require_once('lang_en.php');
-  }
-  elseif ($_SESSION['lang_user'] == 'ge') {
-    require_once('lang_ge.php');
-  }
-  elseif ($_SESSION['lang_user'] == 'ru') {
-    require_once('lang_ru.php');
-  }
-  elseif ($_SESSION['lang_user'] == 'cn') {
-    require_once('lang_cn.php');
-  }
-
+	if ($_SESSION['lang_user'] == 'fr') {
+		require_once('lang_fr.php');
+	}
+	elseif ($_SESSION['lang_user'] == 'en') {
+		require_once('lang_en.php');
+	}
+	elseif ($_SESSION['lang_user'] == 'ge') {
+		require_once('lang_ge.php');
+	}
+	elseif ($_SESSION['lang_user'] == 'ru') {
+		require_once('lang_ru.php');
+	}
+	elseif ($_SESSION['lang_user'] == 'cn') {
+		require_once('lang_cn.php');
+  	}
 }
 
+include_once('header.php');
 
-var_dump($targetExhibit);
 ?>
 
 <section id="exhibit_presentation">
@@ -72,13 +67,13 @@ var_dump($targetExhibit);
 			$listArtwork = $targetExhibit->getArtworkDisplayed();
 			foreach ($listArtist as $artistId => $artistIdentity) {
 					?>
-					<li><a href="<?= URL_ROOT ?>artist.php?id=<?= $artistId ?>"><span class="fa fa-paint-brush"></span> <?= $artistIdentity ?></a>
+					<li><a href="<?= URL_ROOT ?>artist.php?exhibit=<?= $targetExhibit->getId() ?>&id=<?= $artistId ?>"><span class="fa fa-paint-brush"></span> <?= $artistIdentity ?></a>
 					<?php
 					foreach ($listArtwork as $artworkId => $artwork) {
 						if ($artwork['artist_id'] == $artistId) {
 							?>
 							<ul>
-								<li><a href=ref="<?= URL_ROOT ?>artwork.php?id=<?= $artworkId ?>"><span class="fa fa-eye"></span> <?= $artwork['title'] ?></a></li>
+								<li><a href="<?= URL_ROOT ?>artwork.php?exhibit=<?= $targetExhibit->getId() ?>&id=<?= $artworkId ?>"><span class="fa fa-eye"></span> <?= $artwork['title'] ?></a></li>
 							</ul>
 							<?php
 						}

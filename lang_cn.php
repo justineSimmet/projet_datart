@@ -14,7 +14,6 @@ $lang = [
 
 		"artist.biography"=> !isset($targetArtist)?'':$targetArtist->getChineseBiography()->getContent(),
 		"artist.name"=>!isset($targetArtist)?'':$targetArtist->getIdentity(),
-		"artist.oeuvres.exposees"=> !isset($targetArtist)?'':$targetArtist->getArtworkDisplayed(),
 		"artist.liste.oeuvres" => "暴露的艺术品列表",
 		"artist.pic"=> !isset($targetArtist)?'':$targetArtist->getPhotographicPortrait(),
 		"artist.list.artistes" => "展出的艺术家",
@@ -22,7 +21,6 @@ $lang = [
 		"expo.titre"=> !isset($targetExhibit)?'':$targetExhibit->getTitle(),
 		"expo.resume"=> !isset($targetExhibit)?'':$targetExhibit->getChineseSummary()->getContent(),
 		"expo.duree" => !isset($targetExhibit)?'':dateFormat($targetExhibit->getBeginDate()).' - '.dateFormat($targetExhibit->getEndDate()),
-		"expo.tableau.oeuvres" => !isset($targetExhibit)?'':$targetExhibit->listAvailableArtwork(),
 		"expo.horaires" => !isset($targetExhibit)?'':$targetExhibit->getPublicOpening(),
 		"expo.titre.artistes.oeuvres" => "艺术家和作品提出",
 

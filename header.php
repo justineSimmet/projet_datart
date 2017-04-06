@@ -10,6 +10,7 @@
  	<link rel="stylesheet" type="text/css" href="<?= URL_ASSETS_FRONT ?>styles/css/bootstrap.min.css" />
  	<link rel="stylesheet" type="text/css" href="<?= URL_ASSETS_FRONT ?>styles/css/font-awesome.min.css" />
  	<link rel="stylesheet" type="text/css" href="<?= URL_ASSETS_FRONT ?>styles/css/reset.css" />
+ 	<link rel="stylesheet" type="text/css" href="<?= URL_ASSETS_FRONT ?>styles/css/jquery.fancybox.min.css">
  	<link rel="stylesheet" type="text/css" href="<?= URL_ASSETS_FRONT ?>styles/css/stylefront.css" />
 </head>
 <body>
@@ -19,6 +20,6 @@
 	<div class="row">
 <?php
 
-	// include('nav.php');
+	include('nav.php');
 
 ?>
