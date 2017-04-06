@@ -488,7 +488,7 @@ MISE EN PLACE DU DATEPICKER JQUERI UI SUR LES CHAMPS DATE
 	$('.generateCode').on('click', function(){
 		var artworkId = $(this).attr('data-artwork');
 		var exhibitId = $(this).attr('data-exhibit');
-		var target = '192.168.0.14/artwork.php?id='+artworkId;
+		var target = '192.168.0.14/artwork.php?exhibit='+exhibitId+'id='+artworkId;
 		var qrCodeArea = $(this).parents('.qrcode-area');
 		$.post('qrcode.php',{action:'generateCode', artworkId: artworkId, target: target} , function(response){
 			var obj = JSON.parse(response);

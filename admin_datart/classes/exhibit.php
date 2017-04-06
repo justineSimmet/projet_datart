@@ -247,11 +247,6 @@ class Exhibit{
 		return (int) $close;	
 	}
 
-	function setArtistExposed($id){
-		array_push($this->artist_exposed, $id);
-		return TRUE;
-	}
-
 	function getArtistExposed(){
 		$res = requete_sql("SELECT artist.id, artist.surname, artist.name, artist.alias FROM artist
 							LEFT JOIN artist_exposed ON artist.id = artist_exposed.artist_id
@@ -286,19 +281,14 @@ class Exhibit{
 		}
 	}
 
-	function setArtworkDisplayed($id){
-		array_push($this->artwork_displayed, new Artwork($id));
-		return TRUE;
-	}
-
 	function getArtworkDisplayed(){
-		$res = requete_sql("SELECT artwork.id, artwork.artwork_title, artwork.artist_id FROM artwork
+		$res = requete_sql("SELECT artwork.id, artwork.artwork_title, artwork.artist_id, artwork.reference_number FROM artwork
 							LEFT JOIN artwork_displayed ON artwork.id = artwork_displayed.artwork_id
 							WHERE artwork_displayed.exhibit_id = '".$this->id."' ORDER BY artwork.artwork_title ASC");
 		$res = $res->fetchAll(PDO::FETCH_ASSOC);
 		$listArtworks = array();
 		foreach ($res as $artwork) {
-			$listArtworks[$artwork['id']] = ['artist_id'=>$artwork['artist_id'],'title'=>$artwork['artwork_title']];
+			$listArtworks[] = ['artist_id'=>$artwork['artist_id'],'title'=>$artwork['artwork_title'],'artwork_id'=>$artwork['id'],'reference'=>$artwork['reference_number']];
 		}
 		return $listArtworks;
 	}
@@ -456,8 +446,8 @@ class Exhibit{
 	function linkExposedArtist($array){
 		$artistLinkedList = $this->getArtistExposed();
 		$comparList = array();
-		foreach ($artistLinkedList as $art) {
-			$id = $art->getId();
+		foreach ($artistLinkedList as $art=>$identity) {
+			$id = $art;
 			array_push($comparList, $id);
 		};
 		$differentPlus = array_diff($array, $comparList);
@@ -506,7 +496,7 @@ class Exhibit{
 		$artworkLinkedList = $this->getArtworkDisplayed();
 		$comparList = array();
 		foreach ($artworkLinkedList as $art) {
-			$id = $art->getId();
+			$id = $art['artwork_id'];
 			array_push($comparList, $id);
 		};
 		$differentPlus = array_diff($array, $comparList);
@@ -837,15 +827,10 @@ class Exhibit{
 	}
 
 	function totalAvaibleArtwork(){
-		$total = $this->getArtworkDisplayed();
-		$avaible = array();
-		foreach ($total as $t) {
-			if ($t->getDisponibility() == TRUE) {
-				array_push($avaible, $t);
-			}
-		}
-		$count = count($avaible);
-		return $count;
+		$res = requete_sql("SELECT COUNT(artwork_displayed.artwork_id) AS total FROM artwork_displayed LEFT JOIN artwork ON artwork_displayed.artwork_id = artwork.id WHERE artwork.disponibility = '1' AND artwork_displayed.exhibit_id = '".$this->id."' ");
+		$res = $res->fetch(PDO::FETCH_ASSOC);
+		$total = $res['total'];
+		return $total;
 	}
 
 	function listAvailableArtwork(){
@@ -859,7 +844,7 @@ class Exhibit{
 			AND artist.visible = TRUE
 			AND artwork.visible = TRUE
 			GROUP BY artist_id
-			ORDER BY artist.name, artist.alias ASC
+			ORDER BY CONCAT(artist.surname, artist.alias) ASC
 			");
 		$res = $res->fetchAll(PDO::FETCH_ASSOC);
 		$list = array();

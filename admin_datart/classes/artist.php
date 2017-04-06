@@ -629,13 +629,18 @@ soit à faire un update des données de l'id reçue
 	{
 	  $clone = array();
 	  $count = count($listB);
+	  $listArt = array();
+	  foreach ($listB as $artistId => $value) {
+	  	array_push($listArt, $artistId);
+	  };
 	  foreach ($listA as $list) {
 	    for ($i=0; $i < $count ; $i++) { 
-	      if ($list->getId() == $listB[$i]->getId()) {
+	      if ($list->getId() == $listArt) {
 	        array_push($clone, $list->getId());
 	      }
 	    }
 	  }
+	  var_dump($listArt);
 
   	return $clone;
 	}

@@ -161,9 +161,7 @@ if (isset($_POST['targetExhibit']) && isset($_POST['action']) ) {
 	elseif($_POST['action'] == 'add-artist'){
 		if(isset($_POST['artistId'])){
 			$artistExposed = $targetExhibit->linkExposedArtist($_POST['artistId']);
-			var_dump($artistExposed);
 			if ($artistExposed) {
-				$reset = $targetExhibit->resetArtistExposed();
 				foreach ($_POST['artistId'] as $artist) {
 					$targetExhibit->setArtistExposed($artist);
 				}
@@ -201,10 +199,6 @@ if (isset($_POST['targetExhibit']) && isset($_POST['action']) ) {
 		if(isset($_POST['artworkId'])){
 			$artworkDisplayed = $targetExhibit->linkDisplayedArtwork($_POST['artworkId']);
 			if ($artworkDisplayed) {
-				$reset = $targetExhibit->resetArtworkDisplayed();
-				foreach ($_POST['artworkId'] as $artwork) {
-					$targetExhibit->setArtworkDisplayed($artwork);
-				}
 				$actionResultatArtwork = '<div id="update-exhibit-artwork"><div class="alert alert-success alert-dismissable">
 				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 				<strong> Les oeuvres ont bien été associées à l\'exposition.</strong>
@@ -506,7 +500,7 @@ include('header.php');
 	<div class="hidden-lg hidden-sm btn-area-row">
 		<a href="<?= URL_ADMIN ?>exhibit_zoning.php?id=<?= $targetExhibit->getId() ?>" target="_blank" class="btn btn-default btn-custom btn-lg" role="button"><span class="fa fa-cubes"></span> Placer les oeuvres</a>
 		<a href="<?= URL_ADMIN ?>exhibit_technical_doc.php?id=<?= $targetExhibit->getId() ?>" target="_blank" class="btn btn-default btn-custom btn-lg" role="button"><span class="fa fa-file-text"></span> Dossier technique</a>
-		<a href="#" class="btn btn-default btn-custom btn-lg" role="button"><span class="fa fa-desktop"></span> Voir la page visiteur</a>
+		<a href="<?= URL_ROOT ?>exhibit.php" target="_blank" class="btn btn-default btn-custom btn-lg" role="button"><span class="fa fa-desktop"></span> Voir la page visiteur</a>
 	</div>
 <?php
 	}
@@ -581,6 +575,8 @@ include('header.php');
 						else{
 							$selectedArtists = array();
 						}
+						// var_dump($recordedArtists);
+						// var_dump($selectedArtists);
 					?>
 					<section>
 						<div class="col-sm-12" id="alert-area-artist"> <!-- ZONE DES MESSAGES DE SUCCES OU D'ERREUR -->
@@ -593,8 +589,11 @@ include('header.php');
 								<ul <?= (!empty($targetExhibit->getId()) && $targetExhibit->getVisible() == 0) || (!empty($targetExhibit->getId()) && $targetExhibit->getEndDate() < date('Y-m-d'))?'':'id="recordedArtists"'; ?> >
 									<?php
 									if(isset($targetExhibit) && !empty($targetExhibit->getId())){
-										$clone = Artist::compareList($recordedArtists, $selectedArtists);
-										if (!empty($clone)) {
+										$clone = array();
+										foreach ($selectedArtists as $artist => $value) {
+											$clone[] = $artist;
+										}
+										if (!empty($selectedArtists)) {
 											foreach ($recordedArtists as $ra) {
 												if (!in_array($ra->getId(), $clone)) {
 													?>
@@ -619,9 +618,9 @@ include('header.php');
 								<ul <?= (!empty($targetExhibit->getId()) && $targetExhibit->getVisible() == 0) || (!empty($targetExhibit->getId()) && $targetExhibit->getEndDate() < date('Y-m-d'))?'':'id="selectedArtists"'; ?> >
 								<?php
 									if(isset($targetExhibit) && !empty($targetExhibit->getId())){
-										foreach ($selectedArtists as $ra) {
+										foreach ($selectedArtists as $ra=>$identity) {
 										?>
-										<li data-artistId="<?= $ra->getId(); ?>"><?= $ra->getIdentity(); ?></li>
+										<li data-artistId="<?= $ra; ?>"><?= $identity; ?></li>
 									<?php
 										}
 									?>
@@ -656,13 +655,21 @@ include('header.php');
 							<div id="exhibitLinkedArtwork">
 							<?php
 								if (isset($targetExhibit)) {
-								foreach ($targetExhibit->getArtistExposed() as $artist) {
+								$listArtist = $targetExhibit->getArtistExposed();
+								$listArtwork = $targetExhibit->getArtworkDisplayed();
+								$artworkDisplayed = array();
+								foreach ($listArtwork as $artwork) {
+									array_push($artworkDisplayed, $artwork['artwork_id']);
+								}
+								foreach ($listArtist as $artistId=>$value) {
+									$artist = new Artist($artistId);
 									echo '<h3>'.$artist->getIdentity().'</h3>';
 									echo '<div class="form-group form-group-lg">';
 									if ( !empty($artist->getArtwork()) ) {
+
 										foreach ($artist->getArtwork() as $artwork) {
 											?>
-											<label class="checkbox-inline"><input type="checkbox" value="<?= $artwork->getId() ?>" <?= in_array($artwork, $targetExhibit->getArtworkDisplayed())?'checked':''; ?> ><a href="<?= URL_ADMIN ?>artwork_zoom.php?artwork=<?= $artwork->getId()?>"><?= $artwork->getTitle(); ?></a></label>
+											<label class="checkbox-inline"><input type="checkbox" value="<?= $artwork->getId() ?>" <?= in_array($artwork->getId(), $artworkDisplayed)?'checked':''; ?> ><a href="<?= URL_ADMIN ?>artwork_zoom.php?artwork=<?= $artwork->getId()?>"><?= $artwork->getTitle(); ?></a></label>
 											<?php
 										}
 									}
@@ -703,7 +710,7 @@ include('header.php');
 				<div class="hidden-md hidden-xs btn-area-col">
 					<a href="<?= URL_ADMIN ?>exhibit_zoning.php?id=<?= $targetExhibit->getId() ?>" target="_blank" class="btn btn-default btn-custom btn-md" role="button"><span class="fa fa-cubes"></span> Placer les oeuvres</a>
 					<a href="<?= URL_ADMIN ?>exhibit_technical_doc.php?id=<?= $targetExhibit->getId() ?>" target="_blank" class="btn btn-default btn-custom btn-md" role="button"><span class="fa fa-file-text"></span> Dossier technique</a>
-					<a href="#" class="btn btn-default btn-custom btn-md" role="button"><span class="fa fa-desktop"></span> Voir la page visiteur</a>
+					<a href="<?= URL_ROOT ?>exhibit.php" target="_blank" class="btn btn-default btn-custom btn-md" role="button"><span class="fa fa-desktop"></span> Voir la page visiteur</a>
 				</div>
 			<?php
 				}

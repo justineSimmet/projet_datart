@@ -22,9 +22,10 @@ include('header.php');
 					$currentExhibit = Exhibit::currentExhibit();
 					if (count($currentExhibit) == 1 ) {
 						$artworkArray = $currentExhibit[0]->getArtworkDisplayed();
-						$artworkCount = count($artworkArray);
-						$randNumber = rand(0, $artworkCount-1);
-						
+						// var_dump($artworkArray);
+						$artworkRandom = $artworkArray[mt_rand(1, count($artworkArray) - 1)];
+						$randomArtwork = new Artwork($artworkRandom['artwork_id']);
+						$randomImage = $randomArtwork->getPictureOne();
 
 						?>
 						<div id="current-exhibit">
@@ -39,15 +40,13 @@ include('header.php');
 									<a href="<?= URL_ADMIN ?>exhibit_zoom.php?exhibit=<?= $currentExhibit[0]->getId(); ?>" class="btn btn-default pull-right">Voir / Modifier l'exposition</a>
 								</p>
 								<p class="clearfix">
-									<a href="#" class="btn btn-default pull-right">Voir la page visiteur</a>
+									<a href="<?= URL_ROOT?>exhibit.php?id=<?= $currentExhibit[0]->getId(); ?>" class="btn btn-default pull-right" target="_blank">Voir la page visiteur</a>
 								</p>
 							</div>
 
 						</div>
 						<div class="exhibit-picture"><!-- Photo aléatoire tirée d'une oeuvre de l'expo -->
-							<?php
-								$randomImage = $artworkArray[$randNumber]->getPictureOne();
-							?>
+
 							<img src="<?= URL_IMAGES.$randomImage->getTarget(); ?>" alt="<?= $randomImage->getLegend(); ?>"/>
 						</div>
 						</div>
