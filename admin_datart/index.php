@@ -21,11 +21,12 @@ include('header.php');
 				<?php
 					$currentExhibit = Exhibit::currentExhibit();
 					if (count($currentExhibit) == 1 ) {
-						$artworkArray = $currentExhibit[0]->getArtworkDisplayed();
-						// var_dump($artworkArray);
-						$artworkRandom = $artworkArray[mt_rand(1, count($artworkArray) - 1)];
-						$randomArtwork = new Artwork($artworkRandom['artwork_id']);
-						$randomImage = $randomArtwork->getPictureOne();
+						if (!empty($currentExhibit[0]->getArtworkDisplayed())) {
+							$artworkArray = $currentExhibit[0]->getArtworkDisplayed();
+							$artworkRandom = $artworkArray[mt_rand(0, count($artworkArray) - 1)];
+							$randomArtwork = new Artwork($artworkRandom['artwork_id']);
+							$randomImage = $randomArtwork->getPictureOne();
+						}
 
 						?>
 						<div id="current-exhibit">
@@ -195,7 +196,7 @@ include('header.php');
 								$parentExhibit = new Exhibit($event->getExhibitId());
 								?>
 								<li>
-									<a href="<?= URL_ADMIN ?>artwork_zoom?artwork=<?= $event->getExhibitId() ?>"><?= $parentExhibit->getTitle() ?> >> <?= $event->getName()?> le <?= dateFormat($event->getEventDate()); ?> à <?= timeFormat($event->getEventStartTime()); ?></a>
+									<a href="<?= URL_ADMIN ?>exhibit_zoom?exhibit=<?= $event->getExhibitId() ?>"><?= $parentExhibit->getTitle() ?> >> <?= $event->getName()?> le <?= dateFormat($event->getEventDate()); ?> à <?= timeFormat($event->getEventStartTime()); ?></a>
 								</li>
 								<?php
 							}

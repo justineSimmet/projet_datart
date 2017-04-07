@@ -17,7 +17,7 @@ $lang = [
 		"artist.liste.oeuvres" => "Liste des oeuvres exposées",
 		"artist.list.artistes" => "Artistes exposés",
 
-		"expo.duree" => isset($targetExhibit)?'du '.dateFormat($targetExhibit->getBeginDate()).' - '.dateFormat($targetExhibit->getEndDate()):'',
+		"expo.duree" => isset($targetExhibit)?'Du '.dateFormat($targetExhibit->getBeginDate()).' - '.dateFormat($targetExhibit->getEndDate()):'',
 		"expo.titre"=> isset($targetExhibit)?$targetExhibit->getTitle():'',
 		"expo.resume"=> !isset($targetExhibit)?'':$targetExhibit->getFrenchSummary()->getContent(),
 		"expo.horaires" => !isset($targetExhibit)?'':$targetExhibit->getPublicOpening(),

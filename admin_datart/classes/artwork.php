@@ -616,7 +616,7 @@ class Artwork{
 					</fieldset>				
 					</div>
 				<input type="hidden" name="id" value="<?= isset($this)?$this->getId():'' ?>">
-				<input type="submit" value="<?= $action; ?>" class="btn btn-default pull-right" <?= !empty($this->getId()) && $this->getVisible() == FALSE?'disabled':''; ?> />
+				<input type="submit" value="<?= $action; ?>" class="btn btn-default pull-right" <?= !empty($this->getId()) && $this->getVisible() == FALSE?'disabled':''; ?> <?= empty($this->id)?'disabled':''; ?> />
 				</div>
 			
 			</form>

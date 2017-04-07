@@ -31,15 +31,6 @@ img::selection {
 *::-moz-selection {
   background-color: transparent; }
 
-* {
-  -webkit-user-select: none;
-  -moz-user-select: -moz-none;
-  /*IE10*/
-  -ms-user-select: none;
-  user-select: none;
-  /*You just need this if you are only concerned with android and not desktop browsers.*/
-  -webkit-tap-highlight-color: transparent; }
-
 body {
   font-family: 'kelson', 'arial', 'helvetica', sans-serif;
   font-size: 16px; }

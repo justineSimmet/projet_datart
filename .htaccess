@@ -1,0 +1,13 @@
+<Files .htaccess>
+order allow,deny
+deny from all
+</Files>
+
+
+### INTERDIRE L'AFFICHAGE DE CERTAINS FICHIERS COMME config, option, login, setup, install, admin, home, default, xmlrpc.
+<Files ~ "^(wp-(login|admin|config)|config(\.inc)?|install?|user|configure|configuration|options?\.inc|option|settings?(\.inc)?|functions?(\.inc)?|setup(\.inc)?|readme|changelog|default|include|home|xmlrpc|bigdump|uploadTester|errors?|test|data|members?|hacke?r?d?|[-_a-z0-9.]*mafia[-_a-z0-9.]*|[-_a-z0-9.]*power[-_a-z0-9.]*|[-_a-z0-9.]*jihad[-_a-z0-9.]*|php|shell|ssh|root|cmd|[0-9]{1,6})\.(p?s?x?htm?l?|txt|aspx?|cfml?|cgi|pl|php[3-9]{0,1}|jsp?|sql|xml)$">
+order allow,deny
+deny from all
+</Files>
+
+Options -Indexes

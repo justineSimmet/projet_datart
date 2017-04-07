@@ -185,6 +185,9 @@ include('header.php');
                                                 Référence
                                             </th>
                                             <th>
+                                                Dispo.
+                                            </th>
+                                            <th>
                                                 Anglais
                                             </th>
                                             <th>
@@ -205,6 +208,9 @@ include('header.php');
                                             </td>
                                             <td>
                                                 <?= $artwork->getReferenceNumber(); ?>
+                                            </td>
+                                            <td>
+                                                <?= $artwork->getDisponibility() == TRUE?'<span class="fa fa-check red"></span>':'<span class="fa fa-circle-o red"></span>' ; ?>
                                             </td>
                                             <td>
                                                <?= $artwork->checkTrad('english') == TRUE?'<span class="fa fa-check red"></span>':'<span class="fa fa-circle-o red"></span>' ?>

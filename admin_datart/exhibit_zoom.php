@@ -162,9 +162,6 @@ if (isset($_POST['targetExhibit']) && isset($_POST['action']) ) {
 		if(isset($_POST['artistId'])){
 			$artistExposed = $targetExhibit->linkExposedArtist($_POST['artistId']);
 			if ($artistExposed) {
-				foreach ($_POST['artistId'] as $artist) {
-					$targetExhibit->setArtistExposed($artist);
-				}
 				$actionResultatArtist = '<div id="update-exhibit-artist"><div class="alert alert-success alert-dismissable">
 				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 				<strong> Les artistes ont bien été lié à l\'exposition.</strong>
@@ -564,6 +561,7 @@ include('header.php');
 				</div>
 			</section>
 		</div>
+		<?php if(isset($targetExhibit) && !empty($targetExhibit->getId())) { ?>
 		<div class="col-sm-12">
 			<div class="row">
 				<div class="col-md-6 col-xs-12">
@@ -579,7 +577,7 @@ include('header.php');
 						// var_dump($selectedArtists);
 					?>
 					<section>
-						<div class="col-sm-12" id="alert-area-artist"> <!-- ZONE DES MESSAGES DE SUCCES OU D'ERREUR -->
+						<div class="col-sm-12 text-center" id="alert-area-artist"> <!-- ZONE DES MESSAGES DE SUCCES OU D'ERREUR -->
 							<?= !empty($actionResultatArtist)?$actionResultatArtist:''; ?>
 						</div>
 						<h2>Etape 3 : Artistes exposés</h2>
@@ -646,7 +644,7 @@ include('header.php');
 				</div>
 				<div class="col-md-6 col-xs-12">
 					<section>
-						<div class="col-sm-12" id="alert-area-artwork"> <!-- ZONE DES MESSAGES DE SUCCES OU D'ERREUR -->
+						<div class="col-sm-12 text-center" id="alert-area-artwork"> <!-- ZONE DES MESSAGES DE SUCCES OU D'ERREUR -->
 							<?= !empty($actionResultatArtwork)?$actionResultatArtwork:''; ?>
 						</div>
 						<h2>Etape 4 : Les oeuvres</h2>
@@ -696,6 +694,7 @@ include('header.php');
 				</div>
 			</div>
 		</div>
+		<?php } ?>
 	</div>
 </div> <!-- FIN DU CONTAINER CENTRAL -->
 
@@ -724,7 +723,7 @@ include('header.php');
 				}
 			}
 			?>
-			<div id="alert-area-event">
+			<div id="alert-area-event" class="text-center">
 				<?= !empty($actionResultatEvent)?$actionResultatEvent:''; ?>
 			</div>
 		</div>

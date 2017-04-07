@@ -51,10 +51,12 @@ Quand scrolldown nav disparait et qd scrollup reapparait
        var isDown = currentScroll > previousScroll;
 
        if ( isDown ){
-          $("nav").hide();  
+          $("nav").fadeOut(350);
+          $(".container").css('top', '-15px');
        }
        else if ( !isDown ){ 
        	  $("nav").show();
+          $(".container").css('top', '-15px');
        }
        previousScroll = currentScroll;
     });
@@ -68,8 +70,13 @@ Quand scrolldown nav disparait et qd scrollup reapparait
 $(document).ready(function(){
 
   $("body").on("click", function(){
-      $("nav").fadeToggle();
+      $("nav").fadeToggle(350);
   });
+
+  $(".container").on("click", function(){
+      $(this).css('top', '0');
+  });
+
 
 });
 

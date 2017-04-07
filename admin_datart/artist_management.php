@@ -174,7 +174,7 @@ include('header.php');
                                     Oeuvres associées
                                 </th>
                                 <th>
-                                    Biographie + Note
+                                    Bio. + Mot de l'artiste
                                 </th>
                                 <th>
                                     Anglais

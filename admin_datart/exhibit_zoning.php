@@ -181,7 +181,7 @@ if (isset($_GET['id'])) {
 										<div class="list-element">
 											<div class="text-area">
 												<h3><?= strlen($artwork->getTitle()) < 25 ?$artwork->getTitle():substr($artwork->getTitle(),0,23).'...' ; ?></h3>
-												<p>Réf. : <?= $artwork->getReferenceNumber(); ?></p>
+												<p>Réf. : <?= $artwork->getReferenceNumber(); ?> | <?= $artwork->getArtistRequest(); ?></p>
 											</div>
 											<?php
 											if (isset($artworkItem)) {

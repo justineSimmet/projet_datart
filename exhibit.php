@@ -10,6 +10,7 @@ require_once('admin_datart/classes/artwork_textual_content.php');
 require_once('admin_datart/classes/artwork_visual.php');
 require_once('admin_datart/classes/exhibit_textual_content.php');
 $currentExhibit = Exhibit::currentExhibit();
+
 foreach ($currentExhibit as $targetExhibit) {
 
 if (isset($_SESSION['lang_user']) ) {
@@ -30,18 +31,31 @@ if (isset($_SESSION['lang_user']) ) {
   	}
 }
 
+
+
 include_once('header.php');
 
-var_dump($_SESSION);
 ?>
 
+<h2><?= $lang[$_SESSION['lang_user']]['expo.titre'] ?></h2>
 <section id="exhibit_presentation">
 	<div class="expo">
-		<h2><?= $lang[$_SESSION['lang_user']]['expo.titre'] ?></h2>
 		<p class="date">
 		<?= $lang[$_SESSION['lang_user']]['expo.duree'] ?>
 			
 		</p>
+	</div>
+</section>
+
+<section id="pic_exhibit">
+	<?php
+		$artworkArray = $targetExhibit->getArtworkDisplayed();
+		$artworkRandom = $artworkArray[mt_rand(0, count($artworkArray) - 1)];
+        $randomArtwork = new Artwork($artworkRandom['artwork_id']);
+        $randomImage = $randomArtwork->getPictureOne();
+	?>
+	<div class="container_pic">
+		<img src="<?= URL_IMAGES.$randomImage->getTarget(); ?>" alt="<?= $randomImage->getLegend(); ?>"/>
 	</div>
 </section>
 
@@ -57,8 +71,8 @@ var_dump($_SESSION);
 	</div>
 </section>
 
-<section id="list_artwork">
 	<h3><?= $lang[$_SESSION['lang_user']]['expo.titre.artistes.oeuvres'] ?></h3>
+<section id="list_artwork">
 		<div>
 			<ul>
 		<?php 
@@ -66,13 +80,13 @@ var_dump($_SESSION);
 			$listArtwork = $targetExhibit->getArtworkDisplayed();
 			foreach ($listArtist as $artistId => $artistIdentity) {
 					?>
-					<li><a href="<?= URL_ROOT ?>artist.php?exhibit=<?= $targetExhibit->getId() ?>&id=<?= $artistId ?>"><span class="fa fa-paint-brush"></span> <?= $artistIdentity ?></a>
+					<li class="list_artist"><a href="<?= URL_ROOT ?>artist.php?exhibit=<?= $targetExhibit->getId() ?>&id=<?= $artistId ?>"><span class="fa fa-paint-brush"></span> <?= $artistIdentity ?></a>
 					<?php
-					foreach ($listArtwork as $artworkId => $artwork) {
+					foreach ($listArtwork as $artwork) {
 						if ($artwork['artist_id'] == $artistId) {
 							?>
 							<ul>
-								<li><a href="<?= URL_ROOT ?>artwork.php?exhibit=<?= $targetExhibit->getId() ?>&id=<?= $artworkId ?>"><span class="fa fa-eye"></span> <?= $artwork['title'] ?></a></li>
+								<li class="list_artwork"><a href="<?= URL_ROOT ?>artwork.php?exhibit=<?= $targetExhibit->getId() ?>&id=<?= $artwork['artwork_id'] ?>"><span class="fa fa-eye"></span> <?= $artwork['title'] ?></a></li>
 							</ul>
 							<?php
 						}
