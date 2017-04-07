@@ -1,3 +1,6 @@
+		</div>
+		</div>
+
 	<script src="<?= URL_ASSETS_FRONT ?>js/jquery-3.1.1.js"></script>
 	<script src="<?= URL_ASSETS_FRONT ?>js/jquery.fancybox.min.js"></script>
 	<script src="<?= URL_ASSETS_FRONT ?>js/bootstrap.min.js"></script>

@@ -2,7 +2,7 @@
   <div class="row">
   <div class="col-xs-12">                  
   <div class="dropdown clearfix">
-    <button class="btn dropdown-toggle pull-right" type="button" data-toggle="dropdown"><img src="assets/images/lang.svg" alt=""></button>
+    <button class="btn dropdown-toggle pull-right" type="button" data-toggle="dropdown"><img src="assets/images/lang-blue.svg" alt=""></button>
     <ul class="dropdown-menu dropdown-menu-right" id="changeLang">
       <li data-langue="fr"><a href="#"><?= $lang[$_SESSION['lang_user']]['nav.lang.fr'] ?></a></li>
       <li data-langue="en"><a href="#"><?= $lang[$_SESSION['lang_user']]['nav.lang.en'] ?></a></li>

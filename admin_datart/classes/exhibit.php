@@ -291,17 +291,17 @@ class Exhibit{
 		return TRUE;
 	}
 
-	function getArtworkDisplayed(){
-		$res = requete_sql("SELECT artwork.id, artwork.artwork_title, artwork.artist_id FROM artwork
-							LEFT JOIN artwork_displayed ON artwork.id = artwork_displayed.artwork_id
-							WHERE artwork_displayed.exhibit_id = '".$this->id."' ORDER BY artwork.artwork_title ASC");
-		$res = $res->fetchAll(PDO::FETCH_ASSOC);
-		$listArtworks = array();
-		foreach ($res as $artwork) {
-			$listArtworks[$artwork['id']] = ['artist_id'=>$artwork['artist_id'],'title'=>$artwork['artwork_title']];
-		}
-		return $listArtworks;
-	}
+function getArtworkDisplayed(){
+        $res = requete_sql("SELECT artwork.id, artwork.artwork_title, artwork.artist_id, artwork.reference_number FROM artwork
+                            LEFT JOIN artwork_displayed ON artwork.id = artwork_displayed.artwork_id
+                            WHERE artwork_displayed.exhibit_id = '".$this->id."' ORDER BY artwork.artwork_title ASC");
+        $res = $res->fetchAll(PDO::FETCH_ASSOC);
+        $listArtworks = array();
+        foreach ($res as $artwork) {
+            $listArtworks[] = ['artist_id'=>$artwork['artist_id'],'title'=>$artwork['artwork_title'],'artwork_id'=>$artwork['id'],'reference'=>$artwork['reference_number']];
+        }
+        return $listArtworks;
+    }
 
 	function cleanArtworkdDisplayed(){
 		$res = requete_sql("DELETE FROM artwork_displayed WHERE exhibit_id = '".$this->id."' ");
