@@ -22,7 +22,7 @@ $summary = strip_tags(html_entity_decode($summaryExhibit));
 
 $list = $targetExhibit->listAvailableArtwork();
 if (!empty($targetExhibit->getZoning())) {
-	$imageZoning = 'http://localhost/projet_datart/admin_datart/assets/images/exhibit/exhibit'.$_GET['id'].'.jpg';
+	$imageZoning = URL_IMAGES.'exhibit/exhibit'.$_GET['id'].'.jpg';
 
 }
 else{
