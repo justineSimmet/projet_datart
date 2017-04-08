@@ -497,7 +497,7 @@ include('header.php');
 	<div class="hidden-lg hidden-sm btn-area-row">
 		<a href="<?= URL_ADMIN ?>exhibit_zoning.php?id=<?= $targetExhibit->getId() ?>" target="_blank" class="btn btn-default btn-custom btn-lg" role="button"><span class="fa fa-cubes"></span> Placer les oeuvres</a>
 		<a href="<?= URL_ADMIN ?>exhibit_technical_doc.php?id=<?= $targetExhibit->getId() ?>" target="_blank" class="btn btn-default btn-custom btn-lg" role="button"><span class="fa fa-file-text"></span> Dossier technique</a>
-		<a href="<?= URL_ROOT ?>exhibit.php" target="_blank" class="btn btn-default btn-custom btn-lg" role="button"><span class="fa fa-desktop"></span> Voir la page visiteur</a>
+		<a href="<?= URL_ROOT ?>exhibit.php?exhibit=<?= $targetExhibit->getId() ?>" target="_blank" class="btn btn-default btn-custom btn-lg" role="button"><span class="fa fa-desktop"></span> Voir la page visiteur</a>
 	</div>
 <?php
 	}
@@ -709,7 +709,7 @@ include('header.php');
 				<div class="hidden-md hidden-xs btn-area-col">
 					<a href="<?= URL_ADMIN ?>exhibit_zoning.php?id=<?= $targetExhibit->getId() ?>" target="_blank" class="btn btn-default btn-custom btn-md" role="button"><span class="fa fa-cubes"></span> Placer les oeuvres</a>
 					<a href="<?= URL_ADMIN ?>exhibit_technical_doc.php?id=<?= $targetExhibit->getId() ?>" target="_blank" class="btn btn-default btn-custom btn-md" role="button"><span class="fa fa-file-text"></span> Dossier technique</a>
-					<a href="<?= URL_ROOT ?>exhibit.php" target="_blank" class="btn btn-default btn-custom btn-md" role="button"><span class="fa fa-desktop"></span> Voir la page visiteur</a>
+					<a href="<?= URL_ROOT ?>exhibit.php?exhibit=<?= $targetExhibit->getId() ?>"" target="_blank" class="btn btn-default btn-custom btn-md" role="button"><span class="fa fa-desktop"></span> Voir la page visiteur</a>
 				</div>
 			<?php
 				}

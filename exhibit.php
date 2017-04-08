@@ -11,7 +11,13 @@ require_once('admin_datart/classes/artwork_visual.php');
 require_once('admin_datart/classes/exhibit_textual_content.php');
 $currentExhibit = Exhibit::currentExhibit();
 
+
 foreach ($currentExhibit as $targetExhibit) {
+
+if (isset($_GET['exhibit'])) {
+	$targetExhibit = new Exhibit($_GET['exhibit']);
+}
+
 
 if (isset($_SESSION['lang_user']) ) {
 	if ($_SESSION['lang_user'] == 'fr') {
@@ -49,15 +55,22 @@ include_once('header.php');
 
 <section id="pic_exhibit">
 	<?php
-		$artworkArray = $targetExhibit->getArtworkDisplayed();
-		$artworkRandom = $artworkArray[mt_rand(0, count($artworkArray) - 1)];
-        $randomArtwork = new Artwork($artworkRandom['artwork_id']);
-        $randomImage = $randomArtwork->getPictureOne();
+		if (!empty($targetExhibit->getArtworkDisplayed())) {
+			$artworkArray = $targetExhibit->getArtworkDisplayed();
+			$artworkRandom = $artworkArray[mt_rand(0, count($artworkArray) - 1)];
+	        $randomArtwork = new Artwork($artworkRandom['artwork_id']);
+	        $randomImage = $randomArtwork->getPictureOne();
+	    }
+
+	    if (isset($randomImage)) {
 	?>
 	<div class="container_pic">
 		<img src="<?= URL_IMAGES.$randomImage->getTarget(); ?>" alt="<?= $randomImage->getLegend(); ?>"/>
 	</div>
 </section>
+		<?php
+	    }
+		?>
 
 <section id="exhibit_summary">
 	<div>
@@ -101,7 +114,8 @@ include_once('header.php');
 
 
 <?php
-};
+
+}
 
 include('footer.php');
  ?>

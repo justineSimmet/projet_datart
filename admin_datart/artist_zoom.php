@@ -17,6 +17,7 @@ if (isset($_GET['artist'])) {
 	$targetArtist = new Artist($_GET['artist']);
 }
 
+$currentExhibit = Exhibit::currentExhibit();
 
 /************************************************************************************************
 **
@@ -340,7 +341,7 @@ include('header.php');
 		if ($targetArtist->getVisible() == TRUE) {
 ?>
 	<div class="hidden-lg hidden-sm btn-area-row">
-		<a href="<?= URL_ROOT ?>artist.php?id=<?= $targetArtist->getId(); ?>" target="_blank" class="btn btn-default btn-custom btn-lg" role="button"><span class="fa fa-desktop"></span> Voir la page visiteur</a>
+		<a href="<?= URL_ROOT ?>artist.php?exhibit=<?= $currentExhibit[0]->getId() ?>&id=<?= $targetArtist->getId(); ?>" target="_blank" class="btn btn-default btn-custom btn-lg" role="button" target="_blank"><span class="fa fa-desktop"></span> Voir la page visiteur</a>
 		<a href="<?= URL_ADMIN ?>artwork_zoom.php?artist=<?= $targetArtist->getId(); ?>"class="btn btn-default btn-custom btn-lg" role="button"><span class="fa fa-image"></span> Ajouter une oeuvre</a>
 	</div>
 <?php
@@ -444,7 +445,7 @@ include('header.php');
 					if ($targetArtist->getVisible() == TRUE) {
 			?>
 				<div class="hidden-md hidden-xs btn-area-col">
-					<a href="<?= URL_ROOT ?>artist.php?id=<?= $targetArtist->getId(); ?>" target="_blank"  class="btn btn-default btn-custom" role="button"><span class="fa fa-desktop"></span> Voir la page visiteur</a>
+					<a href="<?= URL_ROOT ?>artist.php?exhibit=<?= $currentExhibit[0]->getId() ?>&id=<?= $targetArtist->getId(); ?>" target="_blank"  class="btn btn-default btn-custom" role="button" target="_blank"><span class="fa fa-desktop"></span> Voir la page visiteur</a>
 					<a href="<?= URL_ADMIN ?>artwork_zoom.php?artist=<?= $targetArtist->getId(); ?>"class="btn btn-default btn-custom" role="button"><span class="fa fa-image"></span> Ajouter une oeuvre</a>
 				</div>
 			<?php
