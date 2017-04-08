@@ -86,7 +86,7 @@ include_once('header.php');
 						if ($artwork['artist_id'] == $artistId) {
 							?>
 							<ul>
-								<li class="list_artwork"><a href="<?= URL_ROOT ?>artwork.php?exhibit=<?= $targetExhibit->getId() ?>&id=<?= $artwork['artwork_id'] ?>"><span class="fa fa-eye"></span> <?= $artwork['title'] ?></a></li>
+								<li class="list_artwork"><a href="<?= URL_ROOT ?>artwork.php?exhibit=<?= $targetExhibit->getId() ?>&id=<?= $artwork['artwork_id']?>"></span> <?= $artwork['title'] ?></a></li>
 							</ul>
 							<?php
 						}
