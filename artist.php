@@ -48,7 +48,11 @@ if (isset($_GET['id'])){
 	</div>
 	<?php 
 		}
-
+		else{
+	?>
+		<img src="<?= URL_ASSETS_FRONT ?>images/avatar.jpg" alt="">	
+	<?php
+		}
 	 ?>
 </section>
 
@@ -62,14 +66,14 @@ if (isset($_GET['id'])){
 <section id="artist_listArtwork">
 	<div class="listArtwork">
 		<h3><?= $lang[$_SESSION['lang_user']]['artist.liste.oeuvres'] ?></h3>
-		<ul>
+		<ul class="list_artists">
 		<?php 
 			$listArtwork = $targetExhibit->getArtworkDisplayed();
-			foreach ($listArtwork as $artworkId => $artwork) {
+			foreach ($listArtwork as $artwork) {
 				if ($artwork['artist_id'] == $targetArtist->getId()) {
 			?>
 				<li>
-					<a href="<?= URL_ROOT ?>artwork.php?exhibit=<?= $targetExhibit->getId() ?>&id=<?= $artworkId ?>"><span class="fa fa-eye"></span> <?= $artwork['title'] ?></a>
+					<a href="<?= URL_ROOT ?>artwork.php?exhibit=<?= $targetExhibit->getId() ?>&id=<?= $artwork['artwork_id'] ?>"><?= $artwork['title'] ?></a>
 				</li>
 			<?php
 				}
@@ -113,12 +117,12 @@ foreach ($currentExhibit as $targetExhibit) {
 	<section id="list_artwork">
 		<h3><?= $lang[$_SESSION['lang_user']]['artist.list.artistes'] ?></h3>
 			<div>
-				<ul>
+				<ul class="list_artists">
 			<?php 
 				$listArtist = $targetExhibit->getArtistExposed();
 				foreach ($listArtist as $artistId => $artistIdentity) {
 						?>
-						<li><a href="<?= URL_ROOT ?>artist.php?exhibit=<?= $targetExhibit->getId() ?>&id=<?= $artistId ?>"><span class="fa fa-paint-brush"></span> <?= $artistIdentity ?></a>
+						<li><a href="<?= URL_ROOT ?>artist.php?exhibit=<?= $targetExhibit->getId() ?>&id=<?= $artistId ?>"><?= $artistIdentity ?></a>
 						<?php
 						echo'</li>';
 					}	

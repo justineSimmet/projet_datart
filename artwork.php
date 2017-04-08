@@ -53,35 +53,42 @@ if (isset($_GET['id'])){
 
 <section id="artwork_presentation">
 	<div class="artwork">
-		<h3><?= $targetArtwork->getTitle() ?></h3>
-		<p><?= $lang[$_SESSION['lang_user']]['artwork.nature'] ?></p>
-		<p><a href="<?= URL_ROOT ?>artist.php?exhibit=<?= $targetExhibit->getId() ?>&id=<?= $parentArtist->getId() ?> "><?= $parentArtist->getIdentity() ?></a></p>
+		<h3><?= $targetArtwork->getTitle() ?> (<?= $lang[$_SESSION['lang_user']]['artwork.nature'] ?>)<p class="artwork_artist_name">
+			
+		<a href="<?= URL_ROOT ?>artist.php?exhibit=<?= $targetExhibit->getId() ?>&id=<?= $parentArtist->getId() ?> "><?= $parentArtist->getIdentity() ?></a>
+		</p></h3>
+		
 	</div>
-	<p>
+	<div class="container_main_pic">
+		<div class="main">
+		<?php
+			if(!empty($targetArtwork->getPictureTwo())){
+		?>
+			<div class="container_pic">
+				<img src="<?= URL_IMAGES.$targetArtwork->getPictureTwo()->getTarget() ?> " alt="<?= $targetArtwork->getPictureTwo()->getLegend() ?>">
+			</div>
+		<?php
+			}
+		?>
 		<?= $lang[$_SESSION['lang_user']]['artwork.main'] ?>
-		<?php
-			if(!empty($targetArtwork->getPictureTwo()->getTarget())){
-		?>
-			<div class="container_pic">
-				<img src="<?= URL_IMAGES.$targetArtwork->getPictureTwo()->getTarget() ?>" alt="<?= $targetArtwork->getPictureTwo()->getLegend() ?>">
-			</div>
-		<?php
-			}
-		?>
-	</p>
-		<?php
-			if(!empty($targetArtwork->getPictureThree())){
-		?>
-			<div class="container_pic">
-				<img src="<?= URL_IMAGES.$targetArtwork->getPictureThree()->getTarget() ?>" alt="<?= $targetArtwork->getPictureThree()->getLegend() ?>">
-			</div>
-		<?php
-			}
-		?>
+		</div>
+
+	</div>
+
+	<?php
+		if(!empty($targetArtwork->getPictureThree())){
+	?>
+		<div class="container_pic_three">
+			<img src="<?= URL_IMAGES.$targetArtwork->getPictureThree()->getTarget() ?>" alt="<?= $targetArtwork->getPictureThree()->getLegend() ?>">
+		</div>
+	<?php
+		}
+	?>
 </section>
 
+
 <section id="artwork-galerie">
-	<h4><?= $lang[$_SESSION['lang_user']]['artwork.titre.galerie'] ?></h4>
+	<h3><?= $lang[$_SESSION['lang_user']]['artwork.titre.galerie'] ?></h3>
 		<div class="gallery">
 		<?php 
 			// var_dump($targetArtwork->getVisual());
@@ -98,12 +105,14 @@ if (isset($_GET['id'])){
 		</div>
 
 </section>
-	
+<?php 
+	if (!empty($targetArtwork->getAdditional())) {
+
+ ?>
 <section id="artwork-more">
-	<h4><?= $lang[$_SESSION['lang_user']]['artwork.titre.oeuvre'] ?></h4>
-	<ul>
+	<h3><?= $lang[$_SESSION['lang_user']]['artwork.titre.oeuvre'] ?></h3>
+	<ul class="list_more_artwork">
 	<?php
-		if (!empty($targetArtwork->getAdditional())) {
 			$additionalList = $targetArtwork->getAdditional();
 			foreach ($additionalList as $add) {
 				if ($add->getFormat() == 'pdf') {
@@ -119,13 +128,14 @@ if (isset($_GET['id'])){
 
 	<?php
 			}
-		}
+		
 	?>
 	</ul>
 </section>
 
 <?php
-}
+		}
+	}
 }
 else{
 $currentExhibit = Exhibit::currentExhibit();
@@ -162,13 +172,13 @@ foreach ($currentExhibit as $targetExhibit) {
 			$listArtwork = $targetExhibit->getArtworkDisplayed();
 			foreach ($listArtist as $artistId => $artistIdentity) {
 					?>
-					<li><a href="<?= URL_ROOT ?>artist.php?exhibit=<?= $targetExhibit->getId() ?>&id=<?= $artistId ?>"><span class="fa fa-paint-brush"></span> <?= $artistIdentity ?></a>
+					<li class="list_artist"><a href="<?= URL_ROOT ?>artist.php?exhibit=<?= $targetExhibit->getId() ?>&id=<?= $artistId ?>"><span class="fa fa-paint-brush"></span> <?= $artistIdentity ?></a>
 					<?php
 					foreach ($listArtwork as $artworkId => $artwork) {
 						if ($artwork['artist_id'] == $artistId) {
 							?>
 							<ul>
-								<li><a href="<?= URL_ROOT ?>artwork.php?exhibit=<?= $targetExhibit->getId() ?>&id=<?= $artworkId ?>"><span class="fa fa-eye"></span> <?= $artwork['title'] ?></a></li>
+								<li class="list_artwork"><a href="<?= URL_ROOT ?>artwork.php?exhibit=<?= $targetExhibit->getId() ?>&id=<?= $artworkId ?>"><span class="fa fa-eye"></span> <?= $artwork['title'] ?></a></li>
 							</ul>
 							<?php
 						}

@@ -26,17 +26,13 @@ $lang = [
 
 		"artwork.titre.galerie" => "画廊",
 		"artwork.titre.oeuvre" => "超越艺术品",
-		"artwork.name" => !isset($targetArtwork)?'':$targetArtwork->getTitle(),
-		"artwork.pic"=> !isset($targetArtwork)?'':$targetArtwork->getPictureOne()->getTarget(),
-		"artwork.pic.two"=> isset($targetArtwork) && !empty($targetArtwork->getPictureTwo())?$targetArtwork->getPictureTwo()->getTarget():'',
 		"artwork.nature"=> !isset($targetArtwork)?'':$targetArtwork->getChineseCharacteristic()->getContent(),
-		"artwork.artist.name"=> !isset($targetArtwork)?'':$targetArtwork->getArtistId(),
 		"artwork.main"=> !isset($targetArtwork)?'':$targetArtwork->getChineseMain()->getContent(),
 
 		"about.titre.presentation" => "协会介绍",
 		"about.presentation" => "自1996年以来，“大角度”协会一直在图书馆管理一个致力于文化的展览空间。 对该地区的文化发展非常活跃。 大角度定期为艺术家提供其使用场所。",
 		"about.titre.mentions" => "版本说明",
-		"about.mentions" => " Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloribus ipsam earum ipsum eum excepturi iure et sequi commodi sunt facere sed adipisci asperiores quas, quia ullam, animi repellat minus ea!"
+		"about.titre.credits" => "学分"
 	],
 ];
 
