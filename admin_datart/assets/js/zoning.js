@@ -1,18 +1,21 @@
+//FONCTION DE NETTOYAGE DE TABLEAUX
+//Recherche dans le tableau si la cible recherchée est présente
+//Si c'est le cas, la donnée est supprimée du tableau
 function cleanArray(array, target){
 	for(var i in array){
-		    if(array[i][0]==target){
-		        array.splice(i,1);
-		        break;
-		    }
+		if(array[i][0]==target){
+		    array.splice(i,1);
+		    break;
 		}
+	}
 }
-
 
 
 $(document).ready(function() {
 
 	var arrayData = [];
 
+	//Initialise un tableau de référence de positions des éléments droppés dans la cible
 	$('#drop-area').find('.dropItem').each(function(){
 		var ref = $(this).attr('id');
 		refArray = [ref, $(this).position()];
@@ -27,7 +30,8 @@ $(document).ready(function() {
 	$('#saveZoning').on('click', function(){
 		var exhibit = $(this).attr('data-exhibit');
 		var dataJson = JSON.stringify(arrayData);
-
+		//Après avoir converti les données du tableau de positions en Json,
+		//execution d'une requête Ajax pour sauvegarder les positions en BDD
 		$.post('save_zoning.php',{action:'save', data: dataJson, target: exhibit} , function(response){
 				var obj = JSON.parse(response);
 				if (obj.response == 'success') {
@@ -36,6 +40,9 @@ $(document).ready(function() {
 						+'<strong>Les données ont bien été enregistrées.</strong>'
 						+'</div>';
 					$('#alert-area').html(alertSuccess);
+					// Si l'enregistrement a réussi, exécution d'un html2canvas pour effectuer une "capture"
+					// de la zone de Drop et envoi du résultat sous la forme d'un jpeg en Base 64 en Ajax
+					// afin de sauvegarder le "visuel" dans un fichier jpeg.
 					html2canvas($("#drop-area"), {
     					onrendered: function( canvas ) {
     						var image = canvas.toDataURL('image/jpeg', 1.0);
@@ -53,15 +60,19 @@ $(document).ready(function() {
 			})
 	});
 
+	//Annuler les derniers changements
 	$('#cancelZoning').on('click', function(){
 		$('#cancelChange').modal('show');
 	});
 
+	//Réinitialiser le plan
 	$('#resetZoning').on('click', function(){
 		$('#deleteChange').modal('show');
 	});
 
 	$('#deleteData').on('click', function(){
+		//Si la demande de réinitialisation est validée,
+		//une requête ajax est envoyée pour effacer pour supprimer les données de la table art-zoning
 		var exhibit = $(this).attr('data-exhibit');
 		$.post('save_zoning.php', {action: 'delete', target: exhibit}, function(response){
 			var obj = JSON.parse(response);
@@ -85,7 +96,7 @@ $(document).ready(function() {
 /**********************************************
 ** DRAG AND DROP AVEC JQUERY UI
 ************************************************/
-
+	//Initialise les éléments draggable dans la liste des oeuvres
 	$('.dragItem').draggable(
 		{ 
 			appendTo: '#dropTarget',
@@ -100,6 +111,7 @@ $(document).ready(function() {
 		}
 	);
 
+	//Initialise les éléments draggable dans la zone de drop
 	$('.dropItem').draggable(
 		{
 			containment: "parent",
@@ -112,6 +124,10 @@ $(document).ready(function() {
 		}
 	);
 	
+	//Actions au drop :
+	//Clonage du helper à l'endroit du drop et conversion en élément dropItem
+	//MAJ de la liste des oeuvres pour changer le symbole de l'élément droppé
+	//Mise a jour du tableau de références de positions
 	$('#dropTarget').droppable(
 		{
 			drop : function (event, ui) {
@@ -124,6 +140,7 @@ $(document).ready(function() {
 				cleanArray(arrayData, ref);
 				refArray = [ref, $('#'+ref).position()];
 				arrayData.push(refArray);
+				//Initialisation à chaque drop d'un draggable pour pouvoir redéplacer l'élément si nécessaire
 				$('.dropItem').draggable(
 					{
 						containment: "parent",
@@ -139,7 +156,7 @@ $(document).ready(function() {
 		}
 	);
 
-
+	// Rappel d'un élément droppé a partir de la liste
 	$('#availble-artwork').on('click', '.refreshItem', function(){
 		var ref = $(this).attr('data-reference');
 		$('#'+ref).remove();
@@ -147,6 +164,7 @@ $(document).ready(function() {
 
 		cleanArray(arrayData, ref);
 
+		//Réinitialisation du draggable pour l'élément rappelé
 		$('.dragItem').draggable(
 			{ 
 				appendTo: '#dropTarget',

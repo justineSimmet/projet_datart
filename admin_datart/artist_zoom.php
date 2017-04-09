@@ -33,7 +33,7 @@ if (isset($_POST['id'])) {
 		$targetArtist->setSurname($_POST['surname']);
 		$targetArtist->setName($_POST['name']);
 		$targetArtist->setAlias($_POST['alias']);
-		
+		//Contrôle sur l'identité d'un artiste : le combo doit être nom + prénom ou alias
 		if (!empty($_POST['surname'] && $_POST['name']) || $_POST['alias']) {
 			$updateArtist = $targetArtist->synchroDb();
 		
@@ -57,6 +57,7 @@ if (isset($_POST['id'])) {
 			</div>';			
 		}
 	}
+	//UPDATE d'un artiste
 	else{
 		$targetArtist = new Artist();
 		$targetArtist->setSurname($_POST['surname']);	
@@ -79,6 +80,7 @@ if (isset($_POST['id'])) {
 
 
 if (isset($_POST['targetArtist']) && isset($_POST['action']) ) {
+	//PUBLIER ARTISTE MASQUE
 	if($_POST['action'] == 'publish'){
 		$targetArtist = new Artist($_POST['targetArtist']);
 		$publish = $targetArtist->publishArtist();
@@ -95,6 +97,7 @@ if (isset($_POST['targetArtist']) && isset($_POST['action']) ) {
 			</div>';	
 		}
 	}
+	//SUPPRIMER DEFINITIVEMENT UN ARTISTE
 	elseif($_POST['action'] == 'deleteArtiste'){
 		$targetArtist = new Artist($_POST['targetArtist']);
 		$check = $currentUser->passwordCheck($_POST['password']);
@@ -175,7 +178,7 @@ if(isset($_POST['biographyFrench']) && isset($_POST['noteFrench']) ) {
 		else{
 			$actionResultat = '<div class="alert text-center alert-danger alert-dismissable">
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-			<strong>Erreur !</strong> Les textes d\'accompagnement n\'ont pas été mis à jour.
+			<strong>Erreur !</strong> Les textes d\'accompagnement n\'ont pas tous été mis à jour.
 			</div>';	
 		}
 	}

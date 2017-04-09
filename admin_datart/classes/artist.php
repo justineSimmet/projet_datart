@@ -535,9 +535,15 @@ soit à faire un update des données de l'id reçue
 
 	function hideArtist(){
 		$this->setVisible('0');
-		$res = requete_sql("UPDATE artist set visible ='".$this->visible."' WHERE id='".$this->id."'");
-		if ($res) {
-			return TRUE;
+		$hideArtwork = requete_sql("UPDATE artwork set visible ='0' WHERE artist_id='".$this->id."'");
+		if ($hideArtwork) {
+			$hide = requete_sql("UPDATE artist set visible ='".$this->visible."' WHERE id='".$this->id."'");
+			if ($hide) {
+				return TRUE;
+			}
+			else{
+				return FALSE;
+			}
 		}
 		else{
 			return FALSE;
@@ -558,13 +564,24 @@ soit à faire un update des données de l'id reçue
 	function deleteArtist(){
 		$deleteText = requete_sql("DELETE FROM textual_content_artist WHERE artist_id='".$this->id."'");
 		if ($deleteText) {
-			$delete = requete_sql("DELETE FROM artist WHERE id='".$this->id."'");
-		
-			if ($delete) {
-				return TRUE;
+			$deleteArtwork = requete_sql("DELETE FROM artwork WHERE artist_id='".$this->id."'");
+			if ($deleteArtwork) {
+				$cleanExposed = requete_sql("DELETE FROM artist_exposed WHERE artist_id='".$this->id."'");
+				if ($cleanExposed) {
+					$delete = requete_sql("DELETE FROM artist WHERE id='".$this->id."'");
+					if ($delete) {
+						return TRUE;
+					}
+					else{
+						return FALSE;
+					}
+				}
+				else{
+					return FALSE;
+				}
 			}
 			else{
-				return FALSE;
+				return FALSE;;
 			}
 		}
 		else{

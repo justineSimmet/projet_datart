@@ -9,15 +9,19 @@
     $data['file'] = $_FILES;
     $data['text'] = $_POST;
 
+// AJOUT DE FICHIER
 if (isset($_POST['action']) && $_POST['action'] == 'uploadFiles') {
 
+    // Initialisation des paramètres de fichiers
     $maxSize = 5242880;
     $size = filesize($_FILES['file']['tmp_name']);
     $uploadFormat = array('.pdf','.mp3', '.mp4','.wav');
     $extension = strrchr($_FILES['file']['name'], '.');
 
 	$targetArtwork = new Artwork($_POST['artworkId']);
+    // Chemin d'upload
     $path = __DIR__."\assets\images\artwork\\".$targetArtwork->getId().'\\';
+    // Création du dossier s'il n'est pas déjà existant
     if(!file_exists($path)){
         $newFolder = mkdir($path, 0755, TRUE);
     }
@@ -34,6 +38,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'uploadFiles') {
             echo json_encode($data);
         }
         else{
+            // Si le fichier est conforme, création d'un objet Additional, upload et enregistrement en BDD
         	$newAdditional = new Additional();
             $artworkId = $targetArtwork->getId();
             $newAdditional->setArtworkId($artworkId);
@@ -65,6 +70,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'uploadFiles') {
 
     }
 }
+// MODIFICATION DE FICHIER
 elseif (isset($_POST['action']) && $_POST['action'] == 'editFiles') {
     $newAdditional = new Additional($_POST['addId']);
     if (empty($_POST['target'])) {
@@ -94,6 +100,7 @@ elseif (isset($_POST['action']) && $_POST['action'] == 'editFiles') {
     }
 
 }
+// AJOUT D'UNE URL EXTERNE
 elseif (isset($_POST['action']) && $_POST['action'] == 'addLink') {
     $newAdditional = new Additional();
     $newAdditional->setArtworkId($_POST['artwork']);
@@ -111,6 +118,7 @@ elseif (isset($_POST['action']) && $_POST['action'] == 'addLink') {
     }
 
 }
+// SUPPRESSION D'UN ADDITONNEL EN BDD
 elseif (isset($_POST['action']) && $_POST['action'] == 'deleteFiles') {
     $newAdditional = new Additional($_POST['addId']);
     $delete = $newAdditional->delete();

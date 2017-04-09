@@ -26,6 +26,7 @@ if(isset($_POST['targetId'])){
 $actionResultat = '';
 
 if(isset($_POST['targetId']) && isset($_POST['action']) ){
+	// MASQUER UN ARTISTE AUX UTILISATEURS
 	if ($_POST['action'] == 'hide') {
 		$targetArtist = new Artist($_POST['targetId']);
 		$hide = $targetArtist->hideArtist();
@@ -40,12 +41,12 @@ if(isset($_POST['targetId']) && isset($_POST['action']) ){
 		<p><strong>Erreur !</strong> '.$targetArtist->getIdentity().' n\'a pas pu être supprimé.</p></div>';	
 		}
 	}
-
+	// PUBLIER UN ARTISTE QUI A ETE MASQUE
 	elseif($_POST['action'] == 'publish'){
 		$targetArtist = new Artist($_POST['targetId']);
 		$publish = $targetArtist->publishArtist();
 	}
-
+	// SUPPRIMER DEFINITIVEMENT UN ARTISTE
 	elseif ($_POST['action'] = 'delete') {
 		$targetArtist = new Artist($_POST['targetId']);
 		$check = $currentUser->passwordCheck($_POST['password']);

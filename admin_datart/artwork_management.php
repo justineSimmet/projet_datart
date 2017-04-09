@@ -19,6 +19,7 @@ if (isset($_POST['targetId'])) {
 
 
 if (isset($_POST['targetId']) && isset($_POST['action']) ) {
+    //CACHER UNE OEUVRE
     if ($_POST['action'] == 'hide') {
         $targetArtwork = new Artwork($_POST['targetId']);
         $hide = $targetArtwork->hideArtwork();
@@ -35,6 +36,7 @@ if (isset($_POST['targetId']) && isset($_POST['action']) ) {
             </div>';
         }
     }
+    //PUBLIER UNE OEUVRE
     elseif($_POST['action'] == 'publish'){
         $targetArtwork = new Artwork($_POST['targetId']);
         $publish = $targetArtwork->publishArtwork();
@@ -51,6 +53,7 @@ if (isset($_POST['targetId']) && isset($_POST['action']) ) {
             </div>';
         }
     }
+    //SUPPRIMER DEFINITIVEMENT UNE OEUVRE
     elseif($_POST['action'] == 'delete'){
         $targetArtwork = new Artwork($_POST['targetId']);
         $check = $currentUser->passwordCheck($_POST['password']);

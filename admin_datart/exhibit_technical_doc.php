@@ -35,7 +35,7 @@ class PDF extends FPDF{
 	//en tête
 	function Header(){
 		//logo
-		$this->Image('assets/images/grand-angle-rvb.png',13,10,40);
+		$this->Image(URL_IMAGES.'grand-angle-rvb.png',13,10,40);
 		$this->SetFont('Times','',14);
 	    // Saut de ligne
 	    $this->Ln(40);

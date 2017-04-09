@@ -412,15 +412,17 @@ class Artwork{
 		if ($cleanText) {
 			$cleanDisplay = requete_sql("DELETE FROM artwork_displayed WHERE artwork_id ='".$this->id."' ");
 			if ($cleanDisplay) {
-				$cleanAdd = requete_sql("DELETE FROM additional_content WHERE artwork_id ='".$this->id."' ");
-				if ($cleanAdd) {
-					$delete = requete_sql("DELETE FROM artwork WHERE id ='".$this->id."' ");
-					if ($delete) {
-						return TRUE;
-					}
-					else{
-						return FALSE;
-					}
+				$visuals = $this->getVisual();
+				foreach ($visuals as $visual) {
+					$visual->delete();
+				};
+				$additionals = $this->getAdditional();
+				foreach ($additionals as $additional) {
+					$additional->delete();
+				};
+				$delete = requete_sql("DELETE FROM artwork WHERE id ='".$this->id."' ");
+				if ($delete) {
+					return TRUE;
 				}
 				else{
 					return FALSE;

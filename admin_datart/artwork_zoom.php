@@ -12,7 +12,7 @@ require_once('classes/exhibit_textual_content.php');
 require_once('classes/event.php');
 require_once('includes/include.php');
 
-// INITIALISE UN OBJET EXHIBIT SI ID EN GET
+// INITIALISE UN OBJET ARTWORK SI ID EN GET
 if (isset($_GET['artwork'])) {
 	$targetArtwork = new Artwork($_GET['artwork']);
 	if (!empty($targetArtwork->getId())) {
@@ -21,6 +21,49 @@ if (isset($_GET['artwork'])) {
 }
 
 $currentExhibit = Exhibit::currentExhibit();
+
+
+if (isset($_POST['targetId']) && isset($_POST['action']) ) {
+	$targetArtwork = new Artwork($_POST['targetId']);
+	//PUBLICATION D'UNE OEUVRE MASQUEE
+	if($_POST['action'] == 'publish'){
+		$publish = $targetArtwork->publishArtwork();
+		if ($publish) {
+			$actionResultat = '<div class="alert alert-success alert-dismissable">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<strong>Félicitation,</strong> L\'oeuvre '.$targetArtwork->getTitle().' est de nouveau visible.
+				</div>';
+		}else{
+			$actionResultat = '<div class="alert alert-danger alert-dismissable">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<strong>Erreur !</strong> L\'oeuvre '.$targetArtwork->getTitle().' est toujours masquée.
+			</div>';	
+		}
+	}
+	//SUPPRESSION DEFINITIVE D'UNE OEUVRE MASQUEE
+	elseif($_POST['action'] == 'delete-artwork'){
+		$check = $currentUser->passwordCheck($_POST['password']);
+		if ($check) {
+			$delete = $targetArtwork->deleteExhibit();
+			if ($delete) {
+				header('Location:'.URL_ADMIN.'artwork_management.php');
+			}
+			else{
+				$actionResultat = '<div class="alert alert-danger alert-dismissable">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<strong>Erreur !</strong> L\'oeuvre '.$targetArtwork->getTitle().' n\'a pas été supprimée.
+				</div>';
+			}
+		}
+		else{
+			$actionResultat = '<div class="alert alert-danger alert-dismissable">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<strong>Votre mot de passe est incorrect.</strong> Vous ne pouvez pas supprimer l\'oeuvre '.$targetArtwork->getTitle().'.
+			</div>';
+		}
+	}
+}
+
 
 /************************************************************************************************
 **
@@ -175,12 +218,6 @@ if(isset($_POST['characteristicFrench']) && isset($_POST['mainFrench']) ) {
 	}
 }
 
-/************************************************************************************************
-**
-** Gestion en base de donnée des 3 visuels principaux
-**
-************************************************************************************************/
-
 
 $locationTitle = isset($targetArtwork)?$targetArtwork->getTitle():'Ajouter une oeuvre';
 include('header.php');
@@ -249,7 +286,7 @@ include('header.php');
 ?>
 	<div class="hidden-lg hidden-sm btn-area-row">
 		<button class="btn btn-default btn-custom btn-lg publish-artwork" role="button" data-id="<?= $targetArtwork->getId(); ?>" ><span class="fa fa-eye"></span> Publier l'oeuvre</button>
-		<button class="btn btn-default btn-custom btn-lg delete-arwork" role="button" data-id="<?= $targetArtwork->getId(); ?>" ><span class="fa fa-trash"></span> Supprimer définitivement l'oeuvre</button>
+		<button class="btn btn-default btn-custom btn-lg delete-artwork" role="button" data-id="<?= $targetArtwork->getId(); ?>" ><span class="fa fa-trash"></span> Supprimer définitivement l'oeuvre</button>
 	</div>	
 <?php
 	}
@@ -377,7 +414,7 @@ include('header.php');
 				    		}
     					?>
     				</div>
-
+    			<!-- DROPZONE POUR L'AJOUT DE VISUELS ANNEXES -->
 				<form action="<?= URL_ADMIN ?>picture_process.php" method="POST" id="picturesUpload" class="dropzone">
 					<div class="fallback">
 	    				<input name="image" type="file" />
@@ -471,7 +508,7 @@ include('header.php');
 				    	}
     				?>
     				</div>
-
+    			<!-- DROPZONE POUR L'AJOUT DE DOCUMENTS ANNEXES -->	
 				<form action="<?= URL_ADMIN ?>additional_content.php" method="POST" id="filesUpload" class="dropzone">
 					<div class="fallback">
 	    				<input name="file" type="file" />
@@ -506,7 +543,7 @@ include('header.php');
 		?>
 			<div class="hidden-md hidden-xs btn-area-col">
 				<button class="btn btn-default btn-custom publish-artwork" role="button" data-id="<?= $targetArtwork->getId(); ?>" ><span class="fa fa-eye"></span> Publier l'oeuvre</button>
-				<button class="btn btn-default btn-custom delete-arwork" role="button" data-id="<?= $targetArtwork->getId(); ?>" ><span class="fa fa-trash"></span> Supprimer définitivement l'oeuvre</button>
+				<button class="btn btn-default btn-custom delete-artwork" role="button" data-id="<?= $targetArtwork->getId(); ?>" ><span class="fa fa-trash"></span> Supprimer définitivement l'oeuvre</button>
 			</div>	
 		<?php
 			}
